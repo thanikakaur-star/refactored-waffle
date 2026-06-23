@@ -1,9 +1,15 @@
-import dotenv from "dotenv";
-dotenv.config();
+try {
+  require("dotenv").config();
+} catch {
+  // No .env file in production — that's fine, env vars come from the platform
+}
 
 function required(key: string): string {
   const value = process.env[key];
-  if (!value) throw new Error(`Missing required env var: ${key}`);
+  if (!value) {
+    console.warn(`[config] Missing env var: ${key} — feature will fail at runtime`);
+    return "";
+  }
   return value;
 }
 

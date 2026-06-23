@@ -1,15 +1,18 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = void 0;
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+try {
+    require("dotenv").config();
+}
+catch {
+    // No .env file in production — that's fine, env vars come from the platform
+}
 function required(key) {
     const value = process.env[key];
-    if (!value)
-        throw new Error(`Missing required env var: ${key}`);
+    if (!value) {
+        console.warn(`[config] Missing env var: ${key} — feature will fail at runtime`);
+        return "";
+    }
     return value;
 }
 function optional(key, fallback) {
