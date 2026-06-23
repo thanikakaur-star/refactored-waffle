@@ -1,0 +1,98 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sendDigitalDelivery = sendDigitalDelivery;
+exports.sendFreeSamplePack = sendFreeSamplePack;
+const resend_1 = require("resend");
+const config_js_1 = require("../utils/config.js");
+const logger_js_1 = require("../utils/logger.js");
+let _resend;
+function getResend() {
+    if (!_resend)
+        _resend = new resend_1.Resend(config_js_1.config.resend.apiKey);
+    return _resend;
+}
+async function send(options) {
+    const { data, error } = await getResend().emails.send({
+        from: config_js_1.config.resend.from,
+        to: options.to,
+        subject: options.subject,
+        html: options.html,
+    });
+    if (error) {
+        logger_js_1.logger.error("Email send failed", { to: options.to, error: error.message });
+        throw new Error(`Email failed: ${error.message}`);
+    }
+    logger_js_1.logger.info("Email sent", { to: options.to, emailId: data?.id });
+    return data;
+}
+async function sendDigitalDelivery(to, downloadUrl) {
+    return send({
+        to,
+        subject: "Your Khalsa Kreatives Colouring Book is Ready! 🎨",
+        html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f8f5f0;font-family:Georgia,serif">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;margin-top:32px;margin-bottom:32px">
+    <tr><td style="background:linear-gradient(135deg,#ff6b35,#f7931e);padding:40px 32px;text-align:center">
+      <h1 style="color:#fff;margin:0;font-size:26px;letter-spacing:0.5px">Sat Sri Akaal!</h1>
+      <p style="color:rgba(255,255,255,0.9);margin:8px 0 0;font-size:16px">Your colouring book is ready to download</p>
+    </td></tr>
+    <tr><td style="padding:32px">
+      <p style="color:#333;font-size:16px;line-height:1.6;margin:0 0 16px">
+        Thank you for supporting Sikh &amp; Panjabi cultural education. Your digital colouring book PDF is waiting for you.
+      </p>
+      <p style="color:#555;font-size:14px;line-height:1.6;margin:0 0 24px">
+        This link expires in ${config_js_1.config.download.expiryHours} hours. Please download your file promptly.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td style="background:#ff6b35;border-radius:8px;padding:14px 36px">
+        <a href="${downloadUrl}" style="color:#fff;text-decoration:none;font-size:16px;font-weight:bold;display:inline-block">Download Your Colouring Book</a>
+      </td></tr></table>
+      <p style="color:#999;font-size:12px;text-align:center;margin:24px 0 0">
+        If the button doesn't work, copy this link:<br>
+        <a href="${downloadUrl}" style="color:#ff6b35;word-break:break-all">${downloadUrl}</a>
+      </p>
+    </td></tr>
+    <tr><td style="background:#f8f5f0;padding:20px 32px;text-align:center">
+      <p style="color:#999;font-size:12px;margin:0">Khalsa Kreatives</p>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+    });
+}
+async function sendFreeSamplePack(to, downloadUrl) {
+    return send({
+        to,
+        subject: "Your Free Colouring Sample Pack is Here!",
+        html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f8f5f0;font-family:Georgia,serif">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;margin-top:32px;margin-bottom:32px">
+    <tr><td style="background:linear-gradient(135deg,#4a90d9,#7b68ee);padding:40px 32px;text-align:center">
+      <h1 style="color:#fff;margin:0;font-size:26px">Your Free Sample Pack</h1>
+      <p style="color:rgba(255,255,255,0.9);margin:8px 0 0;font-size:16px">3 pages of Panjabi cultural colouring fun</p>
+    </td></tr>
+    <tr><td style="padding:32px">
+      <p style="color:#333;font-size:16px;line-height:1.6;margin:0 0 16px">
+        Here are your free colouring pages featuring Gurmukhi letters, Gurdwara architecture, and Panjabi festival scenes.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td style="background:#4a90d9;border-radius:8px;padding:14px 36px">
+        <a href="${downloadUrl}" style="color:#fff;text-decoration:none;font-size:16px;font-weight:bold;display:inline-block">Download Sample Pages</a>
+      </td></tr></table>
+      <p style="color:#555;font-size:14px;line-height:1.6;margin:24px 0 0;text-align:center">
+        Love it? The full book has 40+ pages of cultural learning through art.
+      </p>
+    </td></tr>
+    <tr><td style="background:#f8f5f0;padding:20px 32px;text-align:center">
+      <p style="color:#999;font-size:12px;margin:0">Khalsa Kreatives</p>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+    });
+}
+//# sourceMappingURL=sender.js.map

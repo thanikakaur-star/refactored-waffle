@@ -1,7 +1,0 @@
-[build]
-buildCommand = "npm run build && npm run bundle:widget"
-
-[deploy]
-startCommand = "node dist/server.js"
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 3
