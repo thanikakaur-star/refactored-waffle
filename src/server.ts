@@ -4,6 +4,7 @@ import { config } from "./utils/config.js";
 import { logger } from "./utils/logger.js";
 import { stripeWebhookRouter } from "./webhooks/stripe.js";
 import { verifyDownloadToken } from "./fulfillment/digital.js";
+import { chatbotRouter } from "./chatbot/routes.js";
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.post(
 );
 
 app.use(express.json());
+
+app.use("/api/chat", chatbotRouter);
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
