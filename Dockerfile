@@ -13,6 +13,5 @@ RUN npm ci --omit=dev
 COPY --from=build /app/dist/ dist/
 COPY --from=build /app/public/ public/
 COPY assets/ assets/
-EXPOSE 3000
 ENV NODE_ENV=production
 CMD ["node", "dist/server.js"]
