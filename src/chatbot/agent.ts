@@ -2,7 +2,11 @@ import Anthropic from "@anthropic-ai/sdk";
 import { config } from "../utils/config.js";
 import { logger } from "../utils/logger.js";
 
-const client = new Anthropic({ apiKey: config.anthropic.apiKey });
+let _client: Anthropic;
+function getClient() {
+  if (!_client) _client = new Anthropic({ apiKey: config.anthropic.apiKey });
+  return _client;
+}
 
 const SYSTEM_PROMPT = `You are a warm, knowledgeable Panjabi Cultural Guide for a children's and family educational colouring book website. Your purpose is to share the beauty and richness of Sikh heritage and Panjabi culture in a way that is welcoming to all backgrounds.
 
@@ -43,7 +47,7 @@ export async function chat(
 
   logger.info("Chatbot request", { messageCount: messages.length });
 
-  const response = await client.messages.create({
+  const response = await getClient().messages.create({
     model: "claude-sonnet-4-6",
     max_tokens: 600,
     system: SYSTEM_PROMPT,
@@ -68,7 +72,7 @@ export async function* chatStream(
     { role: "user", content: userMessage },
   ];
 
-  const stream = client.messages.stream({
+  const stream = getClient().messages.stream({
     model: "claude-sonnet-4-6",
     max_tokens: 600,
     system: SYSTEM_PROMPT,

@@ -2,7 +2,11 @@ import { Resend } from "resend";
 import { config } from "../utils/config.js";
 import { logger } from "../utils/logger.js";
 
-const resend = new Resend(config.resend.apiKey);
+let _resend: Resend;
+function getResend() {
+  if (!_resend) _resend = new Resend(config.resend.apiKey);
+  return _resend;
+}
 
 interface EmailOptions {
   to: string;
@@ -11,7 +15,7 @@ interface EmailOptions {
 }
 
 async function send(options: EmailOptions) {
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResend().emails.send({
     from: config.resend.from,
     to: options.to,
     subject: options.subject,

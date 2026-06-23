@@ -3,7 +3,11 @@ import Stripe from "stripe";
 import { config } from "../utils/config.js";
 import { logger } from "../utils/logger.js";
 
-const stripe = new Stripe(config.stripe.secretKey);
+let _stripe: Stripe;
+function getStripe() {
+  if (!_stripe) _stripe = new Stripe(config.stripe.secretKey);
+  return _stripe;
+}
 export const stripeWebhookRouter = Router();
 
 type FulfillmentType = "digital" | "physical" | "bundle";
@@ -58,7 +62,7 @@ stripeWebhookRouter.post(
 
     let event: Stripe.Event;
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig, config.stripe.webhookSecret);
+      event = getStripe().webhooks.constructEvent(req.body, sig, config.stripe.webhookSecret);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown verification error";
       logger.error("Webhook signature verification failed", { error: message });

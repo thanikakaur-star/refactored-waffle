@@ -34,13 +34,17 @@ interface LuluPrintJob {
   external_id: string;
 }
 
-const LULU_BASE = config.lulu.sandbox
-  ? "https://api.sandbox.lulu.com"
-  : "https://api.lulu.com";
+function getLuluBase() {
+  return config.lulu.sandbox
+    ? "https://api.sandbox.lulu.com"
+    : "https://api.lulu.com";
+}
 
-const LULU_AUTH = config.lulu.sandbox
-  ? "https://api.sandbox.lulu.com/auth/realms/glasstree/protocol/openid-connect/token"
-  : "https://api.lulu.com/auth/realms/glasstree/protocol/openid-connect/token";
+function getLuluAuth() {
+  return config.lulu.sandbox
+    ? "https://api.sandbox.lulu.com/auth/realms/glasstree/protocol/openid-connect/token"
+    : "https://api.lulu.com/auth/realms/glasstree/protocol/openid-connect/token";
+}
 
 // 8.5x11 colouring book, perfect bound, standard colour interior
 const POD_PACKAGE_ID = "0850X1100BWSTDPB060UW444MXX";
@@ -54,7 +58,7 @@ async function authenticate(): Promise<string> {
     `${config.lulu.apiKey}:${config.lulu.apiSecret}`
   ).toString("base64");
 
-  const res = await fetch(LULU_AUTH, {
+  const res = await fetch(getLuluAuth(), {
     method: "POST",
     headers: {
       Authorization: `Basic ${credentials}`,
@@ -108,7 +112,7 @@ export async function fulfillPhysical(order: PhysicalOrder) {
     package: POD_PACKAGE_ID,
   });
 
-  const res = await fetch(`${LULU_BASE}/print-jobs/`, {
+  const res = await fetch(`${getLuluBase()}/print-jobs/`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
