@@ -1,0 +1,38 @@
+{
+  "id": "evt_test_physical_002",
+  "object": "event",
+  "type": "checkout.session.completed",
+  "data": {
+    "object": {
+      "id": "cs_test_physical_e5f6g7h8",
+      "object": "checkout.session",
+      "payment_status": "paid",
+      "status": "complete",
+      "mode": "payment",
+      "currency": "gbp",
+      "amount_total": 2499,
+      "customer_details": {
+        "email": "family-order@example.com",
+        "name": "Gurinder Singh",
+        "phone": "+447700900001"
+      },
+      "metadata": {
+        "product_type": "physical",
+        "product_name": "Sikh & Panjabi Cultural Colouring Book - Printed"
+      },
+      "shipping_details": {
+        "name": "Gurinder Singh",
+        "address": {
+          "line1": "42 Havelock Road",
+          "line2": "Southall",
+          "city": "London",
+          "state": "Greater London",
+          "postal_code": "UB2 4PA",
+          "country": "GB"
+        }
+      },
+      "created": 1719100500
+    }
+  },
+  "created": 1719100501
+}

@@ -1,0 +1,38 @@
+{
+  "id": "evt_test_bundle_003",
+  "object": "event",
+  "type": "checkout.session.completed",
+  "data": {
+    "object": {
+      "id": "cs_test_bundle_i9j0k1l2",
+      "object": "checkout.session",
+      "payment_status": "paid",
+      "status": "complete",
+      "mode": "payment",
+      "currency": "gbp",
+      "amount_total": 3499,
+      "customer_details": {
+        "email": "bundle-buyer@example.com",
+        "name": "Amrit Kaur Dhillon",
+        "phone": "+447700900002"
+      },
+      "metadata": {
+        "product_type": "bundle",
+        "product_name": "Sikh & Panjabi Cultural Colouring Book - Digital + Print Bundle"
+      },
+      "shipping_details": {
+        "name": "Amrit Kaur Dhillon",
+        "address": {
+          "line1": "15 Singh Sabha Way",
+          "line2": null,
+          "city": "Birmingham",
+          "state": "West Midlands",
+          "postal_code": "B1 1BB",
+          "country": "GB"
+        }
+      },
+      "created": 1719101000
+    }
+  },
+  "created": 1719101001
+}
