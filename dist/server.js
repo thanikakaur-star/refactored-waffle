@@ -11,6 +11,15 @@ const listenPort = Number(process.env.PORT || 3000);
 app.get("/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
+app.get("/debug", (_req, res) => {
+    res.json({
+        node: process.version,
+        port: listenPort,
+        cwd: process.cwd(),
+        env_keys: Object.keys(process.env).sort(),
+        uptime: process.uptime(),
+    });
+});
 try {
     const path = require("node:path");
     const { stripeWebhookRouter } = require("./webhooks/stripe.js");
