@@ -18,14 +18,14 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "resend": "^4.0.0",
-    "stripe": "^17.4.0"
+    "stripe": "^17.4.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.0",
-    "tsup": "^8.3.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0",
     "vitest": "^2.1.0"
   },
   "engines": {
