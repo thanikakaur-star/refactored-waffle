@@ -49,7 +49,8 @@ catch (err) {
     console.warn("Some routes failed to load (missing env vars?) — /health still available:", err.message);
     app.use(express_1.default.json());
 }
-app.listen(listenPort, "0.0.0.0", () => {
-    console.log(`Server safely forced alive on port ${listenPort}`);
+const finalPort = process.env.PORT || 3000;
+app.listen(Number(finalPort), "0.0.0.0", () => {
+    console.log("SERVER LIVE ON PORT", finalPort);
 });
 //# sourceMappingURL=server.js.map
