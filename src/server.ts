@@ -47,8 +47,9 @@ app.get("/download/:token", (req, res) => {
   });
 });
 
-app.listen(config.port, () => {
-  logger.info("Server started", { port: config.port, env: config.nodeEnv });
+const port = parseInt(process.env.PORT || "3000", 10);
+app.listen(port, "0.0.0.0", () => {
+  logger.info("Server started", { port, env: process.env.NODE_ENV || "development" });
 });
 
 export { app };
