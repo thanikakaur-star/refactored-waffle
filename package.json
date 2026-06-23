@@ -1,5 +1,5 @@
 {
-  "name": "panjabi-colouring-book-fulfillment",
+  "name": "khalsa-kreatives",
   "version": "1.0.0",
   "description": "Automated e-book and print-on-demand fulfillment for Sikh & Panjabi Cultural Colouring Books",
   "main": "dist/server.js",

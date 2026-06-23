@@ -37,7 +37,7 @@ app.get("/download/:token", (req, res) => {
   logger.info("Download initiated", { sessionId: payload.sessionId });
 
   const filePath = path.join(PDF_DIR, "panjabi-colouring-book.pdf");
-  res.download(filePath, "Sikh-Panjabi-Colouring-Book.pdf", (err) => {
+  res.download(filePath, "Khalsa-Kreatives-Colouring-Book.pdf", (err) => {
     if (err) {
       logger.error("Download file send failed", { error: (err as Error).message });
       if (!res.headersSent) {

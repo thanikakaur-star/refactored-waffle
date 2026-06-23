@@ -34,7 +34,7 @@ async function send(options: EmailOptions) {
 export async function sendDigitalDelivery(to: string, downloadUrl: string) {
   return send({
     to,
-    subject: "Your Panjabi Colouring Book is Ready! 🎨",
+    subject: "Your Khalsa Kreatives Colouring Book is Ready! 🎨",
     html: `
 <!DOCTYPE html>
 <html>
@@ -61,7 +61,7 @@ export async function sendDigitalDelivery(to: string, downloadUrl: string) {
       </p>
     </td></tr>
     <tr><td style="background:#f8f5f0;padding:20px 32px;text-align:center">
-      <p style="color:#999;font-size:12px;margin:0">Sikh &amp; Panjabi Cultural Colouring Books</p>
+      <p style="color:#999;font-size:12px;margin:0">Khalsa Kreatives</p>
     </td></tr>
   </table>
 </body>
@@ -95,7 +95,7 @@ export async function sendFreeSamplePack(to: string, downloadUrl: string) {
       </p>
     </td></tr>
     <tr><td style="background:#f8f5f0;padding:20px 32px;text-align:center">
-      <p style="color:#999;font-size:12px;margin:0">Sikh &amp; Panjabi Cultural Colouring Books</p>
+      <p style="color:#999;font-size:12px;margin:0">Khalsa Kreatives</p>
     </td></tr>
   </table>
 </body>

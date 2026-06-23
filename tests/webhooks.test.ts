@@ -123,7 +123,7 @@ describe("Lulu Print Job Mapping", () => {
       postcode: "UB2 4PA",
     });
     expect(printBody.line_items).toHaveLength(1);
-    expect(printBody.line_items[0].title).toContain("Panjabi");
+    expect(printBody.line_items[0].title).toContain("Khalsa");
     expect(printBody.external_id).toBe(session.id);
     expect(printBody.shipping_level).toBe("MAIL");
 

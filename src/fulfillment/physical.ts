@@ -82,7 +82,7 @@ function buildPrintJob(order: PhysicalOrder): LuluPrintJob {
   return {
     line_items: [
       {
-        title: "Sikh & Panjabi Cultural Colouring Book",
+        title: "Khalsa Kreatives Colouring Book",
         cover: { source_url: COVER_PDF_URL },
         interior: { source_url: INTERIOR_PDF_URL },
         pod_package_id: POD_PACKAGE_ID,
