@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { localStore, DEV_API_KEY } from "./db/local-store.js";
@@ -503,13 +504,13 @@ const publicDir = [
   path.resolve(__dirname, "..", "public"),
   path.resolve(__dirname, "public"),
   path.join(process.cwd(), "public"),
-].find((d) => { try { return require("fs").existsSync(d); } catch { return false; } }) ?? path.join(process.cwd(), "public");
+].find((d) => fs.existsSync(d)) ?? path.join(process.cwd(), "public");
 
 const dashboardDir = [
   path.resolve(__dirname, "..", "dashboard"),
   path.resolve(__dirname, "dashboard"),
   path.join(process.cwd(), "dashboard"),
-].find((d) => { try { return require("fs").existsSync(d); } catch { return false; } }) ?? path.join(process.cwd(), "dashboard");
+].find((d) => fs.existsSync(d)) ?? path.join(process.cwd(), "dashboard");
 
 logger.info("Static dirs", { publicDir, dashboardDir });
 
