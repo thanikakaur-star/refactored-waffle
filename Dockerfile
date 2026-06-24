@@ -3,14 +3,16 @@ FROM node:20-slim
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 
 COPY tsconfig.json ./
 COPY src/ ./src/
 COPY public/ ./public/
 COPY dashboard/ ./dashboard/
 
-RUN npx tsc
+RUN npx tsc && cp -r public dist/public && cp -r dashboard dist/dashboard
+
+RUN npm prune --omit=dev
 
 ENV NODE_ENV=production
 ENV API_PORT=10000
