@@ -42,13 +42,58 @@ async function handlePhysicalFulfillment(session: Stripe.Checkout.Session) {
   }
   logger.info("Processing physical fulfillment", { sessionId: session.id });
 
-  // Delegated to src/fulfillment/physical.ts (Phase 3)
   const { fulfillPhysical } = await import("../fulfillment/physical.js");
+  const { sendPhysicalOrderConfirmation } = await import("../email/sender.js");
+
+  const email = session.customer_details?.email;
+  const name = shipping.name || "Customer";
+
   await fulfillPhysical({
     sessionId: session.id,
-    name: shipping.name || "Customer",
+    name,
     address: shipping.address,
   });
+
+  if (email) {
+    await sendPhysicalOrderConfirmation(email, name);
+  }
+}
+
+async function handleBundleFulfillment(session: Stripe.Checkout.Session) {
+  const email = session.customer_details?.email;
+  const shipping = session.shipping_details;
+
+  if (!email) {
+    logger.error("Bundle fulfillment failed: no customer email", { sessionId: session.id });
+    return;
+  }
+
+  const { fulfillDigital, generateDownloadToken } = await import("../fulfillment/digital.js");
+  const { fulfillPhysical } = await import("../fulfillment/physical.js");
+  const { sendBundleConfirmation } = await import("../email/sender.js");
+  const { config: appConfig } = await import("../utils/config.js");
+
+  const token = generateDownloadToken(session.id);
+  const downloadUrl = `${appConfig.download.baseUrl}/${token}`;
+
+  const tasks: Promise<unknown>[] = [];
+
+  if (shipping?.address) {
+    tasks.push(
+      fulfillPhysical({
+        sessionId: session.id,
+        name: shipping.name || "Customer",
+        address: shipping.address,
+      })
+    );
+  }
+
+  tasks.push(
+    sendBundleConfirmation(email, shipping?.name || "Customer", downloadUrl)
+  );
+
+  await Promise.all(tasks);
+  logger.info("Bundle fulfillment completed", { sessionId: session.id, email });
 }
 
 stripeWebhookRouter.post(
@@ -88,10 +133,7 @@ stripeWebhookRouter.post(
           await handlePhysicalFulfillment(session);
           break;
         case "bundle":
-          await Promise.all([
-            handleDigitalFulfillment(session),
-            handlePhysicalFulfillment(session),
-          ]);
+          await handleBundleFulfillment(session);
           break;
       }
       res.json({ received: true, type });

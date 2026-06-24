@@ -60,4 +60,8 @@ export const config = {
     baseUrl: optional("DOWNLOAD_BASE_URL", "http://localhost:3000/download"),
     expiryHours: parseInt(optional("DOWNLOAD_LINK_EXPIRY_HOURS", "48"), 10),
   },
+
+  checkout: {
+    baseUrl: optional("CHECKOUT_BASE_URL", "http://localhost:3000"),
+  },
 };

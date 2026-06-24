@@ -1,4 +1,5 @@
 import express from "express";
+import path from "node:path";
 
 const app = express();
 
@@ -8,15 +9,12 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-app.get("/", (_req, res) => {
-  res.send("Khalsa Kreatives is alive");
-});
-
 try {
-  const path = require("node:path");
   const { stripeWebhookRouter } = require("./webhooks/stripe.js");
   const { verifyDownloadToken } = require("./fulfillment/digital.js");
   const { chatbotRouter } = require("./chatbot/routes.js");
+  const { checkoutRouter } = require("./checkout/routes.js");
+  const { productsRouter } = require("./api/products.js");
 
   app.post(
     "/webhooks/stripe",
@@ -25,7 +23,12 @@ try {
   );
 
   app.use(express.json());
+
+  app.use(express.static(path.resolve(process.cwd(), "public")));
+
   app.use("/api/chat", chatbotRouter);
+  app.use("/api/checkout", checkoutRouter);
+  app.use("/api/products", productsRouter);
 
   const PDF_DIR = path.resolve(process.cwd(), "assets/pdf");
 
@@ -42,6 +45,14 @@ try {
         res.status(404).json({ error: "File not found" });
       }
     });
+  });
+
+  app.get("/success", (_req: any, res: any) => {
+    res.sendFile(path.resolve(process.cwd(), "public/success.html"));
+  });
+
+  app.get("*", (_req: any, res: any) => {
+    res.sendFile(path.resolve(process.cwd(), "public/index.html"));
   });
 
   console.log("All routes loaded successfully");

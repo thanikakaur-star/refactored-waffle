@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Khalsa Kreatives — Sikh & Panjabi Cultural Colouring Book</title>
+  <meta name="description" content="A beautiful colouring book celebrating Sikh heritage, Panjabi culture, Gurmukhi script, and the values of the Khalsa. Digital PDF or printed book.">
+  <meta property="og:title" content="Khalsa Kreatives — Sikh & Panjabi Cultural Colouring Book">
+  <meta property="og:description" content="40+ pages of cultural learning through art. Gurmukhi, Gurdwara architecture, festivals, the Five Ks, and more.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #ff6b35;
+      --orange-dark: #e85d2c;
+      --saffron: #f7931e;
+      --navy: #1a1a2e;
+      --cream: #faf8f5;
+      --warm-gray: #f0ebe4;
+      --text: #2d2d2d;
+      --text-light: #666;
+      --green: #2e7d32;
+      --blue: #4a90d9;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text); background: #fff; line-height: 1.6; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #16213e 50%, #0f3460 100%);
+      color: #fff;
+      padding: 80px 24px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(255,107,53,0.15) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 50%, rgba(247,147,30,0.1) 0%, transparent 50%);
+      animation: shimmer 8s ease-in-out infinite alternate;
+    }
+    @keyframes shimmer { from { transform: translateX(-5%); } to { transform: translateX(5%); } }
+    .hero-content { position: relative; max-width: 800px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,107,53,0.2);
+      border: 1px solid rgba(255,107,53,0.4);
+      border-radius: 100px;
+      padding: 6px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--saffron);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--saffron); }
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 600px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+    .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--orange), var(--saffron));
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(255,107,53,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(255,107,53,0.5); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      margin-top: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-number { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--saffron); }
+    .hero-stat-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+    /* SECTIONS */
+    section { padding: 80px 24px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .section-header p { color: var(--text-light); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+    /* FEATURES / WHAT'S INSIDE */
+    .features { background: var(--cream); }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; }
+    .feature-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: transform 0.2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); }
+    .feature-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .feature-card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-bottom: 8px; }
+    .feature-card p { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
+
+    /* PAGE PREVIEWS */
+    .previews { background: #fff; }
+    .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+    .preview-card {
+      border: 2px solid var(--warm-gray);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .preview-card:hover { border-color: var(--orange); transform: translateY(-4px); }
+    .preview-image {
+      background: var(--warm-gray);
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    .preview-info { padding: 16px; }
+    .preview-section { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--orange); font-weight: 600; }
+    .preview-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-top: 4px; }
+    .preview-vocab { font-size: 0.85rem; color: var(--text-light); margin-top: 6px; }
+
+    /* PRICING */
+    .pricing { background: var(--cream); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; max-width: 950px; margin: 0 auto; }
+    .price-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .price-card:hover { border-color: var(--orange); transform: translateY(-4px); }
+    .price-card.popular {
+      border-color: var(--orange);
+      box-shadow: 0 8px 40px rgba(255,107,53,0.15);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--orange), var(--saffron));
+      color: #fff;
+      padding: 4px 20px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .price-card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 6px; }
+    .price-card .tagline { color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; }
+    .price-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .price-amount span { font-size: 1.2rem; font-weight: 600; }
+    .price-features { list-style: none; text-align: left; margin: 24px 0; }
+    .price-features li {
+      padding: 8px 0;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .price-features li::before { content: '\2713'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .price-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .price-btn-primary {
+      background: linear-gradient(135deg, var(--orange), var(--saffron));
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(255,107,53,0.3);
+    }
+    .price-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(255,107,53,0.4); }
+    .price-btn-outline {
+      background: #fff;
+      color: var(--orange);
+      border: 2px solid var(--orange);
+    }
+    .price-btn-outline:hover { background: #fff5f0; }
+
+    /* TESTIMONIALS / SOCIAL PROOF */
+    .social-proof { background: #fff; }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .testimonial {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .testimonial-stars { color: var(--saffron); font-size: 1.2rem; margin-bottom: 12px; }
+    .testimonial p { font-size: 0.95rem; line-height: 1.7; color: var(--text); margin-bottom: 16px; font-style: italic; }
+    .testimonial-author { font-weight: 600; font-size: 0.9rem; }
+    .testimonial-role { color: var(--text-light); font-size: 0.85rem; }
+
+    /* FREE SAMPLE CTA */
+    .free-sample {
+      background: linear-gradient(135deg, var(--navy), #16213e);
+      color: #fff;
+      text-align: center;
+    }
+    .free-sample h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.4rem); margin-bottom: 12px; }
+    .free-sample p { color: rgba(255,255,255,0.8); font-size: 1.1rem; max-width: 500px; margin: 0 auto 32px; }
+    .sample-form { display: flex; gap: 12px; max-width: 460px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+    .sample-form input {
+      flex: 1;
+      min-width: 240px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .sample-form input::placeholder { color: rgba(255,255,255,0.5); }
+    .sample-form input:focus { border-color: var(--saffron); }
+    .sample-form button {
+      padding: 16px 28px;
+      background: linear-gradient(135deg, var(--orange), var(--saffron));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sample-form button:hover { transform: translateY(-2px); }
+    .sample-form button:disabled { opacity: 0.6; cursor: default; transform: none; }
+    .sample-success { color: #66bb6a; font-weight: 600; font-size: 1.1rem; }
+    .sample-note { color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 12px; }
+
+    /* FAQ */
+    .faq { background: var(--cream); }
+    .faq-list { max-width: 700px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid #e0dbd4; }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 20px 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text);
+      font-family: inherit;
+    }
+    .faq-question::after { content: '+'; font-size: 1.4rem; color: var(--orange); transition: transform 0.2s; }
+    .faq-question[aria-expanded="true"]::after { content: '\2212'; }
+    .faq-answer { padding: 0 0 20px; color: var(--text-light); line-height: 1.7; display: none; }
+    .faq-answer.open { display: block; }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.6);
+      padding: 48px 24px;
+      text-align: center;
+    }
+    footer h3 { font-family: 'Playfair Display', serif; color: #fff; font-size: 1.3rem; margin-bottom: 8px; }
+    footer p { font-size: 0.9rem; margin-bottom: 4px; }
+    footer a { color: var(--saffron); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .footer-links { margin: 20px 0; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+    .footer-bottom { margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; }
+
+    @media (max-width: 640px) {
+      .hero { padding: 60px 20px 80px; }
+      section { padding: 60px 20px; }
+      .hero-stats { gap: 24px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Celebrating Sikh & Panjabi Heritage</div>
+      <h1>Learn Culture Through the <span>Joy of Colouring</span></h1>
+      <p>40+ beautifully designed pages exploring Sikh history, Gurmukhi script, Panjabi festivals, and the values of the Khalsa. For families, classrooms, and curious minds of all ages.</p>
+      <div class="hero-ctas">
+        <a href="#pricing" class="btn btn-primary">Get Your Copy</a>
+        <a href="#free-sample" class="btn btn-secondary">Try 3 Free Pages</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-number">40+</div>
+          <div class="hero-stat-label">Colouring Pages</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">20</div>
+          <div class="hero-stat-label">Cultural Topics</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">60+</div>
+          <div class="hero-stat-label">Gurmukhi Words</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT'S INSIDE -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>What's Inside the Book</h2>
+        <p>Every page is a doorway into Sikh and Panjabi heritage — designed to educate, inspire, and delight.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#9775;</div>
+          <h3>Sikh Foundations</h3>
+          <p>The Khanda, Ik Onkar, and Harmandir Sahib — the core symbols and sacred spaces of Sikhi, beautifully illustrated for colouring.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128220;</div>
+          <h3>The Ten Gurus</h3>
+          <p>From Guru Nanak Dev Ji to Guru Gobind Singh Ji and the eternal Guru Granth Sahib Ji — meet the founders of the Khalsa.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#10084;</div>
+          <h3>Values & Virtues</h3>
+          <p>Seva, Chardi Kala, Miri Piri, Sarbat Da Bhala — the beautiful values that guide Sikh life, brought to life through art.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9997;</div>
+          <h3>Gurmukhi Script</h3>
+          <p>Learn the Panjabi alphabet created by Guru Angad Dev Ji. Each page includes transliterated vocabulary with English meanings.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#127882;</div>
+          <h3>Festivals & Culture</h3>
+          <p>Vaisakhi, Bhangra, Phulkari embroidery, Gurdwara worship — the vibrant celebrations and traditions of Panjab.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128170;</div>
+          <h3>Heroes & History</h3>
+          <p>Mai Bhago the warrior, the brave Sahibzade, the Five Ks — stories of courage, sacrifice, and identity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE PREVIEWS -->
+  <section class="previews" id="preview">
+    <div class="container">
+      <div class="section-header">
+        <h2>Sample Pages</h2>
+        <p>A glimpse inside the book. Each page pairs a beautiful colouring illustration with educational text and Gurmukhi vocabulary.</p>
+      </div>
+      <div class="preview-grid">
+        <div class="preview-card">
+          <div class="preview-image">&#9775;</div>
+          <div class="preview-info">
+            <div class="preview-section">Foundations</div>
+            <div class="preview-title">The Khanda</div>
+            <div class="preview-vocab">&#2838;&#2818;&#2849;&#2878; (Khanda) — Sikh emblem</div>
+          </div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-image">&#127963;</div>
+          <div class="preview-info">
+            <div class="preview-section">Foundations</div>
+            <div class="preview-title">Harmandir Sahib</div>
+            <div class="preview-vocab">&#2693;&#2734;&#2765;&#2734;&#2765;&#2736;&#2751;&#2724;&#2744;&#2736; (Amritsar)</div>
+          </div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-image">&#127880;</div>
+          <div class="preview-info">
+            <div class="preview-section">Panjabi Culture</div>
+            <div class="preview-title">Vaisakhi Festival</div>
+            <div class="preview-vocab">&#2605;&#2672;&#2583;&#2652;&#2622; (Bhangra) — Panjabi dance</div>
+          </div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-image">&#128150;</div>
+          <div class="preview-info">
+            <div class="preview-section">Values</div>
+            <div class="preview-title">Seva — Selfless Service</div>
+            <div class="preview-vocab">&#2610;&#2672;&#2583;&#2608; (Langar) — Free kitchen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <h2>Choose Your Format</h2>
+        <p>Every purchase supports Sikh & Panjabi cultural education.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Digital PDF</h3>
+          <p class="tagline">Instant Download</p>
+          <div class="price-amount"><span>&pound;</span>8<span>.99</span></div>
+          <ul class="price-features">
+            <li>40+ colouring pages</li>
+            <li>Educational text on every page</li>
+            <li>Gurmukhi vocabulary</li>
+            <li>Print unlimited copies at home</li>
+            <li>Instant download after purchase</li>
+          </ul>
+          <button class="price-btn price-btn-outline" onclick="checkout('digital')">Get Digital Copy</button>
+        </div>
+        <div class="price-card popular">
+          <div class="popular-badge">Most Popular</div>
+          <h3>Printed Book</h3>
+          <p class="tagline">Shipped to Your Door</p>
+          <div class="price-amount"><span>&pound;</span>14<span>.99</span></div>
+          <ul class="price-features">
+            <li>8.5&times;11" softcover book</li>
+            <li>Quality 60# uncoated paper</li>
+            <li>Perfect for pencils & markers</li>
+            <li>Ships worldwide</li>
+            <li>Beautiful gift for families</li>
+          </ul>
+          <button class="price-btn price-btn-primary" onclick="checkout('physical')">Order Printed Book</button>
+        </div>
+        <div class="price-card">
+          <h3>Bundle</h3>
+          <p class="tagline">Digital + Physical — Save &pound;3</p>
+          <div class="price-amount"><span>&pound;</span>19<span>.99</span></div>
+          <ul class="price-features">
+            <li>Everything in Digital + Physical</li>
+            <li>Start colouring today with PDF</li>
+            <li>Printed copy ships separately</li>
+            <li>Save &pound;3 vs buying separately</li>
+            <li>Best value for families</li>
+          </ul>
+          <button class="price-btn price-btn-outline" onclick="checkout('bundle')">Get the Bundle</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="social-proof">
+    <div class="container">
+      <div class="section-header">
+        <h2>Loved by Families</h2>
+        <p>Hear from parents and educators who are using Khalsa Kreatives.</p>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"My kids absolutely love this book. They're learning Gurmukhi letters while colouring — something I struggled to teach them before. The illustrations are gorgeous."</p>
+          <div class="testimonial-author">Harpreet K.</div>
+          <div class="testimonial-role">Parent of 2, Birmingham</div>
+        </div>
+        <div class="testimonial">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"We use this in our Sunday Gurdwara class. The children are so engaged — they ask questions about every page. The educational content is accurate and age-appropriate."</p>
+          <div class="testimonial-author">Baljinder S.</div>
+          <div class="testimonial-role">Gurdwara Sunday School Teacher, London</div>
+        </div>
+        <div class="testimonial">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"Bought the bundle for my nieces. They started colouring the digital version immediately and were so excited when the printed book arrived. Beautiful quality."</p>
+          <div class="testimonial-author">Mandeep G.</div>
+          <div class="testimonial-role">Gift buyer, Toronto</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREE SAMPLE -->
+  <section class="free-sample" id="free-sample">
+    <div class="container">
+      <h2>Try 3 Free Colouring Pages</h2>
+      <p>Get a taste of the book — featuring The Khanda, Guru Gobind Singh Ji, and Phulkari embroidery patterns.</p>
+      <div id="sample-form-container">
+        <form class="sample-form" id="sampleForm" onsubmit="return handleSampleSubmit(event)">
+          <input type="email" id="sampleEmail" placeholder="Enter your email address" required>
+          <button type="submit" id="sampleBtn">Send Free Pages</button>
+        </form>
+      </div>
+      <p class="sample-note">No spam, ever. Just your free pages and occasional updates about Khalsa Kreatives.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <h2>Frequently Asked Questions</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+            What age is this book suitable for?
+          </button>
+          <div class="faq-answer">The colouring pages use bold, chunky outlines that work beautifully for children aged 4 and up. The educational content is written for family reading, so parents and grandparents can share the stories while younger children colour. Adults who enjoy mindful colouring love our mandala and Phulkari pattern pages too!</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+            How quickly will I receive my order?
+          </button>
+          <div class="faq-answer">Digital orders are delivered instantly via email with a secure download link. Printed books take 3-5 business days to produce, then 5-7 days for UK delivery or 7-14 days for international shipping.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+            Can I print the digital version multiple times?
+          </button>
+          <div class="faq-answer">Yes! When you purchase the digital PDF, you can print it as many times as you like for personal and family use. This is perfect for siblings, classrooms, or if a page gets too colourful and you want a fresh start.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+            Do you ship internationally?
+          </button>
+          <div class="faq-answer">Yes, we ship printed books worldwide through our print partner Lulu Express. We cover the UK, US, Canada, Australia, India, and most of Europe. If you're unsure about your country, the digital PDF is always available instantly.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+            Is the cultural and religious content accurate?
+          </button>
+          <div class="faq-answer">Absolutely. Every page has been carefully researched and reviewed to ensure accuracy and respectful representation of Sikh history, Gurmukhi script, and Panjabi cultural traditions. We take this responsibility seriously.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+            What materials work best for colouring?
+          </button>
+          <div class="faq-answer">The printed book uses 60# uncoated paper which works beautifully with coloured pencils, crayons, and markers. For the digital PDF, we recommend printing on standard printer paper (80gsm) or cardstock for a sturdier feel.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <h3>Khalsa Kreatives</h3>
+      <p>Celebrating Sikh & Panjabi Heritage Through Art</p>
+      <div class="footer-links">
+        <a href="#features">What's Inside</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#free-sample">Free Sample</a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Khalsa Kreatives. All rights reserved.</p>
+        <p style="margin-top:4px">Waheguru Ji Ka Khalsa, Waheguru Ji Ki Fateh</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    async function checkout(product) {
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Loading...';
+
+      try {
+        const res = await fetch('/api/checkout/create-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Something went wrong. Please try again.');
+        }
+      } catch {
+        alert('Connection error. Please check your internet and try again.');
+      }
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+
+    async function handleSampleSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('sampleEmail').value;
+      const btn = document.getElementById('sampleBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('/api/chat/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        if (res.ok) {
+          document.getElementById('sample-form-container').innerHTML =
+            '<p class="sample-success">Check your inbox — your free pages are on the way!</p>';
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Try Again';
+        }
+      } catch {
+        btn.disabled = false;
+        btn.textContent = 'Try Again';
+      }
+      return false;
+    }
+
+    function toggleFaq(btn) {
+      const answer = btn.nextElementSibling;
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      document.querySelectorAll('.faq-question').forEach(q => {
+        q.setAttribute('aria-expanded', 'false');
+        q.nextElementSibling.classList.remove('open');
+      });
+      if (!isOpen) {
+        btn.setAttribute('aria-expanded', 'true');
+        answer.classList.add('open');
+      }
+    }
+  </script>
+
+  <!-- Chatbot Widget -->
+  <script src="/widget.global.js"></script>
+</body>
+</html>
