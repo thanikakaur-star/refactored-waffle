@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LinkedIn Personal Banner — Thanika Kaur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+
+    .banner {
+      width: 1584px;
+      height: 396px;
+      background: #0a0a0f;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+    }
+
+    /* Animated mesh gradient background */
+    .mesh {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 15% 50%, rgba(201,169,110,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 500px at 75% 30%, rgba(13,148,136,0.05) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 300px at 50% 80%, rgba(99,102,241,0.04) 0%, transparent 70%);
+    }
+
+    /* Subtle dot grid */
+    .dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(201,169,110,0.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    /* Gold accent line bottom */
+    .gold-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 5%, #c9a96e 30%, #d4af37 50%, #c9a96e 70%, transparent 95%);
+    }
+
+    /* Left section — keep clear for profile photo overlap */
+    .left-space {
+      width: 280px;
+      flex-shrink: 0;
+    }
+
+    /* Center content */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 60px 40px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .name {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 8px;
+      line-height: 1.1;
+    }
+
+    .role {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: #c9a96e;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .description {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: #94a3b8;
+      line-height: 1.6;
+      max-width: 550px;
+      margin-bottom: 28px;
+    }
+
+    .pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #c9a96e;
+      background: rgba(201,169,110,0.08);
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 20px;
+      padding: 6px 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Right stats column */
+    .stats {
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+      position: relative;
+      z-index: 2;
+      border-left: 1px solid rgba(201,169,110,0.1);
+    }
+
+    .stat {
+      padding: 20px 40px;
+      border-bottom: 1px solid rgba(201,169,110,0.06);
+    }
+
+    .stat:last-child { border-bottom: none; }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #c9a96e, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 2px;
+    }
+
+    /* Corner decorations */
+    .corner-tl, .corner-br {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      z-index: 3;
+    }
+
+    .corner-tl {
+      top: 16px;
+      left: 16px;
+      border-top: 1px solid rgba(201,169,110,0.15);
+      border-left: 1px solid rgba(201,169,110,0.15);
+    }
+
+    .corner-br {
+      bottom: 16px;
+      right: 16px;
+      border-bottom: 1px solid rgba(201,169,110,0.15);
+      border-right: 1px solid rgba(201,169,110,0.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="mesh"></div>
+    <div class="dots"></div>
+    <div class="gold-line"></div>
+    <div class="corner-tl"></div>
+    <div class="corner-br"></div>
+
+    <div class="left-space"></div>
+
+    <div class="content">
+      <div class="name">Thanika Kaur</div>
+      <div class="role">Founder & CEO — HealthProcure Intel</div>
+      <div class="description">Building the intelligence layer for global healthcare procurement. One API for $50B+ in tenders across 85+ countries.</div>
+      <div class="pills">
+        <span class="pill">Healthcare</span>
+        <span class="pill">Procurement</span>
+        <span class="pill">SaaS</span>
+        <span class="pill">API Platform</span>
+        <span class="pill">LSE</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">$50B+</div>
+        <div class="stat-label">Tenders Tracked</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">85+</div>
+        <div class="stat-label">Countries</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">4</div>
+        <div class="stat-label">Data Sources</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">API</div>
+        <div class="stat-label">Developer First</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

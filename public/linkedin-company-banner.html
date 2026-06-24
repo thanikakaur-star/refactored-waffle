@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LinkedIn Company Banner — HealthProcure Intel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+
+    .banner {
+      width: 1128px;
+      height: 191px;
+      background: #0a0a0f;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+    }
+
+    .mesh {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 400px 300px at 20% 50%, rgba(201,169,110,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 400px at 80% 40%, rgba(13,148,136,0.04) 0%, transparent 70%);
+    }
+
+    .dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(201,169,110,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    .gold-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 5%, #c9a96e 30%, #d4af37 50%, #c9a96e 70%, transparent 95%);
+    }
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+    }
+
+    .logo-box {
+      width: 56px;
+      height: 56px;
+      background: rgba(201,169,110,0.08);
+      border: 1.5px solid rgba(201,169,110,0.25);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: #c9a96e;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .brand-name em {
+      font-style: normal;
+      color: #c9a96e;
+    }
+
+    .brand-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #94a3b8;
+      letter-spacing: 1px;
+    }
+
+    .divider {
+      width: 1px;
+      height: 100px;
+      background: linear-gradient(180deg, transparent, rgba(201,169,110,0.15), transparent);
+      margin: 0 50px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .sources {
+      display: flex;
+      gap: 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .source {
+      text-align: center;
+    }
+
+    .source-flag {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .source-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: #c9a96e;
+      letter-spacing: 0.5px;
+    }
+
+    .source-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .url {
+      position: absolute;
+      bottom: 12px;
+      right: 60px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: #475569;
+      letter-spacing: 0.5px;
+      z-index: 2;
+    }
+    .url em {
+      font-style: normal;
+      color: #c9a96e;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="mesh"></div>
+    <div class="dots"></div>
+    <div class="gold-line"></div>
+
+    <div class="left">
+      <div class="logo-box">HP</div>
+      <div class="brand">
+        <div class="brand-name">Health<em>Procure</em> Intel</div>
+        <div class="brand-tagline">The Intelligence Layer for Global Healthcare Procurement</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sources">
+      <div class="source">
+        <span class="source-flag">🇪🇺</span>
+        <div class="source-name">TED Europa</div>
+        <div class="source-desc">EU Tenders</div>
+      </div>
+      <div class="source">
+        <span class="source-flag">🇺🇸</span>
+        <div class="source-name">SAM.gov</div>
+        <div class="source-desc">US Federal</div>
+      </div>
+      <div class="source">
+        <span class="source-flag">🌐</span>
+        <div class="source-name">WHO</div>
+        <div class="source-desc">Global</div>
+      </div>
+      <div class="source">
+        <span class="source-flag">🇬🇧</span>
+        <div class="source-name">NHS</div>
+        <div class="source-desc">UK Health</div>
+      </div>
+    </div>
+
+    <div class="url"><em>healthprocureintel</em>.com</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LinkedIn Featured Image — HealthProcure Intel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 40px; min-height: 100vh; padding: 40px; }
+
+    /* Featured Section Card — 1200x628 */
+    .card {
+      width: 1200px;
+      height: 628px;
+      background: #0a0a0f;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card .mesh {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 600px 500px at 50% 30%, rgba(201,169,110,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 400px at 20% 70%, rgba(13,148,136,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 400px at 80% 80%, rgba(99,102,241,0.03) 0%, transparent 70%);
+    }
+
+    .card .dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(201,169,110,0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    .card .gold-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 10%, #c9a96e 35%, #d4af37 50%, #c9a96e 65%, transparent 90%);
+    }
+
+    .card .border-frame {
+      position: absolute;
+      inset: 20px;
+      border: 1px solid rgba(201,169,110,0.08);
+      border-radius: 4px;
+    }
+
+    .card .content {
+      position: relative;
+      z-index: 2;
+      padding: 60px;
+    }
+
+    .card .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .card .logo-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(201,169,110,0.08);
+      border: 1.5px solid rgba(201,169,110,0.25);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: #c9a96e;
+    }
+
+    .card .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .card .logo-text em { font-style: normal; color: #c9a96e; }
+
+    .card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 54px;
+      font-weight: 700;
+      color: #e2e8f0;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      max-width: 800px;
+    }
+
+    .card h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #c9a96e, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card .subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      color: #94a3b8;
+      margin-bottom: 48px;
+      max-width: 600px;
+      line-height: 1.5;
+    }
+
+    .card .stats-row {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+    }
+
+    .card .stat {
+      text-align: center;
+    }
+
+    .card .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #c9a96e, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+
+    .card .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 4px;
+    }
+
+    .card .stat-divider {
+      width: 1px;
+      height: 60px;
+      background: rgba(201,169,110,0.15);
+      align-self: center;
+    }
+
+    .card .url {
+      position: absolute;
+      bottom: 32px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #475569;
+      z-index: 2;
+      letter-spacing: 1px;
+    }
+    .card .url em { font-style: normal; color: #c9a96e; }
+
+    .label {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="label">LinkedIn Featured / Post Image (1200 x 628)</div>
+    <div class="card">
+      <div class="mesh"></div>
+      <div class="dots"></div>
+      <div class="gold-line"></div>
+      <div class="border-frame"></div>
+
+      <div class="content">
+        <div class="logo-row">
+          <div class="logo-icon">HP</div>
+          <div class="logo-text">Health<em>Procure</em> Intel</div>
+        </div>
+
+        <h1>Every Healthcare Tender.<br><em>One Platform.</em></h1>
+
+        <div class="subtitle">Real-time procurement intelligence from TED Europa, SAM.gov, WHO & NHS Supply Chain</div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-value">$50B+</div>
+            <div class="stat-label">Tenders</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <div class="stat-value">85+</div>
+            <div class="stat-label">Countries</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <div class="stat-value">4</div>
+            <div class="stat-label">Sources</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <div class="stat-value">Free</div>
+            <div class="stat-label">To Start</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="url"><em>healthprocureintel</em>.com</div>
+    </div>
+  </div>
+</body>
+</html>
