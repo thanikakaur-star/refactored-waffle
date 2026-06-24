@@ -165,12 +165,18 @@ describe("GET /api/v1/sources", () => {
   });
 });
 
-describe("Dashboard static serving", () => {
-  it("serves the dashboard HTML at /", async () => {
+describe("Static serving", () => {
+  it("serves the marketing site at /", async () => {
     const res = await fetch(`${BASE}/`);
     expect(res.status).toBe(200);
     const html = await res.text();
     expect(html).toContain("HealthProcure Intel");
-    expect(html).toContain("chart.js");
+  });
+
+  it("serves the dashboard at /dashboard", async () => {
+    const res = await fetch(`${BASE}/dashboard`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain("HealthProcure Intel");
   });
 });

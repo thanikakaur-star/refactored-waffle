@@ -380,11 +380,18 @@ app.get("/api/v1/sources", authMiddleware, (_req, res) => {
   });
 });
 
-// Serve dashboard
-app.use(express.static(path.join(__dirname, "..", "dashboard")));
+// Serve marketing site
+app.use(express.static(path.join(__dirname, "..", "public")));
 app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+});
+
+// Serve dashboard at /dashboard
+app.use("/dashboard", express.static(path.join(__dirname, "..", "dashboard")));
+app.get("/dashboard", (_req, res) => {
   res.sendFile(path.join(__dirname, "..", "dashboard", "index.html"));
 });
+
 app.use((_req, res) => {
   res.status(404).json({ error: "Not found" });
 });
@@ -392,7 +399,8 @@ app.use((_req, res) => {
 const port = Number(process.env.API_PORT) || 3000;
 const server = app.listen(port, () => {
   logger.info(`HealthProcure Intel API running`, { port, mode });
-  logger.info(`Dashboard: http://localhost:${port}`);
+  logger.info(`Website: http://localhost:${port}`);
+  logger.info(`Dashboard: http://localhost:${port}/dashboard`);
   if (!USE_SUPABASE) {
     logger.info(`Dev API key: ${DEV_API_KEY}`);
     logger.info(`Try: curl -H "X-API-Key: ${DEV_API_KEY}" http://localhost:${port}/api/v1/tenders`);

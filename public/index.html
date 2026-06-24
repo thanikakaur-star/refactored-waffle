@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthProcure Intel — Global Healthcare Procurement Intelligence</title>
+  <meta name="description" content="Aggregate $50B+ in global healthcare procurement data from TED Europa, SAM.gov, WHO, and NHS Supply Chain. Real-time intelligence for smarter procurement decisions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              DEFAULT: '#c9a96e',
+              light: '#d4c4a0',
+              dark: '#a8883f',
+              bright: '#d4af37',
+              muted: '#b8975a',
+            },
+            dark: {
+              DEFAULT: '#0a0a0f',
+              100: '#12141d',
+              200: '#0f1117',
+              300: '#181b27',
+              400: '#1e2130',
+              500: '#252839',
+            },
+            teal: {
+              DEFAULT: '#1a7a6d',
+              light: '#0d9488',
+              dark: '#145f55',
+            },
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'Georgia', 'serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #0a0a0f;
+      color: #e2e8f0;
+    }
+
+    /* Hero gradient mesh */
+    .hero-gradient {
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 40%, rgba(201, 169, 110, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 20%, rgba(26, 122, 109, 0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 100% 100% at 50% 100%, rgba(10, 10, 15, 1) 0%, transparent 50%),
+        linear-gradient(180deg, #0a0a0f 0%, #0f1117 50%, #0a0a0f 100%);
+      animation: gradientShift 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 0%, 100% 0%, 50% 100%, 0% 0%;
+      }
+      100% {
+        background-position: 100% 100%, 0% 100%, 50% 0%, 0% 0%;
+      }
+    }
+
+    /* Shimmer effect for hero headline */
+    .shimmer {
+      background: linear-gradient(
+        110deg,
+        #c9a96e 0%,
+        #d4c4a0 25%,
+        #d4af37 50%,
+        #c9a96e 75%,
+        #a8883f 100%
+      );
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Glass morphism */
+    .glass {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .glass-strong {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Scroll-triggered fade-in */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hover lift */
+    .hover-lift {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(201, 169, 110, 0.06);
+    }
+
+    /* Gold border glow for Pro card */
+    .gold-glow {
+      box-shadow: 0 0 40px rgba(212, 175, 55, 0.12), 0 0 80px rgba(201, 169, 110, 0.06);
+    }
+
+    /* Step connector lines */
+    .step-connector {
+      position: relative;
+    }
+
+    .step-connector::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -2rem;
+      width: 4rem;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(201, 169, 110, 0.4), rgba(201, 169, 110, 0.05));
+    }
+
+    @media (max-width: 768px) {
+      .step-connector::after {
+        display: none;
+      }
+    }
+
+    /* Navbar backdrop */
+    .nav-blur {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    /* Subtle animated border for featured pricing */
+    @keyframes borderGlow {
+      0%, 100% { border-color: rgba(201, 169, 110, 0.3); }
+      50% { border-color: rgba(212, 175, 55, 0.6); }
+    }
+
+    .border-glow {
+      animation: borderGlow 3s ease-in-out infinite;
+    }
+
+    /* Counter animation */
+    .counter {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Smooth scroll offset for fixed nav */
+    section[id] {
+      scroll-margin-top: 5rem;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- ============ NAVIGATION ============ -->
+  <nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-dark/80 border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/10">
+            <span class="font-display font-bold text-dark text-lg tracking-tight">HP</span>
+          </div>
+          <span class="hidden sm:block font-body font-semibold text-white text-lg tracking-tight">
+            HealthProcure <span class="text-gold">Intel</span>
+          </span>
+        </a>
+
+        <!-- Nav Links (Desktop) -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#features" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Features</a>
+          <a href="#sources" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Sources</a>
+          <a href="#pricing" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Pricing</a>
+          <a href="/dashboard" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Dashboard</a>
+        </div>
+
+        <!-- CTA -->
+        <div class="flex items-center gap-4">
+          <a href="#pricing"
+             onclick="alert('Coming soon — Stripe integration pending'); return false;"
+             class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-sm hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20">
+            Get API Key
+          </a>
+          <!-- Mobile menu button -->
+          <button id="mobile-menu-btn" class="md:hidden text-gray-400 hover:text-white" aria-label="Toggle menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="md:hidden hidden pb-4 border-t border-white/5 mt-2 pt-4">
+        <div class="flex flex-col gap-3">
+          <a href="#features" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">Features</a>
+          <a href="#sources" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">Sources</a>
+          <a href="#pricing" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">Pricing</a>
+          <a href="/dashboard" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">Dashboard</a>
+          <a href="#pricing"
+             onclick="alert('Coming soon — Stripe integration pending'); return false;"
+             class="sm:hidden inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-sm mt-2">
+            Get API Key
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ============ HERO SECTION ============ -->
+  <section class="hero-gradient relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Decorative elements -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-8 text-center pt-24 pb-20">
+      <div class="fade-up">
+        <p class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-gold text-xs font-medium tracking-wider uppercase mb-8">
+          <span class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
+          B2B Intelligence Platform
+        </p>
+      </div>
+
+      <h1 class="fade-up font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[1.05] tracking-tight mb-8">
+        <span class="text-white">Global Healthcare</span><br />
+        <span class="shimmer">Procurement Intelligence</span>
+      </h1>
+
+      <p class="fade-up max-w-2xl mx-auto text-lg sm:text-xl text-gray-400 leading-relaxed mb-12 font-light">
+        Aggregate and analyze <span class="text-white font-medium">$50B+</span> in procurement data from
+        <span class="text-gold">4 major sources</span> worldwide. Real-time scraping, multi-currency normalization,
+        and tiered API access for procurement teams that demand precision.
+      </p>
+
+      <div class="fade-up flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
+        <a href="#pricing"
+           onclick="alert('Coming soon — Stripe integration pending'); return false;"
+           class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-base hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-xl shadow-gold/20 hover:shadow-gold/30">
+          Start Free
+        </a>
+        <a href="/dashboard"
+           class="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/10 text-white font-semibold text-base hover:border-gold/30 hover:text-gold transition-all duration-200">
+          View Dashboard
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="fade-up grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+        <div class="glass rounded-2xl p-6 hover-lift">
+          <p class="counter text-3xl sm:text-4xl font-display font-bold text-white mb-1" data-target="12000" data-suffix="+">0</p>
+          <p class="text-sm text-gray-500 font-medium">Tenders Tracked</p>
+        </div>
+        <div class="glass rounded-2xl p-6 hover-lift">
+          <p class="counter text-3xl sm:text-4xl font-display font-bold text-white mb-1" data-target="85" data-suffix="+">0</p>
+          <p class="text-sm text-gray-500 font-medium">Countries</p>
+        </div>
+        <div class="glass rounded-2xl p-6 hover-lift">
+          <p class="counter text-3xl sm:text-4xl font-display font-bold text-gold mb-1" data-prefix="$" data-target="50" data-suffix="B+">0</p>
+          <p class="text-sm text-gray-500 font-medium">Contract Value</p>
+        </div>
+        <div class="glass rounded-2xl p-6 hover-lift">
+          <p class="counter text-3xl sm:text-4xl font-display font-bold text-white mb-1" data-target="4" data-suffix="">0</p>
+          <p class="text-sm text-gray-500 font-medium">Data Sources</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom fade -->
+    <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark to-transparent"></div>
+  </section>
+
+
+  <!-- ============ DATA SOURCES ============ -->
+  <section id="sources" class="relative py-24 lg:py-32 bg-dark-200">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16 fade-up">
+        <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">Trusted Data Sources</p>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          Four Pillars of<br />Procurement Data
+        </h2>
+        <p class="max-w-xl mx-auto text-gray-400 text-lg">
+          We aggregate from the world's most authoritative healthcare procurement databases.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- TED Europa -->
+        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600/20 to-blue-400/10 flex items-center justify-center mb-6 border border-blue-500/10">
+            <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke-width="1.5"/>
+              <path stroke-linecap="round" stroke-width="1.5" d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10zM2 12h20"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">TED Europa</h3>
+          <p class="text-xs text-gold/70 font-medium uppercase tracking-wider mb-3">European Union</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            Tenders Electronic Daily: the official journal of EU public procurement, covering all 27 member states.
+          </p>
+        </div>
+
+        <!-- SAM.gov -->
+        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group" style="transition-delay: 0.1s">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-red-600/20 to-red-400/10 flex items-center justify-center mb-6 border border-red-500/10">
+            <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 21V7l9-4 9 4v14M3 7l9 4m0 0l9-4m-9 4v10"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">SAM.gov</h3>
+          <p class="text-xs text-gold/70 font-medium uppercase tracking-wider mb-3">United States</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            System for Award Management: the US federal government's primary procurement and award database.
+          </p>
+        </div>
+
+        <!-- WHO -->
+        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group" style="transition-delay: 0.2s">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-teal/20 to-teal-light/10 flex items-center justify-center mb-6 border border-teal/10">
+            <svg class="w-7 h-7 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke-width="1.5"/>
+              <path stroke-linecap="round" stroke-width="1.5" d="M2 12h20M12 2c2.5 2.8 4 6.2 4 10s-1.5 7.2-4 10c-2.5-2.8-4-6.2-4-10s1.5-7.2 4-10z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">WHO Procurement</h3>
+          <p class="text-xs text-gold/70 font-medium uppercase tracking-wider mb-3">Global</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            World Health Organization procurement portal for medical supplies, vaccines, and health infrastructure.
+          </p>
+        </div>
+
+        <!-- NHS -->
+        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group" style="transition-delay: 0.3s">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-600/20 to-indigo-400/10 flex items-center justify-center mb-6 border border-indigo-500/10">
+            <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12M6 12h12M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">NHS Supply Chain</h3>
+          <p class="text-xs text-gold/70 font-medium uppercase tracking-wider mb-3">United Kingdom</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            National Health Service procurement covering medical devices, pharmaceuticals, and clinical consumables.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ FEATURES ============ -->
+  <section id="features" class="relative py-24 lg:py-32 bg-dark">
+    <!-- Subtle gradient accent -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-gold/[0.02] to-transparent rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16 fade-up">
+        <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">Platform Capabilities</p>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          Intelligence at Every Layer
+        </h2>
+        <p class="max-w-xl mx-auto text-gray-400 text-lg">
+          From raw data scraping to normalized analytics, every component is built for procurement professionals.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="fade-up glass rounded-2xl p-8 hover-lift group">
+          <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-white mb-3 group-hover:text-gold transition-colors">Real-Time Scraping</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            Playwright-powered headless pipeline scrapes procurement portals on schedule. Handles CAPTCHAs, pagination, and dynamic content.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="fade-up glass rounded-2xl p-8 hover-lift group" style="transition-delay: 0.1s">
+          <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-white mb-3 group-hover:text-gold transition-colors">Multi-Currency Intelligence</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            30+ currencies automatically normalized to USD. Compare tenders across EUR, GBP, CHF, and emerging-market currencies with live rates.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="fade-up glass rounded-2xl p-8 hover-lift group" style="transition-delay: 0.2s">
+          <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-white mb-3 group-hover:text-gold transition-colors">Compliance Tracking</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            CPV codes, NAICS mapping, and regulatory classification. Ensure every tender is properly categorized and audit-ready.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="fade-up glass rounded-2xl p-8 hover-lift group">
+          <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-white mb-3 group-hover:text-gold transition-colors">Regional Benchmarks</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            Average lead times, contract values, and win rates segmented by region. Know exactly where your pricing stands.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="fade-up glass rounded-2xl p-8 hover-lift group" style="transition-delay: 0.1s">
+          <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-white mb-3 group-hover:text-gold transition-colors">Tiered API Access</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            From Free to Enterprise, choose the plan that fits. Rate-limited keys with the <code class="text-gold/70 text-xs">hpi_</code> prefix, scoped by tier.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="fade-up glass rounded-2xl p-8 hover-lift group" style="transition-delay: 0.2s">
+          <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-white mb-3 group-hover:text-gold transition-colors">Stripe Integration</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            Automated billing via Stripe webhooks. Subscription changes instantly provision or revoke API keys with zero manual intervention.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="relative py-24 lg:py-32 bg-dark-200 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16 fade-up">
+        <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">How It Works</p>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          Three Steps to Intelligence
+        </h2>
+        <p class="max-w-xl mx-auto text-gray-400 text-lg">
+          Raw procurement data transformed into actionable insights, delivered through a clean API.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 md:gap-6 relative">
+        <!-- Connecting line (desktop) -->
+        <div class="hidden md:block absolute top-1/2 left-[20%] right-[20%] h-px bg-gradient-to-r from-gold/5 via-gold/20 to-gold/5 -translate-y-1/2"></div>
+
+        <!-- Step 1 -->
+        <div class="fade-up relative">
+          <div class="glass-strong rounded-2xl p-8 text-center relative z-10">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold/20">
+              <span class="font-display text-2xl font-bold text-dark">1</span>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-white mb-3">Scrape</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+              Playwright crawlers systematically harvest tenders, awards, and contract data from TED, SAM.gov, WHO, and NHS portals.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="fade-up relative" style="transition-delay: 0.15s">
+          <div class="glass-strong rounded-2xl p-8 text-center relative z-10">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold/20">
+              <span class="font-display text-2xl font-bold text-dark">2</span>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-white mb-3">Normalize</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+              Raw data is cleaned, deduplicated, and enriched. Currencies convert to USD, codes map to CPV/NAICS, and regional benchmarks are computed.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="fade-up relative" style="transition-delay: 0.3s">
+          <div class="glass-strong rounded-2xl p-8 text-center relative z-10">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold/20">
+              <span class="font-display text-2xl font-bold text-dark">3</span>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-white mb-3">Deliver</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+              Access normalized data via our RESTful API or interactive dashboard. Filter by region, CPV code, value range, or deadline.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ PRICING ============ -->
+  <section id="pricing" class="relative py-24 lg:py-32 bg-dark">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-gold/[0.03] to-transparent rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16 fade-up">
+        <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">Pricing</p>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          Plans for Every Scale
+        </h2>
+        <p class="max-w-xl mx-auto text-gray-400 text-lg">
+          Start free. Scale as your procurement intelligence needs grow.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+        <!-- Free -->
+        <div class="fade-up glass rounded-2xl p-8 hover-lift">
+          <h3 class="font-display text-lg font-semibold text-white mb-1">Free</h3>
+          <p class="text-sm text-gray-500 mb-6">Get started exploring</p>
+          <div class="mb-6">
+            <span class="font-display text-4xl font-bold text-white">$0</span>
+            <span class="text-gray-500 text-sm">/month</span>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              100 requests/day
+            </li>
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              20 results per page
+            </li>
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Basic filters
+            </li>
+          </ul>
+          <button onclick="alert('Coming soon — Stripe integration pending')"
+                  class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">
+            Get Started
+          </button>
+        </div>
+
+        <!-- Basic -->
+        <div class="fade-up glass rounded-2xl p-8 hover-lift" style="transition-delay: 0.1s">
+          <h3 class="font-display text-lg font-semibold text-white mb-1">Basic</h3>
+          <p class="text-sm text-gray-500 mb-6">For growing teams</p>
+          <div class="mb-6">
+            <span class="font-display text-4xl font-bold text-white">$49</span>
+            <span class="text-gray-500 text-sm">/month</span>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              1,000 requests/day
+            </li>
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              50 results per page
+            </li>
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              All filters &amp; sorting
+            </li>
+          </ul>
+          <button onclick="alert('Coming soon — Stripe integration pending')"
+                  class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">
+            Subscribe
+          </button>
+        </div>
+
+        <!-- Pro (Featured) -->
+        <div class="fade-up relative lg:-mt-4" style="transition-delay: 0.2s">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+            <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-gold to-gold-dark text-dark text-xs font-bold uppercase tracking-wider">
+              Most Popular
+            </span>
+          </div>
+          <div class="glass-strong rounded-2xl p-8 border-2 border-gold/30 border-glow gold-glow hover-lift">
+            <h3 class="font-display text-lg font-semibold text-gold mb-1">Pro</h3>
+            <p class="text-sm text-gray-500 mb-6">For procurement teams</p>
+            <div class="mb-6">
+              <span class="font-display text-4xl font-bold text-white">$199</span>
+              <span class="text-gray-500 text-sm">/month</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3 text-sm text-gray-300">
+                <svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                10,000 requests/day
+              </li>
+              <li class="flex items-start gap-3 text-sm text-gray-300">
+                <svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                200 results per page
+              </li>
+              <li class="flex items-start gap-3 text-sm text-gray-300">
+                <svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Regional benchmarks
+              </li>
+              <li class="flex items-start gap-3 text-sm text-gray-300">
+                <svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Priority support
+              </li>
+            </ul>
+            <button onclick="alert('Coming soon — Stripe integration pending')"
+                    class="w-full py-3 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark text-sm font-bold hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20">
+              Subscribe
+            </button>
+          </div>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="fade-up glass rounded-2xl p-8 hover-lift" style="transition-delay: 0.3s">
+          <h3 class="font-display text-lg font-semibold text-white mb-1">Enterprise</h3>
+          <p class="text-sm text-gray-500 mb-6">Custom solutions</p>
+          <div class="mb-6">
+            <span class="font-display text-4xl font-bold text-white">$499</span>
+            <span class="text-gray-500 text-sm">/month</span>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Unlimited requests
+            </li>
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              500 results per page
+            </li>
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Custom data feeds
+            </li>
+            <li class="flex items-start gap-3 text-sm text-gray-400">
+              <svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              SLA guarantee
+            </li>
+          </ul>
+          <button onclick="alert('Coming soon — Stripe integration pending')"
+                  class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">
+            Contact Sales
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ CTA SECTION ============ -->
+  <section class="relative py-24 lg:py-32 bg-dark-200 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-gold/[0.02] via-transparent to-teal/[0.02]"></div>
+
+    <div class="relative max-w-3xl mx-auto px-6 lg:px-8 text-center">
+      <div class="fade-up">
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+          <span class="text-white">Ready to transform your</span><br />
+          <span class="shimmer">procurement strategy?</span>
+        </h2>
+        <p class="text-lg text-gray-400 mb-10 max-w-xl mx-auto">
+          Join procurement teams across 85+ countries using HealthProcure Intel to gain a competitive edge.
+        </p>
+
+        <form id="signup-form" class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto" onsubmit="return handleSignup(event)">
+          <input
+            type="email"
+            id="signup-email"
+            placeholder="Enter your work email"
+            required
+            class="flex-1 px-5 py-4 rounded-xl bg-dark-400 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/20 transition-all duration-200"
+          />
+          <button
+            type="submit"
+            class="px-8 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-sm hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20 whitespace-nowrap">
+            Get Started
+          </button>
+        </form>
+        <p class="text-xs text-gray-600 mt-4">Free tier available. No credit card required.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="bg-dark border-t border-white/5 py-16">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <!-- Brand -->
+        <div class="sm:col-span-2 lg:col-span-1">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+              <span class="font-display font-bold text-dark text-sm">HP</span>
+            </div>
+            <span class="font-body font-semibold text-white">HealthProcure <span class="text-gold">Intel</span></span>
+          </div>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-xs">
+            Global healthcare procurement intelligence. Aggregating data from the world's largest public procurement databases.
+          </p>
+        </div>
+
+        <!-- Product -->
+        <div>
+          <h4 class="text-sm font-semibold text-white mb-4">Product</h4>
+          <ul class="space-y-2.5">
+            <li><a href="#features" class="text-sm text-gray-500 hover:text-gold transition-colors">Features</a></li>
+            <li><a href="#pricing" class="text-sm text-gray-500 hover:text-gold transition-colors">Pricing</a></li>
+            <li><a href="/dashboard" class="text-sm text-gray-500 hover:text-gold transition-colors">Dashboard</a></li>
+            <li><a href="#sources" class="text-sm text-gray-500 hover:text-gold transition-colors">Data Sources</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div>
+          <h4 class="text-sm font-semibold text-white mb-4">Resources</h4>
+          <ul class="space-y-2.5">
+            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">API Documentation</a></li>
+            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">Status Page</a></li>
+            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">Changelog</a></li>
+            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">Support</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h4 class="text-sm font-semibold text-white mb-4">Legal</h4>
+          <ul class="space-y-2.5">
+            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">Privacy Policy</a></li>
+            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">Data Processing</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-xs text-gray-600">&copy; 2024 HealthProcure Intel. All rights reserved.</p>
+        <p class="text-xs text-gray-700">Powered by Supabase &amp; Stripe</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn').addEventListener('click', function () {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('#mobile-menu a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        document.getElementById('mobile-menu').classList.add('hidden');
+      });
+    });
+
+    // Intersection Observer for fade-in animations
+    (function () {
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('.fade-up').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+
+    // Animated counter
+    (function () {
+      var counters = document.querySelectorAll('.counter');
+      var counterObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              var el = entry.target;
+              var target = parseInt(el.getAttribute('data-target'), 10);
+              var prefix = el.getAttribute('data-prefix') || '';
+              var suffix = el.getAttribute('data-suffix') || '';
+              var duration = 2000;
+              var startTime = null;
+
+              function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                var progress = Math.min((timestamp - startTime) / duration, 1);
+                // Ease out cubic
+                var eased = 1 - Math.pow(1 - progress, 3);
+                var current = Math.floor(eased * target);
+                el.textContent = prefix + current.toLocaleString() + suffix;
+                if (progress < 1) {
+                  requestAnimationFrame(animate);
+                } else {
+                  el.textContent = prefix + target.toLocaleString() + suffix;
+                }
+              }
+
+              requestAnimationFrame(animate);
+              counterObserver.unobserve(el);
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+
+      counters.forEach(function (counter) {
+        counterObserver.observe(counter);
+      });
+    })();
+
+    // Signup form handler with input sanitization
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    function handleSignup(event) {
+      event.preventDefault();
+      var emailInput = document.getElementById('signup-email');
+      var email = escapeHtml(emailInput.value.trim());
+      if (email) {
+        alert('Coming soon — Stripe integration pending.\n\nWe\'ll notify ' + email + ' when access is available.');
+        emailInput.value = '';
+      }
+      return false;
+    }
+
+    // Navbar background on scroll
+    (function () {
+      var nav = document.querySelector('nav');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > 20) {
+          nav.classList.add('bg-dark/95');
+          nav.classList.remove('bg-dark/80');
+        } else {
+          nav.classList.remove('bg-dark/95');
+          nav.classList.add('bg-dark/80');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
