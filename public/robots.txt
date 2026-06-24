@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Disallow: /health
+
+Sitemap: https://web-production-082cb.up.railway.app/sitemap.xml
