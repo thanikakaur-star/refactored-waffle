@@ -15,11 +15,7 @@ RUN npx tsc && cp -r public dist/public && cp -r dashboard dist/dashboard
 RUN npm prune --omit=dev
 
 ENV NODE_ENV=production
-ENV API_PORT=10000
 
 EXPOSE 10000
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
-  CMD curl -f http://localhost:10000/health || exit 1
 
 CMD ["node", "dist/server.js"]
