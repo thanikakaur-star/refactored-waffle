@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — HealthProcure Intel</title>
+  <meta name="description" content="Terms of Service for HealthProcure Intel, a global healthcare procurement intelligence platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              DEFAULT: '#c9a96e',
+              light: '#d4c4a0',
+              dark: '#a8883f',
+              bright: '#d4af37',
+              muted: '#b8975a',
+            },
+            dark: {
+              DEFAULT: '#0a0a0f',
+              100: '#12141d',
+              200: '#0f1117',
+              300: '#181b27',
+              400: '#1e2130',
+              500: '#252839',
+            },
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'Georgia', 'serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #0a0a0f;
+      color: #e2e8f0;
+    }
+
+    .nav-blur {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0f; }
+    ::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.3); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(201,169,110,0.5); }
+
+    .toc-link {
+      transition: color 0.2s ease, padding-left 0.2s ease;
+    }
+    .toc-link:hover {
+      color: #c9a96e;
+      padding-left: 4px;
+    }
+
+    .legal-section h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-dark/80 border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <a href="/" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/10">
+            <span class="font-display font-bold text-dark text-lg tracking-tight">HP</span>
+          </div>
+          <span class="hidden sm:block font-body font-semibold text-white text-lg tracking-tight">
+            HealthProcure <span class="text-gold">Intel</span>
+          </span>
+        </a>
+        <div class="flex items-center gap-8">
+          <a href="/" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Home</a>
+          <a href="/dashboard" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Dashboard</a>
+          <a href="/privacy.html" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="pt-32 pb-12 px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">Terms of Service</h1>
+      <p class="text-gray-400 text-lg">Last updated: June 2026</p>
+      <div class="mt-6 w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto"></div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-6 lg:px-8 pb-24">
+
+    <!-- Table of Contents -->
+    <div class="bg-dark-100 border border-white/5 rounded-xl p-8 mb-12">
+      <h2 class="font-display text-xl font-semibold text-gold mb-6">Table of Contents</h2>
+      <ol class="space-y-2 text-sm text-gray-400 list-decimal list-inside">
+        <li><a href="#acceptance" class="toc-link">Acceptance of Terms</a></li>
+        <li><a href="#description" class="toc-link">Description of Service</a></li>
+        <li><a href="#api-key-usage" class="toc-link">API Key Usage</a></li>
+        <li><a href="#tiered-plans" class="toc-link">Tiered Plans and Rate Limits</a></li>
+        <li><a href="#data-accuracy" class="toc-link">Data Accuracy Disclaimer</a></li>
+        <li><a href="#intellectual-property" class="toc-link">Intellectual Property</a></li>
+        <li><a href="#payment-terms" class="toc-link">Payment Terms</a></li>
+        <li><a href="#termination" class="toc-link">Termination</a></li>
+        <li><a href="#limitation-of-liability" class="toc-link">Limitation of Liability</a></li>
+        <li><a href="#governing-law" class="toc-link">Governing Law</a></li>
+        <li><a href="#changes" class="toc-link">Changes to Terms</a></li>
+        <li><a href="#contact" class="toc-link">Contact</a></li>
+      </ol>
+    </div>
+
+    <!-- Legal Sections -->
+    <div class="legal-section space-y-12 text-gray-300 leading-relaxed">
+
+      <!-- 1. Acceptance of Terms -->
+      <section id="acceptance">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">1.</span>Acceptance of Terms
+        </h2>
+        <p class="mb-4">
+          By accessing or using the HealthProcure Intel platform, API, dashboard, or any associated services (collectively, the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you are entering into these Terms on behalf of a company or other legal entity, you represent that you have the authority to bind such entity to these Terms.
+        </p>
+        <p>
+          If you do not agree to these Terms, you must not access or use the Service. Your continued use of the Service following the posting of revised Terms constitutes your acceptance of those changes.
+        </p>
+      </section>
+
+      <!-- 2. Description of Service -->
+      <section id="description">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">2.</span>Description of Service
+        </h2>
+        <p class="mb-4">
+          HealthProcure Intel is a business-to-business (B2B) healthcare procurement intelligence platform. The Service provides programmatic API access to aggregated, structured data sourced from publicly available global healthcare procurement databases, including but not limited to:
+        </p>
+        <ul class="list-disc list-inside space-y-2 ml-4 mb-4 text-gray-400">
+          <li><strong class="text-gray-300">TED Europa</strong> (Tenders Electronic Daily) — European Union public procurement notices</li>
+          <li><strong class="text-gray-300">SAM.gov</strong> — United States federal procurement opportunities</li>
+          <li><strong class="text-gray-300">WHO</strong> (World Health Organization) — International health procurement data</li>
+          <li><strong class="text-gray-300">NHS Supply Chain</strong> — United Kingdom National Health Service procurement data</li>
+        </ul>
+        <p>
+          The Service includes a RESTful API, a web-based analytics dashboard, and associated documentation. The Service is intended for business and professional use only.
+        </p>
+      </section>
+
+      <!-- 3. API Key Usage -->
+      <section id="api-key-usage">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">3.</span>API Key Usage
+        </h2>
+        <p class="mb-4">
+          Upon registration, you will be issued an API key bearing the <code class="bg-dark-300 text-gold px-2 py-0.5 rounded text-sm font-mono">hpi_</code> prefix followed by 64 hexadecimal characters. This API key is confidential and personal to your account.
+        </p>
+        <p class="mb-4">You agree to the following conditions regarding your API key:</p>
+        <ul class="list-disc list-inside space-y-2 ml-4 mb-4 text-gray-400">
+          <li>You shall not share, publish, or disclose your API key to any third party.</li>
+          <li>You shall not embed your API key in client-side code, public repositories, or any publicly accessible medium.</li>
+          <li>You shall not resell, redistribute, sublicense, or provide bulk access to raw data obtained through the API to any third party.</li>
+          <li>You are solely responsible for all activity that occurs under your API key.</li>
+          <li>You must notify us immediately at <a href="mailto:legal@healthprocureintel.com" class="text-gold hover:underline">legal@healthprocureintel.com</a> if you believe your API key has been compromised.</li>
+        </ul>
+        <p>
+          We reserve the right to revoke or rotate any API key at any time, with or without notice, if we reasonably believe it has been compromised or is being used in violation of these Terms.
+        </p>
+      </section>
+
+      <!-- 4. Tiered Plans -->
+      <section id="tiered-plans">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">4.</span>Tiered Plans and Rate Limits
+        </h2>
+        <p class="mb-6">
+          The Service is offered under the following subscription tiers. Rate limits are enforced on a per-calendar-day basis (UTC):
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left border border-white/5 rounded-lg overflow-hidden">
+            <thead class="bg-dark-300 text-gray-400 uppercase text-xs tracking-wider">
+              <tr>
+                <th class="px-6 py-4">Plan</th>
+                <th class="px-6 py-4">Rate Limit</th>
+                <th class="px-6 py-4">Price</th>
+                <th class="px-6 py-4">Features</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+              <tr class="bg-dark-100/50">
+                <td class="px-6 py-4 font-medium text-white">Free</td>
+                <td class="px-6 py-4 text-gray-400">100 requests/day</td>
+                <td class="px-6 py-4 text-gray-400">$0/month</td>
+                <td class="px-6 py-4 text-gray-400">Basic tender search, limited filters</td>
+              </tr>
+              <tr class="bg-dark-100/30">
+                <td class="px-6 py-4 font-medium text-white">Basic</td>
+                <td class="px-6 py-4 text-gray-400">1,000 requests/day</td>
+                <td class="px-6 py-4 text-gold">$49/month</td>
+                <td class="px-6 py-4 text-gray-400">Full search, award data, CSV export</td>
+              </tr>
+              <tr class="bg-dark-100/50">
+                <td class="px-6 py-4 font-medium text-white">Pro</td>
+                <td class="px-6 py-4 text-gray-400">10,000 requests/day</td>
+                <td class="px-6 py-4 text-gold">$199/month</td>
+                <td class="px-6 py-4 text-gray-400">Analytics, benchmarks, webhooks, priority support</td>
+              </tr>
+              <tr class="bg-dark-100/30">
+                <td class="px-6 py-4 font-medium text-white">Enterprise</td>
+                <td class="px-6 py-4 text-gray-400">Unlimited</td>
+                <td class="px-6 py-4 text-gold">$499/month</td>
+                <td class="px-6 py-4 text-gray-400">Dedicated support, SLA, custom integrations, bulk export</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-4 text-sm text-gray-500">
+          Requests exceeding your plan's daily limit will receive an HTTP 429 (Too Many Requests) response. Sustained or deliberate abuse of rate limits may result in temporary or permanent suspension of your API key.
+        </p>
+      </section>
+
+      <!-- 5. Data Accuracy Disclaimer -->
+      <section id="data-accuracy">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">5.</span>Data Accuracy Disclaimer
+        </h2>
+        <p class="mb-4">
+          The procurement data provided through the Service is aggregated and structured from publicly available government and institutional sources. While we make commercially reasonable efforts to ensure the accuracy, completeness, and timeliness of the data, <strong class="text-white">we do not guarantee that any data is error-free, complete, or current</strong>.
+        </p>
+        <p class="mb-4">
+          Data is collected through automated web scraping processes and may be subject to delays, omissions, or inaccuracies arising from changes to source websites, network interruptions, or data formatting inconsistencies.
+        </p>
+        <p>
+          You acknowledge and agree that the Service is intended to supplement, not replace, your own due diligence and independent verification. You should not rely solely on data obtained through the Service for procurement decisions, bidding, or contract negotiations.
+        </p>
+      </section>
+
+      <!-- 6. Intellectual Property -->
+      <section id="intellectual-property">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">6.</span>Intellectual Property
+        </h2>
+        <p class="mb-4">
+          The Service, including its software, API design, documentation, dashboard, data models, aggregation methodologies, and branding, is the intellectual property of HealthProcure Intel and is protected by copyright, trademark, and other intellectual property laws.
+        </p>
+        <p class="mb-4">
+          The underlying procurement data sourced from public government databases remains in the public domain to the extent permitted by applicable law. However, our proprietary value-added enhancements — including data normalization, currency conversion, categorization, benchmarking, and analytics — are protected intellectual property.
+        </p>
+        <p>
+          Your subscription grants you a limited, non-exclusive, non-transferable, revocable licence to access and use the Service in accordance with your plan tier. You may not reverse-engineer, decompile, or disassemble any part of the Service.
+        </p>
+      </section>
+
+      <!-- 7. Payment Terms -->
+      <section id="payment-terms">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">7.</span>Payment Terms
+        </h2>
+        <p class="mb-4">
+          Paid subscriptions are billed monthly in advance through our payment processor, Stripe, Inc. By subscribing to a paid plan, you authorise recurring charges to your designated payment method.
+        </p>
+        <ul class="list-disc list-inside space-y-2 ml-4 mb-4 text-gray-400">
+          <li><strong class="text-gray-300">Auto-Renewal:</strong> Subscriptions automatically renew at the end of each billing period unless cancelled before the renewal date.</li>
+          <li><strong class="text-gray-300">Price Changes:</strong> We will provide at least 30 days' notice before any price increase takes effect. Continued use after the effective date constitutes acceptance of the new pricing.</li>
+          <li><strong class="text-gray-300">Refunds:</strong> Subscription fees are non-refundable except where required by applicable law. Downgrades take effect at the start of the next billing cycle.</li>
+          <li><strong class="text-gray-300">Failed Payments:</strong> If a payment fails, we will attempt to process it again. After three consecutive failed attempts, your account may be downgraded to the Free tier and your API key's rate limit adjusted accordingly.</li>
+          <li><strong class="text-gray-300">Taxes:</strong> All prices are exclusive of applicable taxes. You are responsible for all taxes associated with your subscription.</li>
+        </ul>
+      </section>
+
+      <!-- 8. Termination -->
+      <section id="termination">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">8.</span>Termination
+        </h2>
+        <p class="mb-4">
+          You may cancel your subscription at any time through your account settings or by contacting us at <a href="mailto:legal@healthprocureintel.com" class="text-gold hover:underline">legal@healthprocureintel.com</a>. Cancellation takes effect at the end of the current billing period.
+        </p>
+        <p class="mb-4">
+          We reserve the right to suspend or terminate your account and revoke your API key immediately, without prior notice, if we determine in our sole discretion that:
+        </p>
+        <ul class="list-disc list-inside space-y-2 ml-4 mb-4 text-gray-400">
+          <li>You have violated any provision of these Terms.</li>
+          <li>Your API key is being used for unauthorized automated scraping, denial-of-service attacks, or any activity that degrades the Service for other users.</li>
+          <li>You are reselling or redistributing raw API data without authorization.</li>
+          <li>Your use of the Service poses a security risk or legal liability.</li>
+          <li>You have provided false or misleading registration information.</li>
+        </ul>
+        <p>
+          Upon termination, your API key will be deactivated and your access to the Service will cease. Any data stored in your account will be retained for 90 days and then permanently deleted in accordance with our <a href="/privacy.html" class="text-gold hover:underline">Privacy Policy</a>.
+        </p>
+      </section>
+
+      <!-- 9. Limitation of Liability -->
+      <section id="limitation-of-liability">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">9.</span>Limitation of Liability
+        </h2>
+        <p class="mb-4">
+          To the maximum extent permitted by applicable law, HealthProcure Intel, its directors, officers, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, business opportunities, or goodwill, arising out of or in connection with your use of, or inability to use, the Service.
+        </p>
+        <p class="mb-4">
+          In no event shall our total aggregate liability to you exceed the greater of (a) the amount you have paid to us in the twelve (12) months preceding the event giving rise to the claim, or (b) one hundred pounds sterling (GBP 100).
+        </p>
+        <p>
+          The Service is provided on an "as is" and "as available" basis. We expressly disclaim all warranties, whether express, implied, or statutory, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+        </p>
+      </section>
+
+      <!-- 10. Governing Law -->
+      <section id="governing-law">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">10.</span>Governing Law
+        </h2>
+        <p class="mb-4">
+          These Terms shall be governed by and construed in accordance with the laws of England and Wales, without regard to conflict of law principles.
+        </p>
+        <p>
+          Any disputes arising out of or in connection with these Terms or the Service shall be subject to the exclusive jurisdiction of the courts of England and Wales. Notwithstanding the foregoing, we reserve the right to seek injunctive or other equitable relief in any court of competent jurisdiction to protect our intellectual property rights.
+        </p>
+      </section>
+
+      <!-- 11. Changes to Terms -->
+      <section id="changes">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">11.</span>Changes to Terms
+        </h2>
+        <p class="mb-4">
+          We reserve the right to modify these Terms at any time. Material changes will be communicated via email to the address associated with your account and by posting a notice on the Service at least 30 days before the effective date.
+        </p>
+        <p>
+          Your continued use of the Service after the revised Terms become effective constitutes your acceptance of the revised Terms. If you do not agree with the revised Terms, you must discontinue use of the Service and cancel your subscription.
+        </p>
+      </section>
+
+      <!-- 12. Contact -->
+      <section id="contact">
+        <h2 class="text-2xl font-semibold text-white mb-4">
+          <span class="text-gold mr-2">12.</span>Contact
+        </h2>
+        <p class="mb-4">
+          If you have any questions, concerns, or requests regarding these Terms of Service, please contact us at:
+        </p>
+        <div class="bg-dark-100 border border-white/5 rounded-xl p-6">
+          <p class="text-white font-medium mb-1">HealthProcure Intel — Legal Department</p>
+          <p class="text-gray-400">
+            Email: <a href="mailto:legal@healthprocureintel.com" class="text-gold hover:underline">legal@healthprocureintel.com</a>
+          </p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 py-12 px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <p>&copy; 2026 HealthProcure Intel. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href="/terms.html" class="text-gold hover:underline">Terms of Service</a>
+        <a href="/privacy.html" class="hover:text-gold transition-colors duration-200">Privacy Policy</a>
+        <a href="/" class="hover:text-gold transition-colors duration-200">Home</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -58,11 +58,13 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
     return;
   }
 
-  const PRICE_TIER_MAP: Record<string, ApiTier> = {
-    price_basic_monthly: "basic",
-    price_pro_monthly: "pro",
-    price_enterprise_monthly: "enterprise",
-  };
+  function resolveTier(priceId: string, amount?: number): ApiTier {
+    const id = priceId.toLowerCase();
+    if (id.includes("enterprise") || amount === 49900) return "enterprise";
+    if (id.includes("pro") || amount === 19900) return "pro";
+    if (id.includes("basic") || amount === 4900) return "basic";
+    return "basic";
+  }
 
   try {
     switch (event.type) {
@@ -71,8 +73,9 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
         const email = session.customer_email ?? session.customer_details?.email ?? "";
         const customerId = session.customer as string;
         const subscriptionId = session.subscription as string;
-        const priceId = (session.metadata?.price_id ?? "").toLowerCase();
-        const tier = PRICE_TIER_MAP[priceId] ?? "basic";
+        const priceId = session.metadata?.price_id ?? "";
+        const amount = session.amount_total ?? undefined;
+        const tier = resolveTier(priceId, amount);
         const apiKey = `hpi_${crypto.randomBytes(32).toString("hex")}`;
 
         if (USE_SUPABASE && supabase) {
@@ -100,8 +103,8 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
       }
       case "customer.subscription.updated": {
         const sub = event.data.object as Stripe.Subscription;
-        const priceId = sub.items.data[0]?.price.id ?? "";
-        const newTier = PRICE_TIER_MAP[priceId] ?? "basic";
+        const item = sub.items.data[0];
+        const newTier = resolveTier(item?.price.id ?? "", (item?.price.unit_amount ?? undefined) as number | undefined);
         if (USE_SUPABASE && supabase) {
           await supabase.from("api_keys").update({ tier: newTier }).eq("stripe_subscription_id", sub.id);
         }
@@ -380,10 +383,130 @@ app.get("/api/v1/sources", authMiddleware, (_req, res) => {
   });
 });
 
+// --- Stripe Checkout & Billing ---
+
+app.post("/api/v1/checkout", async (req, res) => {
+  if (!STRIPE_SECRET) {
+    res.status(503).json({ error: "Stripe not configured" });
+    return;
+  }
+  const { priceId, email } = req.body;
+  if (!priceId || !email) {
+    res.status(400).json({ error: "priceId and email are required" });
+    return;
+  }
+
+  try {
+    const stripe = new Stripe(STRIPE_SECRET);
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      payment_method_types: ["card"],
+      customer_email: email,
+      line_items: [{ price: priceId, quantity: 1 }],
+      metadata: { price_id: priceId },
+      success_url: `${req.headers.origin || req.protocol + "://" + req.get("host")}/dashboard?checkout=success`,
+      cancel_url: `${req.headers.origin || req.protocol + "://" + req.get("host")}/#pricing`,
+    });
+    res.json({ url: session.url });
+  } catch (err) {
+    logger.error("Checkout session creation failed", { error: String(err) });
+    res.status(500).json({ error: "Failed to create checkout session" });
+  }
+});
+
+app.post("/api/v1/billing/portal", async (req, res) => {
+  if (!STRIPE_SECRET) {
+    res.status(503).json({ error: "Stripe not configured" });
+    return;
+  }
+  const { customerId } = req.body;
+  if (!customerId) {
+    res.status(400).json({ error: "customerId is required" });
+    return;
+  }
+
+  try {
+    const stripe = new Stripe(STRIPE_SECRET);
+    const session = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: `${req.headers.origin || req.protocol + "://" + req.get("host")}/dashboard`,
+    });
+    res.json({ url: session.url });
+  } catch (err) {
+    logger.error("Billing portal session failed", { error: String(err) });
+    res.status(500).json({ error: "Failed to create portal session" });
+  }
+});
+
+app.post("/api/v1/signup/free", async (req, res) => {
+  const { email } = req.body;
+  if (!email || typeof email !== "string" || !email.includes("@")) {
+    res.status(400).json({ error: "Valid email is required" });
+    return;
+  }
+
+  const apiKey = `hpi_${crypto.randomBytes(32).toString("hex")}`;
+
+  if (USE_SUPABASE && supabase) {
+    const { data: existing } = await supabase
+      .from("api_keys")
+      .select("key")
+      .eq("email", email)
+      .eq("is_active", true)
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      res.status(409).json({ error: "An API key already exists for this email" });
+      return;
+    }
+
+    const { error } = await supabase.from("api_keys").insert({
+      id: crypto.randomUUID(),
+      key: apiKey,
+      user_id: email,
+      email,
+      tier: "free",
+      is_active: true,
+    });
+    if (error) {
+      logger.error("Free signup failed", { error: error.message });
+      res.status(500).json({ error: "Failed to create API key" });
+      return;
+    }
+  }
+
+  logger.info("Free API key provisioned", { email });
+  res.json({ apiKey, tier: "free", message: "Your API key has been created. Store it securely — it cannot be retrieved again." });
+});
+
+// --- Stripe Product Info ---
+
+app.get("/api/v1/pricing", (_req, res) => {
+  res.json({
+    data: [
+      { tier: "free", name: "Free", price: 0, requestsPerDay: 100, maxPageSize: 20, benchmarks: false },
+      { tier: "basic", name: "Basic", price: 4900, requestsPerDay: 1000, maxPageSize: 50, benchmarks: false },
+      { tier: "pro", name: "Pro", price: 19900, requestsPerDay: 10000, maxPageSize: 200, benchmarks: true, featured: true },
+      { tier: "enterprise", name: "Enterprise", price: 49900, requestsPerDay: -1, maxPageSize: 500, benchmarks: true },
+    ],
+  });
+});
+
 // Serve marketing site
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.get("/", (_req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+});
+
+// Serve static pages
+app.get("/terms", (_req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "terms.html"));
+});
+app.get("/privacy", (_req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "privacy.html"));
+});
+app.get("/docs", (_req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "docs.html"));
 });
 
 // Serve dashboard at /dashboard
