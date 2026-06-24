@@ -1,35 +1,46 @@
 {
-  "name": "khalsa-kreatives",
+  "name": "healthprocure-intel",
   "version": "1.0.0",
-  "description": "Automated e-book and print-on-demand fulfillment for Sikh & Panjabi Cultural Colouring Books",
+  "description": "Automated healthcare procurement intelligence platform — aggregates global tenders, medical device frameworks, and supply chain benchmarks",
+  "private": true,
+  "type": "module",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc && tsup src/chatbot/widget.ts --format iife --out-dir public --minify",
+    "build": "tsc",
     "start": "node dist/server.js",
-    "bundle:widget": "tsup src/chatbot/widget.ts --format iife --out-dir public --minify",
+    "scrape": "tsx src/scraper/run.ts",
+    "scrape:ted": "tsx src/scraper/run.ts --source=ted",
+    "scrape:sam": "tsx src/scraper/run.ts --source=sam",
+    "migrate": "tsx src/db/migrate.ts",
+    "seed": "tsx src/db/seed.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint src/"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.105.0",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.10.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "cors": "^2.8.5",
+    "cron": "^3.1.7",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
-    "openai": "^6.44.0",
-    "resend": "^4.0.0",
-    "stripe": "^17.4.0",
-    "tsup": "^8.3.0",
-    "typescript": "^5.7.0"
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "playwright": "^1.47.0",
+    "stripe": "^16.12.0",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.0",
+    "@types/uuid": "^10.0.0",
     "tsx": "^4.19.0",
-    "vitest": "^2.1.0"
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.0.0"
   }
 }

@@ -1,57 +1,68 @@
 import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import { getConfigSafe } from "./config/index.js";
+import { authenticateApiKey } from "./api/middleware/auth.js";
+import { tendersRouter } from "./api/routes/tenders.js";
+import { awardsRouter } from "./api/routes/awards.js";
+import { analyticsRouter } from "./api/routes/analytics.js";
+import { stripeWebhooksRouter } from "./api/routes/stripe-webhooks.js";
+import { logger } from "./utils/logger.js";
 
 const app = express();
+const config = getConfigSafe();
 
-const finalPort = process.env.PORT || 3000;
+app.use(helmet());
+app.use(cors());
+
+app.post(
+  "/webhooks/stripe",
+  express.raw({ type: "application/json" }),
+  stripeWebhooksRouter
+);
+
+app.use(express.json());
+
+const limiter = rateLimit({
+  windowMs: Number(config.RATE_LIMIT_WINDOW_MS) || 900000,
+  max: Number(config.RATE_LIMIT_MAX_REQUESTS) || 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests, please try again later." },
+});
+
+app.use("/api", limiter);
 
 app.get("/health", (_req, res) => {
-  res.json({ status: "ok", timestamp: new Date().toISOString() });
+  res.json({ status: "ok", timestamp: new Date().toISOString(), version: "1.0.0" });
 });
 
-app.get("/", (_req, res) => {
-  res.send("Khalsa Kreatives is alive");
-});
+app.use("/api/v1/tenders", authenticateApiKey, tendersRouter);
+app.use("/api/v1/awards", authenticateApiKey, awardsRouter);
+app.use("/api/v1/analytics", authenticateApiKey, analyticsRouter);
 
-try {
-  const path = require("node:path");
-  const { stripeWebhookRouter } = require("./webhooks/stripe.js");
-  const { verifyDownloadToken } = require("./fulfillment/digital.js");
-  const { chatbotRouter } = require("./chatbot/routes.js");
-
-  app.post(
-    "/webhooks/stripe",
-    express.raw({ type: "application/json" }),
-    stripeWebhookRouter
-  );
-
-  app.use(express.json());
-  app.use("/api/chat", chatbotRouter);
-
-  const PDF_DIR = path.resolve(process.cwd(), "assets/pdf");
-
-  app.get("/download/:token", (req: any, res: any) => {
-    const payload = verifyDownloadToken(req.params.token);
-    if (!payload) {
-      res.status(403).json({ error: "Invalid or expired download link" });
-      return;
-    }
-    console.log(`Download initiated: ${payload.sessionId}`);
-    const filePath = path.join(PDF_DIR, "panjabi-colouring-book.pdf");
-    res.download(filePath, "Khalsa-Kreatives-Colouring-Book.pdf", (err: any) => {
-      if (err && !res.headersSent) {
-        res.status(404).json({ error: "File not found" });
-      }
-    });
+app.get("/api/v1/sources", authenticateApiKey, (_req, res) => {
+  res.json({
+    data: [
+      { id: "ted_europa", name: "TED Europa", region: "Europe", url: "https://ted.europa.eu" },
+      { id: "sam_gov", name: "SAM.gov", region: "North America", url: "https://sam.gov" },
+      { id: "who_procurement", name: "WHO Procurement", region: "Global", url: "https://www.who.int/procurement" },
+      { id: "nhs_supply_chain", name: "NHS Supply Chain", region: "United Kingdom", url: "https://nhssupplychain.nhs.uk" },
+    ],
   });
+});
 
-  console.log("All routes loaded successfully");
-} catch (err) {
-  console.warn("Some routes failed to load (missing env vars?) — /health still available:", (err as Error).message);
-  app.use(express.json());
-}
+app.use(express.static("dashboard/dist"));
 
-app.listen(Number(finalPort), "0.0.0.0", () => {
-  console.log("SERVER LIVE ON PORT", finalPort);
+app.use((_req, res) => {
+  res.status(404).json({ error: "Not found" });
+});
+
+const port = Number(config.API_PORT) || 3000;
+
+app.listen(port, () => {
+  logger.info(`HealthProcure Intel API running on port ${port}`);
 });
 
 export { app };
