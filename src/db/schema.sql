@@ -141,13 +141,27 @@ ALTER TABLE tenders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contract_awards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE supply_chain_benchmarks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE api_keys ENABLE ROW LEVEL SECURITY;
+ALTER TABLE scrape_runs ENABLE ROW LEVEL SECURITY;
 
--- Service role can do everything
-CREATE POLICY "Service role full access on tenders"
-  ON tenders FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access on awards"
-  ON contract_awards FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access on benchmarks"
-  ON supply_chain_benchmarks FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access on api_keys"
-  ON api_keys FOR ALL USING (true) WITH CHECK (true);
+-- service_role bypasses RLS automatically — these policies govern anon/authenticated access
+
+-- Public data: anon can read tenders and awards (the product we sell access to via API keys)
+CREATE POLICY "anon_read_tenders"
+  ON tenders FOR SELECT TO anon USING (true);
+
+CREATE POLICY "anon_read_awards"
+  ON contract_awards FOR SELECT TO anon USING (true);
+
+CREATE POLICY "anon_read_benchmarks"
+  ON supply_chain_benchmarks FOR SELECT TO anon USING (true);
+
+-- api_keys: no anon access — only service_role (server-side) can read/write
+-- This prevents anyone with the anon key from listing or forging API keys
+
+-- scrape_runs: no anon access — internal operational data
+-- service_role handles all inserts/reads from the scraper pipeline
+
+-- authenticated users can read their own API key record (for a future self-service portal)
+CREATE POLICY "authenticated_read_own_api_key"
+  ON api_keys FOR SELECT TO authenticated
+  USING (auth.uid()::text = user_id);
