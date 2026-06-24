@@ -498,24 +498,39 @@ app.get("/api/v1/pricing", (_req, res) => {
   });
 });
 
+// Resolve static asset directories — bulletproof for any CWD or __dirname
+const publicDir = [
+  path.resolve(__dirname, "..", "public"),
+  path.resolve(__dirname, "public"),
+  path.join(process.cwd(), "public"),
+].find((d) => { try { return require("fs").existsSync(d); } catch { return false; } }) ?? path.join(process.cwd(), "public");
+
+const dashboardDir = [
+  path.resolve(__dirname, "..", "dashboard"),
+  path.resolve(__dirname, "dashboard"),
+  path.join(process.cwd(), "dashboard"),
+].find((d) => { try { return require("fs").existsSync(d); } catch { return false; } }) ?? path.join(process.cwd(), "dashboard");
+
+logger.info("Static dirs", { publicDir, dashboardDir });
+
 // Serve marketing site
-app.use(express.static(path.join(__dirname, "..", "public")));
+app.use(express.static(publicDir));
 app.get("/", (_req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+  res.sendFile(path.join(publicDir, "index.html"));
 });
 
 // Serve static pages
 const staticPages = ["terms", "privacy", "docs", "products"];
 for (const page of staticPages) {
   app.get(`/${page}`, (_req, res) => {
-    res.sendFile(path.join(__dirname, "..", "public", `${page}.html`));
+    res.sendFile(path.join(publicDir, `${page}.html`));
   });
 }
 
 // Serve dashboard at /dashboard
-app.use("/dashboard", express.static(path.join(__dirname, "..", "dashboard")));
+app.use("/dashboard", express.static(dashboardDir));
 app.get("/dashboard", (_req, res) => {
-  res.sendFile(path.join(__dirname, "..", "dashboard", "index.html"));
+  res.sendFile(path.join(dashboardDir, "index.html"));
 });
 
 app.use((_req, res) => {
