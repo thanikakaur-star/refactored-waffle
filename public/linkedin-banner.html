@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LinkedIn Banner — HealthProcure Intel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; }
+
+    .banner {
+      width: 1584px;
+      height: 396px;
+      background: linear-gradient(135deg, #0a0a0f 0%, #12141d 35%, #0f1118 65%, #0a0a0f 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 0 100px;
+    }
+
+    .glow-1 {
+      position: absolute;
+      top: -150px;
+      left: 200px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 65%);
+    }
+
+    .glow-2 {
+      position: absolute;
+      bottom: -200px;
+      right: 300px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 65%);
+    }
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,169,110,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,169,110,0.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    .accent-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #c9a96e, #d4af37, #c9a96e, transparent);
+    }
+
+    .accent-line-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(201,169,110,0.3), transparent);
+    }
+
+    .left {
+      flex: 1;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .logo-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(201,169,110,0.1);
+      border: 1.5px solid rgba(201,169,110,0.35);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: #c9a96e;
+    }
+
+    .logo-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .logo-name span { color: #c9a96e; }
+
+    .tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      color: #94a3b8;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+      margin-left: 80px;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #c9a96e, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      min-width: 140px;
+      text-align: right;
+    }
+
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .divider {
+      width: 1px;
+      height: 280px;
+      background: linear-gradient(180deg, transparent, rgba(201,169,110,0.2), transparent);
+      position: relative;
+      z-index: 2;
+      margin-left: 80px;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+    <div class="grid"></div>
+    <div class="accent-line-top"></div>
+    <div class="accent-line"></div>
+
+    <div class="left">
+      <div class="logo">
+        <div class="logo-icon">HP</div>
+        <div class="logo-name">Health<span>Procure</span> Intel</div>
+      </div>
+      <div class="tagline">Global Healthcare Procurement Intelligence</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="right">
+      <div class="stat">
+        <div class="stat-value">$50B+</div>
+        <div class="stat-label">Tenders Tracked</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">85+</div>
+        <div class="stat-label">Countries</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">4</div>
+        <div class="stat-label">Govt Portals</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
