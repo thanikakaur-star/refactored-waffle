@@ -499,15 +499,12 @@ app.get("/", (_req, res) => {
 });
 
 // Serve static pages
-app.get("/terms", (_req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "terms.html"));
-});
-app.get("/privacy", (_req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "privacy.html"));
-});
-app.get("/docs", (_req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "docs.html"));
-});
+const staticPages = ["terms", "privacy", "docs", "products"];
+for (const page of staticPages) {
+  app.get(`/${page}`, (_req, res) => {
+    res.sendFile(path.join(__dirname, "..", "public", `${page}.html`));
+  });
+}
 
 // Serve dashboard at /dashboard
 app.use("/dashboard", express.static(path.join(__dirname, "..", "dashboard")));
