@@ -27,14 +27,18 @@ const USE_SUPABASE = !!(SUPABASE_URL && SUPABASE_KEY && SUPABASE_URL.startsWith(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let supabase: any = null;
 if (USE_SUPABASE) {
-  const { createClient } = await import("@supabase/supabase-js");
-  supabase = createClient(SUPABASE_URL!, SUPABASE_KEY!);
-  logger.info("Connected to Supabase", { url: SUPABASE_URL });
+  try {
+    const { createClient } = await import("@supabase/supabase-js");
+    supabase = createClient(SUPABASE_URL!, SUPABASE_KEY!);
+    logger.info("Connected to Supabase", { url: SUPABASE_URL });
+  } catch (err) {
+    logger.error("Failed to init Supabase, falling back to local mode", { error: String(err) });
+  }
 } else {
   logger.info("Running in local mode (no Supabase credentials)");
 }
 
-const mode = USE_SUPABASE ? "supabase" : "local";
+const mode = supabase ? "supabase" : "local";
 
 const app = express();
 
