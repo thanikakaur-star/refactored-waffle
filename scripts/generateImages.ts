@@ -59,7 +59,6 @@ async function generatePage(page: { page: number; title: string; section: string
     n: 1,
     size: "1024x1792",
     quality: "hd",
-    style: "natural",
   });
 
   const imageUrl = response.data[0]?.url;
