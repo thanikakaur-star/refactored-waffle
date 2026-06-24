@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Documentation — HealthProcure Intel</title>
+  <meta name="description" content="HealthProcure Intel API documentation. Access global healthcare procurement data from TED Europa, SAM.gov, WHO, and NHS Supply Chain." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              DEFAULT: '#c9a96e',
+              light: '#d4c4a0',
+              dark: '#a8883f',
+              bright: '#d4af37',
+              muted: '#b8975a',
+            },
+            dark: {
+              DEFAULT: '#0a0a0f',
+              100: '#12141d',
+              200: '#0f1117',
+              300: '#181b27',
+              400: '#1e2130',
+              500: '#252839',
+            },
+            teal: {
+              DEFAULT: '#1a7a6d',
+              light: '#0d9488',
+              dark: '#145f55',
+            },
+          },
+          fontFamily: {
+            body: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #0a0a0f;
+      color: #e2e8f0;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #12141d; }
+    ::-webkit-scrollbar-thumb { background: #2a2d3a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #c9a96e; }
+
+    /* Sidebar */
+    .sidebar-link {
+      transition: all 0.2s ease;
+      border-left: 2px solid transparent;
+    }
+    .sidebar-link:hover, .sidebar-link.active {
+      color: #c9a96e;
+      border-left-color: #c9a96e;
+      background: rgba(201, 169, 110, 0.05);
+    }
+
+    /* Code blocks */
+    .code-block {
+      background: #0f1117;
+      border: 1px solid #1e2130;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8125rem;
+      line-height: 1.7;
+    }
+    .code-block code {
+      display: block;
+      padding: 1.25rem;
+    }
+    .code-block .kw { color: #c9a96e; }
+    .code-block .str { color: #0d9488; }
+    .code-block .num { color: #d4af37; }
+    .code-block .cmt { color: #4a5568; font-style: italic; }
+    .code-block .fn { color: #93c5fd; }
+    .code-block .op { color: #94a3b8; }
+
+    /* Method badges */
+    .method-get {
+      background: rgba(13, 148, 136, 0.15);
+      color: #0d9488;
+      border: 1px solid rgba(13, 148, 136, 0.3);
+    }
+
+    /* Tabs */
+    .tab-btn {
+      transition: all 0.2s ease;
+    }
+    .tab-btn.active {
+      color: #c9a96e;
+      border-bottom-color: #c9a96e;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Endpoint card */
+    .endpoint-card {
+      background: #12141d;
+      border: 1px solid #1e2130;
+      border-radius: 12px;
+      transition: border-color 0.3s ease;
+    }
+    .endpoint-card:hover {
+      border-color: rgba(201, 169, 110, 0.3);
+    }
+
+    /* Table */
+    .docs-table th {
+      background: #0f1117;
+      color: #c9a96e;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+    .docs-table td, .docs-table th {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #1e2130;
+    }
+    .docs-table tr:last-child td { border-bottom: none; }
+    .docs-table tbody tr:hover { background: rgba(201, 169, 110, 0.03); }
+
+    /* Param table */
+    .param-row {
+      border-bottom: 1px solid rgba(30, 33, 48, 0.6);
+    }
+    .param-row:last-child { border-bottom: none; }
+
+    /* Smooth scroll offset for fixed header */
+    section[id] {
+      scroll-margin-top: 5rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-dark-400/60" style="background: rgba(10, 10, 15, 0.92); backdrop-filter: blur(16px);">
+    <div class="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <a href="/" class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+            <span class="text-dark font-bold text-sm tracking-tight">HP</span>
+          </div>
+          <span class="text-white font-semibold text-sm tracking-wide hidden sm:block">HealthProcure Intel</span>
+        </a>
+        <div class="hidden md:flex items-center gap-1 ml-4">
+          <a href="/" class="text-sm text-gray-400 hover:text-gold px-3 py-1.5 rounded-md transition-colors">Home</a>
+          <a href="/dashboard" class="text-sm text-gray-400 hover:text-gold px-3 py-1.5 rounded-md transition-colors">Dashboard</a>
+          <span class="text-sm text-gold px-3 py-1.5 font-medium">API Docs</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-gray-500 font-mono hidden lg:block">v1.0.0</span>
+        <a href="#authentication" class="text-sm bg-gold/10 text-gold border border-gold/20 px-4 py-1.5 rounded-lg hover:bg-gold/20 transition-colors font-medium">Get API Key</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Layout: Sidebar + Main -->
+  <div class="flex pt-16 min-h-screen">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden lg:block w-64 flex-shrink-0 border-r border-dark-400/60 fixed top-16 bottom-0 overflow-y-auto" style="background: rgba(15, 17, 23, 0.6);">
+      <div class="p-5">
+        <p class="text-[0.65rem] uppercase tracking-widest text-gray-500 font-semibold mb-3">Getting Started</p>
+        <a href="#introduction" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">Introduction</a>
+        <a href="#authentication" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">Authentication</a>
+        <a href="#base-url" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">Base URL</a>
+        <a href="#tier-limits" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">Tier Limits</a>
+
+        <p class="text-[0.65rem] uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Endpoints</p>
+        <a href="#health" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">
+          <span class="inline-block text-[0.6rem] font-mono font-semibold text-teal-light bg-teal-light/10 px-1.5 py-0.5 rounded mr-1.5">GET</span>
+          /health
+        </a>
+        <a href="#list-tenders" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">
+          <span class="inline-block text-[0.6rem] font-mono font-semibold text-teal-light bg-teal-light/10 px-1.5 py-0.5 rounded mr-1.5">GET</span>
+          /tenders
+        </a>
+        <a href="#get-tender" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">
+          <span class="inline-block text-[0.6rem] font-mono font-semibold text-teal-light bg-teal-light/10 px-1.5 py-0.5 rounded mr-1.5">GET</span>
+          /tenders/:id
+        </a>
+        <a href="#list-awards" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">
+          <span class="inline-block text-[0.6rem] font-mono font-semibold text-teal-light bg-teal-light/10 px-1.5 py-0.5 rounded mr-1.5">GET</span>
+          /awards
+        </a>
+        <a href="#analytics-stats" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">
+          <span class="inline-block text-[0.6rem] font-mono font-semibold text-teal-light bg-teal-light/10 px-1.5 py-0.5 rounded mr-1.5">GET</span>
+          /analytics/stats
+        </a>
+        <a href="#analytics-benchmarks" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">
+          <span class="inline-block text-[0.6rem] font-mono font-semibold text-teal-light bg-teal-light/10 px-1.5 py-0.5 rounded mr-1.5">GET</span>
+          /analytics/benchmarks
+        </a>
+        <a href="#list-sources" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">
+          <span class="inline-block text-[0.6rem] font-mono font-semibold text-teal-light bg-teal-light/10 px-1.5 py-0.5 rounded mr-1.5">GET</span>
+          /sources
+        </a>
+
+        <p class="text-[0.65rem] uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Reference</p>
+        <a href="#errors" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">Error Responses</a>
+        <a href="#code-examples" class="sidebar-link block text-sm text-gray-400 py-1.5 px-3 rounded-r">Code Examples</a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 lg:ml-64 min-w-0">
+      <div class="max-w-4xl mx-auto px-6 md:px-10 py-12">
+
+        <!-- Introduction -->
+        <section id="introduction" class="mb-16">
+          <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">API Documentation</h1>
+          <p class="text-gold font-medium text-sm mb-6">HealthProcure Intel v1.0.0</p>
+          <p class="text-gray-400 leading-relaxed max-w-2xl">
+            Access aggregated healthcare procurement data from <strong class="text-gray-300">TED Europa</strong>,
+            <strong class="text-gray-300">SAM.gov</strong>, <strong class="text-gray-300">WHO Procurement</strong>,
+            and <strong class="text-gray-300">NHS Supply Chain</strong>. The REST API provides programmatic access
+            to tenders, contract awards, analytics, and regional benchmarks covering $50B+ in procurement activity.
+          </p>
+        </section>
+
+        <!-- Authentication -->
+        <section id="authentication" class="mb-16">
+          <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            Authentication
+          </h2>
+          <p class="text-gray-400 leading-relaxed mb-4">
+            All API requests (except <code class="text-gold font-mono text-sm">/health</code>) require a valid API key
+            passed in the <code class="text-gold font-mono text-sm">X-API-Key</code> header.
+          </p>
+          <p class="text-gray-400 leading-relaxed mb-5">
+            API keys follow the format <code class="text-gold font-mono text-sm">hpi_</code> followed by 64 hexadecimal characters.
+          </p>
+          <div class="code-block">
+            <code><span class="cmt"># Include your API key in every request</span>
+<span class="kw">curl</span> <span class="str">https://your-domain.railway.app/api/v1/tenders</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_api_key_here"</span></code>
+          </div>
+        </section>
+
+        <!-- Base URL -->
+        <section id="base-url" class="mb-16">
+          <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            Base URL
+          </h2>
+          <div class="code-block">
+            <code><span class="str">https://your-domain.railway.app/api/v1</span></code>
+          </div>
+          <p class="text-gray-500 text-sm mt-3">All endpoint paths in this documentation are relative to the base URL unless noted otherwise.</p>
+        </section>
+
+        <!-- Tier Limits -->
+        <section id="tier-limits" class="mb-16">
+          <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            Tier Limits
+          </h2>
+          <p class="text-gray-400 leading-relaxed mb-5">
+            Your API key is associated with a subscription tier that determines rate limits, maximum page sizes, and access to premium endpoints.
+          </p>
+          <div class="overflow-x-auto rounded-xl border border-dark-400">
+            <table class="docs-table w-full text-sm">
+              <thead>
+                <tr>
+                  <th class="text-left rounded-tl-xl">Tier</th>
+                  <th class="text-left">Requests / Day</th>
+                  <th class="text-left">Max Page Size</th>
+                  <th class="text-left">Benchmarks</th>
+                  <th class="text-left rounded-tr-xl">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-medium text-white">Free</td>
+                  <td class="text-gray-400">100</td>
+                  <td class="text-gray-400 font-mono">20</td>
+                  <td><span class="text-red-400 text-xs font-medium">No</span></td>
+                  <td class="text-gray-400">$0</td>
+                </tr>
+                <tr>
+                  <td class="font-medium text-white">Basic</td>
+                  <td class="text-gray-400">1,000</td>
+                  <td class="text-gray-400 font-mono">50</td>
+                  <td><span class="text-red-400 text-xs font-medium">No</span></td>
+                  <td class="text-gold">$49/mo</td>
+                </tr>
+                <tr>
+                  <td class="font-medium text-white">Pro</td>
+                  <td class="text-gray-400">10,000</td>
+                  <td class="text-gray-400 font-mono">200</td>
+                  <td><span class="text-teal-light text-xs font-medium">Yes</span></td>
+                  <td class="text-gold">$199/mo</td>
+                </tr>
+                <tr>
+                  <td class="font-medium text-white">Enterprise</td>
+                  <td class="text-gray-400">Unlimited</td>
+                  <td class="text-gray-400 font-mono">500</td>
+                  <td><span class="text-teal-light text-xs font-medium">Yes</span></td>
+                  <td class="text-gold">$499/mo</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ======================= ENDPOINTS ======================= -->
+
+        <div class="border-t border-dark-400/60 pt-12 mb-12">
+          <h2 class="text-2xl font-bold text-white mb-1">Endpoints</h2>
+          <p class="text-gray-500 text-sm">All endpoints return JSON responses.</p>
+        </div>
+
+        <!-- GET /health -->
+        <section id="health" class="mb-14">
+          <div class="endpoint-card p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="method-get font-mono font-semibold text-xs px-3 py-1 rounded-md">GET</span>
+              <code class="text-white font-mono text-sm">/health</code>
+              <span class="text-xs text-gray-500 ml-auto">No auth required</span>
+            </div>
+            <p class="text-gray-400 text-sm mb-5">Health check endpoint. Returns server status, current timestamp, API version, and database mode. Does not require authentication.</p>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Response</h4>
+            <div class="code-block">
+              <code>{
+  <span class="str">"status"</span>: <span class="str">"ok"</span>,
+  <span class="str">"timestamp"</span>: <span class="str">"2026-06-24T12:00:00.000Z"</span>,
+  <span class="str">"version"</span>: <span class="str">"1.0.0"</span>,
+  <span class="str">"mode"</span>: <span class="str">"supabase"</span>
+}</code>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Try it</h4>
+            <div class="code-block">
+              <code><span class="kw">curl</span> <span class="str">https://your-domain.railway.app/health</span></code>
+            </div>
+          </div>
+        </section>
+
+        <!-- GET /api/v1/tenders -->
+        <section id="list-tenders" class="mb-14">
+          <div class="endpoint-card p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="method-get font-mono font-semibold text-xs px-3 py-1 rounded-md">GET</span>
+              <code class="text-white font-mono text-sm">/api/v1/tenders</code>
+            </div>
+            <p class="text-gray-400 text-sm mb-5">List healthcare procurement tenders with powerful filtering, full-text search, and pagination.</p>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Query Parameters</h4>
+            <div class="rounded-lg border border-dark-400 overflow-hidden mb-6">
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">source</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Filter by data source. One of: <code class="text-teal-light">ted_europa</code>, <code class="text-teal-light">sam_gov</code>, <code class="text-teal-light">who_procurement</code>, <code class="text-teal-light">nhs_supply_chain</code></p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">category</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">One of: <code class="text-teal-light">medical_devices</code>, <code class="text-teal-light">pharmaceuticals</code>, <code class="text-teal-light">health_it</code>, <code class="text-teal-light">laboratory_equipment</code>, <code class="text-teal-light">hospital_infrastructure</code>, <code class="text-teal-light">personal_protective_equipment</code>, <code class="text-teal-light">diagnostics</code>, <code class="text-teal-light">surgical_instruments</code>, <code class="text-teal-light">telemedicine</code>, <code class="text-teal-light">other</code></p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">status</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">One of: <code class="text-teal-light">open</code>, <code class="text-teal-light">closed</code>, <code class="text-teal-light">awarded</code>, <code class="text-teal-light">cancelled</code>, <code class="text-teal-light">planned</code></p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">country</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">ISO 3166-1 alpha-2 country code (e.g. <code class="text-teal-light">DE</code>, <code class="text-teal-light">US</code>, <code class="text-teal-light">GB</code>)</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">region</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Geographic region (e.g. <code class="text-teal-light">Europe</code>, <code class="text-teal-light">North America</code>)</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">minValue</code>
+                <div>
+                  <span class="text-gray-500 text-xs">number, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Minimum tender value in USD</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">maxValue</code>
+                <div>
+                  <span class="text-gray-500 text-xs">number, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Maximum tender value in USD</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">publishedAfter</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">ISO 8601 date (e.g. <code class="text-teal-light">2026-01-01</code>)</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">publishedBefore</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">ISO 8601 date</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">search</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Full-text search across tender titles and descriptions (max 200 chars)</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">page</code>
+                <div>
+                  <span class="text-gray-500 text-xs">integer, default: 1</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Page number for pagination</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">pageSize</code>
+                <div>
+                  <span class="text-gray-500 text-xs">integer, default: 20</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Results per page (max depends on your tier)</p>
+                </div>
+              </div>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Response</h4>
+            <div class="code-block">
+              <code>{
+  <span class="str">"data"</span>: [
+    {
+      <span class="str">"id"</span>: <span class="str">"a1b2c3d4-e5f6-7890-abcd-ef1234567890"</span>,
+      <span class="str">"external_id"</span>: <span class="str">"TED-2026-123456"</span>,
+      <span class="str">"source"</span>: <span class="str">"ted_europa"</span>,
+      <span class="str">"title"</span>: <span class="str">"Supply of MRI Equipment for Regional Hospitals"</span>,
+      <span class="str">"description"</span>: <span class="str">"Procurement of 12 MRI scanners..."</span>,
+      <span class="str">"buyer_name"</span>: <span class="str">"Charite - Universitaetsmedizin Berlin"</span>,
+      <span class="str">"buyer_country"</span>: <span class="str">"DE"</span>,
+      <span class="str">"buyer_region"</span>: <span class="str">"Europe"</span>,
+      <span class="str">"category"</span>: <span class="str">"medical_devices"</span>,
+      <span class="str">"status"</span>: <span class="str">"open"</span>,
+      <span class="str">"published_at"</span>: <span class="str">"2026-06-15T09:00:00.000Z"</span>,
+      <span class="str">"deadline"</span>: <span class="str">"2026-08-01T17:00:00.000Z"</span>,
+      <span class="str">"original_currency"</span>: <span class="str">"EUR"</span>,
+      <span class="str">"original_value"</span>: <span class="num">4200000</span>,
+      <span class="str">"value_usd"</span>: <span class="num">4578000</span>,
+      <span class="str">"compliance_criteria"</span>: [<span class="str">"ISO 13485"</span>, <span class="str">"CE Mark"</span>],
+      <span class="str">"cpv_codes"</span>: [<span class="str">"33111000"</span>],
+      <span class="str">"url"</span>: <span class="str">"https://ted.europa.eu/udl?uri=TED:NOTICE:123456-2026"</span>,
+      <span class="str">"scraped_at"</span>: <span class="str">"2026-06-24T06:30:00.000Z"</span>,
+      <span class="str">"updated_at"</span>: <span class="str">"2026-06-24T06:30:00.000Z"</span>
+    }
+  ],
+  <span class="str">"pagination"</span>: {
+    <span class="str">"page"</span>: <span class="num">1</span>,
+    <span class="str">"pageSize"</span>: <span class="num">20</span>,
+    <span class="str">"total"</span>: <span class="num">150</span>,
+    <span class="str">"totalPages"</span>: <span class="num">8</span>
+  }
+}</code>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Try it</h4>
+            <div class="code-block">
+              <code><span class="cmt"># List open medical device tenders in Europe</span>
+<span class="kw">curl</span> <span class="str">"https://your-domain.railway.app/api/v1/tenders?status=open&category=medical_devices&region=Europe"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_api_key_here"</span></code>
+            </div>
+          </div>
+        </section>
+
+        <!-- GET /api/v1/tenders/:id -->
+        <section id="get-tender" class="mb-14">
+          <div class="endpoint-card p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="method-get font-mono font-semibold text-xs px-3 py-1 rounded-md">GET</span>
+              <code class="text-white font-mono text-sm">/api/v1/tenders/:id</code>
+            </div>
+            <p class="text-gray-400 text-sm mb-5">Retrieve a single tender by its UUID. Returns 404 if the tender does not exist.</p>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Path Parameters</h4>
+            <div class="rounded-lg border border-dark-400 overflow-hidden mb-6">
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">id</code>
+                <div>
+                  <span class="text-gray-500 text-xs">UUID, required</span>
+                  <p class="text-gray-400 text-xs mt-0.5">The unique identifier of the tender</p>
+                </div>
+              </div>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Response</h4>
+            <div class="code-block">
+              <code>{
+  <span class="str">"data"</span>: {
+    <span class="str">"id"</span>: <span class="str">"a1b2c3d4-e5f6-7890-abcd-ef1234567890"</span>,
+    <span class="str">"external_id"</span>: <span class="str">"TED-2026-123456"</span>,
+    <span class="str">"source"</span>: <span class="str">"ted_europa"</span>,
+    <span class="str">"title"</span>: <span class="str">"Supply of MRI Equipment for Regional Hospitals"</span>,
+    <span class="str">"description"</span>: <span class="str">"Full procurement description..."</span>,
+    <span class="str">"buyer_name"</span>: <span class="str">"Charite - Universitaetsmedizin Berlin"</span>,
+    <span class="str">"buyer_country"</span>: <span class="str">"DE"</span>,
+    <span class="str">"buyer_region"</span>: <span class="str">"Europe"</span>,
+    <span class="str">"category"</span>: <span class="str">"medical_devices"</span>,
+    <span class="str">"status"</span>: <span class="str">"open"</span>,
+    <span class="str">"published_at"</span>: <span class="str">"2026-06-15T09:00:00.000Z"</span>,
+    <span class="str">"deadline"</span>: <span class="str">"2026-08-01T17:00:00.000Z"</span>,
+    <span class="str">"original_currency"</span>: <span class="str">"EUR"</span>,
+    <span class="str">"original_value"</span>: <span class="num">4200000</span>,
+    <span class="str">"value_usd"</span>: <span class="num">4578000</span>,
+    <span class="str">"compliance_criteria"</span>: [<span class="str">"ISO 13485"</span>, <span class="str">"CE Mark"</span>],
+    <span class="str">"cpv_codes"</span>: [<span class="str">"33111000"</span>],
+    <span class="str">"url"</span>: <span class="str">"https://ted.europa.eu/udl?uri=TED:NOTICE:123456-2026"</span>,
+    <span class="str">"scraped_at"</span>: <span class="str">"2026-06-24T06:30:00.000Z"</span>,
+    <span class="str">"updated_at"</span>: <span class="str">"2026-06-24T06:30:00.000Z"</span>
+  }
+}</code>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Error Response (404)</h4>
+            <div class="code-block">
+              <code>{
+  <span class="str">"error"</span>: <span class="str">"Tender not found"</span>
+}</code>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Try it</h4>
+            <div class="code-block">
+              <code><span class="kw">curl</span> <span class="str">"https://your-domain.railway.app/api/v1/tenders/a1b2c3d4-e5f6-7890-abcd-ef1234567890"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_api_key_here"</span></code>
+            </div>
+          </div>
+        </section>
+
+        <!-- GET /api/v1/awards -->
+        <section id="list-awards" class="mb-14">
+          <div class="endpoint-card p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="method-get font-mono font-semibold text-xs px-3 py-1 rounded-md">GET</span>
+              <code class="text-white font-mono text-sm">/api/v1/awards</code>
+            </div>
+            <p class="text-gray-400 text-sm mb-5">List contract awards with filtering by tender, supplier country, source, value range, and date range.</p>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Query Parameters</h4>
+            <div class="rounded-lg border border-dark-400 overflow-hidden mb-6">
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">tenderId</code>
+                <div>
+                  <span class="text-gray-500 text-xs">UUID, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Filter awards for a specific tender</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">supplierCountry</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">ISO 3166-1 alpha-2 code of the supplier's country</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">source</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Filter by data source</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">minValue</code>
+                <div>
+                  <span class="text-gray-500 text-xs">number, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Minimum award value in USD</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">maxValue</code>
+                <div>
+                  <span class="text-gray-500 text-xs">number, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Maximum award value in USD</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">awardedAfter</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">ISO 8601 date</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">awardedBefore</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">ISO 8601 date</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">page</code>
+                <div>
+                  <span class="text-gray-500 text-xs">integer, default: 1</span>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">pageSize</code>
+                <div>
+                  <span class="text-gray-500 text-xs">integer, default: 20</span>
+                </div>
+              </div>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Response</h4>
+            <div class="code-block">
+              <code>{
+  <span class="str">"data"</span>: [
+    {
+      <span class="str">"id"</span>: <span class="str">"f9e8d7c6-b5a4-3210-fedc-ba9876543210"</span>,
+      <span class="str">"tender_id"</span>: <span class="str">"a1b2c3d4-e5f6-7890-abcd-ef1234567890"</span>,
+      <span class="str">"award_date"</span>: <span class="str">"2026-05-20T00:00:00.000Z"</span>,
+      <span class="str">"supplier_name"</span>: <span class="str">"Siemens Healthineers AG"</span>,
+      <span class="str">"supplier_country"</span>: <span class="str">"DE"</span>,
+      <span class="str">"original_currency"</span>: <span class="str">"EUR"</span>,
+      <span class="str">"award_value"</span>: <span class="num">3850000</span>,
+      <span class="str">"award_value_usd"</span>: <span class="num">4196500</span>,
+      <span class="str">"framework_type"</span>: <span class="str">"single_supplier"</span>,
+      <span class="str">"duration"</span>: <span class="str">"36 months"</span>,
+      <span class="str">"source"</span>: <span class="str">"ted_europa"</span>,
+      <span class="str">"scraped_at"</span>: <span class="str">"2026-06-24T06:30:00.000Z"</span>
+    }
+  ],
+  <span class="str">"pagination"</span>: {
+    <span class="str">"page"</span>: <span class="num">1</span>,
+    <span class="str">"pageSize"</span>: <span class="num">20</span>,
+    <span class="str">"total"</span>: <span class="num">42</span>,
+    <span class="str">"totalPages"</span>: <span class="num">3</span>
+  }
+}</code>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Try it</h4>
+            <div class="code-block">
+              <code><span class="cmt"># List awards for a specific tender</span>
+<span class="kw">curl</span> <span class="str">"https://your-domain.railway.app/api/v1/awards?tenderId=a1b2c3d4-e5f6-7890-abcd-ef1234567890"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_api_key_here"</span></code>
+            </div>
+          </div>
+        </section>
+
+        <!-- GET /api/v1/analytics/stats -->
+        <section id="analytics-stats" class="mb-14">
+          <div class="endpoint-card p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="method-get font-mono font-semibold text-xs px-3 py-1 rounded-md">GET</span>
+              <code class="text-white font-mono text-sm">/api/v1/analytics/stats</code>
+            </div>
+            <p class="text-gray-400 text-sm mb-5">Retrieve aggregated dashboard statistics including totals, breakdowns by region/category/source, monthly trends, and top buyers.</p>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Response</h4>
+            <div class="code-block">
+              <code>{
+  <span class="str">"totalTenders"</span>: <span class="num">1247</span>,
+  <span class="str">"openTenders"</span>: <span class="num">389</span>,
+  <span class="str">"totalAwardValueUsd"</span>: <span class="num">2847500000</span>,
+  <span class="str">"avgContractValueUsd"</span>: <span class="num">3420000</span>,
+  <span class="str">"tendersByRegion"</span>: {
+    <span class="str">"Europe"</span>: <span class="num">542</span>,
+    <span class="str">"North America"</span>: <span class="num">387</span>,
+    <span class="str">"Global"</span>: <span class="num">198</span>,
+    <span class="str">"United Kingdom"</span>: <span class="num">120</span>
+  },
+  <span class="str">"tendersByCategory"</span>: {
+    <span class="str">"medical_devices"</span>: <span class="num">312</span>,
+    <span class="str">"pharmaceuticals"</span>: <span class="num">278</span>,
+    <span class="str">"health_it"</span>: <span class="num">156</span>,
+    <span class="str">"laboratory_equipment"</span>: <span class="num">134</span>,
+    <span class="cmt">// ... more categories</span>
+  },
+  <span class="str">"tendersBySource"</span>: {
+    <span class="str">"ted_europa"</span>: <span class="num">542</span>,
+    <span class="str">"sam_gov"</span>: <span class="num">387</span>,
+    <span class="str">"who_procurement"</span>: <span class="num">198</span>,
+    <span class="str">"nhs_supply_chain"</span>: <span class="num">120</span>
+  },
+  <span class="str">"monthlyTrend"</span>: [
+    { <span class="str">"month"</span>: <span class="str">"2026-01"</span>, <span class="str">"count"</span>: <span class="num">98</span>, <span class="str">"totalValue"</span>: <span class="num">245000000</span> },
+    { <span class="str">"month"</span>: <span class="str">"2026-02"</span>, <span class="str">"count"</span>: <span class="num">112</span>, <span class="str">"totalValue"</span>: <span class="num">312000000</span> }
+  ],
+  <span class="str">"topBuyers"</span>: [
+    { <span class="str">"name"</span>: <span class="str">"NHS England"</span>, <span class="str">"country"</span>: <span class="str">"GB"</span>, <span class="str">"count"</span>: <span class="num">45</span> },
+    { <span class="str">"name"</span>: <span class="str">"VA Medical Center"</span>, <span class="str">"country"</span>: <span class="str">"US"</span>, <span class="str">"count"</span>: <span class="num">38</span> }
+  ]
+}</code>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Try it</h4>
+            <div class="code-block">
+              <code><span class="kw">curl</span> <span class="str">"https://your-domain.railway.app/api/v1/analytics/stats"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_api_key_here"</span></code>
+            </div>
+          </div>
+        </section>
+
+        <!-- GET /api/v1/analytics/benchmarks -->
+        <section id="analytics-benchmarks" class="mb-14">
+          <div class="endpoint-card p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-1">
+              <span class="method-get font-mono font-semibold text-xs px-3 py-1 rounded-md">GET</span>
+              <code class="text-white font-mono text-sm">/api/v1/analytics/benchmarks</code>
+            </div>
+            <p class="mt-3 mb-5">
+              <span class="inline-block text-[0.65rem] font-semibold uppercase tracking-wider bg-gold/10 text-gold border border-gold/20 px-2 py-0.5 rounded">Pro / Enterprise only</span>
+            </p>
+            <p class="text-gray-400 text-sm mb-5">Retrieve regional supply chain benchmarks including average lead times, contract values, tender counts, and compliance rates. Requires a Pro or Enterprise tier API key.</p>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Query Parameters</h4>
+            <div class="rounded-lg border border-dark-400 overflow-hidden mb-6">
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">region</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Filter benchmarks by region (e.g. <code class="text-teal-light">Europe</code>)</p>
+                </div>
+              </div>
+              <div class="param-row flex items-start gap-4 p-3 text-sm">
+                <code class="text-gold font-mono text-xs w-36 flex-shrink-0 pt-0.5">category</code>
+                <div>
+                  <span class="text-gray-500 text-xs">string, optional</span>
+                  <p class="text-gray-400 text-xs mt-0.5">Filter by procurement category</p>
+                </div>
+              </div>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Response</h4>
+            <div class="code-block">
+              <code>{
+  <span class="str">"data"</span>: [
+    {
+      <span class="str">"id"</span>: <span class="str">"b2c3d4e5-f6a7-8901-bcde-f12345678901"</span>,
+      <span class="str">"region"</span>: <span class="str">"Europe"</span>,
+      <span class="str">"category"</span>: <span class="str">"medical_devices"</span>,
+      <span class="str">"avg_lead_time_days"</span>: <span class="num">67</span>,
+      <span class="str">"avg_contract_value_usd"</span>: <span class="num">2850000</span>,
+      <span class="str">"tender_count"</span>: <span class="num">312</span>,
+      <span class="str">"award_count"</span>: <span class="num">198</span>,
+      <span class="str">"compliance_rate"</span>: <span class="num">0.94</span>,
+      <span class="str">"period"</span>: <span class="str">"2026-Q2"</span>,
+      <span class="str">"calculated_at"</span>: <span class="str">"2026-06-24T00:00:00.000Z"</span>
+    }
+  ]
+}</code>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Error Response (403)</h4>
+            <div class="code-block">
+              <code>{
+  <span class="str">"error"</span>: <span class="str">"This endpoint requires Pro or Enterprise tier"</span>
+}</code>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Try it</h4>
+            <div class="code-block">
+              <code><span class="cmt"># Requires Pro or Enterprise API key</span>
+<span class="kw">curl</span> <span class="str">"https://your-domain.railway.app/api/v1/analytics/benchmarks?region=Europe&category=medical_devices"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_pro_api_key_here"</span></code>
+            </div>
+          </div>
+        </section>
+
+        <!-- GET /api/v1/sources -->
+        <section id="list-sources" class="mb-14">
+          <div class="endpoint-card p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="method-get font-mono font-semibold text-xs px-3 py-1 rounded-md">GET</span>
+              <code class="text-white font-mono text-sm">/api/v1/sources</code>
+            </div>
+            <p class="text-gray-400 text-sm mb-5">List all available procurement data sources with metadata.</p>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Response</h4>
+            <div class="code-block">
+              <code>{
+  <span class="str">"data"</span>: [
+    {
+      <span class="str">"id"</span>: <span class="str">"ted_europa"</span>,
+      <span class="str">"name"</span>: <span class="str">"TED Europa"</span>,
+      <span class="str">"region"</span>: <span class="str">"Europe"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://ted.europa.eu"</span>
+    },
+    {
+      <span class="str">"id"</span>: <span class="str">"sam_gov"</span>,
+      <span class="str">"name"</span>: <span class="str">"SAM.gov"</span>,
+      <span class="str">"region"</span>: <span class="str">"North America"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://sam.gov"</span>
+    },
+    {
+      <span class="str">"id"</span>: <span class="str">"who_procurement"</span>,
+      <span class="str">"name"</span>: <span class="str">"WHO Procurement"</span>,
+      <span class="str">"region"</span>: <span class="str">"Global"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://www.who.int/procurement"</span>
+    },
+    {
+      <span class="str">"id"</span>: <span class="str">"nhs_supply_chain"</span>,
+      <span class="str">"name"</span>: <span class="str">"NHS Supply Chain"</span>,
+      <span class="str">"region"</span>: <span class="str">"United Kingdom"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://www.supplychain.nhs.uk"</span>
+    }
+  ]
+}</code>
+            </div>
+
+            <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-6 mb-3">Try it</h4>
+            <div class="code-block">
+              <code><span class="kw">curl</span> <span class="str">"https://your-domain.railway.app/api/v1/sources"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_api_key_here"</span></code>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= ERRORS ======================= -->
+
+        <section id="errors" class="mb-14">
+          <div class="border-t border-dark-400/60 pt-12 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-1">Error Responses</h2>
+            <p class="text-gray-500 text-sm">All errors return a JSON object with an <code class="text-gold font-mono text-xs">error</code> field.</p>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-dark-400">
+            <table class="docs-table w-full text-sm">
+              <thead>
+                <tr>
+                  <th class="text-left w-24 rounded-tl-xl">Status</th>
+                  <th class="text-left w-44">Meaning</th>
+                  <th class="text-left rounded-tr-xl">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code class="text-gold font-mono">400</code></td>
+                  <td class="text-gray-300 font-medium">Bad Request</td>
+                  <td class="text-gray-400">Invalid query parameters. Zod validation details are included in the <code class="text-teal-light font-mono text-xs">details</code> field.</td>
+                </tr>
+                <tr>
+                  <td><code class="text-gold font-mono">401</code></td>
+                  <td class="text-gray-300 font-medium">Unauthorized</td>
+                  <td class="text-gray-400">Missing or invalid API key. Ensure you are sending the <code class="text-teal-light font-mono text-xs">X-API-Key</code> header.</td>
+                </tr>
+                <tr>
+                  <td><code class="text-gold font-mono">403</code></td>
+                  <td class="text-gray-300 font-medium">Forbidden</td>
+                  <td class="text-gray-400">Your tier does not have access to this endpoint (e.g. benchmarks require Pro or Enterprise).</td>
+                </tr>
+                <tr>
+                  <td><code class="text-gold font-mono">404</code></td>
+                  <td class="text-gray-300 font-medium">Not Found</td>
+                  <td class="text-gray-400">The requested resource does not exist.</td>
+                </tr>
+                <tr>
+                  <td><code class="text-gold font-mono">429</code></td>
+                  <td class="text-gray-300 font-medium">Rate Limited</td>
+                  <td class="text-gray-400">You have exceeded the daily request limit for your tier. Upgrade or wait until the limit resets.</td>
+                </tr>
+                <tr>
+                  <td><code class="text-gold font-mono">500</code></td>
+                  <td class="text-gray-300 font-medium">Server Error</td>
+                  <td class="text-gray-400">An unexpected server error occurred. Contact support if the issue persists.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-8 mb-3">Example Error Response (400)</h4>
+          <div class="code-block">
+            <code>{
+  <span class="str">"error"</span>: <span class="str">"Invalid query parameters"</span>,
+  <span class="str">"details"</span>: [
+    {
+      <span class="str">"code"</span>: <span class="str">"invalid_enum_value"</span>,
+      <span class="str">"expected"</span>: [<span class="str">"open"</span>, <span class="str">"closed"</span>, <span class="str">"awarded"</span>, <span class="str">"cancelled"</span>, <span class="str">"planned"</span>],
+      <span class="str">"received"</span>: <span class="str">"active"</span>,
+      <span class="str">"path"</span>: [<span class="str">"status"</span>],
+      <span class="str">"message"</span>: <span class="str">"Invalid enum value. Expected 'open' | 'closed' | 'awarded' | 'cancelled' | 'planned', received 'active'"</span>
+    }
+  ]
+}</code>
+          </div>
+
+          <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-8 mb-3">Example Error Response (401)</h4>
+          <div class="code-block">
+            <code>{
+  <span class="str">"error"</span>: <span class="str">"Missing or invalid API key"</span>
+}</code>
+          </div>
+
+          <h4 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mt-8 mb-3">Example Error Response (429)</h4>
+          <div class="code-block">
+            <code>{
+  <span class="str">"error"</span>: <span class="str">"Rate limit exceeded"</span>,
+  <span class="str">"limit"</span>: <span class="num">100</span>,
+  <span class="str">"tier"</span>: <span class="str">"free"</span>
+}</code>
+          </div>
+        </section>
+
+        <!-- ======================= CODE EXAMPLES ======================= -->
+
+        <section id="code-examples" class="mb-20">
+          <div class="border-t border-dark-400/60 pt-12 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-1">Code Examples</h2>
+            <p class="text-gray-500 text-sm">Ready-to-use examples in popular languages.</p>
+          </div>
+
+          <!-- Tabs -->
+          <div class="flex border-b border-dark-400 mb-6 gap-0">
+            <button class="tab-btn active text-sm font-medium px-5 py-2.5 border-b-2 border-transparent text-gray-400" data-tab="curl" onclick="switchTab('curl')">cURL</button>
+            <button class="tab-btn text-sm font-medium px-5 py-2.5 border-b-2 border-transparent text-gray-400" data-tab="javascript" onclick="switchTab('javascript')">JavaScript</button>
+            <button class="tab-btn text-sm font-medium px-5 py-2.5 border-b-2 border-transparent text-gray-400" data-tab="python" onclick="switchTab('python')">Python</button>
+          </div>
+
+          <!-- cURL -->
+          <div class="tab-panel active" id="tab-curl">
+            <h4 class="text-sm text-gray-300 font-medium mb-3">List open tenders for medical devices</h4>
+            <div class="code-block mb-6">
+              <code><span class="kw">curl</span> <span class="op">-X</span> GET <span class="str">"https://your-domain.railway.app/api/v1/tenders?status=open&category=medical_devices&pageSize=10"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_api_key_here"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"Accept: application/json"</span></code>
+            </div>
+
+            <h4 class="text-sm text-gray-300 font-medium mb-3">Get dashboard statistics</h4>
+            <div class="code-block mb-6">
+              <code><span class="kw">curl</span> <span class="str">"https://your-domain.railway.app/api/v1/analytics/stats"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_api_key_here"</span></code>
+            </div>
+
+            <h4 class="text-sm text-gray-300 font-medium mb-3">Search tenders by keyword</h4>
+            <div class="code-block">
+              <code><span class="kw">curl</span> <span class="str">"https://your-domain.railway.app/api/v1/tenders?search=ventilator&minValue=100000&publishedAfter=2026-01-01"</span> <span class="op">\</span>
+  <span class="op">-H</span> <span class="str">"X-API-Key: hpi_your_api_key_here"</span></code>
+            </div>
+          </div>
+
+          <!-- JavaScript -->
+          <div class="tab-panel" id="tab-javascript">
+            <h4 class="text-sm text-gray-300 font-medium mb-3">List open tenders for medical devices</h4>
+            <div class="code-block mb-6">
+              <code><span class="kw">const</span> API_KEY <span class="op">=</span> <span class="str">"hpi_your_api_key_here"</span>;
+<span class="kw">const</span> BASE_URL <span class="op">=</span> <span class="str">"https://your-domain.railway.app/api/v1"</span>;
+
+<span class="kw">const</span> params <span class="op">=</span> <span class="kw">new</span> <span class="fn">URLSearchParams</span>({
+  status: <span class="str">"open"</span>,
+  category: <span class="str">"medical_devices"</span>,
+  pageSize: <span class="str">"10"</span>,
+});
+
+<span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`${BASE_URL}/tenders?${params}`</span>, {
+  headers: {
+    <span class="str">"X-API-Key"</span>: API_KEY,
+    <span class="str">"Accept"</span>: <span class="str">"application/json"</span>,
+  },
+});
+
+<span class="kw">const</span> { data, pagination } <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();
+console.<span class="fn">log</span>(<span class="str">`Found ${pagination.total} tenders`</span>);
+
+<span class="kw">for</span> (<span class="kw">const</span> tender <span class="kw">of</span> data) {
+  console.<span class="fn">log</span>(<span class="str">`${tender.title} — $${tender.value_usd?.toLocaleString()}`</span>);
+}</code>
+            </div>
+
+            <h4 class="text-sm text-gray-300 font-medium mb-3">Get regional benchmarks</h4>
+            <div class="code-block">
+              <code><span class="cmt">// Requires Pro or Enterprise tier</span>
+<span class="kw">const</span> benchmarks <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(
+  <span class="str">`${BASE_URL}/analytics/benchmarks?region=Europe&category=pharmaceuticals`</span>,
+  { headers: { <span class="str">"X-API-Key"</span>: API_KEY } }
+).<span class="fn">then</span>(r <span class="op">=></span> r.<span class="fn">json</span>());
+
+<span class="kw">for</span> (<span class="kw">const</span> b <span class="kw">of</span> benchmarks.data) {
+  console.<span class="fn">log</span>(
+    <span class="str">`${b.region} / ${b.category}: avg $${b.avg_contract_value_usd?.toLocaleString()}, `</span> <span class="op">+</span>
+    <span class="str">`lead time ${b.avg_lead_time_days}d, compliance ${(b.compliance_rate * 100).toFixed(0)}%`</span>
+  );
+}</code>
+            </div>
+          </div>
+
+          <!-- Python -->
+          <div class="tab-panel" id="tab-python">
+            <h4 class="text-sm text-gray-300 font-medium mb-3">List open tenders for medical devices</h4>
+            <div class="code-block mb-6">
+              <code><span class="kw">import</span> requests
+
+API_KEY <span class="op">=</span> <span class="str">"hpi_your_api_key_here"</span>
+BASE_URL <span class="op">=</span> <span class="str">"https://your-domain.railway.app/api/v1"</span>
+
+response <span class="op">=</span> requests.<span class="fn">get</span>(
+    <span class="str">f"{BASE_URL}/tenders"</span>,
+    headers<span class="op">=</span>{<span class="str">"X-API-Key"</span>: API_KEY},
+    params<span class="op">=</span>{
+        <span class="str">"status"</span>: <span class="str">"open"</span>,
+        <span class="str">"category"</span>: <span class="str">"medical_devices"</span>,
+        <span class="str">"pageSize"</span>: <span class="num">10</span>,
+    },
+)
+response.<span class="fn">raise_for_status</span>()
+
+data <span class="op">=</span> response.<span class="fn">json</span>()
+<span class="fn">print</span>(<span class="str">f"Found {data['pagination']['total']} tenders"</span>)
+
+<span class="kw">for</span> tender <span class="kw">in</span> data[<span class="str">"data"</span>]:
+    <span class="fn">print</span>(<span class="str">f"{tender['title']} — ${tender['value_usd']:,.0f}"</span>)</code>
+            </div>
+
+            <h4 class="text-sm text-gray-300 font-medium mb-3">Paginate through all awards</h4>
+            <div class="code-block">
+              <code><span class="kw">import</span> requests
+
+API_KEY <span class="op">=</span> <span class="str">"hpi_your_api_key_here"</span>
+BASE_URL <span class="op">=</span> <span class="str">"https://your-domain.railway.app/api/v1"</span>
+
+page <span class="op">=</span> <span class="num">1</span>
+all_awards <span class="op">=</span> []
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    resp <span class="op">=</span> requests.<span class="fn">get</span>(
+        <span class="str">f"{BASE_URL}/awards"</span>,
+        headers<span class="op">=</span>{<span class="str">"X-API-Key"</span>: API_KEY},
+        params<span class="op">=</span>{<span class="str">"page"</span>: page, <span class="str">"pageSize"</span>: <span class="num">50</span>},
+    )
+    resp.<span class="fn">raise_for_status</span>()
+    result <span class="op">=</span> resp.<span class="fn">json</span>()
+    all_awards.<span class="fn">extend</span>(result[<span class="str">"data"</span>])
+
+    <span class="kw">if</span> page <span class="op">>=</span> result[<span class="str">"pagination"</span>][<span class="str">"totalPages"</span>]:
+        <span class="kw">break</span>
+    page <span class="op">+=</span> <span class="num">1</span>
+
+<span class="fn">print</span>(<span class="str">f"Fetched {len(all_awards)} total awards"</span>)</code>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Footer -->
+      <footer class="border-t border-dark-400/60 py-8 px-6 md:px-10">
+        <div class="max-w-4xl mx-auto lg:ml-0 lg:pl-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-md bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+              <span class="text-dark font-bold text-[0.6rem]">HP</span>
+            </div>
+            <span class="text-gray-500 text-xs">HealthProcure Intel</span>
+          </div>
+          <p class="text-gray-600 text-xs">API v1.0.0 &middot; Questions? Contact support@healthprocureintel.com</p>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- JavaScript: Tab switching + sidebar active state -->
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+      });
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === 'tab-' + tab);
+      });
+    }
+
+    // Sidebar active state on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+    function updateActiveSidebar() {
+      let current = '';
+      for (const section of sections) {
+        const top = section.getBoundingClientRect().top;
+        if (top <= 120) current = section.id;
+      }
+      sidebarLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveSidebar, { passive: true });
+    updateActiveSidebar();
+  </script>
+
+</body>
+</html>
