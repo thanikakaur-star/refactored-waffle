@@ -2,7 +2,15 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as https from "node:https";
 import * as http from "node:http";
+import { config } from "dotenv";
 import OpenAI from "openai";
+
+config({ path: path.resolve(__dirname, "../.env") });
+
+if (!process.env.OPENAI_API_KEY) {
+  console.error("Missing OPENAI_API_KEY in .env file. Add it and try again.");
+  process.exit(1);
+}
 
 const designsPath = path.resolve(__dirname, "../src/content/product-designs.json");
 const designs = JSON.parse(fs.readFileSync(designsPath, "utf-8"));
@@ -31,8 +39,12 @@ function downloadFile(url: string, dest: string): Promise<void> {
   });
 }
 
-async function generatePage(page: { page: number; title: string; ai_prompt: string }) {
-  const destFile = path.join(imagesDir, `page-${page.page}.png`);
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+async function generatePage(page: { page: number; title: string; section: string; ai_prompt: string }) {
+  const destFile = path.join(imagesDir, `page-${page.page}-${slugify(page.section)}.png`);
 
   if (fs.existsSync(destFile)) {
     console.log(`Page ${page.page} already exists, skipping: ${page.title}`);
@@ -69,7 +81,7 @@ function updateTemplate() {
   let html = fs.readFileSync(templatePath, "utf-8");
 
   for (const page of designs.pages) {
-    const imgPath = `images/page-${page.page}.png`;
+    const imgPath = `images/page-${page.page}-${slugify(page.section)}.png`;
     const imgTag = `<img src="${imgPath}" alt="${page.title}" class="illustration-img" />`;
 
     const placeholderRegex = new RegExp(
