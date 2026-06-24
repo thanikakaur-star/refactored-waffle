@@ -217,19 +217,19 @@
 
     <!-- Nav Links -->
     <nav class="flex-1 py-4">
-      <a href="#" class="sidebar-link active">
+      <a href="#" class="sidebar-link active" data-panel="overview" onclick="switchPanel('overview', this)">
         <span class="icon">&#9632;</span> Overview
       </a>
-      <a href="#" class="sidebar-link">
+      <a href="#" class="sidebar-link" data-panel="tenders" onclick="switchPanel('tenders', this)">
         <span class="icon">&#9998;</span> Tenders
       </a>
-      <a href="#" class="sidebar-link">
+      <a href="#" class="sidebar-link" data-panel="awards" onclick="switchPanel('awards', this)">
         <span class="icon">&#9733;</span> Awards
       </a>
-      <a href="#" class="sidebar-link">
+      <a href="#" class="sidebar-link" data-panel="benchmarks" onclick="switchPanel('benchmarks', this)">
         <span class="icon">&#9650;</span> Benchmarks
       </a>
-      <a href="#" class="sidebar-link">
+      <a href="#" class="sidebar-link" data-panel="sources" onclick="switchPanel('sources', this)">
         <span class="icon">&#9881;</span> Sources
       </a>
     </nav>
@@ -318,6 +318,9 @@
       <!-- Dashboard Content (hidden until authenticated) -->
       <div id="dashboard" class="hidden fade-in">
 
+      <!-- Overview Panel -->
+      <div id="panel-overview" class="dashboard-panel">
+
         <!-- KPI Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
           <div class="stat-card glass-card p-6 fade-in stagger-1">
@@ -403,7 +406,83 @@
           </div>
         </div>
 
+      </div> <!-- end panel-overview -->
+
+      <!-- Tenders Panel -->
+      <div id="panel-tenders" class="dashboard-panel hidden">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold section-header" style="color: var(--text-primary);">Tenders</h2>
+          <div class="flex gap-3">
+            <select id="tender-filter-status" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+              <option value="">All Statuses</option>
+              <option value="open">Open</option>
+              <option value="closed">Closed</option>
+              <option value="awarded">Awarded</option>
+            </select>
+            <select id="tender-filter-source" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+              <option value="">All Sources</option>
+              <option value="ted_europa">TED Europa</option>
+              <option value="sam_gov">SAM.gov</option>
+              <option value="who_procurement">WHO</option>
+              <option value="nhs_supply_chain">NHS</option>
+            </select>
+          </div>
+        </div>
+        <div id="tenders-panel-list" class="space-y-3"></div>
+        <div id="tenders-pagination" class="flex items-center justify-between mt-6"></div>
       </div>
+
+      <!-- Awards Panel -->
+      <div id="panel-awards" class="dashboard-panel hidden">
+        <h2 class="text-2xl font-bold section-header mb-6" style="color: var(--text-primary);">Contract Awards</h2>
+        <div class="flex gap-3 mb-6">
+          <select id="award-filter-country" onchange="loadAwardsPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Countries</option>
+            <option value="US">United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="DE">Germany</option>
+            <option value="FR">France</option>
+            <option value="CH">Switzerland</option>
+          </select>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm dark-table">
+            <thead>
+              <tr style="border-bottom: 1px solid rgba(148,163,184,0.1);">
+                <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Supplier</th>
+                <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Country</th>
+                <th class="text-right py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Value (USD)</th>
+                <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Awarded</th>
+              </tr>
+            </thead>
+            <tbody id="awards-table-body"></tbody>
+          </table>
+        </div>
+        <div id="awards-pagination" class="flex items-center justify-between mt-6"></div>
+      </div>
+
+      <!-- Benchmarks Panel -->
+      <div id="panel-benchmarks" class="dashboard-panel hidden">
+        <h2 class="text-2xl font-bold section-header mb-6" style="color: var(--text-primary);">Supply Chain Benchmarks</h2>
+        <div class="flex gap-3 mb-6">
+          <select id="bench-filter-region" onchange="loadBenchmarksPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Regions</option>
+            <option value="Europe">Europe</option>
+            <option value="North America">North America</option>
+            <option value="Asia-Pacific">Asia-Pacific</option>
+            <option value="Africa">Africa</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="benchmarks-grid"></div>
+      </div>
+
+      <!-- Sources Panel -->
+      <div id="panel-sources" class="dashboard-panel hidden">
+        <h2 class="text-2xl font-bold section-header mb-6" style="color: var(--text-primary);">Data Sources</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="sources-grid"></div>
+      </div>
+
+      </div> <!-- end #dashboard -->
 
       <!-- Error State -->
       <div id="error" class="hidden text-center py-24">
@@ -688,6 +767,182 @@
       const div = document.createElement('div');
       div.textContent = str || '';
       return div.innerHTML;
+    }
+
+    // Panel switching
+    let currentPanel = 'overview';
+    let tenderPage = 1;
+    let awardPage = 1;
+
+    function switchPanel(panel, linkEl) {
+      if (!apiKey && panel !== 'overview') return;
+      event.preventDefault();
+      currentPanel = panel;
+
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      if (linkEl) linkEl.classList.add('active');
+
+      document.querySelectorAll('.dashboard-panel').forEach(p => p.classList.add('hidden'));
+      const target = document.getElementById('panel-' + panel);
+      if (target) {
+        target.classList.remove('hidden');
+        target.classList.add('fade-in');
+      }
+
+      if (panel === 'tenders') loadTendersPanel();
+      if (panel === 'awards') loadAwardsPanel();
+      if (panel === 'benchmarks') loadBenchmarksPanel();
+      if (panel === 'sources') loadSourcesPanel();
+    }
+
+    async function loadTendersPanel() {
+      const status = document.getElementById('tender-filter-status').value;
+      const source = document.getElementById('tender-filter-source').value;
+      let url = `/api/v1/tenders?pageSize=20&page=${tenderPage}`;
+      if (status) url += `&status=${status}`;
+      if (source) url += `&source=${source}`;
+
+      try {
+        const res = await apiFetch(url);
+        const container = document.getElementById('tenders-panel-list');
+        container.innerHTML = res.data.map(t => `
+          <div class="glass-card p-5 fade-in">
+            <div class="flex items-start justify-between">
+              <div class="flex-1 min-w-0">
+                <h4 class="font-semibold text-sm" style="color: var(--text-primary);">${escapeHtml(t.title)}</h4>
+                <p class="text-xs mt-1" style="color: var(--text-secondary);">${escapeHtml(t.buyer_name)} &mdash; ${escapeHtml(t.buyer_country)}</p>
+                <div class="flex items-center flex-wrap gap-2 mt-2 text-xs" style="color: var(--text-muted);">
+                  <span class="px-2 py-0.5 rounded" style="background: rgba(201,169,110,0.1); color: var(--gold);">${escapeHtml(t.source)}</span>
+                  <span>${formatCategory(t.category)}</span>
+                  ${t.deadline ? `<span>Due: ${new Date(t.deadline).toLocaleDateString()}</span>` : ''}
+                </div>
+              </div>
+              <div class="text-right ml-4 flex-shrink-0">
+                ${t.value_usd ? `<p class="font-semibold text-sm" style="color: var(--gold);">${formatCurrency(t.value_usd)}</p>` : '<p class="text-xs" style="color: var(--text-muted);">Value TBD</p>'}
+                <span class="inline-block mt-1 text-xs px-2 py-0.5 rounded-full"
+                  style="${t.status === 'open' ? 'background: rgba(16,185,129,0.15); color: #10b981;' : t.status === 'awarded' ? 'background: rgba(201,169,110,0.15); color: var(--gold);' : 'background: rgba(148,163,184,0.1); color: #64748b;'}">${t.status}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        renderPagination('tenders-pagination', res.pagination, 'tenders');
+      } catch (err) {
+        document.getElementById('tenders-panel-list').innerHTML = `<p style="color: var(--text-muted);">Failed to load tenders: ${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    async function loadAwardsPanel() {
+      const country = document.getElementById('award-filter-country').value;
+      let url = `/api/v1/awards?pageSize=20&page=${awardPage}`;
+      if (country) url += `&supplierCountry=${country}`;
+
+      try {
+        const res = await apiFetch(url);
+        const tbody = document.getElementById('awards-table-body');
+        tbody.innerHTML = res.data.map(a => `
+          <tr style="border-bottom: 1px solid rgba(148,163,184,0.06);">
+            <td class="py-3 px-4 font-medium" style="color: var(--text-primary);">${escapeHtml(a.supplier_name)}</td>
+            <td class="py-3 px-4" style="color: var(--text-secondary);">${escapeHtml(a.supplier_country)}</td>
+            <td class="py-3 px-4 text-right font-semibold" style="color: var(--gold);">${formatCurrency(a.award_value_usd)}</td>
+            <td class="py-3 px-4" style="color: var(--text-muted);">${new Date(a.award_date).toLocaleDateString()}</td>
+          </tr>
+        `).join('');
+
+        renderPagination('awards-pagination', res.pagination, 'awards');
+      } catch (err) {
+        document.getElementById('awards-table-body').innerHTML = `<tr><td colspan="4" class="py-4 text-center" style="color: var(--text-muted);">${escapeHtml(err.message)}</td></tr>`;
+      }
+    }
+
+    async function loadBenchmarksPanel() {
+      const region = document.getElementById('bench-filter-region').value;
+      let url = '/api/v1/analytics/benchmarks';
+      if (region) url += `?region=${encodeURIComponent(region)}`;
+
+      try {
+        const res = await apiFetch(url);
+        const grid = document.getElementById('benchmarks-grid');
+        grid.innerHTML = res.data.map(b => `
+          <div class="glass-card p-6 fade-in">
+            <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(b.product_category)}</h4>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)}</p>
+            <div class="space-y-3">
+              <div class="flex justify-between text-sm">
+                <span style="color: var(--text-secondary);">Avg Price</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.avg_price_usd)}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span style="color: var(--text-secondary);">Median Price</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.median_price_usd)}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span style="color: var(--text-secondary);">Range</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.min_price_usd)} – ${formatCurrency(b.max_price_usd)}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span style="color: var(--text-secondary);">Sample Size</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${b.sample_size}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        document.getElementById('benchmarks-grid').innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    async function loadSourcesPanel() {
+      try {
+        const res = await apiFetch('/api/v1/sources');
+        const grid = document.getElementById('sources-grid');
+        const icons = { ted_europa: '&#127466;&#127482;', sam_gov: '&#127482;&#127480;', who_procurement: '&#127758;', nhs_supply_chain: '&#127468;&#127463;' };
+        grid.innerHTML = res.data.map(s => `
+          <div class="glass-card p-6 fade-in">
+            <div class="text-3xl mb-3">${icons[s.id] || '&#127760;'}</div>
+            <h4 class="font-semibold text-lg mb-1" style="color: var(--gold);">${escapeHtml(s.name)}</h4>
+            <p class="text-sm mb-4" style="color: var(--text-secondary);">${escapeHtml(s.description)}</p>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span style="color: var(--text-muted);">Region</span>
+                <span style="color: var(--text-primary);">${escapeHtml(s.region)}</span>
+              </div>
+              <div class="flex justify-between">
+                <span style="color: var(--text-muted);">Update Freq</span>
+                <span style="color: var(--text-primary);">${escapeHtml(s.updateFrequency)}</span>
+              </div>
+              <div class="flex justify-between">
+                <span style="color: var(--text-muted);">Status</span>
+                <span class="px-2 py-0.5 rounded-full text-xs" style="background: rgba(16,185,129,0.15); color: #10b981;">Active</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        document.getElementById('sources-grid').innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    function renderPagination(containerId, pagination, type) {
+      if (!pagination) return;
+      const { page, pageSize, total } = pagination;
+      const totalPages = Math.ceil(total / pageSize);
+      if (totalPages <= 1) { document.getElementById(containerId).innerHTML = ''; return; }
+
+      const btnStyle = 'background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-secondary);';
+      document.getElementById(containerId).innerHTML = `
+        <p class="text-xs" style="color: var(--text-muted);">Showing ${(page-1)*pageSize+1}–${Math.min(page*pageSize, total)} of ${total}</p>
+        <div class="flex gap-2">
+          <button class="px-3 py-1 rounded text-sm ${page <= 1 ? 'opacity-30' : ''}" style="${btnStyle}" ${page <= 1 ? 'disabled' : ''} onclick="paginate('${type}', ${page-1})">Prev</button>
+          <span class="px-3 py-1 text-sm" style="color: var(--text-muted);">${page} / ${totalPages}</span>
+          <button class="px-3 py-1 rounded text-sm ${page >= totalPages ? 'opacity-30' : ''}" style="${btnStyle}" ${page >= totalPages ? 'disabled' : ''} onclick="paginate('${type}', ${page+1})">Next</button>
+        </div>
+      `;
+    }
+
+    function paginate(type, page) {
+      if (type === 'tenders') { tenderPage = page; loadTendersPanel(); }
+      if (type === 'awards') { awardPage = page; loadAwardsPanel(); }
     }
   </script>
 </body>
