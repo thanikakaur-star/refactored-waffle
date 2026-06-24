@@ -54,21 +54,25 @@ async function generatePage(page: { page: number; title: string; section: string
   console.log(`Generating page ${page.page}: ${page.title}...`);
 
   const response = await client.images.generate({
-    model: "dall-e-3",
+    model: "gpt-image-1",
     prompt: page.ai_prompt,
     n: 1,
-    size: "1024x1792",
-    quality: "hd",
+    size: "1024x1536",
+    quality: "high",
   });
 
   const imageUrl = response.data?.[0]?.url;
-  if (!imageUrl) {
-    console.error(`No image URL returned for page ${page.page}`);
-    return;
-  }
+  const b64Data = response.data?.[0]?.b64_json;
 
-  await downloadFile(imageUrl, destFile);
-  console.log(`Saved page ${page.page}: ${destFile}`);
+  if (b64Data) {
+    fs.writeFileSync(destFile, Buffer.from(b64Data, "base64"));
+    console.log(`Saved page ${page.page}: ${destFile}`);
+  } else if (imageUrl) {
+    await downloadFile(imageUrl, destFile);
+    console.log(`Saved page ${page.page}: ${destFile}`);
+  } else {
+    console.error(`No image data returned for page ${page.page}`);
+  }
 }
 
 function updateTemplate() {
