@@ -61,7 +61,7 @@ async function generatePage(page: { page: number; title: string; section: string
     quality: "hd",
   });
 
-  const imageUrl = response.data[0]?.url;
+  const imageUrl = response.data?.[0]?.url;
   if (!imageUrl) {
     console.error(`No image URL returned for page ${page.page}`);
     return;
