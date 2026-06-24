@@ -22,12 +22,36 @@ function buildCoverPage(): string {
     </div>`;
 }
 
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+function findImage(page: typeof designs.pages[0]): string | null {
+  const imagesDir = path.join(outputDir, "images");
+  const candidates = [
+    `page-${page.page}-${slugify(page.section)}.png`,
+    `page-${page.page}.png`,
+  ];
+  for (const name of candidates) {
+    if (fs.existsSync(path.join(imagesDir, name))) return `images/${name}`;
+  }
+  return null;
+}
+
 function buildColoringPage(page: typeof designs.pages[0]): string {
   const vocabHtml = page.gurmukhi_vocab
     .map((v: { gurmukhi: string; transliteration: string; english: string }) =>
       `<span class="vocab-item"><span class="gurmukhi">${escapeHtml(v.gurmukhi)}</span> <span class="transliteration">(${escapeHtml(v.transliteration)})</span> — <span class="english">${escapeHtml(v.english)}</span></span>`
     )
     .join(" &bull; ");
+
+  const imgPath = findImage(page);
+  const illustrationHtml = imgPath
+    ? `<img src="${imgPath}" alt="${escapeHtml(page.title)}" class="illustration-img" />`
+    : `<div class="placeholder">
+          <p class="placeholder-label">ILLUSTRATION PLACEHOLDER</p>
+          <p class="placeholder-prompt">${escapeHtml(page.ai_prompt)}</p>
+        </div>`;
 
   return `
     <div class="page coloring-page" data-page="${page.page}">
@@ -36,10 +60,7 @@ function buildColoringPage(page: typeof designs.pages[0]): string {
         <h2 class="page-title">${escapeHtml(page.title)}</h2>
       </div>
       <div class="illustration-area">
-        <div class="placeholder">
-          <p class="placeholder-label">ILLUSTRATION PLACEHOLDER</p>
-          <p class="placeholder-prompt">${escapeHtml(page.ai_prompt)}</p>
-        </div>
+        ${illustrationHtml}
       </div>
       <div class="page-footer">
         <p class="educational-text">${escapeHtml(page.educational_text)}</p>
@@ -84,8 +105,12 @@ const css = `
   }
   .page-title { font-size: 20pt; }
   .illustration-area {
-    flex: 1; border: 2px dashed #ccc; margin: 8px 0;
+    flex: 1; margin: 8px 0;
     display: flex; justify-content: center; align-items: center;
+    overflow: hidden;
+  }
+  .illustration-img {
+    max-width: 100%; max-height: 100%; object-fit: contain;
   }
   .placeholder { padding: 20px; text-align: center; max-width: 90%; }
   .placeholder-label {
