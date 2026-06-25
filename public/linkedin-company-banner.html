@@ -17,7 +17,8 @@
       overflow: hidden;
       display: flex;
       align-items: center;
-      padding: 0 60px;
+      justify-content: center;
+      text-align: center;
     }
 
     .bg {
@@ -28,11 +29,12 @@
 
     .orb {
       position: absolute;
-      width: 500px;
-      height: 500px;
-      top: -250px;
-      left: 150px;
-      background: radial-gradient(circle, rgba(201,169,110,0.03) 0%, transparent 60%);
+      width: 600px;
+      height: 600px;
+      top: -300px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(201,169,110,0.04) 0%, transparent 60%);
     }
 
     .h-lines {
@@ -64,101 +66,74 @@
       );
     }
 
-    .left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+    .content {
       position: relative;
       z-index: 2;
     }
 
-    .logo-box {
-      width: 48px;
-      height: 48px;
-      background: rgba(201,169,110,0.06);
-      border: 1px solid rgba(201,169,110,0.18);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
-      font-size: 20px;
-      color: #c9a96e;
-      flex-shrink: 0;
-    }
-
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .brand-name {
+    h1 {
       font-family: 'Inter', sans-serif;
-      font-size: 22px;
-      font-weight: 600;
+      font-size: 32px;
+      font-weight: 700;
       color: #f1f5f9;
-      letter-spacing: -0.3px;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
     }
-    .brand-name em {
+
+    h1 em {
       font-style: normal;
       color: #c9a96e;
     }
 
-    .brand-tagline {
+    .subtitle {
       font-family: 'Inter', sans-serif;
       font-size: 12px;
       font-weight: 400;
       color: #64748b;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    .divider {
-      width: 1px;
-      height: 80px;
-      background: linear-gradient(180deg, transparent, rgba(201,169,110,0.1), transparent);
-      margin: 0 50px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .sources {
+    .stats {
       display: flex;
-      gap: 32px;
-      position: relative;
-      z-index: 2;
+      gap: 0;
+      justify-content: center;
+      margin-top: 14px;
     }
 
-    .source {
+    .stat {
+      padding: 0 24px;
+      border-left: 1px solid rgba(201,169,110,0.08);
       text-align: center;
     }
 
-    .source-name {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      color: #c9a96e;
-      letter-spacing: 0.3px;
-      margin-bottom: 4px;
+    .stat:first-child {
+      border-left: none;
     }
 
-    .source-desc {
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #c9a96e;
+      line-height: 1.2;
+    }
+
+    .stat-label {
       font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 400;
+      font-size: 9px;
+      font-weight: 500;
       color: #475569;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
     }
 
     .url {
       position: absolute;
-      bottom: 14px;
-      right: 60px;
+      bottom: 10px;
+      right: 40px;
       font-family: 'Inter', sans-serif;
-      font-size: 11px;
+      font-size: 10px;
       color: #334155;
       letter-spacing: 0.5px;
       z-index: 2;
@@ -166,17 +141,6 @@
     .url em {
       font-style: normal;
       color: rgba(201,169,110,0.5);
-    }
-
-    .contact {
-      position: absolute;
-      bottom: 14px;
-      left: 60px;
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      color: #334155;
-      letter-spacing: 0.5px;
-      z-index: 2;
     }
   </style>
 </head>
@@ -187,36 +151,30 @@
     <div class="h-lines"></div>
     <div class="bottom-bar"></div>
 
-    <div class="left">
-      <div class="logo-box">HP</div>
-      <div class="brand">
-        <div class="brand-name">Health<em>Procure</em> Intel</div>
-        <div class="brand-tagline">Global Healthcare Procurement Intelligence</div>
+    <div class="content">
+      <h1>Every Healthcare Tender. <em>One Platform.</em></h1>
+      <div class="subtitle">Real-time procurement intelligence from TED Europa, SAM.gov, WHO & NHS Supply Chain</div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">$50B+</div>
+          <div class="stat-label">Tenders</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">85+</div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Sources</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">Free</div>
+          <div class="stat-label">To Start</div>
+        </div>
       </div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="sources">
-      <div class="source">
-        <div class="source-name">TED Europa</div>
-        <div class="source-desc">EU Tenders</div>
-      </div>
-      <div class="source">
-        <div class="source-name">SAM.gov</div>
-        <div class="source-desc">US Federal</div>
-      </div>
-      <div class="source">
-        <div class="source-name">WHO</div>
-        <div class="source-desc">Global</div>
-      </div>
-      <div class="source">
-        <div class="source-name">NHS</div>
-        <div class="source-desc">UK Health</div>
-      </div>
-    </div>
-
-    <div class="contact">hello@healthprocureintel.com</div>
     <div class="url"><em>healthprocureintel</em>.com</div>
   </div>
 </body>
