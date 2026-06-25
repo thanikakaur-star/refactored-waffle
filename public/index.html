@@ -1176,8 +1176,9 @@
           resultDiv.classList.remove('hidden');
           resultDiv.innerHTML =
             '<div class="glass-strong rounded-xl p-6 text-left">' +
-              '<p class="text-red-400 text-sm font-semibold mb-1">Connection error</p>' +
-              '<p class="text-xs text-gray-500">Could not reach the server. Please try again later.</p>' +
+              '<p class="text-gold text-sm font-semibold mb-2">Thanks for your interest!</p>' +
+              '<p class="text-xs text-gray-400 mb-3">Our API is being set up. In the meantime, we\'ll send your key directly.</p>' +
+              '<a href="mailto:hello@healthprocureintel.com?subject=Free%20API%20Key%20Request&body=Please%20send%20me%20a%20free%20API%20key.%20My%20email%3A%20' + encodeURIComponent(email) + '" class="inline-block px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark text-sm font-semibold hover:from-gold-bright hover:to-gold transition-all duration-200">Email Us for Your Key</a>' +
             '</div>';
           submitBtn.disabled = false;
           submitBtn.textContent = 'Get Free API Key';
