@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <title>LinkedIn Banner — HealthProcure Intel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; }
+    body { background: #111; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
 
     .banner {
       width: 1584px;
       height: 396px;
-      background: linear-gradient(135deg, #0a0a0f 0%, #12141d 35%, #0f1118 65%, #0a0a0f 100%);
+      background: #0a0a0f;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -19,49 +20,57 @@
       padding: 0 100px;
     }
 
-    .glow-1 {
-      position: absolute;
-      top: -150px;
-      left: 200px;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 65%);
-    }
-
-    .glow-2 {
-      position: absolute;
-      bottom: -200px;
-      right: 300px;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 65%);
-    }
-
-    .grid {
+    .bg {
       position: absolute;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(201,169,110,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,169,110,0.025) 1px, transparent 1px);
-      background-size: 80px 80px;
+      background: linear-gradient(160deg, #0d0f16 0%, #0a0a0f 40%, #0e1019 100%);
     }
 
-    .accent-line {
+    .orb-1 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      top: -300px;
+      left: 300px;
+      background: radial-gradient(circle, rgba(201,169,110,0.04) 0%, transparent 60%);
+    }
+
+    .orb-2 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      bottom: -300px;
+      right: 200px;
+      background: radial-gradient(circle, rgba(13,148,136,0.025) 0%, transparent 60%);
+    }
+
+    .h-lines {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 78px,
+        rgba(201,169,110,0.025) 78px,
+        rgba(201,169,110,0.025) 79px
+      );
+    }
+
+    .bottom-bar {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #c9a96e, #d4af37, #c9a96e, transparent);
-    }
-
-    .accent-line-top {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, rgba(201,169,110,0.3), transparent);
+      height: 2px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(201,169,110,0.1) 15%,
+        #c9a96e 40%,
+        #d4af37 50%,
+        #c9a96e 60%,
+        rgba(201,169,110,0.1) 85%,
+        transparent 100%
+      );
     }
 
     .left {
@@ -74,92 +83,91 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .logo-icon {
-      width: 52px;
-      height: 52px;
-      background: rgba(201,169,110,0.1);
-      border: 1.5px solid rgba(201,169,110,0.35);
+      width: 48px;
+      height: 48px;
+      background: rgba(201,169,110,0.06);
+      border: 1px solid rgba(201,169,110,0.18);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      font-size: 22px;
+      font-weight: 600;
+      font-size: 20px;
       color: #c9a96e;
     }
 
     .logo-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      font-weight: 700;
-      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: #f1f5f9;
+      letter-spacing: -0.3px;
     }
     .logo-name span { color: #c9a96e; }
 
     .tagline {
       font-family: 'Inter', sans-serif;
-      font-size: 18px;
-      color: #94a3b8;
+      font-size: 14px;
+      color: #64748b;
       letter-spacing: 2px;
       text-transform: uppercase;
-      font-weight: 500;
+      font-weight: 400;
+    }
+
+    .divider {
+      width: 1px;
+      height: 200px;
+      background: linear-gradient(180deg, transparent, rgba(201,169,110,0.1), transparent);
+      position: relative;
+      z-index: 2;
+      margin: 0 80px;
     }
 
     .right {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 20px;
       position: relative;
       z-index: 2;
-      margin-left: 80px;
     }
 
     .stat {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
     }
 
     .stat-value {
       font-family: 'Playfair Display', serif;
-      font-size: 36px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #c9a96e, #d4af37);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      min-width: 140px;
+      font-size: 32px;
+      font-weight: 600;
+      color: #c9a96e;
+      min-width: 120px;
       text-align: right;
+      line-height: 1;
     }
 
     .stat-label {
       font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      color: #64748b;
+      font-size: 11px;
+      color: #475569;
       text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .divider {
-      width: 1px;
-      height: 280px;
-      background: linear-gradient(180deg, transparent, rgba(201,169,110,0.2), transparent);
-      position: relative;
-      z-index: 2;
-      margin-left: 80px;
+      letter-spacing: 2px;
     }
   </style>
 </head>
 <body>
   <div class="banner">
-    <div class="glow-1"></div>
-    <div class="glow-2"></div>
-    <div class="grid"></div>
-    <div class="accent-line-top"></div>
-    <div class="accent-line"></div>
+    <div class="bg"></div>
+    <div class="orb-1"></div>
+    <div class="orb-2"></div>
+    <div class="h-lines"></div>
+    <div class="bottom-bar"></div>
 
     <div class="left">
       <div class="logo">

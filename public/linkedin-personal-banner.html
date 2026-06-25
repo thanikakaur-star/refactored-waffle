@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LinkedIn Personal Banner — Thanika Kaur</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <title>LinkedIn Personal Banner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    body { background: #111; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
 
     .banner {
       width: 1584px;
@@ -14,200 +14,196 @@
       background: #0a0a0f;
       position: relative;
       overflow: hidden;
-      display: flex;
     }
 
-    /* Animated mesh gradient background */
-    .mesh {
+    /* Layered gradient depth */
+    .bg-layer-1 {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse 600px 400px at 15% 50%, rgba(201,169,110,0.07) 0%, transparent 70%),
-        radial-gradient(ellipse 500px 500px at 75% 30%, rgba(13,148,136,0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 400px 300px at 50% 80%, rgba(99,102,241,0.04) 0%, transparent 70%);
+      background: linear-gradient(160deg, #0d0f16 0%, #0a0a0f 40%, #0e1019 100%);
     }
 
-    /* Subtle dot grid */
-    .dots {
+    /* Soft light orbs */
+    .orb-1 {
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      top: -400px;
+      right: 100px;
+      background: radial-gradient(circle, rgba(201,169,110,0.04) 0%, transparent 60%);
+    }
+
+    .orb-2 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      bottom: -350px;
+      left: 300px;
+      background: radial-gradient(circle, rgba(13,148,136,0.025) 0%, transparent 60%);
+    }
+
+    /* Horizontal lines — architectural feel */
+    .h-lines {
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(rgba(201,169,110,0.08) 1px, transparent 1px);
-      background-size: 32px 32px;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 78px,
+        rgba(201,169,110,0.025) 78px,
+        rgba(201,169,110,0.025) 79px
+      );
     }
 
-    /* Gold accent line bottom */
-    .gold-line {
+    /* Bottom accent */
+    .bottom-bar {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent 5%, #c9a96e 30%, #d4af37 50%, #c9a96e 70%, transparent 95%);
+      height: 2px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(201,169,110,0.1) 15%,
+        #c9a96e 40%,
+        #d4af37 50%,
+        #c9a96e 60%,
+        rgba(201,169,110,0.1) 85%,
+        transparent 100%
+      );
     }
 
-    /* Left section — keep clear for profile photo overlap */
-    .left-space {
-      width: 280px;
+    /* Main layout */
+    .layout {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 100px;
+    }
+
+    /* Left clear zone for profile pic */
+    .photo-zone {
+      width: 220px;
       flex-shrink: 0;
     }
 
-    /* Center content */
-    .content {
+    /* Center info */
+    .info {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 40px 60px 40px 20px;
-      position: relative;
-      z-index: 2;
+      padding-left: 40px;
     }
 
-    .name {
-      font-family: 'Playfair Display', serif;
-      font-size: 44px;
+    .info-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 42px;
       font-weight: 700;
-      color: #e2e8f0;
-      margin-bottom: 8px;
-      line-height: 1.1;
+      color: #f1f5f9;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      margin-bottom: 12px;
     }
 
-    .role {
+    .info-title {
       font-family: 'Inter', sans-serif;
-      font-size: 18px;
-      font-weight: 500;
+      font-size: 16px;
+      font-weight: 400;
       color: #c9a96e;
-      margin-bottom: 24px;
-      letter-spacing: 0.5px;
-    }
-
-    .description {
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      color: #94a3b8;
-      line-height: 1.6;
-      max-width: 550px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
       margin-bottom: 28px;
     }
 
-    .pills {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .pill {
+    .info-desc {
       font-family: 'Inter', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      color: #c9a96e;
-      background: rgba(201,169,110,0.08);
-      border: 1px solid rgba(201,169,110,0.2);
-      border-radius: 20px;
-      padding: 6px 16px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      font-size: 15px;
+      font-weight: 400;
+      color: #64748b;
+      line-height: 1.5;
+      max-width: 480px;
     }
 
-    /* Right stats column */
-    .stats {
-      width: 320px;
+    /* Right metrics */
+    .metrics {
+      display: flex;
+      gap: 0;
+      height: 200px;
+      margin-left: 60px;
+    }
+
+    .metric {
+      width: 140px;
       display: flex;
       flex-direction: column;
+      align-items: center;
       justify-content: center;
-      gap: 0;
-      position: relative;
-      z-index: 2;
-      border-left: 1px solid rgba(201,169,110,0.1);
+      border-left: 1px solid rgba(201,169,110,0.08);
     }
 
-    .stat {
-      padding: 20px 40px;
-      border-bottom: 1px solid rgba(201,169,110,0.06);
+    .metric:first-child {
+      border-left: 1px solid rgba(201,169,110,0.12);
     }
 
-    .stat:last-child { border-bottom: none; }
-
-    .stat-value {
+    .metric-number {
       font-family: 'Playfair Display', serif;
-      font-size: 32px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #c9a96e, #d4af37);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: 1.2;
+      font-size: 36px;
+      font-weight: 600;
+      color: #c9a96e;
+      line-height: 1;
     }
 
-    .stat-label {
+    .metric-line {
+      width: 24px;
+      height: 1px;
+      background: rgba(201,169,110,0.2);
+      margin: 10px 0;
+    }
+
+    .metric-label {
       font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      color: #64748b;
+      font-size: 9px;
+      font-weight: 500;
+      color: #475569;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-top: 2px;
-    }
-
-    /* Corner decorations */
-    .corner-tl, .corner-br {
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      z-index: 3;
-    }
-
-    .corner-tl {
-      top: 16px;
-      left: 16px;
-      border-top: 1px solid rgba(201,169,110,0.15);
-      border-left: 1px solid rgba(201,169,110,0.15);
-    }
-
-    .corner-br {
-      bottom: 16px;
-      right: 16px;
-      border-bottom: 1px solid rgba(201,169,110,0.15);
-      border-right: 1px solid rgba(201,169,110,0.15);
+      letter-spacing: 2px;
     }
   </style>
 </head>
 <body>
   <div class="banner">
-    <div class="mesh"></div>
-    <div class="dots"></div>
-    <div class="gold-line"></div>
-    <div class="corner-tl"></div>
-    <div class="corner-br"></div>
+    <div class="bg-layer-1"></div>
+    <div class="orb-1"></div>
+    <div class="orb-2"></div>
+    <div class="h-lines"></div>
+    <div class="bottom-bar"></div>
 
-    <div class="left-space"></div>
+    <div class="layout">
+      <div class="photo-zone"></div>
 
-    <div class="content">
-      <div class="name">Thanika Kaur</div>
-      <div class="role">Founder & CEO — HealthProcure Intel</div>
-      <div class="description">Building the intelligence layer for global healthcare procurement. One API for $50B+ in tenders across 85+ countries.</div>
-      <div class="pills">
-        <span class="pill">Healthcare</span>
-        <span class="pill">Procurement</span>
-        <span class="pill">SaaS</span>
-        <span class="pill">API Platform</span>
-        <span class="pill">LSE</span>
+      <div class="info">
+        <div class="info-name">Thanika Kaur</div>
+        <div class="info-title">Founder & CEO &mdash; HealthProcure Intel</div>
+        <div class="info-desc">Building the intelligence layer for global healthcare procurement. Aggregating $50B+ in tenders from government portals worldwide.</div>
       </div>
-    </div>
 
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-value">$50B+</div>
-        <div class="stat-label">Tenders Tracked</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">85+</div>
-        <div class="stat-label">Countries</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">4</div>
-        <div class="stat-label">Data Sources</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">API</div>
-        <div class="stat-label">Developer First</div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-number">$50B+</div>
+          <div class="metric-line"></div>
+          <div class="metric-label">Tenders</div>
+        </div>
+        <div class="metric">
+          <div class="metric-number">85+</div>
+          <div class="metric-line"></div>
+          <div class="metric-label">Countries</div>
+        </div>
+        <div class="metric">
+          <div class="metric-number">4</div>
+          <div class="metric-line"></div>
+          <div class="metric-label">Sources</div>
+        </div>
       </div>
     </div>
   </div>
