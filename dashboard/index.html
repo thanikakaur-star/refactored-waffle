@@ -218,19 +218,19 @@
 
     <!-- Nav Links -->
     <nav class="flex-1 py-4">
-      <a href="#" class="sidebar-link active" data-panel="overview" onclick="switchPanel('overview', this)">
+      <a href="#" class="sidebar-link active" data-panel="overview" onclick="switchPanel('overview', this, event)">
         <span class="icon">&#9632;</span> Overview
       </a>
-      <a href="#" class="sidebar-link" data-panel="tenders" onclick="switchPanel('tenders', this)">
+      <a href="#" class="sidebar-link" data-panel="tenders" onclick="switchPanel('tenders', this, event)">
         <span class="icon">&#9998;</span> Tenders
       </a>
-      <a href="#" class="sidebar-link" data-panel="awards" onclick="switchPanel('awards', this)">
+      <a href="#" class="sidebar-link" data-panel="awards" onclick="switchPanel('awards', this, event)">
         <span class="icon">&#9733;</span> Awards
       </a>
-      <a href="#" class="sidebar-link" data-panel="benchmarks" onclick="switchPanel('benchmarks', this)">
+      <a href="#" class="sidebar-link" data-panel="benchmarks" onclick="switchPanel('benchmarks', this, event)">
         <span class="icon">&#9650;</span> Benchmarks
       </a>
-      <a href="#" class="sidebar-link" data-panel="sources" onclick="switchPanel('sources', this)">
+      <a href="#" class="sidebar-link" data-panel="sources" onclick="switchPanel('sources', this, event)">
         <span class="icon">&#9881;</span> Sources
       </a>
     </nav>
@@ -775,17 +775,46 @@
     let tenderPage = 1;
     let awardPage = 1;
 
-    function switchPanel(panel, linkEl) {
-      if (!apiKey && panel !== 'overview') return;
-      event.preventDefault();
+    function switchPanel(panel, linkEl, evt) {
+      if (evt) evt.preventDefault();
       currentPanel = panel;
 
       document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
       if (linkEl) linkEl.classList.add('active');
 
+      if (!apiKey) {
+        showState('dashboard');
+        document.querySelectorAll('.dashboard-panel').forEach(p => p.classList.add('hidden'));
+        const target = document.getElementById('panel-' + panel);
+        if (target) {
+          target.classList.remove('hidden');
+          target.classList.add('fade-in');
+          if (panel === 'overview') {
+            showState('welcome');
+            return;
+          } else {
+            if (!target.querySelector('.connect-prompt')) {
+              const prompt = document.createElement('div');
+              prompt.className = 'connect-prompt text-center py-16';
+              prompt.innerHTML = `
+                <div class="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold);">
+                  <span class="text-2xl" style="color: var(--gold);">&#128274;</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">API Key Required</h3>
+                <p class="text-sm mb-5" style="color: var(--text-secondary);">Enter your API key above to access this section.</p>
+                <button onclick="document.getElementById('apiKeyField').focus()" class="btn-gold text-sm px-5 py-2 rounded-lg">Enter API Key</button>
+              `;
+              target.appendChild(prompt);
+            }
+          }
+        }
+        return;
+      }
+
       document.querySelectorAll('.dashboard-panel').forEach(p => p.classList.add('hidden'));
       const target = document.getElementById('panel-' + panel);
       if (target) {
+        target.querySelector('.connect-prompt')?.remove();
         target.classList.remove('hidden');
         target.classList.add('fade-in');
       }
