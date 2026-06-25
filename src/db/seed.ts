@@ -5,7 +5,7 @@ import type { ProcurementCategory, TenderSource, TenderStatus } from "../types/i
 
 const SAMPLE_TENDERS = [
   {
-    external_id: "TED-2024-001234",
+    external_id: "TED-2026-001234",
     source: "ted_europa" as TenderSource,
     title: "Supply of MRI Scanners for Regional Hospital Network — Germany",
     description: "Framework agreement for supply, installation, and maintenance of 3T MRI systems across 12 university hospitals in Bavaria",
@@ -14,8 +14,8 @@ const SAMPLE_TENDERS = [
     buyer_region: "Europe",
     category: "medical_devices" as ProcurementCategory,
     status: "open" as TenderStatus,
-    published_at: "2024-09-01T08:00:00Z",
-    deadline: "2024-11-15T17:00:00Z",
+    published_at: "2026-05-15T08:00:00Z",
+    deadline: "2026-08-30T17:00:00Z",
     original_currency: "EUR",
     original_value: 28500000,
     value_usd: 31065000,
@@ -24,7 +24,7 @@ const SAMPLE_TENDERS = [
     url: "https://ted.europa.eu/notice/2024-001234",
   },
   {
-    external_id: "SAM-W912DY-24-R-0089",
+    external_id: "SAM-W912DY-26-R-0089",
     source: "sam_gov" as TenderSource,
     title: "Telehealth Platform for Veterans Affairs Medical Centers",
     description: "Acquisition of cloud-based telehealth and remote patient monitoring platform for 37 VA medical centers nationwide",
@@ -33,8 +33,8 @@ const SAMPLE_TENDERS = [
     buyer_region: "North America",
     category: "telemedicine" as ProcurementCategory,
     status: "open" as TenderStatus,
-    published_at: "2024-08-20T14:00:00Z",
-    deadline: "2024-10-30T23:59:00Z",
+    published_at: "2026-06-01T14:00:00Z",
+    deadline: "2026-09-15T23:59:00Z",
     original_currency: "USD",
     original_value: 42000000,
     value_usd: 42000000,
@@ -43,7 +43,7 @@ const SAMPLE_TENDERS = [
     url: "https://sam.gov/opp/W912DY-24-R-0089",
   },
   {
-    external_id: "NHS-SC-2024-PPE-0456",
+    external_id: "NHS-SC-2026-PPE-0456",
     source: "nhs_supply_chain" as TenderSource,
     title: "National PPE Framework — Surgical Gowns and Drapes",
     description: "Multi-lot framework for supply of sterile and non-sterile surgical gowns, drapes, and procedural packs to NHS Trusts across England",
@@ -52,8 +52,8 @@ const SAMPLE_TENDERS = [
     buyer_region: "Europe",
     category: "personal_protective_equipment" as ProcurementCategory,
     status: "open" as TenderStatus,
-    published_at: "2024-09-10T09:00:00Z",
-    deadline: "2024-12-01T12:00:00Z",
+    published_at: "2026-05-20T09:00:00Z",
+    deadline: "2026-08-15T12:00:00Z",
     original_currency: "GBP",
     original_value: 15000000,
     value_usd: 19050000,
@@ -62,7 +62,7 @@ const SAMPLE_TENDERS = [
     url: "https://nhssupplychain.nhs.uk/frameworks/PPE-0456",
   },
   {
-    external_id: "WHO-PRO-2024-DIAG-078",
+    external_id: "WHO-PRO-2026-DIAG-078",
     source: "who_procurement" as TenderSource,
     title: "Rapid Diagnostic Test Kits — Sub-Saharan Africa Distribution",
     description: "Procurement of WHO-prequalified rapid diagnostic test kits for malaria, HIV, and tuberculosis for distribution across 14 countries",
@@ -71,8 +71,8 @@ const SAMPLE_TENDERS = [
     buyer_region: "Africa",
     category: "diagnostics" as ProcurementCategory,
     status: "awarded" as TenderStatus,
-    published_at: "2024-06-01T10:00:00Z",
-    deadline: "2024-08-15T23:59:00Z",
+    published_at: "2026-03-01T10:00:00Z",
+    deadline: "2026-05-15T23:59:00Z",
     original_currency: "USD",
     original_value: 8700000,
     value_usd: 8700000,
@@ -81,7 +81,7 @@ const SAMPLE_TENDERS = [
     url: "https://www.who.int/procurement/DIAG-078",
   },
   {
-    external_id: "TED-2024-005678",
+    external_id: "TED-2026-005678",
     source: "ted_europa" as TenderSource,
     title: "Laboratory Automation Systems — Swedish National Board of Health",
     description: "Design, supply, and commissioning of fully automated clinical laboratory systems for 6 regional laboratories in Sweden",
@@ -90,8 +90,8 @@ const SAMPLE_TENDERS = [
     buyer_region: "Europe",
     category: "laboratory_equipment" as ProcurementCategory,
     status: "open" as TenderStatus,
-    published_at: "2024-09-15T07:00:00Z",
-    deadline: "2024-12-20T16:00:00Z",
+    published_at: "2026-06-10T07:00:00Z",
+    deadline: "2026-09-20T16:00:00Z",
     original_currency: "SEK",
     original_value: 180000000,
     value_usd: 17280000,
@@ -104,7 +104,7 @@ const SAMPLE_TENDERS = [
 const SAMPLE_AWARDS = [
   {
     tender_id: null as string | null,
-    award_date: "2024-08-20T00:00:00Z",
+    award_date: "2026-05-20T00:00:00Z",
     supplier_name: "Becton Dickinson",
     supplier_country: "US",
     original_currency: "USD",
@@ -135,7 +135,7 @@ async function seed() {
 
   logger.info("Seeded tenders", { count: tenders?.length });
 
-  const whoTender = tenders?.find((t) => t.external_id === "WHO-PRO-2024-DIAG-078");
+  const whoTender = tenders?.find((t) => t.external_id === "WHO-PRO-2026-DIAG-078");
   if (whoTender) {
     SAMPLE_AWARDS[0].tender_id = whoTender.id;
     const { error: awardErr } = await client.from("contract_awards").insert(
