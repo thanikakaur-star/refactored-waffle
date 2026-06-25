@@ -754,7 +754,7 @@
             <li class="flex items-start gap-3 text-sm text-gray-500"><svg class="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span class="line-through">Regional benchmarks</span></li>
             <li class="flex items-start gap-3 text-sm text-gray-500"><svg class="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span class="line-through">Custom data feeds</span></li>
           </ul>
-          <a href="#cta" class="block w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200 text-center">Subscribe</a>
+          <button onclick="startCheckout('price_1TlrGvC3JZLLw9RVUSzeqONA')" class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">Subscribe</button>
         </div>
 
         <!-- Pro (Featured) -->
@@ -778,7 +778,7 @@
               <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Priority email support</li>
               <li class="flex items-start gap-3 text-sm text-gray-500"><svg class="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span class="line-through">Custom data feeds</span></li>
             </ul>
-            <a href="#cta" class="block w-full py-3 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark text-sm font-bold hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20 text-center">Subscribe</a>
+            <button onclick="startCheckout('price_1TlrI0C3JZLLw9RVM2BRHEy9')" class="w-full py-3 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark text-sm font-bold hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20">Subscribe</button>
           </div>
         </div>
 
@@ -799,7 +799,7 @@
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Dedicated account manager</li>
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>99.9% uptime SLA</li>
           </ul>
-          <a href="mailto:hello@healthprocureintel.com?subject=Enterprise%20Plan%20Inquiry" class="block w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200 text-center">Contact Sales</a>
+          <button onclick="startCheckout('price_1TlrIaC3JZLLw9RVctcI96FW')" class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">Subscribe</button>
         </div>
       </div>
 
@@ -1189,6 +1189,28 @@
         return div.innerHTML;
       }
     })();
+
+    // Stripe checkout
+    function startCheckout(priceId) {
+      var email = prompt('Enter your email to subscribe:');
+      if (!email || !email.includes('@')) return;
+      fetch('/api/v1/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId: priceId, email: email })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert(data.error || 'Could not start checkout. Please try again.');
+        }
+      })
+      .catch(function() {
+        alert('Could not reach the server. Please try again later.');
+      });
+    }
 
     // Navbar background on scroll
     (function() {
