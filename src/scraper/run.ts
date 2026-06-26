@@ -43,7 +43,8 @@ async function run() {
   }
 
   const headless = process.env.PLAYWRIGHT_HEADLESS !== "false";
-  const browser = await chromium.launch({ headless });
+  const executablePath = process.env.PLAYWRIGHT_CHROMIUM_PATH || undefined;
+  const browser = await chromium.launch({ headless, executablePath });
 
   logger.info("Scraper started", {
     sources: scrapers.map((s) => s.source),
