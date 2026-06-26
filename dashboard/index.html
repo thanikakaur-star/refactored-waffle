@@ -895,24 +895,28 @@
         const grid = document.getElementById('benchmarks-grid');
         grid.innerHTML = res.data.map(b => `
           <div class="glass-card p-6 fade-in">
-            <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(b.product_category)}</h4>
-            <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)}</p>
+            <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(formatCategory(b.category))}</h4>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)} · ${escapeHtml(b.period || '')}</p>
             <div class="space-y-3">
               <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Avg Price</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.avg_price_usd)}</span>
+                <span style="color: var(--text-secondary);">Avg Contract Value</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.avg_contract_value_usd || 0)}</span>
               </div>
               <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Median Price</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.median_price_usd)}</span>
+                <span style="color: var(--text-secondary);">Avg Lead Time</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${b.avg_lead_time_days || 0} days</span>
               </div>
               <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Range</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.min_price_usd)} – ${formatCurrency(b.max_price_usd)}</span>
+                <span style="color: var(--text-secondary);">Tenders</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${(b.tender_count || 0).toLocaleString()}</span>
               </div>
               <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Sample Size</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${b.sample_size}</span>
+                <span style="color: var(--text-secondary);">Awards</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${(b.award_count || 0).toLocaleString()}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span style="color: var(--text-secondary);">Compliance Rate</span>
+                <span class="font-semibold" style="color: var(--teal);">${(b.compliance_rate || 0).toFixed(1)}%</span>
               </div>
             </div>
           </div>
