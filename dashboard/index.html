@@ -508,6 +508,7 @@
 
     const API_BASE = window.location.origin;
     let apiKey = '';
+    let userTier = 'free';
     let charts = {};
 
     // Theme colors
@@ -599,6 +600,21 @@
       }
     }
 
+    // Subtle inline nudge shown to free/basic users who are capped on page size
+    function tendersUpsellHtml() {
+      const planName = userTier.charAt(0).toUpperCase() + userTier.slice(1);
+      return `
+        <div class="glass-card p-4 fade-in flex items-center justify-between flex-wrap gap-3" style="border: 1px solid var(--border-gold);">
+          <p class="text-xs" style="color: var(--text-secondary);">
+            You're on the <span style="color: var(--gold);">${escapeHtml(planName)}</span> plan — capped at ${userTier === 'basic' ? 50 : 20} results per page. Pro shows 200 per page and unlocks regional benchmarks.
+          </p>
+          <button onclick="startCheckout('pro')" class="px-4 py-2 rounded-lg font-semibold text-xs flex-shrink-0" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+            Upgrade to Pro
+          </button>
+        </div>
+      `;
+    }
+
     // Renders the "upgrade to unlock" prompt shown when a free user hits a paid feature
     function upgradePromptHtml(featureName) {
       return `
@@ -635,6 +651,7 @@
 
         const stats = statsRes.data;
         const tenders = tendersRes.data;
+        userTier = (statsRes.meta && statsRes.meta.tier) || 'free';
 
         renderStats(stats);
         renderCharts(stats);
@@ -907,7 +924,7 @@
               </div>
             </div>
           </div>
-        `).join('');
+        `).join('') + ((userTier === 'free' || userTier === 'basic') ? tendersUpsellHtml() : '');
 
         renderPagination('tenders-pagination', res.pagination, 'tenders');
       } catch (err) {

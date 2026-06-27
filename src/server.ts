@@ -142,6 +142,7 @@ const TIER_LIMITS: Record<ApiTier, { requestsPerDay: number; maxPageSize: number
 
 interface AuthReq extends Request {
   tierLimits?: { requestsPerDay: number; maxPageSize: number };
+  tier?: ApiTier;
 }
 
 async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): Promise<void> {
@@ -172,6 +173,7 @@ async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): 
       .update({ request_count: data.request_count + 1, last_used_at: new Date().toISOString() })
       .eq("id", data.id);
     req.tierLimits = TIER_LIMITS[data.tier as ApiTier];
+    req.tier = data.tier as ApiTier;
   } else {
     const found = localStore.findApiKey(key);
     if (!found) {
@@ -184,6 +186,7 @@ async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): 
     }
     localStore.incrementKeyUsage(found.id);
     req.tierLimits = TIER_LIMITS[found.tier];
+    req.tier = found.tier;
   }
   next();
 }
@@ -310,7 +313,8 @@ app.get("/api/v1/awards", authMiddleware, async (req: AuthReq, res) => {
 
 // --- Analytics ---
 
-app.get("/api/v1/analytics/stats", authMiddleware, async (_req, res) => {
+app.get("/api/v1/analytics/stats", authMiddleware, async (req, res) => {
+  const tier = (req as AuthReq).tier ?? "free";
   if (USE_SUPABASE && supabase) {
     try {
       const [tenderRes, openRes, awardRes] = await Promise.all([
@@ -359,12 +363,13 @@ app.get("/api/v1/analytics/stats", authMiddleware, async (_req, res) => {
           monthlyTrend: Object.entries(monthlyMap).map(([month, d]) => ({ month, ...d })).sort((a, b) => a.month.localeCompare(b.month)),
           topBuyers: Object.entries(buyerMap).map(([name, d]) => ({ name, country: d.country, tenderCount: d.count })).sort((a, b) => b.tenderCount - a.tenderCount).slice(0, 10),
         },
+        meta: { tier },
       });
     } catch {
       res.status(500).json({ error: "Internal server error" });
     }
   } else {
-    res.json({ data: localStore.getStats() });
+    res.json({ data: localStore.getStats(), meta: { tier } });
   }
 });
 
