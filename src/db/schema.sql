@@ -87,6 +87,8 @@ CREATE TABLE IF NOT EXISTS api_keys (
   tier api_tier DEFAULT 'free',
   is_active BOOLEAN DEFAULT true,
   request_count INTEGER DEFAULT 0,
+  daily_request_count INTEGER DEFAULT 0,
+  daily_reset_date DATE,
   last_used_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   expires_at TIMESTAMPTZ,

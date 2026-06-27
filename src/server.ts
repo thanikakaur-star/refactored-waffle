@@ -157,6 +157,7 @@ function todayUTC(): string {
 }
 
 // Returns the remaining allowance after counting this request, or null if over.
+// In-memory fallback used in local mode or before the DB migration is applied.
 function consumeDailyRequest(key: string, limit: number): { remaining: number; limit: number } | null {
   const today = todayUTC();
   let usage = dailyUsage.get(key);
@@ -169,6 +170,37 @@ function consumeDailyRequest(key: string, limit: number): { remaining: number; l
   }
   usage.count += 1;
   return { remaining: Math.max(0, limit - usage.count), limit };
+}
+
+// Database-backed daily counter — survives restarts and works across instances.
+// Reads daily_request_count / daily_reset_date off the already-fetched key row,
+// resets at the start of each UTC day, and persists the new count.
+async function consumeDailyRequestDb(
+  client: { from: (t: string) => any },
+  row: { id: string; daily_request_count?: number; daily_reset_date?: string; request_count?: number },
+  limit: number,
+): Promise<{ remaining: number; limit: number } | null> {
+  const today = todayUTC();
+  let count = Number(row.daily_request_count) || 0;
+  let resetDate = row.daily_reset_date;
+  if (resetDate !== today) {
+    count = 0;
+    resetDate = today;
+  }
+  if (count >= limit) {
+    return null; // over the limit — don't count the blocked request
+  }
+  count += 1;
+  await client
+    .from("api_keys")
+    .update({
+      daily_request_count: count,
+      daily_reset_date: resetDate,
+      request_count: (Number(row.request_count) || 0) + 1,
+      last_used_at: new Date().toISOString(),
+    })
+    .eq("id", row.id);
+  return { remaining: Math.max(0, limit - count), limit };
 }
 
 async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): Promise<void> {
@@ -196,24 +228,32 @@ async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): 
     }
     req.tierLimits = TIER_LIMITS[data.tier as ApiTier];
     req.tier = data.tier as ApiTier;
+    const limit = req.tierLimits.requestsPerDay;
 
-    // Enforce the daily request limit
-    const allowance = consumeDailyRequest(key, req.tierLimits.requestsPerDay);
+    // Enforce the daily request limit. Prefer the DB-backed counter (survives
+    // restarts / multi-instance); fall back to in-memory if the migration that
+    // adds daily_reset_date hasn't been applied yet.
+    let allowance: { remaining: number; limit: number } | null;
+    if (data.daily_reset_date !== undefined) {
+      allowance = await consumeDailyRequestDb(supabase, data, limit);
+    } else {
+      allowance = consumeDailyRequest(key, limit);
+      await supabase
+        .from("api_keys")
+        .update({ request_count: data.request_count + 1, last_used_at: new Date().toISOString() })
+        .eq("id", data.id);
+    }
+
     if (!allowance) {
       res.status(429).json({
-        error: `Daily request limit reached (${req.tierLimits.requestsPerDay}/day on the ${data.tier} plan). Upgrade for more, or try again tomorrow.`,
+        error: `Daily request limit reached (${limit}/day on the ${data.tier} plan). Upgrade for more, or try again tomorrow.`,
         tier: data.tier,
-        limit: req.tierLimits.requestsPerDay,
+        limit,
       });
       return;
     }
     res.setHeader("X-RateLimit-Limit", String(allowance.limit));
     res.setHeader("X-RateLimit-Remaining", String(allowance.remaining));
-
-    await supabase
-      .from("api_keys")
-      .update({ request_count: data.request_count + 1, last_used_at: new Date().toISOString() })
-      .eq("id", data.id);
   } else {
     const found = localStore.findApiKey(key);
     if (!found) {
