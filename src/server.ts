@@ -607,8 +607,10 @@ app.get("/api/v1/pricing", (_req, res) => {
 // Gate admin endpoints behind a single secret token (set ADMIN_TOKEN on the
 // server). Compared in constant time to avoid timing leaks.
 function requireAdmin(req: Request, res: Response, next: NextFunction): void {
-  const expected = process.env.ADMIN_TOKEN || "";
-  const provided = (req.headers["x-admin-token"] as string) || "";
+  // Trim both sides so a stray newline/space pasted into the Railway variable
+  // (a very common gotcha) doesn't cause a false "invalid token".
+  const expected = (process.env.ADMIN_TOKEN || "").trim();
+  const provided = ((req.headers["x-admin-token"] as string) || "").trim();
   if (!expected) {
     res.status(503).json({ error: "Admin area is not configured (ADMIN_TOKEN not set)." });
     return;

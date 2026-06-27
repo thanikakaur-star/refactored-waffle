@@ -219,7 +219,11 @@
         sessionStorage.setItem('hp_admin_token', adminToken);
         showDash();
       } catch (e) {
-        showLogin(e.status === 503 ? 'Admin area not configured on the server.' : 'Invalid token.');
+        let msg = 'Invalid token.';
+        if (e.status === 503) msg = 'ADMIN_TOKEN is not set on the server (Railway variables).';
+        else if (e.status === 404) msg = 'Admin endpoint not found — the latest code may not be deployed yet.';
+        else if (e.status === 401) msg = 'Token does not match. Check for extra spaces and that Railway redeployed.';
+        showLogin(msg);
       }
     }
 
