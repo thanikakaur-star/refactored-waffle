@@ -7,6 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { localStore, DEV_API_KEY } from "./db/local-store.js";
 import { logger } from "./utils/logger.js";
+import { startScraperSchedule } from "./scraper/schedule.js";
 import type { ApiTier } from "./types/index.js";
 import type { Request, Response, NextFunction } from "express";
 import { z } from "zod";
@@ -575,6 +576,9 @@ const server = app.listen(port, () => {
     logger.info(`Dev API key: ${DEV_API_KEY}`);
     logger.info(`Try: curl -H "X-API-Key: ${DEV_API_KEY}" http://localhost:${port}/api/v1/tenders`);
   }
+
+  // Start the monthly scraper schedule (no-op unless ENABLE_SCRAPER_CRON=true)
+  startScraperSchedule();
 });
 
 export { app, server };

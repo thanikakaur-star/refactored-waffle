@@ -29,17 +29,17 @@ async function logScrapeRun(result: ScrapeResult) {
   }
 }
 
-async function run() {
-  const sourceArg = process.argv.find((a) => a.startsWith("--source="));
-  const sourceFilter = sourceArg?.split("=")[1] as TenderSource | undefined;
-
+/**
+ * Run the scrapers once. Safe to call from the CLI or from a scheduler.
+ * Returns a summary so callers (e.g. the monthly cron job) can log the outcome.
+ */
+export async function runScrapers(sourceFilter?: TenderSource) {
   const scrapers = sourceFilter
     ? ALL_SCRAPERS.filter((s) => s.source === sourceFilter)
     : ALL_SCRAPERS;
 
   if (scrapers.length === 0) {
-    logger.error("No scrapers matched", { source: sourceFilter });
-    process.exit(1);
+    throw new Error(`No scrapers matched source: ${sourceFilter}`);
   }
 
   const headless = process.env.PLAYWRIGHT_HEADLESS !== "false";
@@ -53,14 +53,16 @@ async function run() {
 
   const results: ScrapeResult[] = [];
 
-  for (const scraper of scrapers) {
-    await scraper.init(browser);
-    const result = await scraper.scrape();
-    results.push(result);
-    await logScrapeRun(result);
+  try {
+    for (const scraper of scrapers) {
+      await scraper.init(browser);
+      const result = await scraper.scrape();
+      results.push(result);
+      await logScrapeRun(result);
+    }
+  } finally {
+    await browser.close();
   }
-
-  await browser.close();
 
   const summary = {
     totalTenders: results.reduce((s, r) => s + r.tendersFound, 0),
@@ -70,9 +72,17 @@ async function run() {
   };
 
   logger.info("Scrape run complete", summary);
+  return summary;
 }
 
-run().catch((err) => {
-  logger.error("Scraper crashed", { error: String(err) });
-  process.exit(1);
-});
+// CLI entry point — only runs when this file is executed directly (npm run scrape)
+const isDirectRun = process.argv[1] && import.meta.url === `file://${process.argv[1]}`;
+if (isDirectRun) {
+  const sourceArg = process.argv.find((a) => a.startsWith("--source="));
+  const sourceFilter = sourceArg?.split("=")[1] as TenderSource | undefined;
+
+  runScrapers(sourceFilter).catch((err) => {
+    logger.error("Scraper crashed", { error: String(err) });
+    process.exit(1);
+  });
+}
