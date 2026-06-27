@@ -134,16 +134,41 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
 
 app.use(express.json());
 
+// Kept in sync with the limits advertised on the pricing page, since these are
+// now enforced — what we promise must match what we allow.
 const TIER_LIMITS: Record<ApiTier, { requestsPerDay: number; maxPageSize: number }> = {
-  free: { requestsPerDay: 50, maxPageSize: 10 },
-  basic: { requestsPerDay: 500, maxPageSize: 50 },
-  pro: { requestsPerDay: 5000, maxPageSize: 100 },
-  enterprise: { requestsPerDay: 50000, maxPageSize: 500 },
+  free: { requestsPerDay: 100, maxPageSize: 20 },
+  basic: { requestsPerDay: 1000, maxPageSize: 50 },
+  pro: { requestsPerDay: 10000, maxPageSize: 200 },
+  enterprise: { requestsPerDay: 1000000, maxPageSize: 500 },
 };
 
 interface AuthReq extends Request {
   tierLimits?: { requestsPerDay: number; maxPageSize: number };
   tier?: ApiTier;
+}
+
+// Per-day request counter, keyed by API key. Resets each calendar day (UTC).
+// In-memory: fine for a single instance; move to the DB/Redis to scale out.
+const dailyUsage = new Map<string, { date: string; count: number }>();
+
+function todayUTC(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// Returns the remaining allowance after counting this request, or null if over.
+function consumeDailyRequest(key: string, limit: number): { remaining: number; limit: number } | null {
+  const today = todayUTC();
+  let usage = dailyUsage.get(key);
+  if (!usage || usage.date !== today) {
+    usage = { date: today, count: 0 };
+    dailyUsage.set(key, usage);
+  }
+  if (usage.count >= limit) {
+    return null; // over the limit
+  }
+  usage.count += 1;
+  return { remaining: Math.max(0, limit - usage.count), limit };
 }
 
 async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): Promise<void> {
@@ -169,12 +194,26 @@ async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): 
       res.status(401).json({ error: "API key has expired." });
       return;
     }
+    req.tierLimits = TIER_LIMITS[data.tier as ApiTier];
+    req.tier = data.tier as ApiTier;
+
+    // Enforce the daily request limit
+    const allowance = consumeDailyRequest(key, req.tierLimits.requestsPerDay);
+    if (!allowance) {
+      res.status(429).json({
+        error: `Daily request limit reached (${req.tierLimits.requestsPerDay}/day on the ${data.tier} plan). Upgrade for more, or try again tomorrow.`,
+        tier: data.tier,
+        limit: req.tierLimits.requestsPerDay,
+      });
+      return;
+    }
+    res.setHeader("X-RateLimit-Limit", String(allowance.limit));
+    res.setHeader("X-RateLimit-Remaining", String(allowance.remaining));
+
     await supabase
       .from("api_keys")
       .update({ request_count: data.request_count + 1, last_used_at: new Date().toISOString() })
       .eq("id", data.id);
-    req.tierLimits = TIER_LIMITS[data.tier as ApiTier];
-    req.tier = data.tier as ApiTier;
   } else {
     const found = localStore.findApiKey(key);
     if (!found) {
@@ -185,9 +224,22 @@ async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): 
       res.status(401).json({ error: "API key has expired." });
       return;
     }
-    localStore.incrementKeyUsage(found.id);
     req.tierLimits = TIER_LIMITS[found.tier];
     req.tier = found.tier;
+
+    const allowance = consumeDailyRequest(key, req.tierLimits.requestsPerDay);
+    if (!allowance) {
+      res.status(429).json({
+        error: `Daily request limit reached (${req.tierLimits.requestsPerDay}/day on the ${found.tier} plan). Upgrade for more, or try again tomorrow.`,
+        tier: found.tier,
+        limit: req.tierLimits.requestsPerDay,
+      });
+      return;
+    }
+    res.setHeader("X-RateLimit-Limit", String(allowance.limit));
+    res.setHeader("X-RateLimit-Remaining", String(allowance.remaining));
+
+    localStore.incrementKeyUsage(found.id);
   }
   next();
 }

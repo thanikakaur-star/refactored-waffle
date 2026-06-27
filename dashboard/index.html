@@ -624,6 +624,22 @@
       `;
     }
 
+    // Shown when a user hits their daily request limit (HTTP 429)
+    function rateLimitPromptHtml() {
+      return `
+        <div class="glass-card p-8 text-center" style="grid-column: 1 / -1; border: 1px solid var(--border-gold);">
+          <div style="font-size: 32px; margin-bottom: 12px;">⏳</div>
+          <h3 class="text-xl font-bold mb-2" style="color: var(--gold); font-family: 'Playfair Display', serif;">You've hit today's request limit</h3>
+          <p class="text-sm mb-6" style="color: var(--text-secondary); max-width: 460px; margin: 0 auto;">
+            You're on the <span style="color: var(--gold);">${escapeHtml(userTier.charAt(0).toUpperCase() + userTier.slice(1))}</span> plan. Upgrade for a higher daily limit, or come back tomorrow when it resets.
+          </p>
+          <button onclick="startCheckout('pro')" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+            Upgrade to Pro
+          </button>
+        </div>
+      `;
+    }
+
     // Renders the "upgrade to unlock" prompt shown when a free user hits a paid feature
     function upgradePromptHtml(featureName) {
       return `
@@ -684,7 +700,11 @@
 
         showState('dashboard');
       } catch (err) {
-        showError(err.message);
+        if (err.status === 429) {
+          showError(err.message + '  You can upgrade for a higher daily limit, or come back tomorrow.');
+        } else {
+          showError(err.message);
+        }
       }
     }
 
@@ -940,6 +960,10 @@
 
         renderPagination('tenders-pagination', res.pagination, 'tenders');
       } catch (err) {
+        if (err.status === 429) {
+          document.getElementById('tenders-panel-list').innerHTML = rateLimitPromptHtml();
+          return;
+        }
         document.getElementById('tenders-panel-list').innerHTML = `<p style="color: var(--text-muted);">Failed to load tenders: ${escapeHtml(err.message)}</p>`;
       }
     }
@@ -1008,6 +1032,8 @@
         if (err.status === 403) {
           // Free/Basic user hit the paywall — show the upgrade prompt instead of an error
           grid.innerHTML = upgradePromptHtml('Regional Benchmarks');
+        } else if (err.status === 429) {
+          grid.innerHTML = rateLimitPromptHtml();
         } else {
           grid.innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
         }
