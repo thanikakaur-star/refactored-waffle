@@ -14,7 +14,7 @@ import { logger } from "../utils/logger.js";
  * Cron format: minute hour day-of-month month day-of-week
  *   "0 3 * * *"   → 03:00 every day (default)
  *   "0 3 1 * *"   → 03:00 on the 1st of every month
- *   "0 */6 * * *" → every 6 hours
+ *   every 6 hours → "0" then "0,6,12,18" in the hour field
  */
 export function startScraperSchedule(): CronJob | null {
   if (process.env.ENABLE_SCRAPER_CRON !== "true") {
