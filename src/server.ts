@@ -525,12 +525,23 @@ app.get("/", (_req, res) => {
 });
 
 // Serve static pages
-const staticPages = ["terms", "privacy", "docs", "products", "support"];
+const staticPages = ["terms", "privacy", "docs", "products", "support", "blog"];
 for (const page of staticPages) {
   app.get(`/${page}`, (_req, res) => {
     res.sendFile(path.join(publicDir, `${page}.html`));
   });
 }
+
+// Serve individual blog posts with clean URLs: /blog/<slug>
+app.get("/blog/:slug", (req, res) => {
+  const slug = path.basename(req.params.slug, ".html");
+  const filePath = path.join(publicDir, "blog", `${slug}.html`);
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).sendFile(path.join(publicDir, "index.html"));
+  }
+});
 
 // Serve dashboard at /dashboard
 app.use("/dashboard", express.static(dashboardDir));
