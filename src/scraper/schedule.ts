@@ -8,12 +8,13 @@ import { logger } from "../utils/logger.js";
  * Controlled by environment variables:
  *   ENABLE_SCRAPER_CRON  — must be "true" to activate (off by default, so local
  *                          dev and tests never kick off scraping)
- *   SCRAPER_CRON         — cron expression (default: 1st of each month at 03:00)
+ *   SCRAPER_CRON         — cron expression (default: daily at 03:00)
  *   SCRAPER_TIMEZONE     — IANA timezone for the schedule (default: Europe/London)
  *
  * Cron format: minute hour day-of-month month day-of-week
- *   "0 3 1 * *"   → 03:00 on the 1st of every month (default)
- *   "0 3 28 * *"  → 03:00 on the 28th of every month
+ *   "0 3 * * *"   → 03:00 every day (default)
+ *   "0 3 1 * *"   → 03:00 on the 1st of every month
+ *   "0 */6 * * *" → every 6 hours
  */
 export function startScraperSchedule(): CronJob | null {
   if (process.env.ENABLE_SCRAPER_CRON !== "true") {
@@ -21,7 +22,7 @@ export function startScraperSchedule(): CronJob | null {
     return null;
   }
 
-  const cronExpression = process.env.SCRAPER_CRON || "0 3 1 * *";
+  const cronExpression = process.env.SCRAPER_CRON || "0 3 * * *";
   const timeZone = process.env.SCRAPER_TIMEZONE || "Europe/London";
 
   let isRunning = false;
