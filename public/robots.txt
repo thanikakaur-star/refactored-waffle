@@ -3,5 +3,6 @@ Allow: /
 Disallow: /api/
 Disallow: /webhooks/
 Disallow: /health
+Disallow: /admin
 
 Sitemap: https://healthprocureintel.com/sitemap.xml

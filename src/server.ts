@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { localStore, DEV_API_KEY } from "./db/local-store.js";
 import { logger } from "./utils/logger.js";
 import { startScraperSchedule } from "./scraper/schedule.js";
+import { getSeoOverviewSafe, isSearchConsoleConfigured } from "./admin/searchConsole.js";
 import type { ApiTier } from "./types/index.js";
 import type { Request, Response, NextFunction } from "express";
 import { z } from "zod";
@@ -509,6 +510,49 @@ app.get("/api/v1/pricing", (_req, res) => {
   });
 });
 
+// --- Admin (private) ---
+
+// Gate admin endpoints behind a single secret token (set ADMIN_TOKEN on the
+// server). Compared in constant time to avoid timing leaks.
+function requireAdmin(req: Request, res: Response, next: NextFunction): void {
+  const expected = process.env.ADMIN_TOKEN || "";
+  const provided = (req.headers["x-admin-token"] as string) || "";
+  if (!expected) {
+    res.status(503).json({ error: "Admin area is not configured (ADMIN_TOKEN not set)." });
+    return;
+  }
+  const a = Buffer.from(expected);
+  const b = Buffer.from(provided);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    res.status(401).json({ error: "Unauthorized." });
+    return;
+  }
+  next();
+}
+
+// Lets the admin page check whether the token is correct before rendering
+app.get("/api/admin/check", requireAdmin, (_req, res) => {
+  res.json({ ok: true, searchConsoleConfigured: isSearchConsoleConfigured() });
+});
+
+// SEO overview from Google Search Console
+app.get("/api/admin/seo", requireAdmin, async (req, res) => {
+  if (!isSearchConsoleConfigured()) {
+    res.status(503).json({
+      error: "Search Console is not connected. Set GSC_SERVICE_ACCOUNT_EMAIL, GSC_PRIVATE_KEY and GSC_SITE_URL.",
+      configured: false,
+    });
+    return;
+  }
+  const days = Math.min(Math.max(Number(req.query.days) || 28, 1), 90);
+  const result = await getSeoOverviewSafe(days);
+  if (!result.ok) {
+    res.status(502).json({ error: result.error, configured: true });
+    return;
+  }
+  res.json({ data: result.data, configured: true });
+});
+
 // Resolve static asset directories — bulletproof for any CWD or __dirname
 const publicDir = [
   path.resolve(__dirname, "..", "public"),
@@ -544,7 +588,7 @@ app.get("/", (_req, res) => {
 });
 
 // Serve static pages
-const staticPages = ["terms", "privacy", "docs", "products", "support", "blog"];
+const staticPages = ["terms", "privacy", "docs", "products", "support", "blog", "admin"];
 for (const page of staticPages) {
   app.get(`/${page}`, (_req, res) => {
     res.sendFile(path.join(publicDir, `${page}.html`));
