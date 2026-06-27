@@ -41,6 +41,31 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://healthprocureintel.com/blog/understanding-ted-europa</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/win-sam-gov-medical-contracts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/nhs-supply-chain-vs-find-a-tender</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/cpv-codes-vs-naics-codes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/who-procurement-prequalification-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://healthprocureintel.com/support</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
