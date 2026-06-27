@@ -235,8 +235,16 @@
       </a>
     </nav>
 
+    <!-- Upgrade CTA (shown only for free/basic users) -->
+    <div id="sidebar-upgrade" class="px-5 mt-auto hidden">
+      <button onclick="startCheckout('pro')" class="w-full px-4 py-3 rounded-lg font-semibold text-sm" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+        ✦ Upgrade to Pro
+      </button>
+      <p class="text-xs text-center mt-2" style="color: var(--text-muted);">Unlock benchmarks &amp; more</p>
+    </div>
+
     <!-- API Status at bottom -->
-    <div class="p-5 mt-auto">
+    <div class="p-5">
       <div class="h-px mb-4" style="background: var(--border-gold);"></div>
       <div id="sidebar-status" class="flex items-center gap-2 text-xs" style="color: var(--text-muted);">
         <span class="w-2 h-2 rounded-full bg-gray-600 inline-block"></span>
@@ -551,6 +559,7 @@
     function showWelcome() {
       showState('welcome');
       document.getElementById('apiKeyField').value = '';
+      document.getElementById('sidebar-upgrade').classList.add('hidden');
     }
 
     function showError(message) {
@@ -652,6 +661,9 @@
         const stats = statsRes.data;
         const tenders = tendersRes.data;
         userTier = (statsRes.meta && statsRes.meta.tier) || 'free';
+
+        // Show the sidebar Upgrade CTA only for free/basic users
+        document.getElementById('sidebar-upgrade').classList.toggle('hidden', !(userTier === 'free' || userTier === 'basic'));
 
         renderStats(stats);
         renderCharts(stats);
