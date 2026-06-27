@@ -518,6 +518,19 @@ const dashboardDir = [
 
 logger.info("Static dirs", { publicDir, dashboardDir });
 
+// Redirect the Railway URL to the canonical custom domain (SEO: avoid duplicate
+// indexing of the same site under two hostnames). Localhost and the custom
+// domain are left untouched.
+const CANONICAL_HOST = process.env.CANONICAL_HOST || "healthprocureintel.com";
+app.use((req, res, next) => {
+  const host = (req.headers.host || "").toLowerCase();
+  if (host.endsWith(".up.railway.app")) {
+    res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`);
+    return;
+  }
+  next();
+});
+
 // Serve marketing site
 app.use(express.static(publicDir));
 app.get("/", (_req, res) => {
