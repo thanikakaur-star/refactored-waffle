@@ -1,6 +1,10 @@
 import { CronJob } from "cron";
-import { runScrapers } from "./run.js";
 import { logger } from "../utils/logger.js";
+
+// NOTE: ./run.js imports Playwright at module load. We deliberately do NOT import
+// it at the top here — otherwise simply starting the server would require
+// Playwright (a devDependency, pruned in production) and crash on boot. Instead
+// we dynamically import it only when a scrape actually runs.
 
 /**
  * Schedule the scrapers to run automatically on a recurring basis.
@@ -38,6 +42,7 @@ export function startScraperSchedule(): CronJob | null {
       isRunning = true;
       logger.info("Scheduled scrape starting");
       try {
+        const { runScrapers } = await import("./run.js");
         const summary = await runScrapers();
         logger.info("Scheduled scrape finished", summary);
       } catch (err) {
