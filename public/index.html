@@ -128,8 +128,11 @@
     };
   </script>
   <style>
-    html, body { overflow-x: hidden; }
+    html, body { overflow-x: hidden; max-width: 100%; }
     body { font-family: 'Inter', system-ui, sans-serif; background-color: #0a0a0f; color: #e2e8f0; }
+    /* Mobile overflow safety: keep code blocks scrollable internally, never stretch the page */
+    pre { max-width: 100%; }
+    .code-block { max-width: 100%; }
     .hero-gradient {
       background:
         radial-gradient(ellipse 80% 60% at 20% 40%, rgba(201,169,110,0.08) 0%, transparent 60%),
@@ -225,7 +228,7 @@
   <!-- ============ HERO SECTION ============ -->
   <section class="hero-gradient relative min-h-screen flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%221%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    <div class="relative max-w-7xl mx-auto px-6 lg:px-8 text-center pt-24 pb-20">
+    <div class="relative w-full min-w-0 max-w-7xl mx-auto px-6 lg:px-8 text-center pt-24 pb-20">
       <div class="fade-up">
         <p class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-gold text-xs font-medium tracking-wider uppercase mb-8">
           <span class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
@@ -270,7 +273,7 @@
       </div>
 
       <!-- Mock API Response -->
-      <div class="fade-up max-w-3xl mx-auto">
+      <div class="fade-up max-w-3xl mx-auto w-full min-w-0">
         <div class="code-block rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
           <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
             <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
