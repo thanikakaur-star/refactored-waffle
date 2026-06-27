@@ -563,9 +563,62 @@
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || `HTTP ${res.status}`);
+        const err = new Error(body.error || `HTTP ${res.status}`);
+        err.status = res.status;
+        throw err;
       }
       return res.json();
+    }
+
+    // Stripe checkout — kick off a subscription from inside the dashboard
+    const PRICE_IDS = {
+      basic: 'price_1TlrGvC3JZLLw9RVUSzeqONA',
+      pro: 'price_1TlrI0C3JZLLw9RVM2BRHEy9',
+      enterprise: 'price_1TlrIaC3JZLLw9RVctcI96FW',
+    };
+
+    async function startCheckout(tier) {
+      const priceId = PRICE_IDS[tier];
+      if (!priceId) return;
+      const email = prompt('Enter your email to upgrade to ' + tier.charAt(0).toUpperCase() + tier.slice(1) + ':');
+      if (!email || !email.includes('@')) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/v1/checkout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ priceId, email }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert(data.error || 'Could not start checkout. Please try again.');
+        }
+      } catch (e) {
+        alert('Could not reach the server. Please try again later.');
+      }
+    }
+
+    // Renders the "upgrade to unlock" prompt shown when a free user hits a paid feature
+    function upgradePromptHtml(featureName) {
+      return `
+        <div class="glass-card p-8 text-center" style="grid-column: 1 / -1; border: 1px solid var(--border-gold);">
+          <div style="font-size: 32px; margin-bottom: 12px;">🔒</div>
+          <h3 class="text-xl font-bold mb-2" style="color: var(--gold); font-family: 'Playfair Display', serif;">${escapeHtml(featureName)} is a Pro feature</h3>
+          <p class="text-sm mb-6" style="color: var(--text-secondary); max-width: 460px; margin: 0 auto;">
+            Unlock regional benchmarks — average contract values, lead times, win rates and compliance by market — plus 10,000 requests/day and 200 results per page.
+          </p>
+          <div class="flex items-center justify-center gap-3 flex-wrap">
+            <button onclick="startCheckout('pro')" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+              Upgrade to Pro — $199/mo
+            </button>
+            <button onclick="startCheckout('enterprise')" class="px-6 py-3 rounded-lg font-semibold text-sm" style="border: 1px solid var(--border-gold); color: var(--gold); background: transparent;">
+              See Enterprise
+            </button>
+          </div>
+          <p class="text-xs mt-4" style="color: var(--text-muted);">Cancel anytime · Secure billing via Stripe</p>
+        </div>
+      `;
     }
 
     async function loadDashboard() {
@@ -922,7 +975,13 @@
           </div>
         `).join('');
       } catch (err) {
-        document.getElementById('benchmarks-grid').innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+        const grid = document.getElementById('benchmarks-grid');
+        if (err.status === 403) {
+          // Free/Basic user hit the paywall — show the upgrade prompt instead of an error
+          grid.innerHTML = upgradePromptHtml('Regional Benchmarks');
+        } else {
+          grid.innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+        }
       }
     }
 
