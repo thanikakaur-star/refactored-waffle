@@ -7,7 +7,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc && cp -r public dist/public && cp -r dashboard dist/dashboard || true",
+    "build": "tsc && cp -r public dist/public && cp -r dashboard dist/dashboard",
     "start": "node dist/server.js",
     "scrape": "tsx src/scraper/run.ts",
     "scrape:ted": "tsx src/scraper/run.ts --source=ted",
