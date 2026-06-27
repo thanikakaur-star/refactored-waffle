@@ -4,8 +4,91 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HealthProcure Intel — The Intelligence Layer for Global Healthcare Procurement</title>
-  <meta name="description" content="Aggregate, normalize, and analyze $50B+ in procurement data from TED Europa, SAM.gov, WHO, and NHS Supply Chain. One API. Every opportunity." />
+  <title>HealthProcure Intel — Healthcare Procurement Intelligence API & Data Platform</title>
+  <meta name="description" content="Track healthcare procurement tenders from TED Europa, SAM.gov, WHO, and NHS Supply Chain in one API and dashboard. Real-time tender alerts, contract award data, and regional pricing benchmarks across 85+ countries." />
+  <meta name="keywords" content="healthcare procurement, tender alerts, procurement API, TED Europa, SAM.gov, WHO procurement, NHS Supply Chain, medical device tenders, government healthcare contracts, procurement intelligence, contract award data, healthcare tender data" />
+  <meta name="author" content="HealthProcure Intel" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://healthprocureintel.com/" />
+
+  <!-- Open Graph / LinkedIn / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://healthprocureintel.com/" />
+  <meta property="og:title" content="HealthProcure Intel — Healthcare Procurement Intelligence Platform" />
+  <meta property="og:description" content="Track healthcare procurement tenders from TED Europa, SAM.gov, WHO, and NHS Supply Chain in one API and dashboard. One API. Every opportunity." />
+  <meta property="og:image" content="https://healthprocureintel.com/logo-hp.png" />
+  <meta property="og:site_name" content="HealthProcure Intel" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HealthProcure Intel — Healthcare Procurement Intelligence Platform" />
+  <meta name="twitter:description" content="Track healthcare procurement tenders from TED Europa, SAM.gov, WHO, and NHS Supply Chain in one API. One API. Every opportunity." />
+  <meta name="twitter:image" content="https://healthprocureintel.com/logo-hp.png" />
+
+  <!-- Structured Data: Organization + Product + FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://healthprocureintel.com/#organization",
+        "name": "HealthProcure Intel",
+        "url": "https://healthprocureintel.com/",
+        "logo": "https://healthprocureintel.com/logo-hp.png",
+        "description": "Global healthcare procurement intelligence platform aggregating tender data from TED Europa, SAM.gov, WHO, and NHS Supply Chain.",
+        "email": "hello@healthprocureintel.com",
+        "sameAs": ["https://www.linkedin.com/company/healthprocure-intel"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://healthprocureintel.com/#website",
+        "url": "https://healthprocureintel.com/",
+        "name": "HealthProcure Intel",
+        "publisher": { "@id": "https://healthprocureintel.com/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "HealthProcure Intel API",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": "Healthcare procurement intelligence API aggregating and normalizing tender data from TED Europa, SAM.gov, WHO, and NHS Supply Chain across 85+ countries.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Free tier with 100 requests per day, no credit card required."
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What data sources do you cover?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We aggregate data from four major procurement portals: TED Europa (EU public procurement across 27 member states), SAM.gov (US federal contracts), WHO Procurement (global health procurement covering 194 member states), and NHS Supply Chain (UK National Health Service)." }
+          },
+          {
+            "@type": "Question",
+            "name": "How fresh is the data?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Our Playwright-powered scrapers run daily across all four portals. New tenders are typically indexed within 24 hours of publication on the source portal." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need a credit card for the free tier?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. The free tier requires only an email address. You receive an API key immediately with 100 requests per day and no credit card required." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I cancel my subscription anytime?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. All paid plans are billed monthly via Stripe with no long-term commitments. You can cancel at any time from your Stripe customer portal." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
