@@ -31,6 +31,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://healthprocureintel.com/blog/ted-europa-vs-sam-gov</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/manual-tender-tracking-vs-platform</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://healthprocureintel.com/support</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
