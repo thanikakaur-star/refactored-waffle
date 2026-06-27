@@ -645,6 +645,78 @@ app.get("/api/admin/seo", requireAdmin, async (req, res) => {
   res.json({ data: result.data, configured: true });
 });
 
+// Business overview — signups, subscribers, MRR, usage, content counts
+app.get("/api/admin/overview", requireAdmin, async (_req, res) => {
+  // Monthly price per tier, in USD
+  const TIER_PRICE_USD: Record<string, number> = { free: 0, basic: 49, pro: 199, enterprise: 499 };
+
+  try {
+    if (USE_SUPABASE && supabase) {
+      const [keysRes, tendersRes, awardsRes, benchmarksRes] = await Promise.all([
+        supabase.from("api_keys").select("tier, is_active, created_at, request_count, daily_request_count, email"),
+        supabase.from("tenders").select("*", { count: "exact", head: true }),
+        supabase.from("contract_awards").select("*", { count: "exact", head: true }),
+        supabase.from("supply_chain_benchmarks").select("*", { count: "exact", head: true }),
+      ]);
+
+      const keys = (keysRes.data ?? []).filter((k: any) => k.is_active !== false);
+      const byTier: Record<string, number> = { free: 0, basic: 0, pro: 0, enterprise: 0 };
+      let mrr = 0;
+      let totalRequests = 0;
+      let requestsToday = 0;
+      const today = new Date().toISOString().slice(0, 10);
+      let signups7d = 0;
+      const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+      for (const k of keys) {
+        const tier = (k.tier as string) || "free";
+        byTier[tier] = (byTier[tier] ?? 0) + 1;
+        mrr += TIER_PRICE_USD[tier] ?? 0;
+        totalRequests += Number(k.request_count) || 0;
+        if (k.daily_reset_date === today) requestsToday += Number(k.daily_request_count) || 0;
+        if (k.created_at && new Date(k.created_at).getTime() >= weekAgo) signups7d += 1;
+      }
+
+      const paying = byTier.basic + byTier.pro + byTier.enterprise;
+
+      // Most recent signups (up to 5)
+      const recent = [...keys]
+        .filter((k: any) => k.created_at)
+        .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .slice(0, 5)
+        .map((k: any) => ({ email: k.email, tier: k.tier, created_at: k.created_at }));
+
+      res.json({
+        data: {
+          users: { total: keys.length, paying, free: byTier.free, signups7d, byTier },
+          revenue: { mrr, arr: mrr * 12, currency: "USD" },
+          usage: { totalRequests, requestsToday },
+          content: {
+            tenders: tendersRes.count ?? 0,
+            awards: awardsRes.count ?? 0,
+            benchmarks: benchmarksRes.count ?? 0,
+          },
+          recentSignups: recent,
+        },
+      });
+    } else {
+      // Local/dev fallback
+      res.json({
+        data: {
+          users: { total: 1, paying: 1, free: 0, signups7d: 0, byTier: { free: 0, basic: 0, pro: 0, enterprise: 1 } },
+          revenue: { mrr: 0, arr: 0, currency: "USD" },
+          usage: { totalRequests: 0, requestsToday: 0 },
+          content: { tenders: 0, awards: 0, benchmarks: 0 },
+          recentSignups: [],
+        },
+      });
+    }
+  } catch (err) {
+    logger.error("Admin overview failed", { error: String(err) });
+    res.status(500).json({ error: "Failed to load overview" });
+  }
+});
+
 // Resolve static asset directories — bulletproof for any CWD or __dirname
 const publicDir = [
   path.resolve(__dirname, "..", "public"),
