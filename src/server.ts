@@ -754,7 +754,7 @@ app.get("/", (_req, res) => {
 });
 
 // Serve static pages
-const staticPages = ["terms", "privacy", "docs", "products", "support", "blog", "admin"];
+const staticPages = ["terms", "privacy", "docs", "products", "support", "blog", "admin", "changelog"];
 for (const page of staticPages) {
   app.get(`/${page}`, (_req, res) => {
     res.sendFile(path.join(publicDir, `${page}.html`));
