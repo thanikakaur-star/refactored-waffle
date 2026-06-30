@@ -1,0 +1,7 @@
+# Force dev dependencies (TypeScript, @types) to be installed during the build.
+# Railway sets NODE_ENV=production, which makes the default `npm ci` skip
+# devDependencies — and the build needs `tsc` to compile. Without this, the
+# build fails with "tsc: not found", no dist/ is produced, and the server
+# crashes on start with MODULE_NOT_FOUND.
+[phases.install]
+cmds = ["npm ci --include=dev"]

@@ -7,6 +7,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { localStore, DEV_API_KEY } from "./db/local-store.js";
 import { logger } from "./utils/logger.js";
+import { startScraperSchedule } from "./scraper/schedule.js";
+import { getSeoOverviewSafe, isSearchConsoleConfigured } from "./admin/searchConsole.js";
 import type { ApiTier } from "./types/index.js";
 import type { Request, Response, NextFunction } from "express";
 import { z } from "zod";
@@ -132,15 +134,73 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
 
 app.use(express.json());
 
+// Kept in sync with the limits advertised on the pricing page, since these are
+// now enforced — what we promise must match what we allow.
 const TIER_LIMITS: Record<ApiTier, { requestsPerDay: number; maxPageSize: number }> = {
-  free: { requestsPerDay: 50, maxPageSize: 10 },
-  basic: { requestsPerDay: 500, maxPageSize: 50 },
-  pro: { requestsPerDay: 5000, maxPageSize: 100 },
-  enterprise: { requestsPerDay: 50000, maxPageSize: 500 },
+  free: { requestsPerDay: 100, maxPageSize: 20 },
+  basic: { requestsPerDay: 1000, maxPageSize: 50 },
+  pro: { requestsPerDay: 10000, maxPageSize: 200 },
+  enterprise: { requestsPerDay: 1000000, maxPageSize: 500 },
 };
 
 interface AuthReq extends Request {
   tierLimits?: { requestsPerDay: number; maxPageSize: number };
+  tier?: ApiTier;
+}
+
+// Per-day request counter, keyed by API key. Resets each calendar day (UTC).
+// In-memory: fine for a single instance; move to the DB/Redis to scale out.
+const dailyUsage = new Map<string, { date: string; count: number }>();
+
+function todayUTC(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// Returns the remaining allowance after counting this request, or null if over.
+// In-memory fallback used in local mode or before the DB migration is applied.
+function consumeDailyRequest(key: string, limit: number): { remaining: number; limit: number } | null {
+  const today = todayUTC();
+  let usage = dailyUsage.get(key);
+  if (!usage || usage.date !== today) {
+    usage = { date: today, count: 0 };
+    dailyUsage.set(key, usage);
+  }
+  if (usage.count >= limit) {
+    return null; // over the limit
+  }
+  usage.count += 1;
+  return { remaining: Math.max(0, limit - usage.count), limit };
+}
+
+// Database-backed daily counter — survives restarts and works across instances.
+// Reads daily_request_count / daily_reset_date off the already-fetched key row,
+// resets at the start of each UTC day, and persists the new count.
+async function consumeDailyRequestDb(
+  client: { from: (t: string) => any },
+  row: { id: string; daily_request_count?: number; daily_reset_date?: string; request_count?: number },
+  limit: number,
+): Promise<{ remaining: number; limit: number } | null> {
+  const today = todayUTC();
+  let count = Number(row.daily_request_count) || 0;
+  let resetDate = row.daily_reset_date;
+  if (resetDate !== today) {
+    count = 0;
+    resetDate = today;
+  }
+  if (count >= limit) {
+    return null; // over the limit — don't count the blocked request
+  }
+  count += 1;
+  await client
+    .from("api_keys")
+    .update({
+      daily_request_count: count,
+      daily_reset_date: resetDate,
+      request_count: (Number(row.request_count) || 0) + 1,
+      last_used_at: new Date().toISOString(),
+    })
+    .eq("id", row.id);
+  return { remaining: Math.max(0, limit - count), limit };
 }
 
 async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): Promise<void> {
@@ -166,11 +226,34 @@ async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): 
       res.status(401).json({ error: "API key has expired." });
       return;
     }
-    await supabase
-      .from("api_keys")
-      .update({ request_count: data.request_count + 1, last_used_at: new Date().toISOString() })
-      .eq("id", data.id);
     req.tierLimits = TIER_LIMITS[data.tier as ApiTier];
+    req.tier = data.tier as ApiTier;
+    const limit = req.tierLimits.requestsPerDay;
+
+    // Enforce the daily request limit. Prefer the DB-backed counter (survives
+    // restarts / multi-instance); fall back to in-memory if the migration that
+    // adds daily_reset_date hasn't been applied yet.
+    let allowance: { remaining: number; limit: number } | null;
+    if (data.daily_reset_date !== undefined) {
+      allowance = await consumeDailyRequestDb(supabase, data, limit);
+    } else {
+      allowance = consumeDailyRequest(key, limit);
+      await supabase
+        .from("api_keys")
+        .update({ request_count: data.request_count + 1, last_used_at: new Date().toISOString() })
+        .eq("id", data.id);
+    }
+
+    if (!allowance) {
+      res.status(429).json({
+        error: `Daily request limit reached (${limit}/day on the ${data.tier} plan). Upgrade for more, or try again tomorrow.`,
+        tier: data.tier,
+        limit,
+      });
+      return;
+    }
+    res.setHeader("X-RateLimit-Limit", String(allowance.limit));
+    res.setHeader("X-RateLimit-Remaining", String(allowance.remaining));
   } else {
     const found = localStore.findApiKey(key);
     if (!found) {
@@ -181,8 +264,22 @@ async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): 
       res.status(401).json({ error: "API key has expired." });
       return;
     }
-    localStore.incrementKeyUsage(found.id);
     req.tierLimits = TIER_LIMITS[found.tier];
+    req.tier = found.tier;
+
+    const allowance = consumeDailyRequest(key, req.tierLimits.requestsPerDay);
+    if (!allowance) {
+      res.status(429).json({
+        error: `Daily request limit reached (${req.tierLimits.requestsPerDay}/day on the ${found.tier} plan). Upgrade for more, or try again tomorrow.`,
+        tier: found.tier,
+        limit: req.tierLimits.requestsPerDay,
+      });
+      return;
+    }
+    res.setHeader("X-RateLimit-Limit", String(allowance.limit));
+    res.setHeader("X-RateLimit-Remaining", String(allowance.remaining));
+
+    localStore.incrementKeyUsage(found.id);
   }
   next();
 }
@@ -309,7 +406,8 @@ app.get("/api/v1/awards", authMiddleware, async (req: AuthReq, res) => {
 
 // --- Analytics ---
 
-app.get("/api/v1/analytics/stats", authMiddleware, async (_req, res) => {
+app.get("/api/v1/analytics/stats", authMiddleware, async (req, res) => {
+  const tier = (req as AuthReq).tier ?? "free";
   if (USE_SUPABASE && supabase) {
     try {
       const [tenderRes, openRes, awardRes] = await Promise.all([
@@ -358,12 +456,13 @@ app.get("/api/v1/analytics/stats", authMiddleware, async (_req, res) => {
           monthlyTrend: Object.entries(monthlyMap).map(([month, d]) => ({ month, ...d })).sort((a, b) => a.month.localeCompare(b.month)),
           topBuyers: Object.entries(buyerMap).map(([name, d]) => ({ name, country: d.country, tenderCount: d.count })).sort((a, b) => b.tenderCount - a.tenderCount).slice(0, 10),
         },
+        meta: { tier },
       });
     } catch {
       res.status(500).json({ error: "Internal server error" });
     }
   } else {
-    res.json({ data: localStore.getStats() });
+    res.json({ data: localStore.getStats(), meta: { tier } });
   }
 });
 
@@ -503,6 +602,123 @@ app.get("/api/v1/pricing", (_req, res) => {
   });
 });
 
+// --- Admin (private) ---
+
+// Gate admin endpoints behind a single secret token (set ADMIN_TOKEN on the
+// server). Compared in constant time to avoid timing leaks.
+function requireAdmin(req: Request, res: Response, next: NextFunction): void {
+  // Trim both sides so a stray newline/space pasted into the Railway variable
+  // (a very common gotcha) doesn't cause a false "invalid token".
+  const expected = (process.env.ADMIN_TOKEN || "").trim();
+  const provided = ((req.headers["x-admin-token"] as string) || "").trim();
+  if (!expected) {
+    res.status(503).json({ error: "Admin area is not configured (ADMIN_TOKEN not set)." });
+    return;
+  }
+  const a = Buffer.from(expected);
+  const b = Buffer.from(provided);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    res.status(401).json({ error: "Unauthorized." });
+    return;
+  }
+  next();
+}
+
+// Lets the admin page check whether the token is correct before rendering
+app.get("/api/admin/check", requireAdmin, (_req, res) => {
+  res.json({ ok: true, searchConsoleConfigured: isSearchConsoleConfigured() });
+});
+
+// SEO overview from Google Search Console
+app.get("/api/admin/seo", requireAdmin, async (req, res) => {
+  if (!isSearchConsoleConfigured()) {
+    res.status(503).json({
+      error: "Search Console is not connected. Set GSC_SERVICE_ACCOUNT_EMAIL, GSC_PRIVATE_KEY and GSC_SITE_URL.",
+      configured: false,
+    });
+    return;
+  }
+  const days = Math.min(Math.max(Number(req.query.days) || 28, 1), 90);
+  const result = await getSeoOverviewSafe(days);
+  if (!result.ok) {
+    res.status(502).json({ error: result.error, configured: true });
+    return;
+  }
+  res.json({ data: result.data, configured: true });
+});
+
+// Business overview — signups, subscribers, MRR, usage, content counts
+app.get("/api/admin/overview", requireAdmin, async (_req, res) => {
+  // Monthly price per tier, in USD
+  const TIER_PRICE_USD: Record<string, number> = { free: 0, basic: 49, pro: 199, enterprise: 499 };
+
+  try {
+    if (USE_SUPABASE && supabase) {
+      const [keysRes, tendersRes, awardsRes, benchmarksRes] = await Promise.all([
+        supabase.from("api_keys").select("tier, is_active, created_at, request_count, daily_request_count, email"),
+        supabase.from("tenders").select("*", { count: "exact", head: true }),
+        supabase.from("contract_awards").select("*", { count: "exact", head: true }),
+        supabase.from("supply_chain_benchmarks").select("*", { count: "exact", head: true }),
+      ]);
+
+      const keys = (keysRes.data ?? []).filter((k: any) => k.is_active !== false);
+      const byTier: Record<string, number> = { free: 0, basic: 0, pro: 0, enterprise: 0 };
+      let mrr = 0;
+      let totalRequests = 0;
+      let requestsToday = 0;
+      const today = new Date().toISOString().slice(0, 10);
+      let signups7d = 0;
+      const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+      for (const k of keys) {
+        const tier = (k.tier as string) || "free";
+        byTier[tier] = (byTier[tier] ?? 0) + 1;
+        mrr += TIER_PRICE_USD[tier] ?? 0;
+        totalRequests += Number(k.request_count) || 0;
+        if (k.daily_reset_date === today) requestsToday += Number(k.daily_request_count) || 0;
+        if (k.created_at && new Date(k.created_at).getTime() >= weekAgo) signups7d += 1;
+      }
+
+      const paying = byTier.basic + byTier.pro + byTier.enterprise;
+
+      // Most recent signups (up to 5)
+      const recent = [...keys]
+        .filter((k: any) => k.created_at)
+        .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .slice(0, 5)
+        .map((k: any) => ({ email: k.email, tier: k.tier, created_at: k.created_at }));
+
+      res.json({
+        data: {
+          users: { total: keys.length, paying, free: byTier.free, signups7d, byTier },
+          revenue: { mrr, arr: mrr * 12, currency: "USD" },
+          usage: { totalRequests, requestsToday },
+          content: {
+            tenders: tendersRes.count ?? 0,
+            awards: awardsRes.count ?? 0,
+            benchmarks: benchmarksRes.count ?? 0,
+          },
+          recentSignups: recent,
+        },
+      });
+    } else {
+      // Local/dev fallback
+      res.json({
+        data: {
+          users: { total: 1, paying: 1, free: 0, signups7d: 0, byTier: { free: 0, basic: 0, pro: 0, enterprise: 1 } },
+          revenue: { mrr: 0, arr: 0, currency: "USD" },
+          usage: { totalRequests: 0, requestsToday: 0 },
+          content: { tenders: 0, awards: 0, benchmarks: 0 },
+          recentSignups: [],
+        },
+      });
+    }
+  } catch (err) {
+    logger.error("Admin overview failed", { error: String(err) });
+    res.status(500).json({ error: "Failed to load overview" });
+  }
+});
+
 // Resolve static asset directories — bulletproof for any CWD or __dirname
 const publicDir = [
   path.resolve(__dirname, "..", "public"),
@@ -518,6 +734,19 @@ const dashboardDir = [
 
 logger.info("Static dirs", { publicDir, dashboardDir });
 
+// Redirect the Railway URL to the canonical custom domain (SEO: avoid duplicate
+// indexing of the same site under two hostnames). Localhost and the custom
+// domain are left untouched.
+const CANONICAL_HOST = process.env.CANONICAL_HOST || "healthprocureintel.com";
+app.use((req, res, next) => {
+  const host = (req.headers.host || "").toLowerCase();
+  if (host.endsWith(".up.railway.app")) {
+    res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`);
+    return;
+  }
+  next();
+});
+
 // Serve marketing site
 app.use(express.static(publicDir));
 app.get("/", (_req, res) => {
@@ -525,12 +754,23 @@ app.get("/", (_req, res) => {
 });
 
 // Serve static pages
-const staticPages = ["terms", "privacy", "docs", "products"];
+const staticPages = ["terms", "privacy", "docs", "products", "support", "blog", "admin", "changelog"];
 for (const page of staticPages) {
   app.get(`/${page}`, (_req, res) => {
     res.sendFile(path.join(publicDir, `${page}.html`));
   });
 }
+
+// Serve individual blog posts with clean URLs: /blog/<slug>
+app.get("/blog/:slug", (req, res) => {
+  const slug = path.basename(req.params.slug, ".html");
+  const filePath = path.join(publicDir, "blog", `${slug}.html`);
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).sendFile(path.join(publicDir, "index.html"));
+  }
+});
 
 // Serve dashboard at /dashboard
 app.use("/dashboard", express.static(dashboardDir));
@@ -551,6 +791,9 @@ const server = app.listen(port, () => {
     logger.info(`Dev API key: ${DEV_API_KEY}`);
     logger.info(`Try: curl -H "X-API-Key: ${DEV_API_KEY}" http://localhost:${port}/api/v1/tenders`);
   }
+
+  // Start the monthly scraper schedule (no-op unless ENABLE_SCRAPER_CRON=true)
+  startScraperSchedule();
 });
 
 export { app, server };

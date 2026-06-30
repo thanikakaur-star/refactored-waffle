@@ -204,12 +204,12 @@
     <!-- Logo -->
     <div class="p-6 pb-4">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #c9a96e, #d4af37);">
-          <span class="text-sm font-bold" style="color: #0a0a0f;">HP</span>
+        <div class="w-11 h-11 flex items-center justify-center" style="background: linear-gradient(150deg, #cdb079 0%, #b8975a 100%); border-radius: 11px; border: 1px solid rgba(212,175,55,0.35); box-shadow: 0 2px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15);">
+          <span style="font-family: 'Playfair Display', serif; font-weight: 600; font-size: 19px; letter-spacing: 0.5px; color: #0a0a0f;">HP</span>
         </div>
         <div>
-          <h1 class="text-sm font-bold" style="color: var(--gold);">HealthProcure</h1>
-          <p class="text-xs" style="color: var(--text-muted);">Intel Platform</p>
+          <h1 style="font-family: 'Playfair Display', serif; font-weight: 600; font-size: 16px; letter-spacing: 0.2px; color: var(--gold); line-height: 1.1;">HealthProcure</h1>
+          <p class="text-xs" style="color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; font-size: 9px; margin-top: 2px;">Intel Platform</p>
         </div>
       </div>
     </div>
@@ -218,25 +218,33 @@
 
     <!-- Nav Links -->
     <nav class="flex-1 py-4">
-      <a href="#" class="sidebar-link active" data-panel="overview" onclick="switchPanel('overview', this)">
+      <a href="#" class="sidebar-link active" data-panel="overview" onclick="switchPanel('overview', this, event)">
         <span class="icon">&#9632;</span> Overview
       </a>
-      <a href="#" class="sidebar-link" data-panel="tenders" onclick="switchPanel('tenders', this)">
+      <a href="#" class="sidebar-link" data-panel="tenders" onclick="switchPanel('tenders', this, event)">
         <span class="icon">&#9998;</span> Tenders
       </a>
-      <a href="#" class="sidebar-link" data-panel="awards" onclick="switchPanel('awards', this)">
+      <a href="#" class="sidebar-link" data-panel="awards" onclick="switchPanel('awards', this, event)">
         <span class="icon">&#9733;</span> Awards
       </a>
-      <a href="#" class="sidebar-link" data-panel="benchmarks" onclick="switchPanel('benchmarks', this)">
+      <a href="#" class="sidebar-link" data-panel="benchmarks" onclick="switchPanel('benchmarks', this, event)">
         <span class="icon">&#9650;</span> Benchmarks
       </a>
-      <a href="#" class="sidebar-link" data-panel="sources" onclick="switchPanel('sources', this)">
+      <a href="#" class="sidebar-link" data-panel="sources" onclick="switchPanel('sources', this, event)">
         <span class="icon">&#9881;</span> Sources
       </a>
     </nav>
 
+    <!-- Upgrade CTA (shown only for free/basic users) -->
+    <div id="sidebar-upgrade" class="px-5 mt-auto hidden">
+      <button onclick="startCheckout('pro')" class="w-full px-4 py-3 rounded-lg font-semibold text-sm" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+        ✦ Upgrade to Pro
+      </button>
+      <p class="text-xs text-center mt-2" style="color: var(--text-muted);">Unlock benchmarks &amp; more</p>
+    </div>
+
     <!-- API Status at bottom -->
-    <div class="p-5 mt-auto">
+    <div class="p-5">
       <div class="h-px mb-4" style="background: var(--border-gold);"></div>
       <div id="sidebar-status" class="flex items-center gap-2 text-xs" style="color: var(--text-muted);">
         <span class="w-2 h-2 rounded-full bg-gray-600 inline-block"></span>
@@ -508,6 +516,7 @@
 
     const API_BASE = window.location.origin;
     let apiKey = '';
+    let userTier = 'free';
     let charts = {};
 
     // Theme colors
@@ -550,6 +559,7 @@
     function showWelcome() {
       showState('welcome');
       document.getElementById('apiKeyField').value = '';
+      document.getElementById('sidebar-upgrade').classList.add('hidden');
     }
 
     function showError(message) {
@@ -563,9 +573,93 @@
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || `HTTP ${res.status}`);
+        const err = new Error(body.error || `HTTP ${res.status}`);
+        err.status = res.status;
+        throw err;
       }
       return res.json();
+    }
+
+    // Stripe checkout — kick off a subscription from inside the dashboard
+    const PRICE_IDS = {
+      basic: 'price_1TlrGvC3JZLLw9RVUSzeqONA',
+      pro: 'price_1TlrI0C3JZLLw9RVM2BRHEy9',
+      enterprise: 'price_1TlrIaC3JZLLw9RVctcI96FW',
+    };
+
+    async function startCheckout(tier) {
+      const priceId = PRICE_IDS[tier];
+      if (!priceId) return;
+      const email = prompt('Enter your email to upgrade to ' + tier.charAt(0).toUpperCase() + tier.slice(1) + ':');
+      if (!email || !email.includes('@')) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/v1/checkout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ priceId, email }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert(data.error || 'Could not start checkout. Please try again.');
+        }
+      } catch (e) {
+        alert('Could not reach the server. Please try again later.');
+      }
+    }
+
+    // Subtle inline nudge shown to free/basic users who are capped on page size
+    function tendersUpsellHtml() {
+      const planName = userTier.charAt(0).toUpperCase() + userTier.slice(1);
+      return `
+        <div class="glass-card p-4 fade-in flex items-center justify-between flex-wrap gap-3" style="border: 1px solid var(--border-gold);">
+          <p class="text-xs" style="color: var(--text-secondary);">
+            You're on the <span style="color: var(--gold);">${escapeHtml(planName)}</span> plan — capped at ${userTier === 'basic' ? 50 : 20} results per page. Pro shows 200 per page and unlocks regional benchmarks.
+          </p>
+          <button onclick="startCheckout('pro')" class="px-4 py-2 rounded-lg font-semibold text-xs flex-shrink-0" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+            Upgrade to Pro
+          </button>
+        </div>
+      `;
+    }
+
+    // Shown when a user hits their daily request limit (HTTP 429)
+    function rateLimitPromptHtml() {
+      return `
+        <div class="glass-card p-8 text-center" style="grid-column: 1 / -1; border: 1px solid var(--border-gold);">
+          <div style="font-size: 32px; margin-bottom: 12px;">⏳</div>
+          <h3 class="text-xl font-bold mb-2" style="color: var(--gold); font-family: 'Playfair Display', serif;">You've hit today's request limit</h3>
+          <p class="text-sm mb-6" style="color: var(--text-secondary); max-width: 460px; margin: 0 auto;">
+            You're on the <span style="color: var(--gold);">${escapeHtml(userTier.charAt(0).toUpperCase() + userTier.slice(1))}</span> plan. Upgrade for a higher daily limit, or come back tomorrow when it resets.
+          </p>
+          <button onclick="startCheckout('pro')" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+            Upgrade to Pro
+          </button>
+        </div>
+      `;
+    }
+
+    // Renders the "upgrade to unlock" prompt shown when a free user hits a paid feature
+    function upgradePromptHtml(featureName) {
+      return `
+        <div class="glass-card p-8 text-center" style="grid-column: 1 / -1; border: 1px solid var(--border-gold);">
+          <div style="font-size: 32px; margin-bottom: 12px;">🔒</div>
+          <h3 class="text-xl font-bold mb-2" style="color: var(--gold); font-family: 'Playfair Display', serif;">${escapeHtml(featureName)} is a Pro feature</h3>
+          <p class="text-sm mb-6" style="color: var(--text-secondary); max-width: 460px; margin: 0 auto;">
+            Unlock regional benchmarks — average contract values, lead times, win rates and compliance by market — plus 10,000 requests/day and 200 results per page.
+          </p>
+          <div class="flex items-center justify-center gap-3 flex-wrap">
+            <button onclick="startCheckout('pro')" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+              Upgrade to Pro — $199/mo
+            </button>
+            <button onclick="startCheckout('enterprise')" class="px-6 py-3 rounded-lg font-semibold text-sm" style="border: 1px solid var(--border-gold); color: var(--gold); background: transparent;">
+              See Enterprise
+            </button>
+          </div>
+          <p class="text-xs mt-4" style="color: var(--text-muted);">Cancel anytime · Secure billing via Stripe</p>
+        </div>
+      `;
     }
 
     async function loadDashboard() {
@@ -582,6 +676,10 @@
 
         const stats = statsRes.data;
         const tenders = tendersRes.data;
+        userTier = (statsRes.meta && statsRes.meta.tier) || 'free';
+
+        // Show the sidebar Upgrade CTA only for free/basic users
+        document.getElementById('sidebar-upgrade').classList.toggle('hidden', !(userTier === 'free' || userTier === 'basic'));
 
         renderStats(stats);
         renderCharts(stats);
@@ -602,7 +700,11 @@
 
         showState('dashboard');
       } catch (err) {
-        showError(err.message);
+        if (err.status === 429) {
+          showError(err.message + '  You can upgrade for a higher daily limit, or come back tomorrow.');
+        } else {
+          showError(err.message);
+        }
       }
     }
 
@@ -775,17 +877,46 @@
     let tenderPage = 1;
     let awardPage = 1;
 
-    function switchPanel(panel, linkEl) {
-      if (!apiKey && panel !== 'overview') return;
-      event.preventDefault();
+    function switchPanel(panel, linkEl, evt) {
+      if (evt) evt.preventDefault();
       currentPanel = panel;
 
       document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
       if (linkEl) linkEl.classList.add('active');
 
+      if (!apiKey) {
+        showState('dashboard');
+        document.querySelectorAll('.dashboard-panel').forEach(p => p.classList.add('hidden'));
+        const target = document.getElementById('panel-' + panel);
+        if (target) {
+          target.classList.remove('hidden');
+          target.classList.add('fade-in');
+          if (panel === 'overview') {
+            showState('welcome');
+            return;
+          } else {
+            if (!target.querySelector('.connect-prompt')) {
+              const prompt = document.createElement('div');
+              prompt.className = 'connect-prompt text-center py-16';
+              prompt.innerHTML = `
+                <div class="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold);">
+                  <span class="text-2xl" style="color: var(--gold);">&#128274;</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">API Key Required</h3>
+                <p class="text-sm mb-5" style="color: var(--text-secondary);">Enter your API key above to access this section.</p>
+                <button onclick="document.getElementById('apiKeyField').focus()" class="btn-gold text-sm px-5 py-2 rounded-lg">Enter API Key</button>
+              `;
+              target.appendChild(prompt);
+            }
+          }
+        }
+        return;
+      }
+
       document.querySelectorAll('.dashboard-panel').forEach(p => p.classList.add('hidden'));
       const target = document.getElementById('panel-' + panel);
       if (target) {
+        target.querySelector('.connect-prompt')?.remove();
         target.classList.remove('hidden');
         target.classList.add('fade-in');
       }
@@ -825,10 +956,14 @@
               </div>
             </div>
           </div>
-        `).join('');
+        `).join('') + ((userTier === 'free' || userTier === 'basic') ? tendersUpsellHtml() : '');
 
         renderPagination('tenders-pagination', res.pagination, 'tenders');
       } catch (err) {
+        if (err.status === 429) {
+          document.getElementById('tenders-panel-list').innerHTML = rateLimitPromptHtml();
+          return;
+        }
         document.getElementById('tenders-panel-list').innerHTML = `<p style="color: var(--text-muted);">Failed to load tenders: ${escapeHtml(err.message)}</p>`;
       }
     }
@@ -866,30 +1001,42 @@
         const grid = document.getElementById('benchmarks-grid');
         grid.innerHTML = res.data.map(b => `
           <div class="glass-card p-6 fade-in">
-            <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(b.product_category)}</h4>
-            <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)}</p>
+            <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(formatCategory(b.category))}</h4>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)} · ${escapeHtml(b.period || '')}</p>
             <div class="space-y-3">
               <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Avg Price</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.avg_price_usd)}</span>
+                <span style="color: var(--text-secondary);">Avg Contract Value</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.avg_contract_value_usd || 0)}</span>
               </div>
               <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Median Price</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.median_price_usd)}</span>
+                <span style="color: var(--text-secondary);">Avg Lead Time</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${b.avg_lead_time_days || 0} days</span>
               </div>
               <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Range</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.min_price_usd)} – ${formatCurrency(b.max_price_usd)}</span>
+                <span style="color: var(--text-secondary);">Tenders</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${(b.tender_count || 0).toLocaleString()}</span>
               </div>
               <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Sample Size</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${b.sample_size}</span>
+                <span style="color: var(--text-secondary);">Awards</span>
+                <span class="font-semibold" style="color: var(--text-primary);">${(b.award_count || 0).toLocaleString()}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span style="color: var(--text-secondary);">Compliance Rate</span>
+                <span class="font-semibold" style="color: var(--teal);">${(b.compliance_rate || 0).toFixed(1)}%</span>
               </div>
             </div>
           </div>
         `).join('');
       } catch (err) {
-        document.getElementById('benchmarks-grid').innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+        const grid = document.getElementById('benchmarks-grid');
+        if (err.status === 403) {
+          // Free/Basic user hit the paywall — show the upgrade prompt instead of an error
+          grid.innerHTML = upgradePromptHtml('Regional Benchmarks');
+        } else if (err.status === 429) {
+          grid.innerHTML = rateLimitPromptHtml();
+        } else {
+          grid.innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+        }
       }
     }
 

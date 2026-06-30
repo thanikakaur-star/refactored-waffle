@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LinkedIn Featured Image — HealthProcure Intel</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #111; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+    .card {
+      width: 1200px;
+      height: 628px;
+      background: #0a0a0f;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #0d0f16 0%, #0a0a0f 40%, #0e1019 100%);
+    }
+
+    .orb-1 {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      top: -300px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(201,169,110,0.04) 0%, transparent 60%);
+    }
+
+    .orb-2 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      bottom: -300px;
+      left: 100px;
+      background: radial-gradient(circle, rgba(13,148,136,0.02) 0%, transparent 60%);
+    }
+
+    .h-lines {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 78px,
+        rgba(201,169,110,0.02) 78px,
+        rgba(201,169,110,0.02) 79px
+      );
+    }
+
+    .border-frame {
+      position: absolute;
+      inset: 24px;
+      border: 1px solid rgba(201,169,110,0.06);
+      border-radius: 2px;
+    }
+
+    .bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(201,169,110,0.1) 15%,
+        #c9a96e 40%,
+        #d4af37 50%,
+        #c9a96e 60%,
+        rgba(201,169,110,0.1) 85%,
+        transparent 100%
+      );
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: 60px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 48px;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(201,169,110,0.06);
+      border: 1px solid rgba(201,169,110,0.18);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: #c9a96e;
+    }
+
+    .logo-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #e2e8f0;
+      letter-spacing: -0.3px;
+    }
+    .logo-text em { font-style: normal; color: #c9a96e; }
+
+    h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #f1f5f9;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      max-width: 720px;
+      letter-spacing: -1px;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: #c9a96e;
+    }
+
+    .subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: #64748b;
+      margin-bottom: 56px;
+      max-width: 560px;
+      line-height: 1.5;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 0;
+      justify-content: center;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 0 36px;
+      border-left: 1px solid rgba(201,169,110,0.08);
+    }
+
+    .stat:first-child {
+      border-left: none;
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 600;
+      color: #c9a96e;
+      line-height: 1.2;
+    }
+
+    .stat-line {
+      width: 20px;
+      height: 1px;
+      background: rgba(201,169,110,0.15);
+      margin: 8px auto;
+    }
+
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .url {
+      position: absolute;
+      bottom: 32px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: #334155;
+      z-index: 2;
+      letter-spacing: 0.5px;
+    }
+    .url em { font-style: normal; color: rgba(201,169,110,0.5); }
+
+    .contact {
+      position: absolute;
+      bottom: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: #334155;
+      z-index: 2;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="bg"></div>
+    <div class="orb-1"></div>
+    <div class="orb-2"></div>
+    <div class="h-lines"></div>
+    <div class="border-frame"></div>
+    <div class="bottom-bar"></div>
+
+    <div class="content">
+      <div class="logo-row">
+        <div class="logo-icon">HP</div>
+        <div class="logo-text">Health<em>Procure</em> Intel</div>
+      </div>
+
+      <h1>Every Healthcare Tender.<br><em>One Platform.</em></h1>
+
+      <div class="subtitle">Real-time procurement intelligence from TED Europa, SAM.gov, WHO & NHS Supply Chain</div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-value">$50B+</div>
+          <div class="stat-line"></div>
+          <div class="stat-label">Tenders</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">85+</div>
+          <div class="stat-line"></div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-line"></div>
+          <div class="stat-label">Sources</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">Free</div>
+          <div class="stat-line"></div>
+          <div class="stat-label">To Start</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="url"><em>healthprocureintel</em>.com</div>
+    <div class="contact">hello@healthprocureintel.com</div>
+  </div>
+</body>
+</html>

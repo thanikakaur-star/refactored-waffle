@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin — HealthProcure Intel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: {
+      gold: { DEFAULT: '#c9a96e', dark: '#a8883f', bright: '#d4af37' },
+      dark: { DEFAULT: '#0a0a0f', 100: '#12141d', 200: '#0f1117', 300: '#181b27', 400: '#1e2130' },
+      teal: { DEFAULT: '#1a7a6d', light: '#0d9488' },
+    }, fontFamily: { display: ['Playfair Display', 'serif'], body: ['Inter', 'sans-serif'] } } } };
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: #e2e8f0; }
+    .card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); }
+    th, td { text-align: left; padding: 8px 10px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    th { color: #c9a96e; font-weight: 600; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body class="antialiased">
+
+  <header class="border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(150deg,#cdb079,#b8975a); border:1px solid rgba(212,175,55,0.35);">
+          <span style="font-family:'Playfair Display',serif; font-weight:600; color:#0a0a0f;">HP</span>
+        </div>
+        <div>
+          <h1 class="font-display font-semibold text-white">Admin</h1>
+          <p class="text-xs text-gray-500 uppercase tracking-widest">Private · SEO Console</p>
+        </div>
+      </div>
+      <button id="logout-btn" class="hidden text-xs text-gray-400 hover:text-gold">Log out</button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10">
+
+    <!-- Login -->
+    <div id="login" class="max-w-sm mx-auto card rounded-2xl p-8 mt-16">
+      <h2 class="font-display text-xl font-semibold text-white mb-1">Admin access</h2>
+      <p class="text-sm text-gray-500 mb-6">Enter your admin token to continue.</p>
+      <input id="token-input" type="password" placeholder="Admin token" class="w-full px-4 py-3 rounded-lg bg-dark-400 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-gold/40 mb-3" />
+      <button id="login-btn" class="w-full py-3 rounded-lg font-semibold text-sm" style="background: linear-gradient(135deg,#c9a96e,#a8883f); color:#0a0a0f;">Unlock</button>
+      <p id="login-error" class="hidden text-red-400 text-xs mt-3"></p>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dash" class="hidden">
+
+      <!-- Business overview -->
+      <h2 class="font-display text-2xl font-bold text-white mb-6">Business overview</h2>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="card rounded-xl p-5">
+          <p class="text-3xl font-display font-bold text-gold" id="b-mrr">—</p>
+          <p class="text-xs text-gray-500 mt-1">MRR (monthly recurring)</p>
+        </div>
+        <div class="card rounded-xl p-5">
+          <p class="text-3xl font-display font-bold text-white" id="b-paying">—</p>
+          <p class="text-xs text-gray-500 mt-1">Paying subscribers</p>
+        </div>
+        <div class="card rounded-xl p-5">
+          <p class="text-3xl font-display font-bold text-white" id="b-users">—</p>
+          <p class="text-xs text-gray-500 mt-1">Total signups</p>
+        </div>
+        <div class="card rounded-xl p-5">
+          <p class="text-3xl font-display font-bold text-white" id="b-new">—</p>
+          <p class="text-xs text-gray-500 mt-1">New (last 7 days)</p>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6 mb-6">
+        <!-- Subscriber breakdown -->
+        <div class="card rounded-2xl p-5">
+          <h3 class="font-display font-semibold text-white mb-4">Subscribers by tier</h3>
+          <div class="space-y-3 text-sm">
+            <div class="flex items-center justify-between"><span class="text-gray-400">Free</span><span class="text-white font-semibold" id="t-free">—</span></div>
+            <div class="flex items-center justify-between"><span class="text-gray-400">Basic &middot; $49/mo</span><span class="text-white font-semibold" id="t-basic">—</span></div>
+            <div class="flex items-center justify-between"><span class="text-gray-400">Pro &middot; $199/mo</span><span class="text-white font-semibold" id="t-pro">—</span></div>
+            <div class="flex items-center justify-between"><span class="text-gray-400">Enterprise &middot; $499/mo</span><span class="text-white font-semibold" id="t-ent">—</span></div>
+            <div class="flex items-center justify-between border-t border-white/5 pt-3"><span class="text-gold">Annual run rate (ARR)</span><span class="text-gold font-semibold" id="b-arr">—</span></div>
+          </div>
+        </div>
+        <!-- Usage & content -->
+        <div class="card rounded-2xl p-5">
+          <h3 class="font-display font-semibold text-white mb-4">Usage &amp; data</h3>
+          <div class="space-y-3 text-sm">
+            <div class="flex items-center justify-between"><span class="text-gray-400">API requests today</span><span class="text-white font-semibold" id="u-today">—</span></div>
+            <div class="flex items-center justify-between"><span class="text-gray-400">API requests (all time)</span><span class="text-white font-semibold" id="u-total">—</span></div>
+            <div class="flex items-center justify-between"><span class="text-gray-400">Tenders in database</span><span class="text-white font-semibold" id="c-tenders">—</span></div>
+            <div class="flex items-center justify-between"><span class="text-gray-400">Contract awards</span><span class="text-white font-semibold" id="c-awards">—</span></div>
+            <div class="flex items-center justify-between"><span class="text-gray-400">Benchmarks</span><span class="text-white font-semibold" id="c-benchmarks">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent signups -->
+      <div class="card rounded-2xl p-5 mb-10">
+        <h3 class="font-display font-semibold text-white mb-3">Recent signups</h3>
+        <div class="overflow-x-auto"><table class="w-full" id="recent-table">
+          <thead><tr><th>Email</th><th>Tier</th><th class="num">When</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+
+      <div class="h-px mb-8" style="background: rgba(255,255,255,0.06);"></div>
+
+      <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <h2 class="font-display text-2xl font-bold text-white">Search performance</h2>
+        <select id="range" class="text-sm rounded-lg px-3 py-2 bg-dark-400 border border-white/10 text-white">
+          <option value="7">Last 7 days</option>
+          <option value="28" selected>Last 28 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+      </div>
+
+      <div id="not-configured" class="hidden card rounded-2xl p-8 mb-8">
+        <h3 class="font-display text-lg font-semibold text-gold mb-3">Connect Google Search Console</h3>
+        <p class="text-sm text-gray-400 mb-4">Search Console isn't connected yet. To enable it, set these environment variables on your server (Railway):</p>
+        <ul class="text-sm text-gray-400 space-y-2 list-disc pl-5 mb-4">
+          <li><code class="text-gold/80">GSC_SERVICE_ACCOUNT_EMAIL</code> — your service account email</li>
+          <li><code class="text-gold/80">GSC_PRIVATE_KEY</code> — the service account private key (PEM)</li>
+          <li><code class="text-gold/80">GSC_SITE_URL</code> — e.g. <code class="text-gray-300">https://healthprocureintel.com/</code></li>
+        </ul>
+        <p class="text-xs text-gray-500">Create a service account in Google Cloud, enable the Search Console API, then add the service account email as a user on your property in Search Console.</p>
+      </div>
+
+      <div id="metrics">
+        <!-- Totals -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div class="card rounded-xl p-5"><p class="text-2xl font-display font-bold text-white" id="m-clicks">—</p><p class="text-xs text-gray-500 mt-1">Total Clicks</p></div>
+          <div class="card rounded-xl p-5"><p class="text-2xl font-display font-bold text-white" id="m-impr">—</p><p class="text-xs text-gray-500 mt-1">Impressions</p></div>
+          <div class="card rounded-xl p-5"><p class="text-2xl font-display font-bold text-gold" id="m-ctr">—</p><p class="text-xs text-gray-500 mt-1">Avg CTR</p></div>
+          <div class="card rounded-xl p-5"><p class="text-2xl font-display font-bold text-white" id="m-pos">—</p><p class="text-xs text-gray-500 mt-1">Avg Position</p></div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="card rounded-2xl p-5">
+            <h3 class="font-display font-semibold text-white mb-3">Top queries</h3>
+            <div class="overflow-x-auto"><table class="w-full" id="queries-table">
+              <thead><tr><th>Query</th><th class="num">Clicks</th><th class="num">Impr.</th><th class="num">Pos.</th></tr></thead>
+              <tbody></tbody>
+            </table></div>
+          </div>
+          <div class="card rounded-2xl p-5">
+            <h3 class="font-display font-semibold text-white mb-3">Top pages</h3>
+            <div class="overflow-x-auto"><table class="w-full" id="pages-table">
+              <thead><tr><th>Page</th><th class="num">Clicks</th><th class="num">Impr.</th><th class="num">Pos.</th></tr></thead>
+              <tbody></tbody>
+            </table></div>
+          </div>
+        </div>
+      </div>
+
+      <p id="dash-error" class="hidden text-red-400 text-sm mt-6"></p>
+    </div>
+  </main>
+
+  <script>
+    let adminToken = sessionStorage.getItem('hp_admin_token') || '';
+
+    const $ = (id) => document.getElementById(id);
+    function escapeHtml(s) { const d = document.createElement('div'); d.appendChild(document.createTextNode(String(s))); return d.innerHTML; }
+    function fmt(n) { return Number(n || 0).toLocaleString(); }
+
+    async function adminFetch(path) {
+      const res = await fetch(path, { headers: { 'X-Admin-Token': adminToken } });
+      if (!res.ok) { const b = await res.json().catch(() => ({})); const e = new Error(b.error || ('HTTP ' + res.status)); e.status = res.status; e.body = b; throw e; }
+      return res.json();
+    }
+
+    function showDash() { $('login').classList.add('hidden'); $('dash').classList.remove('hidden'); $('logout-btn').classList.remove('hidden'); loadOverview(); loadSeo(); }
+
+    function money(n) { return '$' + Number(n || 0).toLocaleString(); }
+
+    async function loadOverview() {
+      try {
+        const res = await adminFetch('/api/admin/overview');
+        const d = res.data;
+        $('b-mrr').textContent = money(d.revenue.mrr);
+        $('b-arr').textContent = money(d.revenue.arr);
+        $('b-paying').textContent = fmt(d.users.paying);
+        $('b-users').textContent = fmt(d.users.total);
+        $('b-new').textContent = fmt(d.users.signups7d);
+        $('t-free').textContent = fmt(d.users.byTier.free);
+        $('t-basic').textContent = fmt(d.users.byTier.basic);
+        $('t-pro').textContent = fmt(d.users.byTier.pro);
+        $('t-ent').textContent = fmt(d.users.byTier.enterprise);
+        $('u-today').textContent = fmt(d.usage.requestsToday);
+        $('u-total').textContent = fmt(d.usage.totalRequests);
+        $('c-tenders').textContent = fmt(d.content.tenders);
+        $('c-awards').textContent = fmt(d.content.awards);
+        $('c-benchmarks').textContent = fmt(d.content.benchmarks);
+        document.querySelector('#recent-table tbody').innerHTML = (d.recentSignups || []).map(s =>
+          `<tr><td>${escapeHtml(s.email || '—')}</td><td><span style="color: var(--gold)">${escapeHtml(s.tier || 'free')}</span></td><td class="num">${s.created_at ? new Date(s.created_at).toLocaleDateString() : '—'}</td></tr>`
+        ).join('') || '<tr><td colspan="3" style="color:#64748b">No signups yet</td></tr>';
+      } catch (e) {
+        if (e.status === 401) { sessionStorage.removeItem('hp_admin_token'); showLogin('Session expired. Enter your token again.'); }
+      }
+    }
+    function showLogin(msg) {
+      $('dash').classList.add('hidden'); $('login').classList.remove('hidden'); $('logout-btn').classList.add('hidden');
+      if (msg) { $('login-error').textContent = msg; $('login-error').classList.remove('hidden'); }
+    }
+
+    async function tryLogin() {
+      adminToken = $('token-input').value.trim();
+      if (!adminToken) return;
+      try {
+        await adminFetch('/api/admin/check');
+        sessionStorage.setItem('hp_admin_token', adminToken);
+        showDash();
+      } catch (e) {
+        let msg = 'Invalid token.';
+        if (e.status === 503) msg = 'ADMIN_TOKEN is not set on the server (Railway variables).';
+        else if (e.status === 404) msg = 'Admin endpoint not found — the latest code may not be deployed yet.';
+        else if (e.status === 401) msg = 'Token does not match. Check for extra spaces and that Railway redeployed.';
+        showLogin(msg);
+      }
+    }
+
+    async function loadSeo() {
+      const days = $('range').value;
+      $('dash-error').classList.add('hidden');
+      try {
+        const res = await adminFetch('/api/admin/seo?days=' + days);
+        $('not-configured').classList.add('hidden');
+        $('metrics').classList.remove('hidden');
+        const d = res.data;
+        $('m-clicks').textContent = fmt(d.totals.clicks);
+        $('m-impr').textContent = fmt(d.totals.impressions);
+        $('m-ctr').textContent = (d.totals.ctr * 100).toFixed(1) + '%';
+        $('m-pos').textContent = d.totals.position.toFixed(1);
+        document.querySelector('#queries-table tbody').innerHTML = d.topQueries.map(q =>
+          `<tr><td>${escapeHtml(q.query)}</td><td class="num">${fmt(q.clicks)}</td><td class="num">${fmt(q.impressions)}</td><td class="num">${q.position.toFixed(1)}</td></tr>`
+        ).join('') || '<tr><td colspan="4" style="color:#64748b">No data yet</td></tr>';
+        document.querySelector('#pages-table tbody').innerHTML = d.topPages.map(p =>
+          `<tr><td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(p.page)}</td><td class="num">${fmt(p.clicks)}</td><td class="num">${fmt(p.impressions)}</td><td class="num">${p.position.toFixed(1)}</td></tr>`
+        ).join('') || '<tr><td colspan="4" style="color:#64748b">No data yet</td></tr>';
+      } catch (e) {
+        if (e.status === 503 && e.body && e.body.configured === false) {
+          $('metrics').classList.add('hidden');
+          $('not-configured').classList.remove('hidden');
+        } else if (e.status === 401) {
+          sessionStorage.removeItem('hp_admin_token'); showLogin('Session expired. Enter your token again.');
+        } else {
+          $('dash-error').textContent = 'Could not load Search Console data: ' + e.message;
+          $('dash-error').classList.remove('hidden');
+        }
+      }
+    }
+
+    $('login-btn').addEventListener('click', tryLogin);
+    $('token-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
+    $('range').addEventListener('change', loadSeo);
+    $('logout-btn').addEventListener('click', () => { sessionStorage.removeItem('hp_admin_token'); adminToken = ''; showLogin(); });
+
+    // Auto-login if a token is already stored
+    if (adminToken) { adminFetch('/api/admin/check').then(showDash).catch(() => showLogin()); }
+  </script>
+</body>
+</html>
