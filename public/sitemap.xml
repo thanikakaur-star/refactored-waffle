@@ -106,6 +106,21 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://healthprocureintel.com/blog/who-procurement-vs-unicef-supply-division</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/how-to-respond-to-an-rfp-healthcare</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/public-vs-private-healthcare-procurement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://healthprocureintel.com/changelog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
