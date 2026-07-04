@@ -121,6 +121,56 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://healthprocureintel.com/blog/healthcare-procurement-glossary</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/ppe-procurement-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/diagnostics-procurement-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/pharmaceutical-tenders-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/digital-health-telehealth-procurement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/social-value-sustainability-healthcare-procurement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/common-mistakes-losing-healthcare-tenders</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/how-to-build-a-winning-bid-team</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/hospital-equipment-procurement-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/blog/market-intelligence-for-medtech-sales-teams</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://healthprocureintel.com/changelog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -139,5 +189,15 @@
     <loc>https://healthprocureintel.com/privacy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/carbon-reduction-policy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://healthprocureintel.com/modern-slavery-statement</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
   </url>
 </urlset>
