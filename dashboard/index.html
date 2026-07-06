@@ -435,6 +435,19 @@
               <option value="who_procurement">WHO</option>
               <option value="nhs_supply_chain">NHS</option>
             </select>
+            <select id="tender-filter-category" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+              <option value="">All Categories</option>
+              <option value="medical_devices">Medical Devices</option>
+              <option value="pharmaceuticals">Pharmaceuticals</option>
+              <option value="health_it">Health IT</option>
+              <option value="laboratory_equipment">Laboratory Equipment</option>
+              <option value="hospital_infrastructure">Hospital Infrastructure</option>
+              <option value="personal_protective_equipment">PPE</option>
+              <option value="diagnostics">Diagnostics</option>
+              <option value="surgical_instruments">Surgical Instruments</option>
+              <option value="telemedicine">Telemedicine</option>
+              <option value="other">Other</option>
+            </select>
           </div>
         </div>
         <div id="tenders-panel-list" class="space-y-3"></div>
@@ -481,7 +494,21 @@
             <option value="Asia-Pacific">Asia-Pacific</option>
             <option value="Africa">Africa</option>
           </select>
+          <select id="bench-filter-category" onchange="loadBenchmarksPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Categories</option>
+            <option value="medical_devices">Medical Devices</option>
+            <option value="pharmaceuticals">Pharmaceuticals</option>
+            <option value="health_it">Health IT</option>
+            <option value="laboratory_equipment">Laboratory Equipment</option>
+            <option value="hospital_infrastructure">Hospital Infrastructure</option>
+            <option value="personal_protective_equipment">PPE</option>
+            <option value="diagnostics">Diagnostics</option>
+            <option value="surgical_instruments">Surgical Instruments</option>
+            <option value="telemedicine">Telemedicine</option>
+            <option value="other">Other</option>
+          </select>
         </div>
+        <p class="text-xs mb-4" style="color: var(--text-muted);">Click a benchmark card to see matching open tenders.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="benchmarks-grid"></div>
       </div>
 
@@ -927,12 +954,22 @@
       if (panel === 'sources') loadSourcesPanel();
     }
 
+    function goToTendersFiltered(category) {
+      const categoryField = document.getElementById('tender-filter-category');
+      if (categoryField) categoryField.value = category || '';
+      tenderPage = 1;
+      const linkEl = document.querySelector('.sidebar-link[data-panel="tenders"]');
+      switchPanel('tenders', linkEl, null);
+    }
+
     async function loadTendersPanel() {
       const status = document.getElementById('tender-filter-status').value;
       const source = document.getElementById('tender-filter-source').value;
+      const category = document.getElementById('tender-filter-category').value;
       let url = `/api/v1/tenders?pageSize=20&page=${tenderPage}`;
       if (status) url += `&status=${status}`;
       if (source) url += `&source=${source}`;
+      if (category) url += `&category=${category}`;
 
       try {
         const res = await apiFetch(url);
@@ -993,14 +1030,18 @@
 
     async function loadBenchmarksPanel() {
       const region = document.getElementById('bench-filter-region').value;
-      let url = '/api/v1/analytics/benchmarks';
-      if (region) url += `?region=${encodeURIComponent(region)}`;
+      const category = document.getElementById('bench-filter-category').value;
+      const params = new URLSearchParams();
+      if (region) params.set('region', region);
+      if (category) params.set('category', category);
+      const qs = params.toString();
+      let url = '/api/v1/analytics/benchmarks' + (qs ? `?${qs}` : '');
 
       try {
         const res = await apiFetch(url);
         const grid = document.getElementById('benchmarks-grid');
         grid.innerHTML = res.data.map(b => `
-          <div class="glass-card p-6 fade-in">
+          <div class="glass-card p-6 fade-in" style="cursor: pointer;" onclick="goToTendersFiltered('${b.category}')" title="View open ${escapeHtml(formatCategory(b.category))} tenders">
             <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(formatCategory(b.category))}</h4>
             <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)} · ${escapeHtml(b.period || '')}</p>
             <div class="space-y-3">
