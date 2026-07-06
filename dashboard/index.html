@@ -962,6 +962,11 @@
       switchPanel('tenders', linkEl, null);
     }
 
+    function toggleTenderDetail(idx) {
+      const el = document.getElementById(`tender-detail-${idx}`);
+      if (el) el.classList.toggle('hidden');
+    }
+
     async function loadTendersPanel() {
       const status = document.getElementById('tender-filter-status').value;
       const source = document.getElementById('tender-filter-source').value;
@@ -974,8 +979,8 @@
       try {
         const res = await apiFetch(url);
         const container = document.getElementById('tenders-panel-list');
-        container.innerHTML = res.data.map(t => `
-          <div class="glass-card p-5 fade-in">
+        container.innerHTML = res.data.map((t, idx) => `
+          <div class="glass-card p-5 fade-in" style="cursor: pointer;" onclick="toggleTenderDetail(${idx})" title="Click for compliance details and the original listing">
             <div class="flex items-start justify-between">
               <div class="flex-1 min-w-0">
                 <h4 class="font-semibold text-sm" style="color: var(--text-primary);">${escapeHtml(t.title)}</h4>
@@ -991,6 +996,12 @@
                 <span class="inline-block mt-1 text-xs px-2 py-0.5 rounded-full"
                   style="${t.status === 'open' ? 'background: rgba(16,185,129,0.15); color: #10b981;' : t.status === 'awarded' ? 'background: rgba(201,169,110,0.15); color: var(--gold);' : 'background: rgba(148,163,184,0.1); color: #64748b;'}">${t.status}</span>
               </div>
+            </div>
+            <div id="tender-detail-${idx}" class="hidden mt-4 pt-4 space-y-2" style="border-top: 1px solid rgba(148,163,184,0.1);" onclick="event.stopPropagation()">
+              ${t.description ? `<p class="text-xs" style="color: var(--text-secondary);">${escapeHtml(t.description)}</p>` : ''}
+              ${(t.compliance_criteria && t.compliance_criteria.length) ? `<p class="text-xs"><span style="color: var(--text-muted);">Compliance criteria:</span> ${t.compliance_criteria.map(escapeHtml).join(', ')}</p>` : ''}
+              ${(t.cpv_codes && t.cpv_codes.length) ? `<p class="text-xs"><span style="color: var(--text-muted);">CPV codes:</span> ${t.cpv_codes.map(escapeHtml).join(', ')}</p>` : ''}
+              ${t.url ? `<a href="${escapeHtml(t.url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-semibold mt-1" style="color: var(--gold);">View Original Listing &amp; Bid Instructions &#8599;</a>` : ''}
             </div>
           </div>
         `).join('') + ((userTier === 'free' || userTier === 'basic') ? tendersUpsellHtml() : '');
