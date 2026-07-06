@@ -96,6 +96,21 @@ CREATE TABLE IF NOT EXISTS api_keys (
   stripe_subscription_id TEXT
 );
 
+-- Saved tender alerts — notify a user by email when new tenders match their filters
+CREATE TABLE IF NOT EXISTS tender_alerts (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  api_key_id UUID NOT NULL REFERENCES api_keys(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  category procurement_category,
+  source tender_source,
+  region TEXT,
+  country TEXT,
+  keyword TEXT,
+  is_active BOOLEAN DEFAULT true,
+  last_notified_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Scrape run logs
 CREATE TABLE IF NOT EXISTS scrape_runs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

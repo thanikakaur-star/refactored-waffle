@@ -68,6 +68,20 @@ export interface ApiKeyRow {
   stripe_subscription_id: string | null;
 }
 
+export interface AlertRow {
+  id: string;
+  api_key_id: string;
+  email: string;
+  category: ProcurementCategory | null;
+  source: TenderSource | null;
+  region: string | null;
+  country: string | null;
+  keyword: string | null;
+  is_active: boolean;
+  last_notified_at: string | null;
+  created_at: string;
+}
+
 function uuid(): string {
   return crypto.randomUUID();
 }
@@ -279,6 +293,7 @@ class LocalStore {
   awards: AwardRow[] = [...SEED_AWARDS];
   benchmarks: BenchmarkRow[] = [...SEED_BENCHMARKS];
   apiKeys: ApiKeyRow[] = [...SEED_API_KEYS];
+  alerts: AlertRow[] = [];
 
   findApiKey(key: string): ApiKeyRow | undefined {
     return this.apiKeys.find((k) => k.key === key && k.is_active);
@@ -392,6 +407,30 @@ class LocalStore {
     if (filters.region) result = result.filter((b) => b.region === filters.region);
     if (filters.category) result = result.filter((b) => b.category === filters.category);
     return result.sort((a, b) => b.calculated_at.localeCompare(a.calculated_at));
+  }
+
+  createAlert(alert: Omit<AlertRow, "id" | "is_active" | "last_notified_at" | "created_at">): AlertRow {
+    const row: AlertRow = {
+      ...alert,
+      id: uuid(),
+      is_active: true,
+      last_notified_at: null,
+      created_at: new Date().toISOString(),
+    };
+    this.alerts.push(row);
+    return row;
+  }
+
+  listAlerts(apiKeyId: string): AlertRow[] {
+    return this.alerts
+      .filter((a) => a.api_key_id === apiKeyId)
+      .sort((a, b) => b.created_at.localeCompare(a.created_at));
+  }
+
+  deleteAlert(id: string, apiKeyId: string): boolean {
+    const before = this.alerts.length;
+    this.alerts = this.alerts.filter((a) => !(a.id === id && a.api_key_id === apiKeyId));
+    return this.alerts.length < before;
   }
 }
 

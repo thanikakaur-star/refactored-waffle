@@ -37,6 +37,8 @@ Copy `.env.example` to `.env` and fill in all values. Required:
 | `STRIPE_SECRET_KEY` | Stripe API key for subscriptions |
 | `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
 | `API_PORT` | Server port (default 3000) |
+| `RESEND_API_KEY` | Optional — powers tender alert emails via Resend |
+| `ALERT_FROM_EMAIL` | Optional — sender address for alert emails |
 
 ## Project Layout
 
@@ -56,6 +58,8 @@ Copy `.env.example` to `.env` and fill in all values. Required:
 - `src/api/routes/stripe-webhooks.ts` — Stripe subscription lifecycle
 - `src/utils/currency.ts` — Multi-currency conversion (30+ currencies)
 - `src/utils/logger.ts` — Structured JSON logging
+- `src/utils/email.ts` — Resend email client for alert notifications
+- `src/alerts/notifier.ts` — Matches saved tender alerts and emails digests after each scrape
 - `src/types/index.ts` — TypeScript type definitions
 - `dashboard/index.html` — B2B analytics dashboard (Tailwind + Chart.js)
 - `tests/` — Vitest unit tests

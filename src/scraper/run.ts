@@ -3,6 +3,7 @@ import { TedEuropaScraper } from "./sources/ted.js";
 import { SamGovScraper } from "./sources/sam.js";
 import { getSupabaseClient } from "../db/client.js";
 import { logger } from "../utils/logger.js";
+import { checkAlertsAndNotify } from "../alerts/notifier.js";
 import { v4 as uuidv4 } from "uuid";
 import type { ScrapeResult, TenderSource } from "../types/index.js";
 import { BaseScraper } from "./base.js";
@@ -72,6 +73,13 @@ export async function runScrapers(sourceFilter?: TenderSource) {
   };
 
   logger.info("Scrape run complete", summary);
+
+  try {
+    await checkAlertsAndNotify();
+  } catch (err) {
+    logger.warn("Alert check failed after scrape run", { error: String(err) });
+  }
+
   return summary;
 }
 

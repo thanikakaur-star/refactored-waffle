@@ -233,6 +233,9 @@
       <a href="#" class="sidebar-link" data-panel="sources" onclick="switchPanel('sources', this, event)">
         <span class="icon">&#9881;</span> Sources
       </a>
+      <a href="#" class="sidebar-link" data-panel="alerts" onclick="switchPanel('alerts', this, event)">
+        <span class="icon">&#128276;</span> Alerts
+      </a>
     </nav>
 
     <!-- Upgrade CTA (shown only for free/basic users) -->
@@ -448,6 +451,9 @@
               <option value="telemedicine">Telemedicine</option>
               <option value="other">Other</option>
             </select>
+            <button onclick="saveCurrentTendersAsAlert()" class="text-sm rounded-lg px-3 py-2 font-semibold" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Get emailed when new tenders match these filters">
+              &#128276; Save as Alert
+            </button>
           </div>
         </div>
         <div id="tenders-panel-list" class="space-y-3"></div>
@@ -516,6 +522,47 @@
       <div id="panel-sources" class="dashboard-panel hidden">
         <h2 class="text-2xl font-bold section-header mb-6" style="color: var(--text-primary);">Data Sources</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="sources-grid"></div>
+      </div>
+
+      <!-- Alerts Panel -->
+      <div id="panel-alerts" class="dashboard-panel hidden">
+        <h2 class="text-2xl font-bold section-header mb-2" style="color: var(--text-primary);">Tender Alerts</h2>
+        <p class="text-sm mb-6" style="color: var(--text-secondary);">One alert, every source — instead of checking NHS Supply Chain, Find a Tender, Scotland/Ireland portals and TED Europa separately, save a filter here once and we'll email you when a new tender matches it.</p>
+
+        <div class="glass-card p-6 mb-8">
+          <h3 class="font-semibold text-sm mb-4" style="color: var(--gold);">Create a new alert</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+            <select id="alert-category" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+              <option value="">Any Category</option>
+              <option value="medical_devices">Medical Devices</option>
+              <option value="pharmaceuticals">Pharmaceuticals</option>
+              <option value="health_it">Health IT</option>
+              <option value="laboratory_equipment">Laboratory Equipment</option>
+              <option value="hospital_infrastructure">Hospital Infrastructure</option>
+              <option value="personal_protective_equipment">PPE</option>
+              <option value="diagnostics">Diagnostics</option>
+              <option value="surgical_instruments">Surgical Instruments</option>
+              <option value="telemedicine">Telemedicine</option>
+              <option value="other">Other</option>
+            </select>
+            <select id="alert-source" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+              <option value="">Any Source</option>
+              <option value="ted_europa">TED Europa</option>
+              <option value="sam_gov">SAM.gov</option>
+              <option value="who_procurement">WHO</option>
+              <option value="nhs_supply_chain">NHS</option>
+            </select>
+            <input id="alert-country" type="text" maxlength="5" placeholder="Country code (e.g. GB)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
+            <input id="alert-region" type="text" maxlength="50" placeholder="Region (e.g. Europe)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
+            <input id="alert-keyword" type="text" maxlength="200" placeholder="Keyword (e.g. surgical)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
+            <input id="alert-email" type="email" placeholder="Notify email" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
+          </div>
+          <button onclick="createAlert()" class="btn-gold text-sm px-5 py-2 rounded-lg">Create Alert</button>
+          <span id="alert-form-message" class="text-xs ml-3" style="color: var(--text-muted);"></span>
+        </div>
+
+        <h3 class="font-semibold text-sm mb-4" style="color: var(--text-primary);">Your active alerts</h3>
+        <div id="alerts-list" class="space-y-3"></div>
       </div>
 
       </div> <!-- end #dashboard -->
@@ -952,6 +999,7 @@
       if (panel === 'awards') loadAwardsPanel();
       if (panel === 'benchmarks') loadBenchmarksPanel();
       if (panel === 'sources') loadSourcesPanel();
+      if (panel === 'alerts') loadAlertsPanel();
     }
 
     function goToTendersFiltered(category) {
@@ -1120,6 +1168,81 @@
         `).join('');
       } catch (err) {
         document.getElementById('sources-grid').innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    function saveCurrentTendersAsAlert() {
+      document.getElementById('alert-category').value = document.getElementById('tender-filter-category').value;
+      document.getElementById('alert-source').value = document.getElementById('tender-filter-source').value;
+      const linkEl = document.querySelector('.sidebar-link[data-panel="alerts"]');
+      switchPanel('alerts', linkEl, null);
+    }
+
+    async function loadAlertsPanel() {
+      const list = document.getElementById('alerts-list');
+      try {
+        const res = await apiFetch('/api/v1/alerts');
+        if (!res.data.length) {
+          list.innerHTML = `<p class="text-sm" style="color: var(--text-muted);">No alerts yet — create one above and we'll email you when a matching tender appears.</p>`;
+          return;
+        }
+        list.innerHTML = res.data.map(a => `
+          <div class="glass-card p-4 fade-in flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center flex-wrap gap-2 text-xs" style="color: var(--text-secondary);">
+              ${a.category ? `<span class="px-2 py-0.5 rounded" style="background: rgba(201,169,110,0.1); color: var(--gold);">${escapeHtml(formatCategory(a.category))}</span>` : ''}
+              ${a.source ? `<span class="px-2 py-0.5 rounded" style="background: rgba(201,169,110,0.1); color: var(--gold);">${escapeHtml(a.source)}</span>` : ''}
+              ${a.region ? `<span>${escapeHtml(a.region)}</span>` : ''}
+              ${a.country ? `<span>${escapeHtml(a.country)}</span>` : ''}
+              ${a.keyword ? `<span>&ldquo;${escapeHtml(a.keyword)}&rdquo;</span>` : ''}
+              <span style="color: var(--text-muted);">&rarr; ${escapeHtml(a.email)}</span>
+            </div>
+            <button onclick="deleteAlert('${a.id}')" class="text-xs px-3 py-1 rounded-lg" style="background: rgba(244,63,94,0.1); color: #f43f5e; border: 1px solid rgba(244,63,94,0.2);">Delete</button>
+          </div>
+        `).join('');
+      } catch (err) {
+        list.innerHTML = `<p class="text-sm" style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    async function createAlert() {
+      const msg = document.getElementById('alert-form-message');
+      const body = {
+        category: document.getElementById('alert-category').value || undefined,
+        source: document.getElementById('alert-source').value || undefined,
+        region: document.getElementById('alert-region').value.trim() || undefined,
+        country: document.getElementById('alert-country').value.trim() || undefined,
+        keyword: document.getElementById('alert-keyword').value.trim() || undefined,
+        email: document.getElementById('alert-email').value.trim() || undefined,
+      };
+      msg.textContent = 'Saving…';
+      try {
+        const res = await fetch(`${API_BASE}/api/v1/alerts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          msg.textContent = data.error || 'Could not create alert.';
+          return;
+        }
+        msg.textContent = 'Alert created.';
+        document.getElementById('alert-keyword').value = '';
+        loadAlertsPanel();
+      } catch (err) {
+        msg.textContent = 'Could not reach the server.';
+      }
+    }
+
+    async function deleteAlert(id) {
+      try {
+        await fetch(`${API_BASE}/api/v1/alerts/${id}`, {
+          method: 'DELETE',
+          headers: { 'X-API-Key': apiKey },
+        });
+        loadAlertsPanel();
+      } catch (err) {
+        alert('Could not delete alert. Please try again.');
       }
     }
 

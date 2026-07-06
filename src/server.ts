@@ -146,6 +146,8 @@ const TIER_LIMITS: Record<ApiTier, { requestsPerDay: number; maxPageSize: number
 interface AuthReq extends Request {
   tierLimits?: { requestsPerDay: number; maxPageSize: number };
   tier?: ApiTier;
+  apiKeyId?: string;
+  apiKeyEmail?: string;
 }
 
 // Per-day request counter, keyed by API key. Resets each calendar day (UTC).
@@ -228,6 +230,8 @@ async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): 
     }
     req.tierLimits = TIER_LIMITS[data.tier as ApiTier];
     req.tier = data.tier as ApiTier;
+    req.apiKeyId = data.id;
+    req.apiKeyEmail = data.email;
     const limit = req.tierLimits.requestsPerDay;
 
     // Enforce the daily request limit. Prefer the DB-backed counter (survives
@@ -266,6 +270,8 @@ async function authMiddleware(req: AuthReq, res: Response, next: NextFunction): 
     }
     req.tierLimits = TIER_LIMITS[found.tier];
     req.tier = found.tier;
+    req.apiKeyId = found.id;
+    req.apiKeyEmail = found.email;
 
     const allowance = consumeDailyRequest(key, req.tierLimits.requestsPerDay);
     if (!allowance) {
@@ -491,6 +497,127 @@ app.get("/api/v1/sources", authMiddleware, (_req, res) => {
       { id: "nhs_supply_chain", name: "NHS Supply Chain", region: "United Kingdom", url: "https://nhssupplychain.nhs.uk" },
     ],
   });
+});
+
+// --- Tender Alerts ---
+// Save a filter as a standing alert; new matching tenders get emailed to you
+// after each scrape run (src/alerts/notifier.ts), the same way NHS Supply
+// Chain, Find a Tender, and TED Europa each notify you separately — except
+// this covers every source in one alert.
+
+const ALERT_LIMITS: Record<ApiTier, number> = { free: 3, basic: 3, pro: 20, enterprise: 100 };
+
+const createAlertSchema = z.object({
+  category: z.enum([
+    "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
+    "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
+    "surgical_instruments", "telemedicine", "other",
+  ]).optional(),
+  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "manual"]).optional(),
+  region: z.string().max(50).optional(),
+  country: z.string().max(5).optional(),
+  keyword: z.string().max(200).optional(),
+  email: z.string().email().optional(),
+});
+
+app.get("/api/v1/alerts", authMiddleware, async (req: AuthReq, res) => {
+  if (!req.apiKeyId) { res.status(401).json({ error: "Not authenticated" }); return; }
+
+  if (USE_SUPABASE && supabase) {
+    const { data, error } = await supabase
+      .from("tender_alerts")
+      .select("*")
+      .eq("api_key_id", req.apiKeyId)
+      .order("created_at", { ascending: false });
+    if (error) { res.status(500).json({ error: "Database query failed" }); return; }
+    res.json({ data: data ?? [] });
+  } else {
+    res.json({ data: localStore.listAlerts(req.apiKeyId) });
+  }
+});
+
+app.post("/api/v1/alerts", authMiddleware, async (req: AuthReq, res) => {
+  if (!req.apiKeyId) { res.status(401).json({ error: "Not authenticated" }); return; }
+
+  const parsed = createAlertSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Invalid alert parameters", details: parsed.error.issues });
+    return;
+  }
+  const f = parsed.data;
+  if (!f.category && !f.source && !f.region && !f.country && !f.keyword) {
+    res.status(400).json({ error: "Provide at least one filter (category, source, region, country, or keyword)" });
+    return;
+  }
+
+  const email = f.email || req.apiKeyEmail;
+  if (!email) { res.status(400).json({ error: "No email on file for this API key — pass one explicitly" }); return; }
+
+  const limit = ALERT_LIMITS[req.tier ?? "free"];
+
+  if (USE_SUPABASE && supabase) {
+    const { count } = await supabase
+      .from("tender_alerts")
+      .select("*", { count: "exact", head: true })
+      .eq("api_key_id", req.apiKeyId)
+      .eq("is_active", true);
+    if ((count ?? 0) >= limit) {
+      res.status(403).json({ error: `Your ${req.tier} plan allows up to ${limit} active alerts. Delete one or upgrade for more.` });
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("tender_alerts")
+      .insert({
+        id: crypto.randomUUID(),
+        api_key_id: req.apiKeyId,
+        email,
+        category: f.category ?? null,
+        source: f.source ?? null,
+        region: f.region ?? null,
+        country: f.country ?? null,
+        keyword: f.keyword ?? null,
+        is_active: true,
+      })
+      .select()
+      .single();
+    if (error) { res.status(500).json({ error: "Failed to create alert" }); return; }
+    res.status(201).json({ data });
+  } else {
+    if (localStore.listAlerts(req.apiKeyId).length >= limit) {
+      res.status(403).json({ error: `Your ${req.tier} plan allows up to ${limit} active alerts. Delete one or upgrade for more.` });
+      return;
+    }
+    const data = localStore.createAlert({
+      api_key_id: req.apiKeyId,
+      email,
+      category: f.category ?? null,
+      source: f.source ?? null,
+      region: f.region ?? null,
+      country: f.country ?? null,
+      keyword: f.keyword ?? null,
+    });
+    res.status(201).json({ data });
+  }
+});
+
+app.delete("/api/v1/alerts/:id", authMiddleware, async (req: AuthReq, res) => {
+  if (!req.apiKeyId) { res.status(401).json({ error: "Not authenticated" }); return; }
+
+  if (USE_SUPABASE && supabase) {
+    const { error, count } = await supabase
+      .from("tender_alerts")
+      .delete({ count: "exact" })
+      .eq("id", req.params.id)
+      .eq("api_key_id", req.apiKeyId);
+    if (error) { res.status(500).json({ error: "Failed to delete alert" }); return; }
+    if (!count) { res.status(404).json({ error: "Alert not found" }); return; }
+    res.status(204).send();
+  } else {
+    const deleted = localStore.deleteAlert(req.params.id, req.apiKeyId);
+    if (!deleted) { res.status(404).json({ error: "Alert not found" }); return; }
+    res.status(204).send();
+  }
 });
 
 // --- Stripe Checkout & Billing ---
