@@ -307,11 +307,11 @@ app.get("/health", (_req, res) => {
 // --- Tenders ---
 
 const tendersFilters = z.object({
-  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "manual"]).optional(),
+  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "manual"]).optional(),
   category: z.enum([
     "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
     "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
-    "surgical_instruments", "telemedicine", "other",
+    "surgical_instruments", "telemedicine", "clinical_services", "social_care", "other",
   ]).optional(),
   status: z.enum(["open", "closed", "awarded", "cancelled", "planned"]).optional(),
   country: z.string().max(5).optional(),
@@ -373,7 +373,7 @@ app.get("/api/v1/tenders/:id", authMiddleware, async (req, res) => {
 const awardsFilters = z.object({
   tenderId: z.string().uuid().optional(),
   supplierCountry: z.string().max(5).optional(),
-  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "manual"]).optional(),
+  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "manual"]).optional(),
   minValue: z.coerce.number().min(0).optional(),
   maxValue: z.coerce.number().min(0).optional(),
   awardedAfter: z.string().optional(),
@@ -491,10 +491,12 @@ app.get("/api/v1/analytics/benchmarks", authMiddleware, async (req, res) => {
 app.get("/api/v1/sources", authMiddleware, (_req, res) => {
   res.json({
     data: [
-      { id: "ted_europa", name: "TED Europa", region: "Europe", url: "https://ted.europa.eu" },
-      { id: "sam_gov", name: "SAM.gov", region: "North America", url: "https://sam.gov" },
-      { id: "who_procurement", name: "WHO Procurement", region: "Global", url: "https://www.who.int/procurement" },
-      { id: "nhs_supply_chain", name: "NHS Supply Chain", region: "United Kingdom", url: "https://nhssupplychain.nhs.uk" },
+      { id: "ted_europa", name: "TED Europa", region: "Europe", url: "https://ted.europa.eu", description: "EU-wide public procurement notices above threshold value.", updateFrequency: "Daily" },
+      { id: "sam_gov", name: "SAM.gov", region: "North America", url: "https://sam.gov", description: "U.S. federal government contract opportunities.", updateFrequency: "Daily" },
+      { id: "who_procurement", name: "WHO Procurement", region: "Global", url: "https://www.who.int", description: "World Health Organization procurement notices.", updateFrequency: "Daily" },
+      { id: "nhs_supply_chain", name: "NHS Supply Chain", region: "United Kingdom", url: "https://www.supplychain.nhs.uk", description: "NHS framework agreements and supply contracts.", updateFrequency: "Daily" },
+      { id: "contracts_finder", name: "Contracts Finder", region: "United Kingdom", url: "https://www.contractsfinder.service.gov.uk", description: "UK local authority and lower-value public sector contracts.", updateFrequency: "Daily" },
+      { id: "find_a_tender", name: "Find a Tender", region: "United Kingdom", url: "https://www.find-tender.service.gov.uk", description: "UK central government and above-threshold public contracts.", updateFrequency: "Daily" },
     ],
   });
 });
@@ -511,9 +513,9 @@ const createAlertSchema = z.object({
   category: z.enum([
     "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
     "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
-    "surgical_instruments", "telemedicine", "other",
+    "surgical_instruments", "telemedicine", "clinical_services", "social_care", "other",
   ]).optional(),
-  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "manual"]).optional(),
+  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "manual"]).optional(),
   region: z.string().max(50).optional(),
   country: z.string().max(5).optional(),
   keyword: z.string().max(200).optional(),

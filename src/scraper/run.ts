@@ -1,14 +1,24 @@
 import { chromium } from "playwright";
 import { TedEuropaScraper } from "./sources/ted.js";
 import { SamGovScraper } from "./sources/sam.js";
+import { ContractsFinderScraper } from "./sources/contracts-finder.js";
+import { FindATenderScraper } from "./sources/find-a-tender.js";
 import { getSupabaseClient } from "../db/client.js";
 import { logger } from "../utils/logger.js";
 import { checkAlertsAndNotify } from "../alerts/notifier.js";
 import { v4 as uuidv4 } from "uuid";
 import type { ScrapeResult, TenderSource } from "../types/index.js";
 import { BaseScraper } from "./base.js";
+import { ApiScraper } from "./api-base.js";
 
-const ALL_SCRAPERS: BaseScraper[] = [new TedEuropaScraper(), new SamGovScraper()];
+type AnyScraper = BaseScraper | ApiScraper;
+
+const ALL_SCRAPERS: AnyScraper[] = [
+  new TedEuropaScraper(),
+  new SamGovScraper(),
+  new ContractsFinderScraper(),
+  new FindATenderScraper(),
+];
 
 async function logScrapeRun(result: ScrapeResult) {
   try {
@@ -43,26 +53,33 @@ export async function runScrapers(sourceFilter?: TenderSource) {
     throw new Error(`No scrapers matched source: ${sourceFilter}`);
   }
 
+  const needsBrowser = scrapers.some((s) => s instanceof BaseScraper);
   const headless = process.env.PLAYWRIGHT_HEADLESS !== "false";
   const executablePath = process.env.PLAYWRIGHT_CHROMIUM_PATH || undefined;
-  const browser = await chromium.launch({ headless, executablePath });
+  const browser = needsBrowser ? await chromium.launch({ headless, executablePath }) : null;
 
   logger.info("Scraper started", {
     sources: scrapers.map((s) => s.source),
     headless,
+    browserLaunched: needsBrowser,
   });
 
   const results: ScrapeResult[] = [];
 
   try {
     for (const scraper of scrapers) {
-      await scraper.init(browser);
+      if (scraper instanceof BaseScraper) {
+        if (!browser) throw new Error("Browser required but not launched");
+        await scraper.init(browser);
+      } else {
+        await scraper.init();
+      }
       const result = await scraper.scrape();
       results.push(result);
       await logScrapeRun(result);
     }
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
   }
 
   const summary = {

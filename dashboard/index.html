@@ -437,6 +437,8 @@
               <option value="sam_gov">SAM.gov</option>
               <option value="who_procurement">WHO</option>
               <option value="nhs_supply_chain">NHS</option>
+              <option value="contracts_finder">Contracts Finder (UK)</option>
+              <option value="find_a_tender">Find a Tender (UK)</option>
             </select>
             <select id="tender-filter-category" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
               <option value="">All Categories</option>
@@ -449,6 +451,8 @@
               <option value="diagnostics">Diagnostics</option>
               <option value="surgical_instruments">Surgical Instruments</option>
               <option value="telemedicine">Telemedicine</option>
+              <option value="clinical_services">Clinical Services</option>
+              <option value="social_care">Social Care</option>
               <option value="other">Other</option>
             </select>
             <button onclick="saveCurrentTendersAsAlert()" class="text-sm rounded-lg px-3 py-2 font-semibold" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Get emailed when new tenders match these filters">
@@ -511,6 +515,8 @@
             <option value="diagnostics">Diagnostics</option>
             <option value="surgical_instruments">Surgical Instruments</option>
             <option value="telemedicine">Telemedicine</option>
+            <option value="clinical_services">Clinical Services</option>
+            <option value="social_care">Social Care</option>
             <option value="other">Other</option>
           </select>
         </div>
@@ -543,6 +549,8 @@
               <option value="diagnostics">Diagnostics</option>
               <option value="surgical_instruments">Surgical Instruments</option>
               <option value="telemedicine">Telemedicine</option>
+              <option value="clinical_services">Clinical Services</option>
+              <option value="social_care">Social Care</option>
               <option value="other">Other</option>
             </select>
             <select id="alert-source" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
@@ -551,6 +559,8 @@
               <option value="sam_gov">SAM.gov</option>
               <option value="who_procurement">WHO</option>
               <option value="nhs_supply_chain">NHS</option>
+              <option value="contracts_finder">Contracts Finder (UK)</option>
+              <option value="find_a_tender">Find a Tender (UK)</option>
             </select>
             <input id="alert-country" type="text" maxlength="5" placeholder="Country code (e.g. GB)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
             <input id="alert-region" type="text" maxlength="50" placeholder="Region (e.g. Europe)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />

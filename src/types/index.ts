@@ -65,7 +65,14 @@ export interface ApiKey {
   stripeSubscriptionId: string | null;
 }
 
-export type TenderSource = "ted_europa" | "sam_gov" | "who_procurement" | "nhs_supply_chain" | "manual";
+export type TenderSource =
+  | "ted_europa"
+  | "sam_gov"
+  | "who_procurement"
+  | "nhs_supply_chain"
+  | "contracts_finder"
+  | "find_a_tender"
+  | "manual";
 
 export type TenderStatus = "open" | "closed" | "awarded" | "cancelled" | "planned";
 
@@ -79,6 +86,8 @@ export type ProcurementCategory =
   | "diagnostics"
   | "surgical_instruments"
   | "telemedicine"
+  | "clinical_services"
+  | "social_care"
   | "other";
 
 export type ApiTier = "free" | "basic" | "pro" | "enterprise";

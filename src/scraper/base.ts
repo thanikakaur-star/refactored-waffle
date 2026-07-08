@@ -1,6 +1,7 @@
 import type { Browser, Page } from "playwright";
 import type { ScrapeResult, TenderSource, Tender, ContractAward } from "../types/index.js";
 import { logger } from "../utils/logger.js";
+import { persistTenders, persistAwards } from "./persist.js";
 
 export abstract class BaseScraper {
   abstract readonly source: TenderSource;
@@ -39,9 +40,23 @@ export abstract class BaseScraper {
       result.awardsFound = awards.length;
 
       await page.close();
+
+      const tenderPersist = await persistTenders(tenders);
+      result.tendersNew = tenderPersist.persisted;
+      if (tenderPersist.failed > 0) {
+        result.errors.push(`${tenderPersist.failed} tender(s) failed to persist`);
+      }
+
+      const awardPersist = await persistAwards(awards);
+      if (awardPersist.failed > 0) {
+        result.errors.push(`${awardPersist.failed} award(s) failed to persist`);
+      }
+
       logger.info(`Scrape complete: ${this.source}`, {
-        tenders: tenders.length,
-        awards: awards.length,
+        tendersFound: tenders.length,
+        tendersPersisted: tenderPersist.persisted,
+        awardsFound: awards.length,
+        awardsPersisted: awardPersist.persisted,
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);

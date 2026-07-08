@@ -24,7 +24,7 @@ async function run() {
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
     DO $$ BEGIN
-      CREATE TYPE tender_source AS ENUM ('ted_europa', 'sam_gov', 'who_procurement', 'nhs_supply_chain', 'manual');
+      CREATE TYPE tender_source AS ENUM ('ted_europa', 'sam_gov', 'who_procurement', 'nhs_supply_chain', 'contracts_finder', 'find_a_tender', 'manual');
     EXCEPTION WHEN duplicate_object THEN null; END $$;
 
     DO $$ BEGIN
@@ -35,7 +35,7 @@ async function run() {
       CREATE TYPE procurement_category AS ENUM (
         'medical_devices', 'pharmaceuticals', 'health_it', 'laboratory_equipment',
         'hospital_infrastructure', 'personal_protective_equipment', 'diagnostics',
-        'surgical_instruments', 'telemedicine', 'other'
+        'surgical_instruments', 'telemedicine', 'clinical_services', 'social_care', 'other'
       );
     EXCEPTION WHEN duplicate_object THEN null; END $$;
 

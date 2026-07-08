@@ -4,11 +4,11 @@ import { z } from "zod";
 
 describe("API filter validation", () => {
   const filtersSchema = z.object({
-    source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "manual"]).optional(),
+    source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "manual"]).optional(),
     category: z.enum([
       "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
       "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
-      "surgical_instruments", "telemedicine", "other",
+      "surgical_instruments", "telemedicine", "clinical_services", "social_care", "other",
     ]).optional(),
     status: z.enum(["open", "closed", "awarded", "cancelled", "planned"]).optional(),
     country: z.string().max(5).optional(),
