@@ -167,6 +167,41 @@ describe("GET /api/v1/sources", () => {
   });
 });
 
+describe("POST /api/v1/signup/free", () => {
+  async function postJson(path: string, body: unknown) {
+    const res = await fetch(`${BASE}${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    return { status: res.status, body: await res.json() };
+  }
+
+  it("rejects an invalid email", async () => {
+    const { status } = await postJson("/api/v1/signup/free", { email: "not-an-email" });
+    expect(status).toBe(400);
+  });
+
+  it("issues a free key that actually authenticates", async () => {
+    const email = `signup-test-${Date.now()}@example.com`;
+    const { status, body } = await postJson("/api/v1/signup/free", { email });
+    expect(status).toBe(200);
+    expect(body.apiKey).toMatch(/^hpi_/);
+    expect(body.tier).toBe("free");
+
+    // The whole point: the returned key must work on an authed endpoint.
+    const { status: authStatus } = await apiFetch("/api/v1/tenders", body.apiKey);
+    expect(authStatus).toBe(200);
+  });
+
+  it("returns 409 for a duplicate email", async () => {
+    const email = `dup-test-${Date.now()}@example.com`;
+    await postJson("/api/v1/signup/free", { email });
+    const { status } = await postJson("/api/v1/signup/free", { email });
+    expect(status).toBe(409);
+  });
+});
+
 describe("Static serving", () => {
   it("serves the marketing site at /", async () => {
     const res = await fetch(`${BASE}/`);

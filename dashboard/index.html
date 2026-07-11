@@ -660,6 +660,8 @@
     function showWelcome() {
       showState('welcome');
       document.getElementById('apiKeyField').value = '';
+      apiKey = '';
+      try { localStorage.removeItem('hpi_api_key'); } catch (e) {}
       document.getElementById('sidebar-upgrade').classList.add('hidden');
     }
 
@@ -807,6 +809,9 @@
     async function loadDashboard() {
       apiKey = document.getElementById('apiKeyField').value.trim();
       if (!apiKey) return;
+
+      // Remember the key so returning to the dashboard reconnects automatically.
+      try { localStorage.setItem('hpi_api_key', apiKey); } catch (e) {}
 
       showState('loading');
 
@@ -1335,6 +1340,23 @@
       if (type === 'tenders') { tenderPage = page; loadTendersPanel(); }
       if (type === 'awards') { awardPage = page; loadAwardsPanel(); }
     }
+
+    // Auto-connect: accept a key from ?key= (e.g. straight after free signup)
+    // or from a previously saved session, so the user lands connected.
+    (function initDashboard() {
+      var urlKey = new URLSearchParams(window.location.search).get('key');
+      var savedKey = null;
+      try { savedKey = localStorage.getItem('hpi_api_key'); } catch (e) {}
+      var startKey = urlKey || savedKey;
+      if (startKey) {
+        document.getElementById('apiKeyField').value = startKey;
+        // Strip the key from the URL so it isn't left in the address bar / history.
+        if (urlKey && window.history.replaceState) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        loadDashboard();
+      }
+    })();
   </script>
 </body>
 </html>

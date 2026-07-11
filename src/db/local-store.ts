@@ -299,6 +299,29 @@ class LocalStore {
     return this.apiKeys.find((k) => k.key === key && k.is_active);
   }
 
+  findApiKeyByEmail(email: string): ApiKeyRow | undefined {
+    return this.apiKeys.find((k) => k.email === email && k.is_active);
+  }
+
+  createApiKey(params: { key: string; email: string; tier: ApiTier }): ApiKeyRow {
+    const row: ApiKeyRow = {
+      id: uuid(),
+      key: params.key,
+      user_id: params.email,
+      email: params.email,
+      tier: params.tier,
+      is_active: true,
+      request_count: 0,
+      last_used_at: null,
+      created_at: new Date().toISOString(),
+      expires_at: null,
+      stripe_customer_id: null,
+      stripe_subscription_id: null,
+    };
+    this.apiKeys.push(row);
+    return row;
+  }
+
   incrementKeyUsage(id: string): void {
     const key = this.apiKeys.find((k) => k.id === id);
     if (key) {

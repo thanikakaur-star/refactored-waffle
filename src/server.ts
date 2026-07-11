@@ -712,6 +712,14 @@ app.post("/api/v1/signup/free", async (req, res) => {
       res.status(500).json({ error: "Failed to create API key" });
       return;
     }
+  } else {
+    // Local mode — persist to the in-memory store so the key actually
+    // authenticates afterwards (otherwise we'd hand out a dead key).
+    if (localStore.findApiKeyByEmail(email)) {
+      res.status(409).json({ error: "An API key already exists for this email" });
+      return;
+    }
+    localStore.createApiKey({ key: apiKey, email, tier: "free" });
   }
 
   logger.info("Free API key provisioned", { email });
