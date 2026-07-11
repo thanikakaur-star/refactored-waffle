@@ -688,21 +688,21 @@
       enterprise: 'price_1TlrIaC3JZLLw9RVctcI96FW',
     };
 
-    let checkoutPriceId = null;
-
     function startCheckout(tier) {
       const priceId = PRICE_IDS[tier];
       if (!priceId) return;
-      checkoutPriceId = priceId;
+      const modal = document.getElementById('checkout-modal');
+      modal.dataset.priceId = priceId;
       document.getElementById('checkout-error-dash').classList.add('hidden');
       document.getElementById('checkout-email-dash').value = '';
-      document.getElementById('checkout-modal').classList.remove('hidden');
+      modal.classList.remove('hidden');
       document.getElementById('checkout-email-dash').focus();
     }
 
     function closeCheckoutModal() {
-      document.getElementById('checkout-modal').classList.add('hidden');
-      checkoutPriceId = null;
+      const modal = document.getElementById('checkout-modal');
+      modal.classList.add('hidden');
+      delete modal.dataset.priceId;
     }
 
     document.getElementById('checkout-modal').addEventListener('click', (e) => {
@@ -711,9 +711,15 @@
 
     document.getElementById('checkout-form-dash').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const priceId = document.getElementById('checkout-modal').dataset.priceId;
       const email = document.getElementById('checkout-email-dash').value.trim();
       const errorEl = document.getElementById('checkout-error-dash');
       const submitBtn = document.getElementById('checkout-submit-dash');
+      if (!priceId) {
+        errorEl.textContent = 'Something went wrong opening this form — please close it and click Upgrade again.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
       if (!email || !email.includes('@')) {
         errorEl.textContent = 'Please enter a valid email address.';
         errorEl.classList.remove('hidden');
@@ -726,7 +732,7 @@
         const res = await fetch(`${API_BASE}/api/v1/checkout`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ priceId: checkoutPriceId, email }),
+          body: JSON.stringify({ priceId, email }),
         });
         const data = await res.json();
         if (data.url) {

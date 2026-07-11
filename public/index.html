@@ -1268,19 +1268,19 @@
     })();
 
     // Stripe checkout
-    var checkoutPriceId = null;
-
     function openCheckoutModal(priceId) {
-      checkoutPriceId = priceId;
+      var modal = document.getElementById('checkout-modal');
+      modal.dataset.priceId = priceId || '';
       document.getElementById('checkout-error').classList.add('hidden');
       document.getElementById('checkout-email').value = '';
-      document.getElementById('checkout-modal').classList.remove('hidden');
+      modal.classList.remove('hidden');
       document.getElementById('checkout-email').focus();
     }
 
     function closeCheckoutModal() {
-      document.getElementById('checkout-modal').classList.add('hidden');
-      checkoutPriceId = null;
+      var modal = document.getElementById('checkout-modal');
+      modal.classList.add('hidden');
+      delete modal.dataset.priceId;
     }
 
     document.getElementById('checkout-modal').addEventListener('click', function(e) {
@@ -1289,9 +1289,15 @@
 
     document.getElementById('checkout-form').addEventListener('submit', function(e) {
       e.preventDefault();
+      var priceId = document.getElementById('checkout-modal').dataset.priceId;
       var email = document.getElementById('checkout-email').value.trim();
       var errorEl = document.getElementById('checkout-error');
       var submitBtn = document.getElementById('checkout-submit');
+      if (!priceId) {
+        errorEl.textContent = 'Something went wrong opening this form — please close it and click Subscribe again.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
       if (!email || !email.includes('@')) {
         errorEl.textContent = 'Please enter a valid email address.';
         errorEl.classList.remove('hidden');
@@ -1303,7 +1309,7 @@
       fetch('/api/v1/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId: checkoutPriceId, email: email })
+        body: JSON.stringify({ priceId: priceId, email: email })
       })
       .then(function(res) { return res.json(); })
       .then(function(data) {
