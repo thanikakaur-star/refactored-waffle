@@ -593,6 +593,23 @@
     </main>
   </div>
 
+  <!-- Checkout Email Modal -->
+  <div id="checkout-modal" class="hidden" style="position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(10,10,15,0.8); backdrop-filter: blur(4px);">
+    <div class="glass-card" style="padding: 2rem; width: 100%; max-width: 24rem; border: 1px solid var(--border-gold); border-radius: 1rem;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">Almost there</h3>
+      <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.25rem;">Enter your email and we'll take you to secure checkout via Stripe.</p>
+      <form id="checkout-form-dash">
+        <input id="checkout-email-dash" type="email" required placeholder="you@company.com"
+          class="text-sm rounded-lg px-3 py-2" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary); margin-bottom: 0.5rem;" />
+        <p id="checkout-error-dash" class="hidden text-xs" style="color: #f43f5e; margin-bottom: 0.75rem;"></p>
+        <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+          <button type="button" onclick="closeCheckoutModal()" class="text-sm" style="flex: 1; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-gold); color: var(--text-secondary); background: transparent; font-weight: 600;">Cancel</button>
+          <button id="checkout-submit-dash" type="submit" class="btn-gold text-sm" style="flex: 1; padding: 0.75rem; border-radius: 0.5rem;">Continue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     // Chart.js dark theme defaults
     Chart.defaults.color = '#94a3b8';
@@ -671,27 +688,62 @@
       enterprise: 'price_1TlrIaC3JZLLw9RVctcI96FW',
     };
 
-    async function startCheckout(tier) {
+    let checkoutPriceId = null;
+
+    function startCheckout(tier) {
       const priceId = PRICE_IDS[tier];
       if (!priceId) return;
-      const email = prompt('Enter your email to upgrade to ' + tier.charAt(0).toUpperCase() + tier.slice(1) + ':');
-      if (!email || !email.includes('@')) return;
+      checkoutPriceId = priceId;
+      document.getElementById('checkout-error-dash').classList.add('hidden');
+      document.getElementById('checkout-email-dash').value = '';
+      document.getElementById('checkout-modal').classList.remove('hidden');
+      document.getElementById('checkout-email-dash').focus();
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkout-modal').classList.add('hidden');
+      checkoutPriceId = null;
+    }
+
+    document.getElementById('checkout-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeCheckoutModal();
+    });
+
+    document.getElementById('checkout-form-dash').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('checkout-email-dash').value.trim();
+      const errorEl = document.getElementById('checkout-error-dash');
+      const submitBtn = document.getElementById('checkout-submit-dash');
+      if (!email || !email.includes('@')) {
+        errorEl.textContent = 'Please enter a valid email address.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      errorEl.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Redirecting…';
       try {
         const res = await fetch(`${API_BASE}/api/v1/checkout`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ priceId, email }),
+          body: JSON.stringify({ priceId: checkoutPriceId, email }),
         });
         const data = await res.json();
         if (data.url) {
           window.location.href = data.url;
         } else {
-          alert(data.error || 'Could not start checkout. Please try again.');
+          errorEl.textContent = data.error || 'Could not start checkout. Please try again.';
+          errorEl.classList.remove('hidden');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Continue';
         }
       } catch (e) {
-        alert('Could not reach the server. Please try again later.');
+        errorEl.textContent = 'Could not reach the server. Please try again later.';
+        errorEl.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Continue';
       }
-    }
+    });
 
     // Subtle inline nudge shown to free/basic users who are capped on page size
     function tendersUpsellHtml() {
