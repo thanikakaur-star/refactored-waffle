@@ -594,7 +594,7 @@
   </div>
 
   <!-- Checkout Email Modal -->
-  <div id="checkout-modal" class="hidden" style="position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(10,10,15,0.8); backdrop-filter: blur(4px);">
+  <div id="checkout-modal" style="display: none; position: fixed; inset: 0; z-index: 60; align-items: center; justify-content: center; padding: 1rem; background: rgba(10,10,15,0.8); backdrop-filter: blur(4px);">
     <div class="glass-card" style="padding: 2rem; width: 100%; max-width: 24rem; border: 1px solid var(--border-gold); border-radius: 1rem;">
       <h3 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">Almost there</h3>
       <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.25rem;">Enter your email and we'll take you to secure checkout via Stripe.</p>
@@ -697,13 +697,13 @@
       modal.dataset.priceId = priceId;
       document.getElementById('checkout-error-dash').classList.add('hidden');
       document.getElementById('checkout-email-dash').value = '';
-      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
       document.getElementById('checkout-email-dash').focus();
     }
 
     function closeCheckoutModal() {
       const modal = document.getElementById('checkout-modal');
-      modal.classList.add('hidden');
+      modal.style.display = 'none';
       delete modal.dataset.priceId;
     }
 
