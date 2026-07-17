@@ -56,27 +56,56 @@ export async function runScrapers(sourceFilter?: TenderSource) {
   const needsBrowser = scrapers.some((s) => s instanceof BaseScraper);
   const headless = process.env.PLAYWRIGHT_HEADLESS !== "false";
   const executablePath = process.env.PLAYWRIGHT_CHROMIUM_PATH || undefined;
-  const browser = needsBrowser ? await chromium.launch({ headless, executablePath }) : null;
+
+  // Try to launch a browser only if a browser-based scraper is in the set.
+  // If it fails (e.g. no Chromium binary installed in production), we log it
+  // and carry on — the API-based scrapers (SAM.gov, Find a Tender, Contracts
+  // Finder) don't need a browser and must still run. One broken source must
+  // never sink the whole pipeline.
+  let browser = null;
+  if (needsBrowser) {
+    try {
+      browser = await chromium.launch({ headless, executablePath });
+    } catch (err) {
+      logger.error("Browser launch failed — running API-based scrapers only", { error: String(err) });
+    }
+  }
 
   logger.info("Scraper started", {
     sources: scrapers.map((s) => s.source),
     headless,
-    browserLaunched: needsBrowser,
+    browserLaunched: !!browser,
   });
 
   const results: ScrapeResult[] = [];
 
   try {
     for (const scraper of scrapers) {
-      if (scraper instanceof BaseScraper) {
-        if (!browser) throw new Error("Browser required but not launched");
-        await scraper.init(browser);
-      } else {
-        await scraper.init();
+      try {
+        if (scraper instanceof BaseScraper) {
+          if (!browser) {
+            // Browser-based source but no browser available — record and skip,
+            // don't abort the whole run.
+            const skipped: ScrapeResult = {
+              source: scraper.source,
+              tendersFound: 0, tendersNew: 0, tendersUpdated: 0, awardsFound: 0,
+              errors: ["Skipped — no browser available"],
+              durationMs: 0,
+            };
+            results.push(skipped);
+            await logScrapeRun(skipped);
+            continue;
+          }
+          await scraper.init(browser);
+        } else {
+          await scraper.init();
+        }
+        const result = await scraper.scrape();
+        results.push(result);
+        await logScrapeRun(result);
+      } catch (err) {
+        logger.error("Scraper threw — continuing with the rest", { source: scraper.source, error: String(err) });
       }
-      const result = await scraper.scrape();
-      results.push(result);
-      await logScrapeRun(result);
     }
   } finally {
     if (browser) await browser.close();
