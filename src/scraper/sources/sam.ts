@@ -1,126 +1,154 @@
-import type { Page } from "playwright";
-import { BaseScraper } from "../base.js";
-import { convertToUsd, parseCurrencyValue } from "../../utils/currency.js";
+import { ApiScraper } from "../api-base.js";
+import { convertToUsd } from "../../utils/currency.js";
 import { logger } from "../../utils/logger.js";
-import type { Tender, ContractAward, ProcurementCategory } from "../../types/index.js";
+import type { Tender, ProcurementCategory } from "../../types/index.js";
 
+// Healthcare-relevant NAICS codes → our categories. We query the official
+// SAM.gov API per code so results are precise and API-sanctioned (no scraping).
 const NAICS_CATEGORY_MAP: Record<string, ProcurementCategory> = {
   "339112": "medical_devices",
   "339113": "surgical_instruments",
   "339114": "diagnostics",
   "325411": "pharmaceuticals",
   "325412": "pharmaceuticals",
-  "325413": "pharmaceuticals",
-  "325414": "pharmaceuticals",
   "334510": "health_it",
   "334516": "diagnostics",
-  "334517": "medical_devices",
   "621999": "telemedicine",
   "236220": "hospital_infrastructure",
   "339920": "personal_protective_equipment",
 };
 
-export class SamGovScraper extends BaseScraper {
+interface SamOpportunity {
+  noticeId?: string;
+  title?: string;
+  solicitationNumber?: string;
+  fullParentPathName?: string;
+  postedDate?: string;
+  type?: string;
+  baseType?: string;
+  responseDeadLine?: string;
+  naicsCode?: string;
+  classificationCode?: string;
+  active?: string;
+  description?: string;
+  uiLink?: string;
+  award?: { amount?: string };
+  placeOfPerformance?: { country?: { code?: string } };
+}
+
+interface SamResponse {
+  totalRecords?: number;
+  opportunitiesData?: SamOpportunity[];
+}
+
+function mmddyyyy(d: Date): string {
+  const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(d.getUTCDate()).padStart(2, "0");
+  return `${mm}/${dd}/${d.getUTCFullYear()}`;
+}
+
+function mapStatus(active: string | undefined, type: string | undefined): "open" | "closed" | "awarded" | "planned" {
+  if (active && active.toLowerCase() === "no") return "closed";
+  const t = (type ?? "").toLowerCase();
+  if (t.includes("award")) return "awarded";
+  if (t.includes("presolicitation") || t.includes("sources sought") || t.includes("special notice")) return "planned";
+  return "open";
+}
+
+/**
+ * SAM.gov via the official Get Opportunities API (api.sam.gov) — the
+ * sanctioned, login-free route. NOT UI scraping (which SAM.gov's terms
+ * prohibit). Requires a free API key from https://api.data.gov, set as
+ * SAM_GOV_API_KEY. Without the key this no-ops loudly into scrape_runs.errors.
+ *
+ * NOTE: written to the documented API contract but not yet verified against a
+ * live key from this environment — run once on the server and check
+ * scrape_runs before relying on it.
+ */
+export class SamGovScraper extends ApiScraper {
   readonly source = "sam_gov" as const;
   readonly baseUrl = "https://sam.gov";
 
-  private readonly searchUrl = `${this.baseUrl}/search/?index=opp&sort=-modifiedDate&keywords=healthcare+medical+device&is_active=true`;
+  private readonly apiUrl = "https://api.sam.gov/opportunities/v2/search";
 
-  async extractTenders(page: Page): Promise<Partial<Tender>[]> {
+  protected async fetchTenders(): Promise<Partial<Tender>[]> {
+    const apiKey = process.env.SAM_GOV_API_KEY;
+    if (!apiKey) {
+      throw new Error("SAM_GOV_API_KEY not set — get a free key at https://api.data.gov and add it to your env.");
+    }
+
+    const postedTo = new Date();
+    const postedFrom = new Date(postedTo.getTime() - 90 * 24 * 60 * 60 * 1000);
+
     const tenders: Partial<Tender>[] = [];
+    const seen = new Set<string>();
 
-    const navigated = await this.safeNavigate(page, this.searchUrl, 45000);
-    if (!navigated) return tenders;
+    for (const [naics, category] of Object.entries(NAICS_CATEGORY_MAP)) {
+      const params = new URLSearchParams({
+        api_key: apiKey,
+        postedFrom: mmddyyyy(postedFrom),
+        postedTo: mmddyyyy(postedTo),
+        ncode: naics,
+        limit: "50",
+      });
 
-    await page.waitForTimeout(3000);
-
-    const oppLinks = await page.$$eval(
-      "a[href*='/opp/']",
-      (links) => links.map((a) => ({ href: a.getAttribute("href"), text: a.textContent?.trim() })).filter((l) => l.href).slice(0, 20)
-    );
-
-    logger.info("SAM.gov: Found opportunity links", { count: oppLinks.length });
-
-    for (const link of oppLinks) {
+      let res: Response;
       try {
-        const fullUrl = link.href!.startsWith("http") ? link.href! : `${this.baseUrl}${link.href}`;
-        const ok = await this.safeNavigate(page, fullUrl);
-        if (!ok) continue;
-
-        const tender = await this.parseOpportunityPage(page, fullUrl);
-        if (tender) tenders.push(tender);
-
-        await page.waitForTimeout(1500 + Math.random() * 2000);
+        res = await fetch(`${this.apiUrl}?${params.toString()}`, {
+          headers: { Accept: "application/json" },
+          signal: AbortSignal.timeout(30000),
+        });
       } catch (err) {
-        logger.warn("SAM.gov: Failed to parse opportunity", { href: link.href, error: String(err) });
+        logger.warn("SAM.gov: request failed for NAICS", { naics, error: String(err) });
+        continue;
+      }
+
+      if (!res.ok) {
+        const snippet = (await res.text().catch(() => "")).slice(0, 200);
+        // A bad key / rate limit affects every code — fail loudly rather than loop.
+        if (res.status === 401 || res.status === 403 || res.status === 429) {
+          throw new Error(`SAM.gov API ${res.status}: ${snippet}`);
+        }
+        logger.warn("SAM.gov: non-OK for NAICS", { naics, status: res.status });
+        continue;
+      }
+
+      const data = (await res.json()) as SamResponse;
+      for (const opp of data.opportunitiesData ?? []) {
+        const id = opp.noticeId ?? opp.solicitationNumber ?? "";
+        if (!id || seen.has(id)) continue;
+        seen.add(id);
+        tenders.push(this.mapOpportunity(opp, category));
       }
     }
 
+    logger.info("SAM.gov: fetched opportunities", { count: tenders.length });
     return tenders;
   }
 
-  private async parseOpportunityPage(page: Page, url: string): Promise<Partial<Tender> | null> {
-    const title = await this.safeText(page, "h1, .opportunity-title, [data-testid='title']");
-    if (!title) return null;
-
-    const externalId = url.match(/opp\/([A-Za-z0-9-]+)/)?.[1] ?? "";
-    const description = await this.safeText(page, ".description, [data-testid='description'], .opportunity-description");
-    const buyerName = await this.safeText(page, ".agency-name, [data-testid='agency'], .department");
-    const naicsText = await this.safeText(page, ".naics-code, [data-testid='naics']");
-
-    const valueText = await this.safeText(page, ".award-amount, .estimated-value, [data-testid='value']");
-    const parsed = valueText ? parseCurrencyValue(valueText) : null;
-
-    const deadlineText = await this.safeText(page, ".response-date, [data-testid='deadline']");
-    const publishedText = await this.safeText(page, ".published-date, [data-testid='published']");
-    const typeText = await this.safeText(page, ".opportunity-type, [data-testid='type']");
-
-    const complianceTexts = await this.safeTextAll(page, ".eligibility-item, .requirement-item");
-
-    const category = this.mapNaicsToCategory(naicsText);
+  private mapOpportunity(opp: SamOpportunity, category: ProcurementCategory): Partial<Tender> {
+    const amount = opp.award?.amount ? Number(opp.award.amount) : null;
+    const countryCode = opp.placeOfPerformance?.country?.code;
 
     return {
-      externalId,
+      externalId: opp.noticeId ?? opp.solicitationNumber ?? "",
       source: "sam_gov",
-      title,
-      description,
-      buyerName: buyerName || "U.S. Federal Agency",
-      buyerCountry: "US",
+      title: opp.title ?? "",
+      description: opp.fullParentPathName ?? "",
+      buyerName: opp.fullParentPathName?.split(".")[0] || "U.S. Federal Agency",
+      buyerCountry: countryCode && countryCode.length <= 3 ? countryCode : "US",
       buyerRegion: "North America",
       category,
-      status: this.mapStatusFromType(typeText),
-      publishedAt: this.parseDate(publishedText) ?? new Date(),
-      deadline: this.parseDate(deadlineText),
+      status: mapStatus(opp.active, opp.type ?? opp.baseType),
+      publishedAt: opp.postedDate ? new Date(opp.postedDate) : new Date(),
+      deadline: opp.responseDeadLine ? new Date(opp.responseDeadLine) : null,
       originalCurrency: "USD",
-      originalValue: parsed?.amount ?? null,
-      valueUsd: parsed?.amount ?? null,
-      complianceCriteria: complianceTexts.length > 0 ? complianceTexts : ["FAR compliance", "SAM.gov registration"],
-      cpvCodes: naicsText ? [naicsText.replace(/\D/g, "")] : [],
-      url,
-      rawData: { valueText, typeText, naicsText },
+      originalValue: amount,
+      valueUsd: amount != null ? convertToUsd(amount, "USD") : null,
+      complianceCriteria: ["FAR compliance", "SAM.gov registration"],
+      cpvCodes: opp.naicsCode ? [opp.naicsCode] : [],
+      url: opp.uiLink || `${this.baseUrl}/opp/${opp.noticeId}/view`,
+      rawData: { type: opp.type, naicsCode: opp.naicsCode, classificationCode: opp.classificationCode },
     };
-  }
-
-  async extractAwards(page: Page): Promise<Partial<ContractAward>[]> {
-    return [];
-  }
-
-  private mapNaicsToCategory(naicsText: string): ProcurementCategory {
-    const code = naicsText.replace(/\D/g, "").slice(0, 6);
-    return NAICS_CATEGORY_MAP[code] ?? "other";
-  }
-
-  private mapStatusFromType(typeText: string): "open" | "closed" | "awarded" | "planned" {
-    const lower = typeText.toLowerCase();
-    if (lower.includes("award")) return "awarded";
-    if (lower.includes("presolicitation") || lower.includes("sources sought")) return "planned";
-    if (lower.includes("closed") || lower.includes("archived")) return "closed";
-    return "open";
-  }
-
-  private parseDate(raw: string): Date | null {
-    if (!raw) return null;
-    const d = new Date(raw);
-    return isNaN(d.getTime()) ? null : d;
   }
 }

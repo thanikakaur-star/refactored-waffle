@@ -3,7 +3,7 @@
 ## Architecture
 
 TypeScript/Node.js full-stack platform that aggregates global healthcare procurement data:
-- **Scraper pipeline**: Playwright-based scrapers for TED Europa and SAM.gov, plus API-based (OCDS) scrapers for UK Contracts Finder and Find a Tender Service — WHO and NHS Supply Chain are supported sources but have no scraper implementation yet
+- **Scraper pipeline**: Playwright scraper for TED Europa; API-based scrapers for SAM.gov (official Get Opportunities API), UK Contracts Finder and Find a Tender Service (OCDS APIs) — WHO and NHS Supply Chain are supported sources but have no scraper implementation yet
 - **PostgreSQL via Supabase**: Normalized schema with currency standardization, regional benchmarks
 - **Secure API tier**: Express API with tiered API key authentication (free/basic/pro/enterprise)
 - **B2B Dashboard**: Tailwind CSS + Chart.js analytics dashboard for procurement visualization
@@ -51,7 +51,7 @@ Copy `.env.example` to `.env` and fill in all values. Required:
 - `src/scraper/api-base.ts` — Abstract API-based scraper base class (no browser needed)
 - `src/scraper/persist.ts` — Upserts scraped tenders/awards into Supabase
 - `src/scraper/sources/ted.ts` — TED Europa scraper (Playwright)
-- `src/scraper/sources/sam.ts` — SAM.gov scraper (Playwright)
+- `src/scraper/sources/sam.ts` — SAM.gov scraper (official api.sam.gov Get Opportunities API — needs SAM_GOV_API_KEY)
 - `src/scraper/sources/contracts-finder.ts` — Contracts Finder scraper (OCDS API, unverified endpoint — see file comment)
 - `src/scraper/sources/find-a-tender.ts` — Find a Tender Service scraper (OCDS API, unverified endpoint — see file comment)
 - `src/scraper/sources/uk-category-map.ts` — Keyword/CPV classifier for UK service & goods tenders

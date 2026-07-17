@@ -22,7 +22,7 @@ describe("TedEuropaScraper", () => {
   });
 });
 
-describe("SamGovScraper", () => {
+describe("SamGovScraper (official API)", () => {
   it("has correct source identifier", () => {
     const scraper = new SamGovScraper();
     expect(scraper.source).toBe("sam_gov");
@@ -33,11 +33,15 @@ describe("SamGovScraper", () => {
     expect(scraper.baseUrl).toBe("https://sam.gov");
   });
 
-  it("returns empty results when browser not initialized", async () => {
+  it("errors clearly when SAM_GOV_API_KEY is not set", async () => {
+    const prev = process.env.SAM_GOV_API_KEY;
+    delete process.env.SAM_GOV_API_KEY;
     const scraper = new SamGovScraper();
     const result = await scraper.scrape();
     expect(result.source).toBe("sam_gov");
     expect(result.errors.length).toBeGreaterThan(0);
+    expect(result.errors[0]).toContain("SAM_GOV_API_KEY");
     expect(result.tendersFound).toBe(0);
+    if (prev !== undefined) process.env.SAM_GOV_API_KEY = prev;
   });
 });
