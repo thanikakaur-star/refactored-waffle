@@ -766,6 +766,34 @@ app.get("/api/admin/check", requireAdmin, (_req, res) => {
   res.json({ ok: true, searchConsoleConfigured: isSearchConsoleConfigured() });
 });
 
+// Manually trigger a scrape run and return the summary. Lets you verify the
+// pipeline on demand (and after deploys) without the Railway CLI. Guarded so
+// only one runs at a time. Playwright is loaded lazily inside run.js so this
+// endpoint never pulls it in at server boot.
+let scrapeInProgress = false;
+app.post("/api/admin/scrape", requireAdmin, async (req, res) => {
+  if (!USE_SUPABASE || !supabase) {
+    res.status(503).json({ error: "Scraping requires Supabase (production mode)." });
+    return;
+  }
+  if (scrapeInProgress) {
+    res.status(409).json({ error: "A scrape is already running. Try again shortly." });
+    return;
+  }
+  const source = typeof req.body?.source === "string" ? req.body.source : undefined;
+  scrapeInProgress = true;
+  try {
+    const { runScrapers } = await import("./scraper/run.js");
+    const summary = await runScrapers(source as never);
+    res.json({ ok: true, summary });
+  } catch (err) {
+    logger.error("Manual scrape failed", { error: String(err) });
+    res.status(500).json({ error: "Scrape failed", detail: String(err) });
+  } finally {
+    scrapeInProgress = false;
+  }
+});
+
 // SEO overview from Google Search Console
 app.get("/api/admin/seo", requireAdmin, async (req, res) => {
   if (!isSearchConsoleConfigured()) {
