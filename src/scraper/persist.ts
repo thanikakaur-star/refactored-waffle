@@ -41,16 +41,31 @@ export async function persistTenders(tenders: Partial<Tender>[]): Promise<{ pers
   }
   if (rows.length === 0) return { persisted: 0, failed: skipped };
 
+  // Postgres rejects a single upsert batch outright if two rows share the
+  // same ON CONFLICT target (source, external_id) — some source feeds (e.g.
+  // Contracts Finder OCDS) emit multiple releases per notice under the same
+  // id, which would otherwise fail the whole batch. Keep the last occurrence
+  // of each key.
+  const dedupedByKey = new Map<string, (typeof rows)[number]>();
+  for (const row of rows) {
+    dedupedByKey.set(`${row.source}::${row.external_id}`, row);
+  }
+  const dedupedRows = [...dedupedByKey.values()];
+  const duplicatesDropped = rows.length - dedupedRows.length;
+  if (duplicatesDropped > 0) {
+    logger.warn("Dropped duplicate (source, external_id) rows within batch", { duplicatesDropped });
+  }
+
   const { error, count } = await client
     .from("tenders")
-    .upsert(rows, { onConflict: "source,external_id", count: "exact" });
+    .upsert(dedupedRows, { onConflict: "source,external_id", count: "exact" });
 
   if (error) {
     logger.error("Failed to persist tenders", { error: error.message });
     return { persisted: 0, failed: rows.length };
   }
 
-  return { persisted: count ?? rows.length, failed: skipped };
+  return { persisted: count ?? dedupedRows.length, failed: skipped };
 }
 
 /**
