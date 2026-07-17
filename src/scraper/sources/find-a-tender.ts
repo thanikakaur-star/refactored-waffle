@@ -5,6 +5,14 @@ import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
 
 // OCDS release-package shape — only the fields we actually read.
+interface OcdsClassification {
+  id?: string;
+  scheme?: string;
+}
+interface OcdsItem {
+  classification?: OcdsClassification;
+  additionalClassifications?: OcdsClassification[];
+}
 interface OcdsRelease {
   ocid?: string;
   id?: string;
@@ -16,10 +24,36 @@ interface OcdsRelease {
     status?: string;
     value?: { amount?: number; currency?: string };
     tenderPeriod?: { endDate?: string };
-    classification?: { id?: string };
+    classification?: OcdsClassification;
+    items?: OcdsItem[];
     documents?: Array<{ url?: string; documentType?: string }>;
   };
+  awards?: Array<{ items?: OcdsItem[] }>;
   buyer?: { name?: string };
+}
+
+// A CPV code is a CPV code wherever it appears. Real Find a Tender notices
+// frequently carry the CPV only on the line items (tender.items[] and
+// award.items[]) via `classification` / `additionalClassifications`, not on
+// the top-level `tender.classification`. Collect every CPV across all of
+// those locations so the healthcare filter and classifier don't miss health
+// notices that only tag CPV at the item level.
+function collectCpvCodes(release: OcdsRelease): string[] {
+  const codes: string[] = [];
+  const push = (c?: OcdsClassification) => {
+    if (c?.id && (c.scheme === undefined || /cpv/i.test(c.scheme))) codes.push(c.id);
+  };
+  const pushItem = (item: OcdsItem) => {
+    push(item.classification);
+    (item.additionalClassifications ?? []).forEach(push);
+  };
+
+  push(release.tender?.classification);
+  (release.tender?.items ?? []).forEach(pushItem);
+  (release.awards ?? []).forEach((a) => (a.items ?? []).forEach(pushItem));
+
+  // De-dupe, preserving order.
+  return [...new Set(codes)];
 }
 
 interface OcdsReleasePackage {
@@ -45,11 +79,12 @@ function mapStatus(ocdsStatus: string | undefined): "open" | "closed" | "awarded
   }
 }
 
-// Keep only healthcare-relevant notices: CPV 33xxxxxx (medical equipment /
-// pharmaceuticals) or 85xxxxxx (health & social work services), or — when no
-// CPV is present — a keyword classification that isn't "other".
-function isHealthcare(cpv: string | undefined, category: ProcurementCategory): boolean {
-  if (cpv) {
+// Keep only healthcare-relevant notices: any CPV 33xxxxxx (medical equipment /
+// pharmaceuticals) or 85xxxxxx (health & social work services) anywhere on the
+// notice, or — when no health CPV is present — a keyword classification that
+// isn't "other".
+function isHealthcare(cpvCodes: string[], category: ProcurementCategory): boolean {
+  for (const cpv of cpvCodes) {
     const digits = cpv.replace(/\D/g, "");
     if (digits.startsWith("33") || digits.startsWith("85")) return true;
   }
@@ -106,14 +141,24 @@ export class FindATenderScraper extends ApiScraper {
 
       for (const r of releases) {
         if (!r.tender?.title) continue;
-        const cpv = r.tender.classification?.id;
-        const category = classifyUkTender(r.tender.title, r.tender.description ?? "", cpv);
-        if (!isHealthcare(cpv, category)) continue;
+        const cpvCodes = collectCpvCodes(r);
+        // Classify off a health CPV when one exists (so item-level 33xx/85xx
+        // codes drive the category), otherwise the first CPV, else keywords.
+        const healthCpv = cpvCodes.find((c) => {
+          const d = c.replace(/\D/g, "");
+          return d.startsWith("33") || d.startsWith("85");
+        });
+        const category = classifyUkTender(
+          r.tender.title,
+          r.tender.description ?? "",
+          healthCpv ?? cpvCodes[0],
+        );
+        if (!isHealthcare(cpvCodes, category)) continue;
 
         const externalId = r.tender.id ?? r.ocid ?? r.id ?? "";
         if (!externalId || seen.has(externalId)) continue;
         seen.add(externalId);
-        out.push(this.mapRelease(r, category));
+        out.push(this.mapRelease(r, category, cpvCodes));
       }
 
       url = data.links?.next;
@@ -123,7 +168,7 @@ export class FindATenderScraper extends ApiScraper {
     return out;
   }
 
-  private mapRelease(release: OcdsRelease, category: ProcurementCategory): Partial<Tender> {
+  private mapRelease(release: OcdsRelease, category: ProcurementCategory, cpvCodes: string[]): Partial<Tender> {
     const tender = release.tender!;
     const value = tender.value;
     // The release id is the public notice number (e.g. "035240-2023"), which
@@ -149,7 +194,7 @@ export class FindATenderScraper extends ApiScraper {
       originalValue: value?.amount ?? null,
       valueUsd: value?.amount ? convertToUsd(value.amount, value.currency ?? "GBP") : null,
       complianceCriteria: ["UK Public Contracts Regulations 2015"],
-      cpvCodes: tender.classification?.id ? [tender.classification.id] : [],
+      cpvCodes,
       url,
       rawData: { ocid: release.ocid },
     };
