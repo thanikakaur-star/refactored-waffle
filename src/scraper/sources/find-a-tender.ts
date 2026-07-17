@@ -80,9 +80,12 @@ export class FindATenderScraper extends ApiScraper {
 
   protected async fetchTenders(): Promise<Partial<Tender>[]> {
     const updatedFrom = new Date(Date.now() - this.lookbackDays * 24 * 60 * 60 * 1000).toISOString();
+    // NOTE: production host (no `-integration`, which serves sample data).
+    // Params kept minimal to the documented contract — updatedFrom + limit;
+    // stage/status filtering is done client-side to avoid unsupported params.
     let url: string | undefined =
       `${this.baseUrl}/api/1.0/ocdsReleasePackages` +
-      `?limit=${this.pageLimit}&stages=tender&updatedFrom=${encodeURIComponent(updatedFrom)}`;
+      `?limit=${this.pageLimit}&updatedFrom=${encodeURIComponent(updatedFrom)}`;
 
     const out: Partial<Tender>[] = [];
     const seen = new Set<string>();
@@ -123,15 +126,15 @@ export class FindATenderScraper extends ApiScraper {
   private mapRelease(release: OcdsRelease, category: ProcurementCategory): Partial<Tender> {
     const tender = release.tender!;
     const value = tender.value;
-    // Prefer the tender-notice document link, then any document, then a search
-    // link for the notice — never just the bare homepage.
-    const noticeDoc =
-      tender.documents?.find((d) => d.documentType === "tenderNotice" && d.url) ??
-      tender.documents?.find((d) => d.url);
-    const url = noticeDoc?.url || `${this.baseUrl}/Search?keywords=${encodeURIComponent(tender.title ?? "")}`;
+    // The release id is the public notice number (e.g. "035240-2023"), which
+    // maps directly to the real notice page — confirmed against live URLs.
+    const noticeId = release.id;
+    const url = noticeId
+      ? `${this.baseUrl}/Notice/${noticeId}`
+      : `${this.baseUrl}/Search?keywords=${encodeURIComponent(tender.title ?? "")}`;
 
     return {
-      externalId: tender.id ?? release.ocid ?? release.id ?? "",
+      externalId: noticeId ?? release.ocid ?? tender.id ?? "",
       source: "find_a_tender",
       title: tender.title ?? "",
       description: tender.description ?? "",
