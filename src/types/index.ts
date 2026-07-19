@@ -72,6 +72,7 @@ export type TenderSource =
   | "nhs_supply_chain"
   | "contracts_finder"
   | "find_a_tender"
+  | "world_bank"
   | "manual";
 
 export type TenderStatus = "open" | "closed" | "awarded" | "cancelled" | "planned";

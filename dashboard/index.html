@@ -301,7 +301,7 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-5 max-w-5xl mx-auto">
           <div class="glass-card p-5 fade-in stagger-1">
             <div class="text-2xl mb-3">&#127466;&#127482;</div>
             <h3 class="font-semibold text-sm" style="color: var(--gold);">TED Europa</h3>
@@ -321,6 +321,11 @@
             <div class="text-2xl mb-3">&#127468;&#127463;</div>
             <h3 class="font-semibold text-sm" style="color: var(--gold);">Contracts Finder</h3>
             <p class="text-xs mt-1" style="color: var(--text-muted);">UK local authority &amp; NHS contracts</p>
+          </div>
+          <div class="glass-card p-5 fade-in stagger-4">
+            <div class="text-2xl mb-3">&#127760;</div>
+            <h3 class="font-semibold text-sm" style="color: var(--gold);">World Bank</h3>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">Global development projects</p>
           </div>
         </div>
 
@@ -437,6 +442,7 @@
               <option value="sam_gov">SAM.gov</option>
               <option value="contracts_finder">Contracts Finder (UK)</option>
               <option value="find_a_tender">Find a Tender (UK)</option>
+              <option value="world_bank">World Bank</option>
             </select>
             <select id="tender-filter-category" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
               <option value="">All Categories</option>
@@ -557,6 +563,7 @@
               <option value="sam_gov">SAM.gov</option>
               <option value="contracts_finder">Contracts Finder (UK)</option>
               <option value="find_a_tender">Find a Tender (UK)</option>
+              <option value="world_bank">World Bank</option>
             </select>
             <input id="alert-country" type="text" maxlength="5" placeholder="Country code (e.g. GB)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
             <input id="alert-region" type="text" maxlength="50" placeholder="Region (e.g. Europe)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
@@ -1213,7 +1220,7 @@
       try {
         const res = await apiFetch('/api/v1/sources');
         const grid = document.getElementById('sources-grid');
-        const icons = { ted_europa: '&#127466;&#127482;', sam_gov: '&#127482;&#127480;', contracts_finder: '&#127468;&#127463;', find_a_tender: '&#127468;&#127463;', who_procurement: '&#127758;', nhs_supply_chain: '&#127468;&#127463;' };
+        const icons = { ted_europa: '&#127466;&#127482;', sam_gov: '&#127482;&#127480;', contracts_finder: '&#127468;&#127463;', find_a_tender: '&#127468;&#127463;', world_bank: '&#127760;', who_procurement: '&#127758;', nhs_supply_chain: '&#127468;&#127463;' };
         grid.innerHTML = res.data.map(s => `
           <div class="glass-card p-6 fade-in">
             <div class="text-3xl mb-3">${icons[s.id] || '&#127760;'}</div>

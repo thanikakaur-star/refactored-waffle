@@ -7,7 +7,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- Enum types
 CREATE TYPE tender_source AS ENUM (
   'ted_europa', 'sam_gov', 'who_procurement', 'nhs_supply_chain',
-  'contracts_finder', 'find_a_tender', 'manual'
+  'contracts_finder', 'find_a_tender', 'world_bank', 'manual'
 );
 
 CREATE TYPE tender_status AS ENUM (
