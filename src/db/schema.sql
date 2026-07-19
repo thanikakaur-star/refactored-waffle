@@ -131,6 +131,15 @@ CREATE TABLE IF NOT EXISTS scrape_runs (
   status TEXT DEFAULT 'running'
 );
 
+-- Full-text search over title + description, kept as a real (generated,
+-- stored) column so PostgREST's .textSearch() can target it directly —
+-- querying just "title" would miss anything only mentioned in the
+-- description, and wouldn't use a GIN index built on the combined
+-- expression anyway. coalesce() guards against description ever being NULL
+-- (it's TEXT DEFAULT '' but not NOT NULL) collapsing the whole vector.
+ALTER TABLE tenders ADD COLUMN search_vector tsvector
+  GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || coalesce(description, ''))) STORED;
+
 -- Indexes for query performance
 CREATE INDEX idx_tenders_source ON tenders(source);
 CREATE INDEX idx_tenders_status ON tenders(status);
@@ -138,7 +147,7 @@ CREATE INDEX idx_tenders_category ON tenders(category);
 CREATE INDEX idx_tenders_country ON tenders(buyer_country);
 CREATE INDEX idx_tenders_published ON tenders(published_at DESC);
 CREATE INDEX idx_tenders_value ON tenders(value_usd DESC NULLS LAST);
-CREATE INDEX idx_tenders_search ON tenders USING gin(to_tsvector('english', title || ' ' || description));
+CREATE INDEX idx_tenders_search ON tenders USING gin(search_vector);
 CREATE INDEX idx_awards_tender ON contract_awards(tender_id);
 CREATE INDEX idx_awards_date ON contract_awards(award_date DESC);
 CREATE INDEX idx_benchmarks_region ON supply_chain_benchmarks(region, category);

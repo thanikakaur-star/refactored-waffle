@@ -437,43 +437,48 @@
 
       <!-- Tenders Panel -->
       <div id="panel-tenders" class="dashboard-panel hidden">
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
           <h2 class="text-2xl font-bold section-header" style="color: var(--text-primary);">Tenders</h2>
-          <div class="flex gap-3">
-            <select id="tender-filter-status" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
-              <option value="">All Statuses</option>
-              <option value="open">Open</option>
-              <option value="closed">Closed</option>
-              <option value="awarded">Awarded</option>
-            </select>
-            <select id="tender-filter-source" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
-              <option value="">All Sources</option>
-              <option value="ted_europa">TED Europa</option>
-              <option value="sam_gov">SAM.gov</option>
-              <option value="contracts_finder">Contracts Finder (UK)</option>
-              <option value="find_a_tender">Find a Tender (UK)</option>
-              <option value="world_bank">World Bank</option>
-              <option value="canada_buys">CanadaBuys</option>
-            </select>
-            <select id="tender-filter-category" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
-              <option value="">All Categories</option>
-              <option value="medical_devices">Medical Devices</option>
-              <option value="pharmaceuticals">Pharmaceuticals</option>
-              <option value="health_it">Health IT</option>
-              <option value="laboratory_equipment">Laboratory Equipment</option>
-              <option value="hospital_infrastructure">Hospital Infrastructure</option>
-              <option value="personal_protective_equipment">PPE</option>
-              <option value="diagnostics">Diagnostics</option>
-              <option value="surgical_instruments">Surgical Instruments</option>
-              <option value="telemedicine">Telemedicine</option>
-              <option value="clinical_services">Clinical Services</option>
-              <option value="social_care">Social Care</option>
-              <option value="other">Other</option>
-            </select>
-            <button onclick="saveCurrentTendersAsAlert()" class="text-sm rounded-lg px-3 py-2 font-semibold" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Get emailed when new tenders match these filters">
-              &#128276; Save as Alert
-            </button>
+          <button onclick="saveCurrentTendersAsAlert()" class="text-sm rounded-lg px-3 py-2 font-semibold flex items-center gap-1.5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Get emailed when new tenders match these filters">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15v.5a4 4 0 008 0V15"/><path d="M5.2 15h9.6c.6 0 .9-.7.5-1.2-.9-1-1.3-2-1.3-3.6V8.3a4 4 0 00-8 0v1.9c0 1.6-.4 2.6-1.3 3.6-.4.5-.1 1.2.5 1.2z"/></svg>
+            Save as Alert
+          </button>
+        </div>
+        <div class="flex gap-3 mb-6 flex-wrap">
+          <div class="relative flex-1 min-w-[220px]">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="var(--text-muted)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;"><circle cx="8.5" cy="8.5" r="6"/><path d="M17 17l-4-4"/></svg>
+            <input id="tender-search" type="text" placeholder="Search tenders (title, description)..." oninput="debouncedSearchTenders()" class="text-sm rounded-lg pl-9 pr-3 py-2 w-full" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
           </div>
+          <select id="tender-filter-status" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+            <option value="awarded">Awarded</option>
+          </select>
+          <select id="tender-filter-source" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Sources</option>
+            <option value="ted_europa">TED Europa</option>
+            <option value="sam_gov">SAM.gov</option>
+            <option value="contracts_finder">Contracts Finder (UK)</option>
+            <option value="find_a_tender">Find a Tender (UK)</option>
+            <option value="world_bank">World Bank</option>
+            <option value="canada_buys">CanadaBuys</option>
+          </select>
+          <select id="tender-filter-category" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Categories</option>
+            <option value="medical_devices">Medical Devices</option>
+            <option value="pharmaceuticals">Pharmaceuticals</option>
+            <option value="health_it">Health IT</option>
+            <option value="laboratory_equipment">Laboratory Equipment</option>
+            <option value="hospital_infrastructure">Hospital Infrastructure</option>
+            <option value="personal_protective_equipment">PPE</option>
+            <option value="diagnostics">Diagnostics</option>
+            <option value="surgical_instruments">Surgical Instruments</option>
+            <option value="telemedicine">Telemedicine</option>
+            <option value="clinical_services">Clinical Services</option>
+            <option value="social_care">Social Care</option>
+            <option value="other">Other</option>
+          </select>
         </div>
         <div id="tenders-panel-list" class="space-y-3"></div>
         <div id="tenders-pagination" class="flex items-center justify-between mt-6"></div>
@@ -644,9 +649,14 @@
   </div>
 
   <script>
-    // Chart.js dark theme defaults
-    Chart.defaults.color = '#94a3b8';
-    Chart.defaults.borderColor = 'rgba(148,163,184,0.1)';
+    // Chart.js dark theme defaults. Guarded: if the Chart.js CDN fails to
+    // load (ad-blocker, network hiccup, offline), this would otherwise throw
+    // and silently kill every line below it in this script — tenders,
+    // search, awards, alerts, checkout — not just the charts.
+    if (typeof Chart !== 'undefined') {
+      Chart.defaults.color = '#94a3b8';
+      Chart.defaults.borderColor = 'rgba(148,163,184,0.1)';
+    }
 
     const API_BASE = window.location.origin;
     let apiKey = '';
@@ -1121,18 +1131,32 @@
       if (el) el.classList.toggle('hidden');
     }
 
+    let tendersSearchDebounceTimer = null;
+    function debouncedSearchTenders() {
+      clearTimeout(tendersSearchDebounceTimer);
+      tendersSearchDebounceTimer = setTimeout(() => { tenderPage = 1; loadTendersPanel(); }, 350);
+    }
+
     async function loadTendersPanel() {
       const status = document.getElementById('tender-filter-status').value;
       const source = document.getElementById('tender-filter-source').value;
       const category = document.getElementById('tender-filter-category').value;
-      let url = `/api/v1/tenders?pageSize=20&page=${tenderPage}`;
-      if (status) url += `&status=${status}`;
-      if (source) url += `&source=${source}`;
-      if (category) url += `&category=${category}`;
+      const search = document.getElementById('tender-search').value.trim();
+      const params = new URLSearchParams({ pageSize: '20', page: String(tenderPage) });
+      if (status) params.set('status', status);
+      if (source) params.set('source', source);
+      if (category) params.set('category', category);
+      if (search) params.set('search', search);
+      const url = `/api/v1/tenders?${params.toString()}`;
 
       try {
         const res = await apiFetch(url);
         const container = document.getElementById('tenders-panel-list');
+        if (res.data.length === 0) {
+          container.innerHTML = `<p class="text-sm py-8 text-center" style="color: var(--text-muted);">No tenders match ${search ? `"${escapeHtml(search)}"` : 'these filters'}.</p>`;
+          renderPagination('tenders-pagination', res.pagination, 'tenders');
+          return;
+        }
         container.innerHTML = res.data.map((t, idx) => `
           <div class="glass-card p-5 fade-in" style="cursor: pointer;" onclick="toggleTenderDetail(${idx})" title="Click for compliance details and the original listing">
             <div class="flex items-start justify-between">
@@ -1299,6 +1323,7 @@
     function saveCurrentTendersAsAlert() {
       document.getElementById('alert-category').value = document.getElementById('tender-filter-category').value;
       document.getElementById('alert-source').value = document.getElementById('tender-filter-source').value;
+      document.getElementById('alert-keyword').value = document.getElementById('tender-search').value.trim();
       const linkEl = document.querySelector('.sidebar-link[data-panel="alerts"]');
       switchPanel('alerts', linkEl, null);
     }

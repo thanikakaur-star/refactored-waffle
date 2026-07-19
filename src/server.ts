@@ -345,7 +345,7 @@ app.get("/api/v1/tenders", authMiddleware, async (req: AuthReq, res) => {
     if (f.maxValue) query = query.lte("value_usd", f.maxValue);
     if (f.publishedAfter) query = query.gte("published_at", f.publishedAfter);
     if (f.publishedBefore) query = query.lte("published_at", f.publishedBefore);
-    if (f.search) query = query.textSearch("title", f.search, { type: "websearch" });
+    if (f.search) query = query.textSearch("search_vector", f.search, { type: "websearch" });
     const offset = (f.page - 1) * f.pageSize;
     const { data, count, error } = await query.order("published_at", { ascending: false }).range(offset, offset + f.pageSize - 1);
     if (error) { res.status(500).json({ error: "Database query failed" }); return; }
