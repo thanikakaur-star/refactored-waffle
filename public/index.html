@@ -175,9 +175,8 @@
     .faq-answer.open { max-height:400px; }
     .faq-icon { transition:transform 0.3s ease; }
     .faq-icon.open { transform:rotate(45deg); }
-    .product-card { position:relative; overflow:hidden; }
-    .product-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, transparent, rgba(201,169,110,0.5), transparent); opacity:0; transition:opacity 0.3s ease; }
-    .product-card:hover::before { opacity:1; }
+    .product-card { position:relative; transition:border-color 0.3s ease, background 0.3s ease; }
+    .product-card:hover { border-color:rgba(201,169,110,0.22); background:rgba(255,255,255,0.06); }
   </style>
 </head>
 <body class="antialiased">
@@ -230,79 +229,64 @@
   </nav>
 
   <!-- ============ HERO SECTION ============ -->
-  <section class="hero-gradient relative min-h-screen flex items-center justify-center overflow-hidden">
+  <section class="hero-gradient relative overflow-hidden">
     <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%221%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    <div class="relative w-full min-w-0 max-w-7xl mx-auto px-6 lg:px-8 text-center pt-24 pb-20">
-      <div class="fade-up">
-        <p class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-gold text-xs font-medium tracking-wider uppercase mb-8">
-          <span class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
-          B2B Intelligence Platform
-        </p>
-      </div>
-      <h1 class="fade-up font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.08] tracking-tight mb-8">
-        <span class="shimmer">The Intelligence Layer</span><br />
-        <span class="text-white">for Global Healthcare</span><br />
-        <span class="text-white">Procurement</span>
-      </h1>
-      <p class="fade-up max-w-3xl mx-auto text-lg sm:text-xl text-gray-400 leading-relaxed mb-12 font-light">
-        Track every healthcare tender from <span class="text-white font-medium">TED Europa, SAM.gov, Find a Tender, and Contracts Finder</span> in one dashboard. No more checking five government portals a day. <span class="text-gold">One dashboard. Every opportunity.</span>
-      </p>
-      <div class="fade-up flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-        <a href="#cta" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-base hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-xl shadow-gold/20 hover:shadow-gold/30">
-          Start Free — No Credit Card
-        </a>
-        <a href="/dashboard" class="w-full sm:w-auto px-8 py-4 rounded-xl border border-gold/30 text-gold font-semibold text-base hover:bg-gold/5 hover:border-gold/50 transition-all duration-200">
-          See the Dashboard
-        </a>
-      </div>
+    <div class="relative w-full min-w-0 max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-24 lg:pt-40 lg:pb-32">
+      <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-14 lg:gap-10 items-center">
 
-      <!-- Stats -->
-      <div class="fade-up grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
-        <div class="glass rounded-2xl p-6 hover-lift">
-          <p class="counter text-3xl sm:text-4xl font-display font-bold text-white mb-1" data-target="12000" data-suffix="+">0</p>
-          <p class="text-sm text-gray-500 font-medium">Tenders Tracked</p>
-        </div>
-        <div class="glass rounded-2xl p-6 hover-lift">
-          <p class="counter text-3xl sm:text-4xl font-display font-bold text-white mb-1" data-target="85" data-suffix="+">0</p>
-          <p class="text-sm text-gray-500 font-medium">Countries</p>
-        </div>
-        <div class="glass rounded-2xl p-6 hover-lift">
-          <p class="counter text-3xl sm:text-4xl font-display font-bold text-gold mb-1" data-prefix="$" data-target="50" data-suffix="B+">0</p>
-          <p class="text-sm text-gray-500 font-medium">Contract Value</p>
-        </div>
-        <div class="glass rounded-2xl p-6 hover-lift">
-          <p class="counter text-3xl sm:text-4xl font-display font-bold text-white mb-1" data-target="4">0</p>
-          <p class="text-sm text-gray-500 font-medium">Live Sources</p>
-        </div>
-      </div>
-
-      <!-- Mock API Response -->
-      <div class="fade-up max-w-3xl mx-auto w-full min-w-0">
-        <div class="code-block rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
-          <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
-            <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
-            <span class="w-3 h-3 rounded-full bg-yellow-500/60"></span>
-            <span class="w-3 h-3 rounded-full bg-green-500/60"></span>
-            <span class="ml-3 text-xs text-gray-500 font-mono hidden sm:inline">GET /api/v1/tenders?source=ted&category=medical_devices&limit=1</span>
-            <span class="ml-3 text-xs text-gray-500 font-mono sm:hidden">GET /api/v1/tenders</span>
+        <!-- Left: thesis -->
+        <div>
+          <p class="fade-up flex items-center gap-2.5 text-xs font-mono text-gray-500 tracking-wide mb-7">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-light"></span>
+            5 procurement portals &middot; scraped daily &middot; zero manual checking
+          </p>
+          <h1 class="fade-up font-display text-4xl sm:text-5xl lg:text-[3.4rem] font-bold leading-[1.1] tracking-tight mb-7 text-white" style="text-wrap: balance;">
+            Stop refreshing five government portals to find <em class="italic text-gold">one</em> surgical tender.
+          </h1>
+          <p class="fade-up max-w-xl text-lg text-gray-400 leading-relaxed mb-9 font-light">
+            TED Europa, SAM.gov, UK Find a Tender, Contracts Finder, and the World Bank — normalized into one searchable feed, with CPV classification and daily alerts, so the opportunity finds you instead.
+          </p>
+          <div class="fade-up flex flex-col sm:flex-row items-start gap-4 mb-10">
+            <a href="#cta" class="w-full sm:w-auto text-center px-8 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-base hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-xl shadow-gold/20 hover:shadow-gold/30">
+              Start Free — No Credit Card
+            </a>
+            <a href="/dashboard" class="w-full sm:w-auto text-center px-8 py-4 rounded-xl border border-gold/30 text-gold font-semibold text-base hover:bg-gold/5 hover:border-gold/50 transition-all duration-200">
+              See the Dashboard
+            </a>
           </div>
-          <pre class="p-3 sm:p-5 text-[11px] sm:text-sm font-mono leading-relaxed overflow-x-auto text-left"><code><span class="code-comment">// 200 OK — Response in 42ms</span>
+          <div class="fade-up flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-gray-500 font-mono">
+            <span>5 <span class="text-gray-600">markets</span></span>
+            <span class="w-px h-4 bg-white/10"></span>
+            <span>Daily <span class="text-gray-600">refresh</span></span>
+            <span class="w-px h-4 bg-white/10"></span>
+            <span>$0 <span class="text-gray-600">to start</span></span>
+          </div>
+        </div>
+
+        <!-- Right: the product itself, as the thesis image -->
+        <div class="fade-up w-full min-w-0">
+          <div class="code-block rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
+            <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
+              <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500/60"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500/60"></span>
+              <span class="ml-3 text-xs text-gray-500 font-mono hidden sm:inline">GET /api/v1/tenders?category=surgical_instruments&status=open</span>
+              <span class="ml-3 text-xs text-gray-500 font-mono sm:hidden">GET /api/v1/tenders</span>
+            </div>
+            <pre class="p-4 sm:p-5 text-[11px] sm:text-sm font-mono leading-relaxed overflow-x-auto text-left"><code><span class="code-comment">// 200 OK</span>
 {
-  <span class="code-key">"total"</span>: <span class="code-number">3847</span>,
   <span class="code-key">"page"</span>: <span class="code-number">1</span>,
   <span class="code-key">"data"</span>: [{
-    <span class="code-key">"id"</span>: <span class="code-string">"ted-2026-128947"</span>,
-    <span class="code-key">"title"</span>: <span class="code-string">"MRI Equipment Supply — University Hospital Munich"</span>,
-    <span class="code-key">"source"</span>: <span class="code-string">"ted_europa"</span>,
-    <span class="code-key">"country"</span>: <span class="code-string">"DE"</span>,
-    <span class="code-key">"value_usd"</span>: <span class="code-number">2450000</span>,
-    <span class="code-key">"original_currency"</span>: <span class="code-string">"EUR"</span>,
-    <span class="code-key">"original_value"</span>: <span class="code-number">2280000</span>,
-    <span class="code-key">"category"</span>: <span class="code-string">"medical_devices"</span>,
-    <span class="code-key">"deadline"</span>: <span class="code-string">"2026-07-15T14:00:00Z"</span>,
+    <span class="code-key">"title"</span>: <span class="code-string">"Framework — Laparoscopic &amp; General</span>
+<span class="code-string">      Surgical Instruments"</span>,
+    <span class="code-key">"source"</span>: <span class="code-string">"find_a_tender"</span>,
+    <span class="code-key">"cpv_codes"</span>: [<span class="code-string">"33169000"</span>],
+    <span class="code-key">"category"</span>: <span class="code-string">"surgical_instruments"</span>,
     <span class="code-key">"status"</span>: <span class="code-string">"open"</span>
   }]
 }</code></pre>
+          </div>
+          <p class="mt-4 text-xs text-gray-600 font-mono pl-1">Illustrative response shape — real data at /docs</p>
         </div>
       </div>
     </div>
@@ -314,10 +298,10 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
       <div class="text-center mb-16 fade-up">
         <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">Trusted Data Sources</p>
-        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Four Pillars of Procurement Data</h2>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Five Markets, One Feed</h2>
         <p class="max-w-2xl mx-auto text-gray-400 text-lg">We aggregate from the world's most authoritative healthcare procurement databases, covering every major market.</p>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <!-- TED Europa -->
         <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group">
           <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600/20 to-blue-400/10 flex items-center justify-center mb-6 border border-blue-500/10">
@@ -372,6 +356,19 @@
             <span class="text-xs px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400/80 border border-indigo-500/10">Local Authority</span>
             <span class="text-xs px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400/80 border border-indigo-500/10">Clinical Services</span>
             <span class="text-xs px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400/80 border border-indigo-500/10">Social Care</span>
+          </div>
+        </div>
+        <!-- World Bank -->
+        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group" style="transition-delay:0.4s">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-600/20 to-emerald-400/10 flex items-center justify-center mb-6 border border-emerald-500/10">
+            <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M2 12h20M12 2c2.5 2.8 4 6.2 4 10s-1.5 7.2-4 10c-2.5-2.8-4-6.2-4-10s1.5-7.2 4-10z"/></svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">World Bank</h3>
+          <p class="text-xs text-emerald-400/70 font-medium uppercase tracking-wider mb-3">Global — Development Financing</p>
+          <p class="text-sm text-gray-400 leading-relaxed mb-4">Procurement notices for World Bank-financed development projects worldwide, including health-sector infrastructure and equipment contracts.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400/80 border border-emerald-500/10">Development Projects</span>
+            <span class="text-xs px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400/80 border border-emerald-500/10">Global Reach</span>
           </div>
         </div>
       </div>
