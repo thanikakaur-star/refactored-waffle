@@ -4,6 +4,7 @@ import { SamGovScraper } from "./sources/sam.js";
 import { ContractsFinderScraper } from "./sources/contracts-finder.js";
 import { FindATenderScraper } from "./sources/find-a-tender.js";
 import { WorldBankScraper } from "./sources/world-bank.js";
+import { CanadaBuysScraper } from "./sources/canada-buys.js";
 import { getSupabaseClient } from "../db/client.js";
 import { logger } from "../utils/logger.js";
 import { checkAlertsAndNotify } from "../alerts/notifier.js";
@@ -20,6 +21,7 @@ const ALL_SCRAPERS: AnyScraper[] = [
   new ContractsFinderScraper(),
   new FindATenderScraper(),
   new WorldBankScraper(),
+  new CanadaBuysScraper(),
 ];
 
 async function logScrapeRun(result: ScrapeResult) {

@@ -159,7 +159,7 @@ describe("GET /api/v1/sources", () => {
   it("returns data source list", async () => {
     const { status, body } = await apiFetch("/api/v1/sources");
     expect(status).toBe(200);
-    expect(body.data.length).toBe(5);
+    expect(body.data.length).toBe(6);
     expect(body.data.map((s: any) => s.id)).toContain("ted_europa");
     expect(body.data.map((s: any) => s.id)).toContain("sam_gov");
     expect(body.data.map((s: any) => s.id)).toContain("contracts_finder");

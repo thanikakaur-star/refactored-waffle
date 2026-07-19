@@ -307,7 +307,7 @@ app.get("/health", (_req, res) => {
 // --- Tenders ---
 
 const tendersFilters = z.object({
-  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "world_bank", "manual"]).optional(),
+  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "world_bank", "canada_buys", "manual"]).optional(),
   category: z.enum([
     "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
     "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
@@ -373,7 +373,7 @@ app.get("/api/v1/tenders/:id", authMiddleware, async (req, res) => {
 const awardsFilters = z.object({
   tenderId: z.string().uuid().optional(),
   supplierCountry: z.string().max(5).optional(),
-  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "world_bank", "manual"]).optional(),
+  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "world_bank", "canada_buys", "manual"]).optional(),
   minValue: z.coerce.number().min(0).optional(),
   maxValue: z.coerce.number().min(0).optional(),
   awardedAfter: z.string().optional(),
@@ -496,6 +496,7 @@ app.get("/api/v1/sources", authMiddleware, (_req, res) => {
       { id: "contracts_finder", name: "Contracts Finder", region: "United Kingdom", url: "https://www.contractsfinder.service.gov.uk", description: "UK local authority and lower-value public sector contracts, including NHS trusts.", updateFrequency: "Daily" },
       { id: "find_a_tender", name: "Find a Tender", region: "United Kingdom", url: "https://www.find-tender.service.gov.uk", description: "UK central government and above-threshold public contracts, including NHS Supply Chain tenders.", updateFrequency: "Daily" },
       { id: "world_bank", name: "World Bank", region: "Global", url: "https://projects.worldbank.org", description: "Procurement notices for World Bank-financed development projects worldwide, including health-sector contracts.", updateFrequency: "Daily" },
+      { id: "canada_buys", name: "CanadaBuys", region: "Canada", url: "https://canadabuys.canada.ca", description: "Canadian federal and provincial public sector tender notices, including health-sector procurement.", updateFrequency: "Daily" },
     ],
   });
 });
@@ -514,7 +515,7 @@ const createAlertSchema = z.object({
     "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
     "surgical_instruments", "telemedicine", "clinical_services", "social_care", "other",
   ]).optional(),
-  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "world_bank", "manual"]).optional(),
+  source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "world_bank", "canada_buys", "manual"]).optional(),
   region: z.string().max(50).optional(),
   country: z.string().max(5).optional(),
   keyword: z.string().max(200).optional(),
