@@ -7,7 +7,7 @@ const KEYWORD_CATEGORY_MAP: Array<{ keywords: RegExp; category: ProcurementCateg
   { keywords: /occupational therap|physiotherap|speech.?and.?language|nursing agency|clinical staff|therapist/i, category: "clinical_services" },
   { keywords: /social care|adult social|children.?s social|domiciliary care|care worker|residential care|social work/i, category: "social_care" },
   { keywords: /personal protective equipment|\bppe\b|surgical gown|face mask/i, category: "personal_protective_equipment" },
-  { keywords: /surgical instrument|robotic surgery|surgical kit/i, category: "surgical_instruments" },
+  { keywords: /surgical instrument|robotic surgery|surgical kit|surgical device|surgical stapler|endoscop|laparoscop|arthroscop|orthopaedic implant|orthopedic implant|scalpel|forceps|operating theatre equipment|operating room equipment/i, category: "surgical_instruments" },
   { keywords: /diagnostic|pathology|imaging|radiolog/i, category: "diagnostics" },
   { keywords: /pharmac|medicine|drug supply/i, category: "pharmaceuticals" },
   { keywords: /telehealth|telemedicine|remote monitoring/i, category: "telemedicine" },
@@ -17,6 +17,8 @@ const KEYWORD_CATEGORY_MAP: Array<{ keywords: RegExp; category: ProcurementCateg
 ];
 
 const CPV_CATEGORY_MAP: Record<string, ProcurementCategory> = {
+  "33169000": "surgical_instruments", // surgical instruments
+  "33162000": "surgical_instruments", // operating theatre apparatus
   "33100000": "medical_devices",
   "33140000": "personal_protective_equipment",
   "33600000": "pharmaceuticals",
