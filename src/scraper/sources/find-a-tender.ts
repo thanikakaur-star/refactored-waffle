@@ -3,6 +3,7 @@ import { convertToUsd } from "../../utils/currency.js";
 import { classifyUkTender } from "./uk-category-map.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
+import type { PendingAward } from "../api-base.js";
 
 // OCDS release-package shape — only the fields we actually read.
 interface OcdsClassification {
@@ -28,8 +29,21 @@ interface OcdsRelease {
     items?: OcdsItem[];
     documents?: Array<{ url?: string; documentType?: string }>;
   };
-  awards?: Array<{ items?: OcdsItem[] }>;
+  awards?: Array<{
+    id?: string;
+    date?: string;
+    status?: string;
+    value?: { amount?: number; currency?: string };
+    suppliers?: Array<{ id?: string; name?: string }>;
+    items?: OcdsItem[];
+  }>;
   buyer?: { name?: string };
+}
+
+// OCDS "active"/"pending" awards aren't a done deal yet — only extract
+// supplier/value data once an award is actually confirmed.
+function isFinalAward(status: string | undefined): boolean {
+  return status === undefined || status === "active";
 }
 
 // A CPV code is a CPV code wherever it appears. Real Find a Tender notices
@@ -159,6 +173,11 @@ export class FindATenderScraper extends ApiScraper {
         if (!externalId || seen.has(externalId)) continue;
         seen.add(externalId);
         out.push(this.mapRelease(r, category, cpvCodes));
+        // Same priority order as the externalId assigned in mapRelease, so
+        // ApiScraper can link the award to its tender's real DB id/category
+        // once both are persisted.
+        const tenderExternalId = r.id ?? r.ocid ?? r.tender.id ?? "";
+        this.collectAwards(r, tenderExternalId);
       }
 
       url = data.links?.next;
@@ -166,6 +185,34 @@ export class FindATenderScraper extends ApiScraper {
 
     logger.info("Find a Tender: healthcare tenders collected", { count: out.length });
     return out;
+  }
+
+  // OCDS release.awards[] carries the actual supplier/value data for
+  // confirmed contracts — one per supplier, since a framework award can list
+  // several suppliers each winning a share. Pushed onto this.pendingAwards
+  // (from ApiScraper) rather than persisted directly, since linking to the
+  // tender's real DB id has to wait until after tenders are persisted.
+  private collectAwards(release: OcdsRelease, tenderExternalId: string): void {
+    if (!tenderExternalId) return;
+    for (const award of release.awards ?? []) {
+      if (!isFinalAward(award.status) || !award.value?.amount) continue;
+      const suppliers = award.suppliers?.length ? award.suppliers : [{ name: undefined }];
+      suppliers.forEach((supplier, i) => {
+        if (!supplier.name) return;
+        const entry: PendingAward = {
+          tenderExternalId,
+          externalId: award.id ? `${award.id}-${supplier.id ?? i}` : undefined,
+          source: "find_a_tender",
+          awardDate: award.date ? new Date(award.date) : new Date(),
+          supplierName: supplier.name,
+          supplierCountry: "GB",
+          originalCurrency: award.value?.currency ?? "GBP",
+          awardValue: award.value!.amount!,
+          awardValueUsd: convertToUsd(award.value!.amount!, award.value?.currency ?? "GBP") ?? undefined,
+        };
+        this.pendingAwards.push(entry);
+      });
+    }
   }
 
   private mapRelease(release: OcdsRelease, category: ProcurementCategory, cpvCodes: string[]): Partial<Tender> {

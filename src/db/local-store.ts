@@ -27,7 +27,10 @@ export interface TenderRow {
 
 export interface AwardRow {
   id: string;
+  external_id: string | null;
   tender_id: string | null;
+  tender_title: string | null;
+  category: string | null;
   award_date: string;
   supplier_name: string;
   supplier_country: string;
@@ -237,7 +240,7 @@ const SEED_TENDERS: TenderRow[] = [
 
 const SEED_AWARDS: AwardRow[] = [
   {
-    id: uuid(), tender_id: SEED_TENDERS[3].id,
+    id: uuid(), external_id: null, tender_id: SEED_TENDERS[3].id, tender_title: SEED_TENDERS[3].title, category: SEED_TENDERS[3].category,
     award_date: "2026-05-20T00:00:00Z",
     supplier_name: "Becton Dickinson", supplier_country: "US",
     original_currency: "USD", award_value: 8700000, award_value_usd: 8700000,
@@ -245,7 +248,7 @@ const SEED_AWARDS: AwardRow[] = [
     source: "who_procurement", scraped_at: new Date().toISOString(),
   },
   {
-    id: uuid(), tender_id: SEED_TENDERS[9].id,
+    id: uuid(), external_id: null, tender_id: SEED_TENDERS[9].id, tender_title: SEED_TENDERS[9].title, category: SEED_TENDERS[9].category,
     award_date: "2026-04-25T00:00:00Z",
     supplier_name: "Abbott Laboratories", supplier_country: "US",
     original_currency: "USD", award_value: 18500000, award_value_usd: 18500000,
@@ -253,7 +256,7 @@ const SEED_AWARDS: AwardRow[] = [
     source: "sam_gov", scraped_at: new Date().toISOString(),
   },
   {
-    id: uuid(), tender_id: null,
+    id: uuid(), external_id: null, tender_id: null, tender_title: null, category: null,
     award_date: "2026-06-10T00:00:00Z",
     supplier_name: "Siemens Healthineers", supplier_country: "DE",
     original_currency: "EUR", award_value: 14200000, award_value_usd: 15478000,
@@ -261,7 +264,7 @@ const SEED_AWARDS: AwardRow[] = [
     source: "ted_europa", scraped_at: new Date().toISOString(),
   },
   {
-    id: uuid(), tender_id: null,
+    id: uuid(), external_id: null, tender_id: null, tender_title: null, category: null,
     award_date: "2026-03-15T00:00:00Z",
     supplier_name: "Medline Industries", supplier_country: "US",
     original_currency: "GBP", award_value: 8900000, award_value_usd: 11303000,
@@ -359,7 +362,7 @@ class LocalStore {
   }
 
   queryAwards(filters: {
-    tenderId?: string; supplierCountry?: string; source?: string;
+    tenderId?: string; supplierCountry?: string; supplierName?: string; category?: string; source?: string;
     minValue?: number; maxValue?: number;
     awardedAfter?: string; awardedBefore?: string;
     page: number; pageSize: number;
@@ -368,6 +371,11 @@ class LocalStore {
 
     if (filters.tenderId) result = result.filter((a) => a.tender_id === filters.tenderId);
     if (filters.supplierCountry) result = result.filter((a) => a.supplier_country === filters.supplierCountry);
+    if (filters.supplierName) {
+      const needle = filters.supplierName.toLowerCase();
+      result = result.filter((a) => a.supplier_name.toLowerCase().includes(needle));
+    }
+    if (filters.category) result = result.filter((a) => a.category === filters.category);
     if (filters.source) result = result.filter((a) => a.source === filters.source);
     if (filters.minValue) result = result.filter((a) => a.award_value_usd >= filters.minValue!);
     if (filters.maxValue) result = result.filter((a) => a.award_value_usd <= filters.maxValue!);

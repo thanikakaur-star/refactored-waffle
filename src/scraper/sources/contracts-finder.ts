@@ -3,6 +3,7 @@ import { convertToUsd } from "../../utils/currency.js";
 import { classifyUkTender } from "./uk-category-map.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender } from "../../types/index.js";
+import type { PendingAward } from "../api-base.js";
 
 interface OcdsRelease {
   ocid?: string;
@@ -18,7 +19,19 @@ interface OcdsRelease {
     classification?: { id?: string };
     documents?: Array<{ url?: string }>;
   };
+  awards?: Array<{
+    id?: string;
+    date?: string;
+    status?: string;
+    value?: { amount?: number; currency?: string };
+    suppliers?: Array<{ id?: string; name?: string }>;
+  }>;
   buyer?: { name?: string };
+}
+
+// Same as Find a Tender: only extract confirmed awards, not pending ones.
+function isFinalAward(status: string | undefined): boolean {
+  return status === undefined || status === "active";
 }
 
 interface OcdsReleasePackage {
@@ -73,9 +86,35 @@ export class ContractsFinderScraper extends ApiScraper {
     const releases = data.releases ?? [];
     logger.info("Contracts Finder: Fetched releases", { count: releases.length });
 
-    return releases
-      .filter((r) => r.tender?.title)
-      .map((r) => this.mapRelease(r));
+    const kept = releases.filter((r) => r.tender?.title);
+    for (const r of kept) {
+      const tenderExternalId = r.tender!.id ?? r.ocid ?? r.id ?? "";
+      this.collectAwards(r, tenderExternalId);
+    }
+    return kept.map((r) => this.mapRelease(r));
+  }
+
+  private collectAwards(release: OcdsRelease, tenderExternalId: string): void {
+    if (!tenderExternalId) return;
+    for (const award of release.awards ?? []) {
+      if (!isFinalAward(award.status) || !award.value?.amount) continue;
+      const suppliers = award.suppliers?.length ? award.suppliers : [{ name: undefined }];
+      suppliers.forEach((supplier, i) => {
+        if (!supplier.name) return;
+        const entry: PendingAward = {
+          tenderExternalId,
+          externalId: award.id ? `${award.id}-${supplier.id ?? i}` : undefined,
+          source: "contracts_finder",
+          awardDate: award.date ? new Date(award.date) : new Date(),
+          supplierName: supplier.name,
+          supplierCountry: "GB",
+          originalCurrency: award.value?.currency ?? "GBP",
+          awardValue: award.value!.amount!,
+          awardValueUsd: convertToUsd(award.value!.amount!, award.value?.currency ?? "GBP") ?? undefined,
+        };
+        this.pendingAwards.push(entry);
+      });
+    }
   }
 
   private mapRelease(release: OcdsRelease): Partial<Tender> {

@@ -24,7 +24,10 @@ export interface Tender {
 
 export interface ContractAward {
   id: string;
-  tenderId: string;
+  externalId: string | null;
+  tenderId: string | null;
+  tenderTitle: string | null;
+  category: ProcurementCategory | null;
   awardDate: Date;
   supplierName: string;
   supplierCountry: string;

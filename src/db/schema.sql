@@ -51,7 +51,10 @@ CREATE TABLE IF NOT EXISTS tenders (
 -- Contract awards
 CREATE TABLE IF NOT EXISTS contract_awards (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  external_id TEXT,
   tender_id UUID REFERENCES tenders(id) ON DELETE CASCADE,
+  tender_title TEXT,
+  category procurement_category,
   award_date TIMESTAMPTZ NOT NULL,
   supplier_name TEXT NOT NULL,
   supplier_country TEXT DEFAULT '',
@@ -61,7 +64,8 @@ CREATE TABLE IF NOT EXISTS contract_awards (
   framework_type TEXT,
   duration TEXT,
   source tender_source NOT NULL,
-  scraped_at TIMESTAMPTZ DEFAULT NOW()
+  scraped_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(source, external_id)
 );
 
 -- Pre-computed regional benchmarks

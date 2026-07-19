@@ -482,21 +482,39 @@
       <!-- Awards Panel -->
       <div id="panel-awards" class="dashboard-panel hidden">
         <h2 class="text-2xl font-bold section-header mb-6" style="color: var(--text-primary);">Contract Awards</h2>
-        <div class="flex gap-3 mb-6">
+        <div class="flex gap-3 mb-6 flex-wrap">
+          <select id="award-filter-category" onchange="loadAwardsPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Categories</option>
+            <option value="medical_devices">Medical Devices</option>
+            <option value="pharmaceuticals">Pharmaceuticals</option>
+            <option value="health_it">Health IT</option>
+            <option value="laboratory_equipment">Laboratory Equipment</option>
+            <option value="hospital_infrastructure">Hospital Infrastructure</option>
+            <option value="personal_protective_equipment">PPE</option>
+            <option value="diagnostics">Diagnostics</option>
+            <option value="surgical_instruments">Surgical Instruments</option>
+            <option value="telemedicine">Telemedicine</option>
+            <option value="clinical_services">Clinical Services</option>
+            <option value="social_care">Social Care</option>
+            <option value="other">Other</option>
+          </select>
           <select id="award-filter-country" onchange="loadAwardsPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
             <option value="">All Countries</option>
             <option value="US">United States</option>
             <option value="GB">United Kingdom</option>
+            <option value="CA">Canada</option>
             <option value="DE">Germany</option>
             <option value="FR">France</option>
             <option value="CH">Switzerland</option>
           </select>
+          <input id="award-filter-supplier" type="text" placeholder="Search supplier name..." oninput="debouncedLoadAwards()" class="text-sm rounded-lg px-3 py-2 flex-1 min-w-[200px]" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-sm dark-table">
             <thead>
               <tr style="border-bottom: 1px solid rgba(148,163,184,0.1);">
                 <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Supplier</th>
+                <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Won</th>
                 <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Country</th>
                 <th class="text-right py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Value (USD)</th>
                 <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Awarded</th>
@@ -1152,26 +1170,45 @@
       }
     }
 
+    let awardsDebounceTimer = null;
+    function debouncedLoadAwards() {
+      clearTimeout(awardsDebounceTimer);
+      awardsDebounceTimer = setTimeout(() => { awardPage = 1; loadAwardsPanel(); }, 350);
+    }
+
     async function loadAwardsPanel() {
+      const category = document.getElementById('award-filter-category').value;
       const country = document.getElementById('award-filter-country').value;
-      let url = `/api/v1/awards?pageSize=20&page=${awardPage}`;
-      if (country) url += `&supplierCountry=${country}`;
+      const supplierName = document.getElementById('award-filter-supplier').value.trim();
+      const params = new URLSearchParams({ pageSize: '20', page: String(awardPage) });
+      if (category) params.set('category', category);
+      if (country) params.set('supplierCountry', country);
+      if (supplierName) params.set('supplierName', supplierName);
+      const url = `/api/v1/awards?${params.toString()}`;
 
       try {
         const res = await apiFetch(url);
         const tbody = document.getElementById('awards-table-body');
-        tbody.innerHTML = res.data.map(a => `
-          <tr style="border-bottom: 1px solid rgba(148,163,184,0.06);">
-            <td class="py-3 px-4 font-medium" style="color: var(--text-primary);">${escapeHtml(a.supplier_name)}</td>
-            <td class="py-3 px-4" style="color: var(--text-secondary);">${escapeHtml(a.supplier_country)}</td>
-            <td class="py-3 px-4 text-right font-semibold" style="color: var(--gold);">${formatCurrency(a.award_value_usd)}</td>
-            <td class="py-3 px-4" style="color: var(--text-muted);">${new Date(a.award_date).toLocaleDateString()}</td>
-          </tr>
-        `).join('');
+        if (res.data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center" style="color: var(--text-muted);">No awards match these filters yet.</td></tr>`;
+        } else {
+          tbody.innerHTML = res.data.map(a => `
+            <tr style="border-bottom: 1px solid rgba(148,163,184,0.06);">
+              <td class="py-3 px-4 font-medium" style="color: var(--text-primary);">${escapeHtml(a.supplier_name)}</td>
+              <td class="py-3 px-4" style="color: var(--text-secondary); max-width: 320px;">
+                ${a.tender_title ? escapeHtml(a.tender_title) : '<span style="color: var(--text-muted);">—</span>'}
+                ${a.category ? `<span class="ml-1 text-xs" style="color: var(--gold);">· ${escapeHtml(formatCategory(a.category))}</span>` : ''}
+              </td>
+              <td class="py-3 px-4" style="color: var(--text-secondary);">${escapeHtml(a.supplier_country)}</td>
+              <td class="py-3 px-4 text-right font-semibold" style="color: var(--gold);">${formatCurrency(a.award_value_usd)}</td>
+              <td class="py-3 px-4" style="color: var(--text-muted);">${new Date(a.award_date).toLocaleDateString()}</td>
+            </tr>
+          `).join('');
+        }
 
         renderPagination('awards-pagination', res.pagination, 'awards');
       } catch (err) {
-        document.getElementById('awards-table-body').innerHTML = `<tr><td colspan="4" class="py-4 text-center" style="color: var(--text-muted);">${escapeHtml(err.message)}</td></tr>`;
+        document.getElementById('awards-table-body').innerHTML = `<tr><td colspan="5" class="py-4 text-center" style="color: var(--text-muted);">${escapeHtml(err.message)}</td></tr>`;
       }
     }
 

@@ -1,6 +1,11 @@
-import type { ScrapeResult, TenderSource, Tender } from "../types/index.js";
+import type { ScrapeResult, TenderSource, Tender, ContractAward } from "../types/index.js";
 import { logger } from "../utils/logger.js";
-import { persistTenders } from "./persist.js";
+import { persistTenders, persistAwards } from "./persist.js";
+
+// An award pulled out of the same fetch as its tender, keyed by the
+// tender's externalId so it can be linked to the tender's real DB id
+// (and category) only after that tender has actually been persisted.
+export type PendingAward = Partial<ContractAward> & { tenderExternalId: string };
 
 /**
  * Base class for sources with a public JSON/OCDS API (Contracts Finder, Find
@@ -11,10 +16,16 @@ export abstract class ApiScraper {
   abstract readonly source: TenderSource;
   abstract readonly baseUrl: string;
 
+  // Populated by fetchTenders() implementations that also find award data
+  // in the same payload (e.g. OCDS release.awards[]) — cleared at the start
+  // of every scrape() so a subclass instance is safe to reuse across runs.
+  protected pendingAwards: PendingAward[] = [];
+
   async init(): Promise<void> {}
 
   async scrape(): Promise<ScrapeResult> {
     const start = Date.now();
+    this.pendingAwards = [];
     const result: ScrapeResult = {
       source: this.source,
       tendersFound: 0,
@@ -35,6 +46,31 @@ export abstract class ApiScraper {
       result.tendersNew = persisted.persisted;
       if (persisted.failed > 0) {
         result.errors.push(`${persisted.failed} tender(s) failed to persist`);
+      }
+
+      if (this.pendingAwards.length > 0) {
+        const categoryByExternalId = new Map(tenders.map((t) => [t.externalId, t.category]));
+        const titleByExternalId = new Map(tenders.map((t) => [t.externalId, t.title]));
+
+        const awardsToPersist: Partial<ContractAward>[] = this.pendingAwards.map((a) => {
+          const { tenderExternalId, ...award } = a;
+          return {
+            ...award,
+            tenderId: persisted.idsByExternalId.get(tenderExternalId) ?? null,
+            category: categoryByExternalId.get(tenderExternalId) ?? null,
+            tenderTitle: titleByExternalId.get(tenderExternalId) ?? null,
+          };
+        });
+
+        const awardsPersisted = await persistAwards(awardsToPersist);
+        result.awardsFound = this.pendingAwards.length;
+        if (awardsPersisted.failed > 0) {
+          result.errors.push(`${awardsPersisted.failed} award(s) failed to persist`);
+        }
+        logger.info(`API scrape: awards processed for ${this.source}`, {
+          awardsFound: this.pendingAwards.length,
+          awardsPersisted: awardsPersisted.persisted,
+        });
       }
 
       logger.info(`API scrape complete: ${this.source}`, {

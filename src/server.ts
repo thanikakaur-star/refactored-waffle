@@ -373,6 +373,12 @@ app.get("/api/v1/tenders/:id", authMiddleware, async (req, res) => {
 const awardsFilters = z.object({
   tenderId: z.string().uuid().optional(),
   supplierCountry: z.string().max(5).optional(),
+  supplierName: z.string().max(200).optional(),
+  category: z.enum([
+    "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
+    "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
+    "surgical_instruments", "telemedicine", "clinical_services", "social_care", "other",
+  ]).optional(),
   source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "world_bank", "canada_buys", "manual"]).optional(),
   minValue: z.coerce.number().min(0).optional(),
   maxValue: z.coerce.number().min(0).optional(),
@@ -395,6 +401,8 @@ app.get("/api/v1/awards", authMiddleware, async (req: AuthReq, res) => {
     let query = supabase.from("contract_awards").select("*", { count: "exact" });
     if (f.tenderId) query = query.eq("tender_id", f.tenderId);
     if (f.supplierCountry) query = query.eq("supplier_country", f.supplierCountry);
+    if (f.supplierName) query = query.ilike("supplier_name", `%${f.supplierName}%`);
+    if (f.category) query = query.eq("category", f.category);
     if (f.source) query = query.eq("source", f.source);
     if (f.minValue) query = query.gte("award_value_usd", f.minValue);
     if (f.maxValue) query = query.lte("award_value_usd", f.maxValue);
