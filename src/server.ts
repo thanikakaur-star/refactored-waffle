@@ -493,10 +493,8 @@ app.get("/api/v1/sources", authMiddleware, (_req, res) => {
     data: [
       { id: "ted_europa", name: "TED Europa", region: "Europe", url: "https://ted.europa.eu", description: "EU-wide public procurement notices above threshold value.", updateFrequency: "Daily" },
       { id: "sam_gov", name: "SAM.gov", region: "North America", url: "https://sam.gov", description: "U.S. federal government contract opportunities.", updateFrequency: "Daily" },
-      { id: "who_procurement", name: "WHO Procurement", region: "Global", url: "https://www.who.int", description: "World Health Organization procurement notices.", updateFrequency: "Daily" },
-      { id: "nhs_supply_chain", name: "NHS Supply Chain", region: "United Kingdom", url: "https://www.supplychain.nhs.uk", description: "NHS framework agreements and supply contracts.", updateFrequency: "Daily" },
-      { id: "contracts_finder", name: "Contracts Finder", region: "United Kingdom", url: "https://www.contractsfinder.service.gov.uk", description: "UK local authority and lower-value public sector contracts.", updateFrequency: "Daily" },
-      { id: "find_a_tender", name: "Find a Tender", region: "United Kingdom", url: "https://www.find-tender.service.gov.uk", description: "UK central government and above-threshold public contracts.", updateFrequency: "Daily" },
+      { id: "contracts_finder", name: "Contracts Finder", region: "United Kingdom", url: "https://www.contractsfinder.service.gov.uk", description: "UK local authority and lower-value public sector contracts, including NHS trusts.", updateFrequency: "Daily" },
+      { id: "find_a_tender", name: "Find a Tender", region: "United Kingdom", url: "https://www.find-tender.service.gov.uk", description: "UK central government and above-threshold public contracts, including NHS Supply Chain tenders.", updateFrequency: "Daily" },
     ],
   });
 });
