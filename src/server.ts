@@ -802,6 +802,72 @@ app.post("/api/admin/scrape", requireAdmin, async (req, res) => {
   }
 });
 
+// Simple scraper trigger UI (mobile-friendly)
+app.get("/api/admin/scrape-trigger", requireAdmin, (_req, res) => {
+  res.type("text/html").send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Trigger Scraper</title>
+      <style>
+        body { font-family: system-ui; background: #0a0a0f; color: #e2e8f0; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .container { text-align: center; padding: 40px 20px; max-width: 400px; }
+        h1 { margin-bottom: 10px; }
+        p { color: #94a3b8; margin-bottom: 30px; }
+        button { background: #c9a96e; color: #0a0a0f; border: none; padding: 16px 32px; font-size: 16px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        button:hover { background: #d4af37; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        #status { margin-top: 20px; color: #94a3b8; font-size: 14px; min-height: 20px; }
+        .success { color: #0d9488; }
+        .error { color: #dc2626; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>🔄 Scraper Control</h1>
+        <p>Trigger real-time data scrape from all procurement sources</p>
+        <button onclick="triggerScrape()">Start Scrape</button>
+        <div id="status"></div>
+      </div>
+      <script>
+        async function triggerScrape() {
+          const btn = document.querySelector('button');
+          const status = document.getElementById('status');
+          btn.disabled = true;
+          status.textContent = 'Scraping in progress...';
+          status.className = '';
+
+          try {
+            const token = prompt('Enter ADMIN_TOKEN:');
+            if (!token) return;
+
+            const res = await fetch('/api/admin/scrape', {
+              method: 'POST',
+              headers: { 'X-Admin-Token': token },
+            });
+
+            if (!res.ok) {
+              throw new Error(\`Error \${res.status}: \${res.statusText}\`);
+            }
+
+            const data = await res.json();
+            status.textContent = \`✓ Scrape complete! Tenders: \${data.summary?.totalTenders || 0}, Awards: \${data.summary?.totalAwards || 0}\`;
+            status.className = 'success';
+          } catch (err) {
+            status.textContent = \`Error: \${err.message}\`;
+            status.className = 'error';
+          } finally {
+            btn.disabled = false;
+          }
+        }
+      </script>
+    </body>
+    </html>
+  `);
+});
+
 // SEO overview from Google Search Console
 app.get("/api/admin/seo", requireAdmin, async (req, res) => {
   if (!isSearchConsoleConfigured()) {
