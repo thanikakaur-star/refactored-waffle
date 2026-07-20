@@ -74,6 +74,7 @@ Before this was fixed (see git history, "Replace raw Unicode glyph icons with a 
 - **Never fabricate stats.** The landing page previously had "12,000+ tenders / 85 countries / $50B" with no real backing — removed. Any number shown as fact must be true or clearly labeled illustrative/sample.
 - **Source cards must match reality.** If a source has no working scraper, don't give it a card implying live data (this is why WHO/NHS Supply Chain cards were replaced with Find a Tender/Contracts Finder — the sources that actually work).
 - **Mockups/demos get a visible label.** Any illustrative-only view (see `surgical-tenders-demo.html`) carries a persistent "Illustrative preview" badge — never let a mockup look indistinguishable from live data.
+- **Site-wide copy must represent the whole platform, not one category.** The hero headline/API example were briefly rewritten around a single category (surgical instruments) after a run of client-demo work — this wrongly narrowed the platform's identity in copy every visitor sees. Category-specific language belongs in a demo/pitch artifact for that client, never in `public/index.html` or `dashboard/index.html`'s primary messaging. The product spans medical devices, pharmaceuticals, diagnostics, surgical instruments, PPE, health IT, clinical services, social care, and more — hero copy, examples, and stats should reflect that breadth, not whichever category was most recently discussed.
 
 ## Anti-patterns already fixed (don't reintroduce)
 
