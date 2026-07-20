@@ -1407,7 +1407,7 @@
         <p class="text-xs" style="color: var(--text-muted);">Showing ${(page-1)*pageSize+1}–${Math.min(page*pageSize, total)} of ${total}</p>
         <div class="flex gap-2">
           <button class="px-3 py-1 rounded text-sm ${page <= 1 ? 'opacity-30' : ''}" style="${btnStyle}" ${page <= 1 ? 'disabled' : ''} onclick="paginate('${type}', ${page-1})">Prev</button>
-          <span class="px-3 py-1 text-sm" style="color: var(--text-muted);">${page} / ${totalPages}</span>
+          <span class="px-3 py-1 text-sm font-semibold" style="color: white;">${page} / ${totalPages}</span>
           <button class="px-3 py-1 rounded text-sm ${page >= totalPages ? 'opacity-30' : ''}" style="${btnStyle}" ${page >= totalPages ? 'disabled' : ''} onclick="paginate('${type}', ${page+1})">Next</button>
         </div>
       `;
