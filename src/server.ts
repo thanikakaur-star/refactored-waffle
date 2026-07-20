@@ -67,7 +67,7 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
 
   const STRIPE_PRICES: Record<string, ApiTier> = {
     "price_1TlrIaC3JZLLw9RVctcI96FW": "enterprise",
-    "price_1TlrI0C3JZLLw9RVM2BRHEy9": "pro",
+    "price_1TvExtC3JZLLw9RVXpliAtZR": "pro",
     "price_1TlrGvC3JZLLw9RVUSzeqONA": "basic",
   };
 
@@ -741,7 +741,7 @@ app.get("/api/v1/pricing", (_req, res) => {
     data: [
       { tier: "free", name: "Free", price: 0, requestsPerDay: 100, maxPageSize: 20, benchmarks: false },
       { tier: "basic", name: "Basic", price: 4900, stripePriceId: "price_1TlrGvC3JZLLw9RVUSzeqONA", requestsPerDay: 1000, maxPageSize: 50, benchmarks: false },
-      { tier: "pro", name: "Pro", price: 19900, stripePriceId: "price_1TlrI0C3JZLLw9RVM2BRHEy9", requestsPerDay: 10000, maxPageSize: 200, benchmarks: true, featured: true },
+      { tier: "pro", name: "Pro", price: 19900, stripePriceId: "price_1TvExtC3JZLLw9RVXpliAtZR", requestsPerDay: 10000, maxPageSize: 200, benchmarks: true, featured: true },
       { tier: "enterprise", name: "Enterprise", price: 49900, stripePriceId: "price_1TlrIaC3JZLLw9RVctcI96FW", requestsPerDay: -1, maxPageSize: 500, benchmarks: true },
     ],
   });
