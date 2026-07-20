@@ -241,10 +241,10 @@
             5 procurement portals &middot; scraped daily &middot; zero manual checking
           </p>
           <h1 class="fade-up font-display text-4xl sm:text-5xl lg:text-[3.4rem] font-bold leading-[1.1] tracking-tight mb-7 text-white" style="text-wrap: balance;">
-            Stop refreshing five government portals to find <em class="italic text-gold">one</em> surgical tender.
+            Stop refreshing five government portals for <em class="italic text-gold">every</em> healthcare tender.
           </h1>
           <p class="fade-up max-w-xl text-lg text-gray-400 leading-relaxed mb-9 font-light">
-            TED Europa, SAM.gov, UK Find a Tender, Contracts Finder, and the World Bank — normalized into one searchable feed, with CPV classification and daily alerts, so the opportunity finds you instead.
+            Medical devices, pharmaceuticals, diagnostics, surgical instruments, PPE, health IT, and more — TED Europa, SAM.gov, UK Find a Tender, Contracts Finder, and the World Bank, normalized into one searchable feed with CPV classification and daily alerts.
           </p>
           <div class="fade-up flex flex-col sm:flex-row items-start gap-4 mb-10">
             <a href="#cta" class="w-full sm:w-auto text-center px-8 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-base hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-xl shadow-gold/20 hover:shadow-gold/30">
@@ -270,20 +270,23 @@
               <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
               <span class="w-3 h-3 rounded-full bg-yellow-500/60"></span>
               <span class="w-3 h-3 rounded-full bg-green-500/60"></span>
-              <span class="ml-3 text-xs text-gray-500 font-mono hidden sm:inline">GET /api/v1/tenders?category=surgical_instruments&status=open</span>
+              <span class="ml-3 text-xs text-gray-500 font-mono hidden sm:inline">GET /api/v1/tenders?status=open&limit=3</span>
               <span class="ml-3 text-xs text-gray-500 font-mono sm:hidden">GET /api/v1/tenders</span>
             </div>
             <pre class="p-4 sm:p-5 text-[11px] sm:text-sm font-mono leading-relaxed overflow-x-auto text-left"><code><span class="code-comment">// 200 OK</span>
 {
   <span class="code-key">"page"</span>: <span class="code-number">1</span>,
-  <span class="code-key">"data"</span>: [{
-    <span class="code-key">"title"</span>: <span class="code-string">"Framework — Laparoscopic &amp; General</span>
-<span class="code-string">      Surgical Instruments"</span>,
-    <span class="code-key">"source"</span>: <span class="code-string">"find_a_tender"</span>,
-    <span class="code-key">"cpv_codes"</span>: [<span class="code-string">"33169000"</span>],
-    <span class="code-key">"category"</span>: <span class="code-string">"surgical_instruments"</span>,
-    <span class="code-key">"status"</span>: <span class="code-string">"open"</span>
-  }]
+  <span class="code-key">"data"</span>: [
+    { <span class="code-key">"title"</span>: <span class="code-string">"MRI Equipment Supply Framework"</span>,
+      <span class="code-key">"category"</span>: <span class="code-string">"medical_devices"</span>,
+      <span class="code-key">"source"</span>: <span class="code-string">"ted_europa"</span> },
+    { <span class="code-key">"title"</span>: <span class="code-string">"Occupational Health Counselling"</span>,
+      <span class="code-key">"category"</span>: <span class="code-string">"clinical_services"</span>,
+      <span class="code-key">"source"</span>: <span class="code-string">"find_a_tender"</span> },
+    { <span class="code-key">"title"</span>: <span class="code-string">"Laparoscopic Surgical Instruments"</span>,
+      <span class="code-key">"category"</span>: <span class="code-string">"surgical_instruments"</span>,
+      <span class="code-key">"source"</span>: <span class="code-string">"contracts_finder"</span> }
+  ]
 }</code></pre>
           </div>
           <p class="mt-4 text-xs text-gray-600 font-mono pl-1">Illustrative response shape — real data at /docs</p>
