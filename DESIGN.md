@@ -2,17 +2,18 @@
 
 ## Overview
 
-HealthProcure Intel's design is a **data-first aesthetic inspired by Apple's product-reverent minimalism** — applied to global procurement intelligence. Every page is organized around one job: **make real procurement data the hero**. UI recedes. Noise disappears. Tenders, awards, benchmarks, and alerts stand alone.
+HealthProcure Intel's design is a **luxury intelligence aesthetic** — black and gold paired with Apple's product-reverent minimalism, applied to global procurement intelligence. Every page is organized around one job: **make real procurement data the hero**. UI recedes. Noise disappears. Tenders, awards, benchmarks, and alerts stand alone.
 
-The system uses **alternating full-bleed sections** (light ↔ dark) with a single gold accent (`#c9a96e`) for every interactive element. Color changes provide all visual hierarchy — no gradients, no decorative shadows, no chrome. Photography is honest. Data tables breathe. Typography is confident but quiet.
+The system uses **alternating full-bleed sections** (white ↔ black) with a single gold accent (`#c9a96e`) for every interactive element. The black-and-gold pairing creates maximum contrast and editorial gravitas. Color changes provide all visual hierarchy — no gradients, no decorative shadows, no chrome. Photography is honest. Data tables breathe. Typography is confident but quiet.
 
 **Key Characteristics:**
 - Data-first presentation; UI recedes so intelligence can speak.
-- Alternating full-bleed tile sections: white ↔ dark navy/slate, with color change acting as the section divider.
+- **Black and gold aesthetic:** Pure black (`#000000`) dark sections paired with warm gold (`#c9a96e`) for maximum contrast and brand gravitas.
+- Alternating full-bleed tile sections: white ↔ pure black, with color change acting as the section divider.
 - Single gold accent (`#c9a96e`) carries every interactive element; teal (`#0d9488`) is reserved for secondary actions and status on dark surfaces.
 - Whisper-soft elevation used only for data cards during hover or sticky bars with backdrop blur.
-- Tight two-row nav: slim global nav + persistent context-specific sub-nav.
-- Section rhythm: light data showcase → dark analytics tile → light filter/search → dark awards panel — a predictable pulse.
+- Tight two-row nav: slim global nav (black with gold logo) + persistent context-specific sub-nav.
+- Section rhythm: light data showcase → pure black analytics tile → light filter/search → pure black awards panel — a bold, predictable pulse.
 
 ---
 
@@ -33,10 +34,10 @@ The system uses **alternating full-bleed sections** (light ↔ dark) with a sing
 
 ### Surface — Dark
 
-- **Navy Tile 1** (`#0f172a`): The primary dark-tile surface. Used for dark sections, dark cards, and the main dashboard background.
-- **Navy Tile 2** (`#1e293b`): A micro-step lighter — used where dark tiles sit adjacent to create faint separation.
-- **Navy Tile 3** (`#0a0e27`): A micro-step darker — used for embedded content, video frames, and the global nav background.
-- **Pure Black** (`#000000`): Reserved for edge-to-edge overlays and true void.
+- **Pure Black** (`#000000`): The primary dark-tile surface on the dashboard and dark panels. Paired with gold for maximum contrast and luxury intelligence aesthetic.
+- **Black Elevated** (`#0a0a0f`): Micro-step lighter than pure black — used for card backgrounds and slight elevation separation.
+- **Black Alt** (`#121212`): Another micro-step for subtle tier separation in nested dark surfaces.
+- **Charcoal** (`#1a1a1a`): Used for embedded content frames, video backgrounds, and edge-to-edge darkest overlays. Reserved for maximum visual weight.
 
 ### Text
 
@@ -159,7 +160,7 @@ Every section begins with at least 48px of air above its headline and 32–48px 
 
 ### Navigation
 
-**`global-nav`** — Persistent ultra-slim nav bar at top. Background `#0a0e27` (Navy Tile 3 / near-black), height 44px. Left: HealthProcure logo in white. Center: links ("Tenders", "Awards", "Benchmarks", "Alerts", "Docs") in `nav-link` (12px / 400 / white). Right: Search icon + API key indicator. No shadows. Quiet, minimal.
+**`global-nav`** — Persistent ultra-slim nav bar at top. Background `#000000` (pure black), height 44px. Left: HealthProcure logo in gold. Center: links ("Tenders", "Awards", "Benchmarks", "Alerts", "Docs") in `nav-link` (12px / 400 / white). Right: Search icon + API key indicator. No shadows. Bold and minimal.
 
 **`sub-nav-sticky`** — Surface-specific sticky bar below global nav. Background `#f8fafc` (off-white) at 90% opacity with `backdrop-filter: blur(20px)`. Height 48px. Left: section name in `tagline` (21px / 600). Right: filter count, sort toggle, primary CTA. Pinned during scroll.
 
@@ -187,13 +188,13 @@ Every section begins with at least 48px of air above its headline and 32–48px 
 
 **`tile-off-white`** — Alternate light tile on `#f8fafc`. Used to break consecutive white tiles.
 
-**`tile-dark`** — Full-bleed dark tile. Background `#0f172a`, text `#ffffff`, `none` radius, padding 64px. Uses `text-link-on-dark` (teal) for inline copy.
+**`tile-dark`** — Full-bleed dark tile. Background `#000000` (pure black), text `#ffffff`, `none` radius, padding 64px. Uses `text-link-on-dark` (teal) for inline copy. Maximum contrast with gold CTAs.
 
-**`tile-dark-2`** — Variant on `#1e293b`. Used where dark tiles sit adjacent for faint separation.
+**`tile-dark-2`** — Variant on `#0a0a0f`. Used where dark tiles sit adjacent for faint separation via micro-step.
 
 **`dashboard-panel`** — Data-focused panel. Background `#ffffff`, subtle border `1px solid #e2e8f0`, `md` radius (8px), padding 24px 20px. Contains title, filters, data table/card grid, pagination at bottom.
 
-**`dashboard-panel-dark`** — Same as `dashboard-panel` but background `#0f172a`, text `#ffffff`, border `rgba(255, 255, 255, 0.1)`.
+**`dashboard-panel-dark`** — Same as `dashboard-panel` but background `#000000` (pure black), text `#ffffff`, border `rgba(201, 169, 110, 0.2)` (gold-tinted hairline for brand).
 
 ### Inputs & Forms
 
