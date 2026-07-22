@@ -1,94 +1,328 @@
 # HealthProcure Intel — Design System
 
-This documents the visual identity actually in production across `public/index.html` (landing page) and `dashboard/index.html` (product). It exists so future changes — new source cards, new panels, new pages — extend the same system instead of drifting into generic template patterns. If you're adding UI, read this first.
+## Overview
 
-## Design principles
+HealthProcure Intel's design is a **data-first aesthetic inspired by Apple's product-reverent minimalism** — applied to global procurement intelligence. Every page is organized around one job: **make real procurement data the hero**. UI recedes. Noise disappears. Tenders, awards, benchmarks, and alerts stand alone.
 
-1. **Dark, gold, editorial-precision — not generic SaaS.** The identity is a near-black ground with a warm gold accent and serif display type, closer to a private banking or intelligence-briefing aesthetic than a typical dashboard template. Protect that; don't default to purple gradients, Inter-everywhere, or rounded-everything.
-2. **Every icon means something.** No decorative Unicode glyphs, no emoji as section markers, no sparkles (✦) as a "magic" motif. If you need an icon, draw a small inline SVG in the house style (below) that actually represents the thing it labels.
-3. **Real data, or clearly marked as illustrative.** Never present fabricated numbers as live stats. If something is a mockup/demo, label it visibly.
-4. **Honor what's already there.** Match existing tokens and patterns before introducing new ones. A new source card should look like the other four source cards.
+The system uses **alternating full-bleed sections** (light ↔ dark) with a single gold accent (`#c9a96e`) for every interactive element. Color changes provide all visual hierarchy — no gradients, no decorative shadows, no chrome. Photography is honest. Data tables breathe. Typography is confident but quiet.
 
-## Color tokens
+**Key Characteristics:**
+- Data-first presentation; UI recedes so intelligence can speak.
+- Alternating full-bleed tile sections: white ↔ dark navy/slate, with color change acting as the section divider.
+- Single gold accent (`#c9a96e`) carries every interactive element; teal (`#0d9488`) is reserved for secondary actions and status on dark surfaces.
+- Whisper-soft elevation used only for data cards during hover or sticky bars with backdrop blur.
+- Tight two-row nav: slim global nav + persistent context-specific sub-nav.
+- Section rhythm: light data showcase → dark analytics tile → light filter/search → dark awards panel — a predictable pulse.
 
-Defined as CSS custom properties in both `public/index.html` (Tailwind config + inline vars) and `dashboard/index.html` (`:root`). Keep them in sync if you change one.
+---
 
-| Token | Value | Use |
-|---|---|---|
-| `--bg-base` | `#0a0a0f` | Page background |
-| `--bg-card` | `#12141d` | Card/panel surfaces |
-| `--bg-input` | `#1a1d28` | Form inputs, chips, filter pills |
-| `--bg-elevated` | `#171a24` | Slightly-raised surfaces (landing page code blocks, chrome bars) |
-| `--gold` | `#c9a96e` | Primary accent — links, active states, primary CTAs |
-| `--gold-highlight` / `--gold-bright` | `#d4af37` | Gradient endpoint, hover emphasis |
-| `--gold-dim` | `#8a7550` | Muted gold — secondary labels, CPV codes |
-| `--teal` | `#0d9488` (dashboard) / `#14b8a6` (demo artifact) | Semantic "open/active" status — **not** a second brand accent, keep it purely semantic |
-| `--text-primary` | `#e2e8f0` | Headings, primary copy |
-| `--text-secondary` | `#94a3b8` | Body copy, descriptions |
-| `--text-muted` | `#64748b` | Captions, timestamps, placeholder-weight text |
-| `--border-gold` | `rgba(201,169,110,0.15)` | Default card/input borders |
-| `--border-gold-hover` | `rgba(201,169,110,0.35)` | Hover/focus border state |
+## Colors
 
-**Status colors** (semantic, separate from the gold/teal accent system):
-- Success/open: `#10b981`
-- Error/warning: `#f43f5e`
+### Brand & Action
 
-**Light theme**: not yet built for the dashboard/landing page (both are dark-only by design, matching the "private intelligence briefing" identity). The one-off demo artifact (`surgical-tenders-demo.html`) does implement both themes via `:root[data-theme]` — use that file as the reference if a light variant is ever needed here.
+- **Action Gold** (`#c9a96e`): The single brand-level interactive color. All text links, pill CTAs ("View Tender", "Create Alert"), and focus rings. Press state via `transform: scale(0.95)`.
+- **Focus Gold** (`#d4af37`): A brighter sibling of Action Gold, reserved for keyboard focus rings on buttons (`outline: 2px solid`).
+- **Status Teal** (`#0d9488`): Secondary accent used on dark surfaces for inline links, secondary buttons, and status indicators where Action Gold would disappear.
+- **Teal Light** (`#14b8a6`): Brighter teal for hover states and emphasis on status elements.
+
+### Surface — Light
+
+- **Pure White** (`#ffffff`): The dominant canvas. Data tables, cards, filter rows, form inputs. Clean, uncluttered.
+- **Off-White** (`#f8fafc`): A signature off-white for alternating light tiles and card backgrounds. Just different enough from white to create rhythm.
+- **Slate 50** (`#f9fafb`): Secondary light surfaces and subtle backgrounds behind interactive elements.
+
+### Surface — Dark
+
+- **Navy Tile 1** (`#0f172a`): The primary dark-tile surface. Used for dark sections, dark cards, and the main dashboard background.
+- **Navy Tile 2** (`#1e293b`): A micro-step lighter — used where dark tiles sit adjacent to create faint separation.
+- **Navy Tile 3** (`#0a0e27`): A micro-step darker — used for embedded content, video frames, and the global nav background.
+- **Pure Black** (`#000000`): Reserved for edge-to-edge overlays and true void.
+
+### Text
+
+- **Ink Dark** (`#1e293b`): Every headline, body paragraph, and utility button text on light surfaces.
+- **Ink on Dark** (`#ffffff`): All text on dark tiles and the global nav.
+- **Ink Muted** (`#64748b`): Secondary copy, captions, disabled states, helper text.
+- **Ink Muted Strong** (`#475569`): Body text on subtle backgrounds.
+
+### Hairlines & Borders
+
+- **Divider Soft** (`#e2e8f0`): Border tone on secondary buttons and card dividers — functions as a subtle ring rather than a hard line.
+- **Divider Subtle** (`#cbd5e1`): The 1px hairline on cards and inputs.
+- **Gold Soft** (`rgba(201, 169, 110, 0.2)`): Soft gold divider, used sparingly on data section breaks.
+
+**No gradients.** Depth comes from surface color change and soft shadows — never from CSS gradients. Atmospheric imagery (if used) is photographic, not computed.
+
+---
 
 ## Typography
 
-Three faces, each with a specific job — don't blend their roles.
+### Font Family
 
-- **Playfair Display** (serif, weights 600–800) — display face. Headlines, section titles, the logo mark, panel headers. Used *sparingly*: it's what makes this feel editorial rather than templated. Never use it for body copy or UI labels.
-- **Inter** (sans, weights 400–700) — body face. Running copy, buttons, nav, form labels, table content. The workhorse.
-- **JetBrains Mono** — utility face, used in the demo artifact for data-heavy contexts (CPV codes, API responses, timestamps). Not yet adopted in the main dashboard/landing page but is the right choice if you add a code block or data-table-heavy view — `font-variant-numeric: tabular-nums` wherever digits line up in columns.
+- **Display**: `SF Pro Display, system-ui, -apple-system, sans-serif` — optimized for sizes ≥ 19px.
+- **Body / UI**: `SF Pro Text, system-ui, -apple-system, sans-serif` — text-optimized for body, captions, buttons, links below 20px.
+- **Serif Display** (alternative): `Playfair Display, Georgia, serif` — for headline emphasis on landing page hero (optional; SF Pro Display is preferred).
+- **Monospace**: `SF Mono, Monaco, Courier New, monospace` — for tender IDs, contract values, timestamps in tables.
+- **OpenType**: `font-variant-numeric: tabular-nums` on all contract values and dates for alignment in tables.
 
-Both `public/index.html` and `dashboard/index.html` load fonts via Google Fonts `<link>` tags (not inlined) — fine for those pages since they're not sandboxed Artifacts. If you ever port this identity into an Artifact, fonts must be inlined as `@font-face` data URIs instead (the Artifact CSP blocks font CDNs).
+### Hierarchy
 
-## Icons
+| Role | Size | Weight | Line Height | Letter Spacing | Use |
+|---|---|---|---|---|---|
+| `hero-display` | 56px | 600 | 1.07 | -0.28px | Page hero headline; signature "tight" cadence |
+| `display-lg` | 40px | 600 | 1.10 | 0px | Section headlines; "Five Markets, One Feed" |
+| `display-md` | 34px | 600 | 1.47 | -0.374px | Subsection headers; panel titles on dashboard |
+| `lead` | 28px | 400 | 1.14 | 0.196px | Tile subheadings; tender titles in list |
+| `tagline` | 21px | 600 | 1.19 | 0.231px | Sub-tile tagline; nav category names |
+| `body-strong` | 17px | 600 | 1.24 | -0.374px | Inline strong (supplier names, bold labels) |
+| `body` | 17px | 400 | 1.47 | -0.374px | Default paragraph; table body text; filter labels |
+| `body-mono` | 16px | 400 | 1.5 | 0px | Tender IDs, contract values in tables (tabular) |
+| `caption` | 14px | 400 | 1.43 | -0.224px | Secondary captions, button text, helper text |
+| `caption-strong` | 14px | 600 | 1.29 | -0.224px | Emphasized captions; modal headers |
+| `button` | 15px | 600 | 1.0 | -0.224px | Action buttons; "Create Alert", "View Tender" |
+| `fine-print` | 12px | 400 | 1.0 | -0.12px | Footer body, legal disclaimers |
+| `micro-legal` | 10px | 400 | 1.3 | -0.08px | Micro legal, attribution |
+| `nav-link` | 12px | 400 | 1.0 | -0.12px | Global nav menu items, breadcrumbs |
 
-**Rule: hand-drawn inline SVG only. Never Unicode glyphs, never emoji, never icon-font ligatures.**
+### Principles
 
-House style, matched across the dashboard's sidebar/KPI icons and the landing page's source-card icons:
-```html
-<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-  <!-- shape -->
-</svg>
-```
-- `viewBox="0 0 20 20"` for compact UI icons (sidebar, KPI cards), `0 0 24 24` for larger ones (welcome states, empty states)
-- `stroke-width` 1.4–1.6 — thin, precise, matches the editorial tone. Never filled/solid icons.
-- Color via `stroke="currentColor"` so it inherits the parent's text color (active/hover states just work)
-- Rendered size: 14–17px for inline/sidebar icons, 26–28px for empty-state/welcome icons
+- **Negative letter-spacing at display sizes.** Every headline at 17px and up carries slight tracking tighten (`-0.12 → -0.374px`). Produces the iconic "tight" cadence. Never at 12px or below.
+- **Body copy at 17px, not 16px.** The extra pixel gives the page an unmistakable "reading, not scanning" pace.
+- **Weight 600 for headlines, 400 for body.** Ladder is 400 / 600 / 700. No 500. Strong inline uses 600; display uses 600; body stays 400.
+- **Line-height is context-specific.** Display uses 1.07–1.19 (tight). Body uses 1.47. Data tables use 1.5.
+- **Monospace for numeric data.** Tender IDs, contract values, dates use `body-mono` with `font-variant-numeric: tabular-nums` for vertical alignment in tables.
 
-Before this was fixed (see git history, "Replace raw Unicode glyph icons with a coherent SVG icon set"), the dashboard used things like ♦ for "Total Tenders" and a generic ⚕ caduceus for the welcome state — arbitrary symbols with no real connection to what they labeled. Don't reintroduce that pattern. If you need a new icon and don't have a clean idea, a five-node network graph (aggregation), a grid (overview), a document with lines (tenders), a ribbon/medal (awards), ascending bars (benchmarks), a stacked-ellipse database shape (sources), and a bell (alerts) are the ones already established — reuse or extend the same visual language rather than inventing a new one.
+---
 
-## Layout patterns
+## Layout
 
-- **Cards**: `border-radius: 12px` (`.glass-card` / `rounded-2xl`), `1px solid var(--border-gold)` border, subtle `translateY(-2px)` lift + border-brighten on hover. No accent-bar-sweep-on-hover effects (removed as a generic-template tell — see git history).
-- **Grids**: source/product cards use `grid-cols-1 md:grid-cols-N` responsive grids, not fixed pixel widths.
-- **Hero sections**: asymmetric two-column (thesis statement + supporting visual/data), not centered-everything with a decorative badge pill. The landing page hero was rebuilt around this principle — see `public/index.html` for the reference pattern.
-- **Filter rows**: `flex gap-3 flex-wrap`, consistent `text-sm rounded-lg px-3 py-2` styling on all selects/inputs within a row, search inputs get a left-padded magnifying-glass SVG icon.
+### Spacing System
 
-## Content rules
+- **Base unit:** 8px. Structural layout snaps to 8/12/16/20/24/32/48/64/80.
+- **Tokens:**
+  - `xs` 4px — tight typographic adjustments
+  - `sm` 8px — compact card padding
+  - `md` 12px — standard gutters
+  - `lg` 16px — standard padding
+  - `xl` 24px — section padding, card spacing
+  - `2xl` 32px — large section padding
+  - `3xl` 48px — hero vertical padding
+  - `section` 64px — full-bleed tile vertical padding
 
-- **Never fabricate stats.** The landing page previously had "12,000+ tenders / 85 countries / $50B" with no real backing — removed. Any number shown as fact must be true or clearly labeled illustrative/sample.
-- **Source cards must match reality.** If a source has no working scraper, don't give it a card implying live data (this is why WHO/NHS Supply Chain cards were replaced with Find a Tender/Contracts Finder — the sources that actually work).
-- **Mockups/demos get a visible label.** Any illustrative-only view (see `surgical-tenders-demo.html`) carries a persistent "Illustrative preview" badge — never let a mockup look indistinguishable from live data.
-- **Site-wide copy must represent the whole platform, not one category.** The hero headline/API example were briefly rewritten around a single category (surgical instruments) after a run of client-demo work — this wrongly narrowed the platform's identity in copy every visitor sees. Category-specific language belongs in a demo/pitch artifact for that client, never in `public/index.html` or `dashboard/index.html`'s primary messaging. The product spans medical devices, pharmaceuticals, diagnostics, surgical instruments, PPE, health IT, clinical services, social care, and more — hero copy, examples, and stats should reflect that breadth, not whichever category was most recently discussed.
+- **Section vertical padding:** 64px inside full-bleed tiles; tiles stack edge-to-edge with 0 gap (color change provides the break).
+- **Card padding:** 16px inside data cards.
+- **Button padding:** 10–12px vertical, 18–24px horizontal.
+- **Universal rhythm constant:** 17px body line-height (~26px line) — every page uses this pulse.
 
-## Anti-patterns already fixed (don't reintroduce)
+### Grid & Container
 
-These were identified and removed this session as generic "AI-generated design" tells — listed explicitly so they don't creep back in:
+- **Max content width:** 1280px on dashboard and data-heavy sections; 1440px on landing page; full-bleed for hero tiles.
+- **Column patterns:** Single-column centered stack on heroes; 2–3 column grids on data cards; full-bleed alternating tiles on marketing pages.
+- **Gutters:** 16–20px between cards in a grid.
 
-- Centered hero with a gradient-shimmer animated headline
-- Uppercase glass pill badge with a pulsing dot ("● B2B Intelligence Platform")
-- Accent bar that sweeps across the top of a card on hover
-- Raw Unicode/emoji used as icons (♦ ★ ⚕ ✦ etc.)
-- Fabricated round-number stats with no real source
-- Stale copy that doesn't match the actual product (e.g. "Four Pillars" after a fifth source shipped)
+### Whitespace Philosophy
 
-## Where things live
+Every section begins with at least 48px of air above its headline and 32–48px below. Data cards are never crowded; nearest content to a data element is at least 24px away. This makes complex data breathable.
 
-- `public/index.html` — marketing/landing page (Tailwind CDN + inline config)
-- `dashboard/index.html` — the product itself (Tailwind CDN + Chart.js, vanilla JS)
-- No shared CSS file — tokens are duplicated as `:root` custom properties in each file. Keep them in sync manually until/unless these are consolidated into a shared stylesheet.
+---
+
+## Elevation & Depth
+
+| Level | Treatment | Use |
+|---|---|---|
+| Flat | No shadow, no border | Full-bleed tiles, nav, body sections |
+| Soft hairline | 1px `rgba(0, 0, 0, 0.08)` | Data cards, input fields |
+| Subtle shadow | `rgba(0, 0, 0, 0.04) 0px 1px 3px` | Hovered data cards, tooltips |
+| Backdrop blur | `backdrop-filter: blur(20px)` on off-white 80% | Sticky header bar, modal backdrop |
+| Card lift shadow | `rgba(201, 169, 110, 0.1) 0px 4px 12px` | Data card on hover — the only gold-tinted shadow |
+
+**Shadow philosophy.** Use exactly one soft shadow: on data cards during hover. Elevation otherwise comes from (a) surface-color change and (b) backdrop-blur on sticky bars. Reserve color-tinted shadows for subtle brand moments.
+
+---
+
+## Shapes
+
+### Border Radius Scale
+
+| Token | Value | Use |
+|---|---|---|
+| `none` | 0px | Full-bleed hero tiles |
+| `xs` | 4px | Tight inline elements (badges) |
+| `sm` | 6px | Small utility buttons, compact inputs |
+| `md` | 8px | Data cards, filter inputs |
+| `lg` | 12px | Larger card groups, modal corners |
+| `pill` | 9999px | Primary gold pill CTAs, search input, filter pills |
+
+---
+
+## Components
+
+### Navigation
+
+**`global-nav`** — Persistent ultra-slim nav bar at top. Background `#0a0e27` (Navy Tile 3 / near-black), height 44px. Left: HealthProcure logo in white. Center: links ("Tenders", "Awards", "Benchmarks", "Alerts", "Docs") in `nav-link` (12px / 400 / white). Right: Search icon + API key indicator. No shadows. Quiet, minimal.
+
+**`sub-nav-sticky`** — Surface-specific sticky bar below global nav. Background `#f8fafc` (off-white) at 90% opacity with `backdrop-filter: blur(20px)`. Height 48px. Left: section name in `tagline` (21px / 600). Right: filter count, sort toggle, primary CTA. Pinned during scroll.
+
+### Buttons
+
+**`button-primary`** — Signature action. Background `#c9a96e`, text `#0f172a` (ink dark), `button` size (15px / 600), rounded `pill`, padding 11px × 24px. Full-pill radius IS the brand signal.
+- Active: `transform: scale(0.95)`
+- Focus: 2px solid `#d4af37` outline
+
+**`button-secondary`** — When a second action exists. Border `1px solid #c9a96e`, text `#c9a96e`, background transparent, `pill` radius, padding 11px × 24px.
+
+**`button-tertiary`** — On dark surfaces. Border `1px solid #0d9488`, text `#0d9488`, background transparent, `md` radius (8px), padding 9px × 16px.
+
+**`button-icon`** — Compact utility. Background `#f8fafc`, text `#1e293b`, 32 × 32px, `md` radius, no padding (icon centered).
+
+**`text-link`** — Inline body links in `#c9a96e`, no underline by default, underline on hover.
+
+**`text-link-on-dark`** — Inline links on dark tiles in `#0d9488` (Status Teal).
+
+### Cards & Containers
+
+**`data-card`** — Light card on light background. Background `#ffffff`, 1px solid `#e2e8f0`, `md` radius (8px), padding 16px. Lift shadow on hover (`rgba(201, 169, 110, 0.1) 0px 4px 12px`). Used for tender rows, awards, alert configs.
+
+**`tile-light`** — Full-bleed light tile. Background `#ffffff`, text `#1e293b`, `none` radius (0), vertical padding 64px, horizontal padding 32px. Centered stack: headline + supporting text + CTA + optional visualization.
+
+**`tile-off-white`** — Alternate light tile on `#f8fafc`. Used to break consecutive white tiles.
+
+**`tile-dark`** — Full-bleed dark tile. Background `#0f172a`, text `#ffffff`, `none` radius, padding 64px. Uses `text-link-on-dark` (teal) for inline copy.
+
+**`tile-dark-2`** — Variant on `#1e293b`. Used where dark tiles sit adjacent for faint separation.
+
+**`dashboard-panel`** — Data-focused panel. Background `#ffffff`, subtle border `1px solid #e2e8f0`, `md` radius (8px), padding 24px 20px. Contains title, filters, data table/card grid, pagination at bottom.
+
+**`dashboard-panel-dark`** — Same as `dashboard-panel` but background `#0f172a`, text `#ffffff`, border `rgba(255, 255, 255, 0.1)`.
+
+### Inputs & Forms
+
+**`input-text`** — Text and number inputs. Background `#ffffff`, text `#1e293b`, 1px solid `#cbd5e1`, `md` radius (6px), padding 10px 12px. Focus: border becomes `#c9a96e`.
+
+**`input-search`** — Search field. Background `#ffffff`, text `#1e293b`, 1px solid `#e2e8f0`, `pill` radius, padding 12px 16px, 44px height. Leading search glyph (14px, muted). Focus: border `#c9a96e`.
+
+**`filter-select`** — Dropdown or toggle. Background `#f8fafc`, border `1px solid #cbd5e1`, text `#1e293b` in `body`, `md` radius, padding 8px 12px. Active: border `#c9a96e`, background `rgba(201, 169, 110, 0.05)`.
+
+**`filter-pill`** — Removable filter tag. Background `rgba(201, 169, 110, 0.15)`, text `#c9a96e` (bold), `pill` radius, padding 6px 10px, trailing `×` close.
+
+### Tables & Lists
+
+**`table-header`** — Background `#f8fafc`, text `#64748b` in `caption` (14px / 400), uppercase, letter-spaced. Sortable headers show small arrow.
+
+**`table-row`** — Alternating `#ffffff` and `#f8fafc` backgrounds. Text in `body` (17px / 400), padding 12px. Hover: background shifts, subtle `rgba(201, 169, 110, 0.04)` tint.
+
+**`tender-row`** — Shows: tender title (bold), category tag, source badge, value (right-aligned, tabular-nums), deadline countdown. Clickable for detail expand.
+
+**`award-row`** — Shows: supplier name (bold), tender title, value, award date, status badge. Linked to supplier/tender detail.
+
+### Status & Badges
+
+**`badge-category`** — Procurement category label. Background `rgba(201, 169, 110, 0.15)`, text `#c9a96e` in `caption`, `xs` radius, padding 3px 8px.
+
+**`badge-source`** — Data source label (TED Europa, SAM.gov, etc.). Background `rgba(13, 148, 136, 0.15)`, text `#0d9488`, `xs` radius, padding 3px 8px.
+
+**`badge-status`** — Contextual status:
+- Open: teal background/text
+- Awarded: gold background, dark text
+- Closed: gray background/text
+- New: small green dot + "New" label
+
+### Pagination
+
+**`pagination-controls`** — Flex row at bottom of data panels. Text "Showing X–Y of Z" in `caption`. Buttons: `button-tertiary` for prev/next, bold `#c9a96e` text for current page (e.g., "3 / 8"). Prev/next disabled (opacity 0.4) at boundary.
+
+---
+
+## Layout Patterns
+
+### Hero Section (Landing Page)
+
+**Asymmetric two-column layout:**
+- **Left column** (60%): Headline in `hero-display` (56px / 600), subhead in `lead` (28px), two pill CTAs, supporting stats in small text.
+- **Right column** (40%): Live data feed, animated tender cards, or dashboard preview. Minimal chrome.
+
+**Spacing:** 80px top/bottom padding, 40px horizontal gutters.
+
+### Dashboard Section
+
+**Sticky filter bar at top:**
+- Horizontal flex: filter pills (category, source, date) on left, sort/view toggle on right.
+- Pinned during scroll; unpin on mobile.
+
+**Data panel below:**
+- Panel title in `display-md` (34px).
+- Data table or card grid filling space.
+- Pagination at bottom.
+
+**Dark alternate panels** (Awards, Alerts) use `tile-dark` pattern.
+
+### Icons
+
+**Rule: hand-drawn inline SVG only. Never Unicode glyphs, emoji, or icon-font ligatures.**
+
+- **House style:** thin-stroke SVG, 1.6px stroke width, 14–17px rendered size, `stroke="currentColor"` so color inherits from parent text (active/hover states just work).
+- **Sidebar icons:** Grid (tenders), Document (awards), Ribbon (benchmarks), Bar chart (analytics), Database (sources), Bell (alerts) — thin stroke, minimal detail, semantic.
+- **Status indicators:** Dot + label (Open/Awarded/Closed) — no pictorial icon, just a colored dot.
+- **Button icons:** Chevron (expand), X (close), Magnifying glass (search), Caret (sort) — all thin-stroke, currentColor.
+- **No decorative icons.** Every icon represents the thing it labels.
+
+---
+
+## Do's and Don'ts
+
+### Do
+- Use `#c9a96e` (Action Gold) for every interactive element — links, pill CTAs, focus signals — and nothing else. The single accent is non-negotiable.
+- Set headlines in `hero-display` or `display-lg` with negative letter-spacing for the signature "tight" cadence.
+- Run body copy at `body` (17px / 400 / 1.47 / -0.374px) — not 16px. The extra pixel defines the brand's reading pace.
+- Alternate `tile-light` and `tile-dark` for full-bleed section rhythm. Color change IS the divider.
+- Reserve `pill` radius for primary gold CTA and filter pills.
+- Apply the single card-lift shadow only during hover on data cards — never on buttons or static elements.
+- Use `transform: scale(0.95)` as the press state on every button.
+- Keep the global nav true dark/near-black.
+
+### Don't
+- Don't introduce a second accent color; every "click me" is `#c9a96e` (Action Gold). Teal is secondary/status only.
+- Don't add shadows to buttons or text — shadow reserved for hovered data cards.
+- Don't use decorative gradients; depth comes from surface color and subtle shadows.
+- Don't set body copy at weight 500 — ladder is 400 / 600 / 700. Body always 400.
+- Don't round full-bleed tiles — tiles rectangular, edge-to-edge; color change is the divider.
+- Don't tighten line-height below 1.47 for body copy.
+- Don't mix radii grammars — use `sm` (6px) for compact utility, `md` (8px) for cards, `pill` for pills.
+- Don't use inline SVG decorations or animated backgrounds — let data and photography speak.
+- Don't fabricate stats. Ever. If mockup, label it visibly.
+
+---
+
+## Responsive Behavior
+
+### Breakpoints
+
+| Name | Width | Key Changes |
+|---|---|---|
+| Small phone | ≤ 419px | Single-column layout; hero h1 drops to 34px; filter bar → icon toggles |
+| Phone | 420–640px | Single-column stack; sidebar → hamburger; hero h1 → 34px |
+| Tablet | 641–1023px | Hero single-column; data panels stack; table scrolls horizontally |
+| Desktop | 1024–1440px | Full two-column hero; multi-column card grids; sticky sub-nav visible |
+| Wide desktop | ≥ 1441px | Content locks at 1280px (dashboard) or 1440px (landing); margins absorb extra |
+
+### Touch Targets
+- Minimum 44 × 44px. `button-primary` lands at ~44 × 100px.
+- `button-icon` exactly 32 × 32px (touch-friendly; padding nearby provides extra hit area).
+- Global nav utility links ~32 × 80px — precision desktop; mobile uses hamburger.
+
+### Collapsing Strategy
+- **Global nav**: full link row on desktop → hamburger + logo + action icon at 640px.
+- **Sub-nav sticky bar**: full filter row → icon toggles at mobile; labels move to slide-out tray.
+- **Hero**: two-column asymmetric → single-column stack at 834px; right column moves below headline.
+- **Data tables**: full columns on desktop → horizontal scroll on tablet/mobile; sticky first column (tender title).
+- **Hero typography**: 56px → 40px (1024px) → 34px (640px) → 28px (419px).
+
+---
+
+## Known Decisions
+
+- **No dark mode toggle.** The color system supports dark tiles and panels, but global theme (light vs. dark) isn't a user choice. Can be added without breaking tokens.
+- **Single gold shadow.** Card-lift shadow (`rgba(201, 169, 110, 0.1) 0px 4px 12px`) is the only drop-shadow. Gold-tinted to reinforce brand.
+- **Teal is secondary.** Teal used for status/secondary actions on dark, inline links on dark, progress indicators — not primary accent.
+- **No gradients, no animations.** System is static-by-default for clarity. Animations (if added) are micro-interactions only (button press scale, fade-ins on load) — never background motion.
+- **Photography is honest.** Imagery is photographic and data-contextual (real dashboards, real data) — never stock or decorative.
