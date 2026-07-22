@@ -148,15 +148,55 @@
 
     /* Gold button */
     .btn-gold {
-      background: linear-gradient(135deg, var(--gold), var(--gold-highlight));
+      background: var(--gold);
       color: #0a0a0f;
       font-weight: 600;
       transition: all 0.25s ease;
+      border-radius: 24px;
     }
 
     .btn-gold:hover {
-      box-shadow: 0 4px 20px rgba(201,169,110,0.35);
+      opacity: 0.9;
       transform: translateY(-1px);
+    }
+
+    /* KPI Card Enhancement */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Chart Card Enhancement */
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.25s ease;
+    }
+
+    .chart-card:hover {
+      border-color: var(--border-gold-hover);
+      box-shadow: 0 4px 16px rgba(201,169,110,0.08);
     }
 
     /* Mobile sidebar */
@@ -234,9 +274,6 @@
       </a>
       <a href="#" class="sidebar-link" data-panel="benchmarks" onclick="switchPanel('benchmarks', this, event)">
         <span class="icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.5V11m4.5 6.5V7m4.5 10.5V4m4.5 13.5V9"/></svg></span> Benchmarks
-      </a>
-      <a href="#" class="sidebar-link" data-panel="sources" onclick="switchPanel('sources', this, event)">
-        <span class="icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="10" cy="4.3" rx="6" ry="2.2"/><path d="M4 4.3v11.4c0 1.2 2.7 2.2 6 2.2s6-1 6-2.2V4.3"/><path d="M4 9.9c0 1.2 2.7 2.2 6 2.2s6-1 6-2.2"/></svg></span> Sources
       </a>
       <a href="#" class="sidebar-link" data-panel="alerts" onclick="switchPanel('alerts', this, event)">
         <span class="icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15v.5a4 4 0 008 0V15"/><path d="M5.2 15h9.6c.6 0 .9-.7.5-1.2-.9-1-1.3-2-1.3-3.6V8.3a4 4 0 00-8 0v1.9c0 1.6-.4 2.6-1.3 3.6-.4.5-.1 1.2.5 1.2z"/></svg></span> Alerts
@@ -386,24 +423,28 @@
         </div>
 
         <!-- Charts 2x2 Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
-          <div class="glass-card p-6">
-            <h3 class="section-header text-sm font-semibold mb-4" style="color: var(--gold);">Monthly Tender Volume & Value</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div class="chart-card">
+            <h3 class="section-header text-sm font-semibold mb-1" style="color: var(--gold);">Monthly Tender Volume & Value</h3>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">Tracking procurement activity across all sources</p>
             <canvas id="chart-monthly" height="200"></canvas>
           </div>
-          <div class="glass-card p-6">
-            <h3 class="section-header text-sm font-semibold mb-4" style="color: var(--gold);">Tenders by Region</h3>
+          <div class="chart-card">
+            <h3 class="section-header text-sm font-semibold mb-1" style="color: var(--gold);">Tenders by Region</h3>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">Geographic distribution of opportunities</p>
             <canvas id="chart-region" height="200"></canvas>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
-          <div class="glass-card p-6">
-            <h3 class="section-header text-sm font-semibold mb-4" style="color: var(--gold);">Procurement Categories</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div class="chart-card">
+            <h3 class="section-header text-sm font-semibold mb-1" style="color: var(--gold);">Procurement Categories</h3>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">Medical devices, pharma, IT, infrastructure & more</p>
             <canvas id="chart-category" height="200"></canvas>
           </div>
-          <div class="glass-card p-6">
-            <h3 class="section-header text-sm font-semibold mb-4" style="color: var(--gold);">Data Sources</h3>
+          <div class="chart-card">
+            <h3 class="section-header text-sm font-semibold mb-1" style="color: var(--gold);">Data Sources</h3>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">Tenders aggregated from global procurement portals</p>
             <canvas id="chart-source" height="200"></canvas>
           </div>
         </div>
@@ -440,10 +481,20 @@
       <div id="panel-tenders" class="dashboard-panel hidden">
         <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
           <h2 class="text-2xl font-bold section-header" style="color: var(--text-primary);">Tenders</h2>
-          <button onclick="saveCurrentTendersAsAlert()" class="text-sm rounded-lg px-3 py-2 font-semibold flex items-center gap-1.5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Get emailed when new tenders match these filters">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15v.5a4 4 0 008 0V15"/><path d="M5.2 15h9.6c.6 0 .9-.7.5-1.2-.9-1-1.3-2-1.3-3.6V8.3a4 4 0 00-8 0v1.9c0 1.6-.4 2.6-1.3 3.6-.4.5-.1 1.2.5 1.2z"/></svg>
-            Save as Alert
-          </button>
+          <div class="flex gap-2 flex-wrap">
+            <button onclick="exportTendersAsJSON()" class="text-sm rounded-lg px-3 py-2 font-semibold flex items-center gap-1.5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Download tenders as JSON">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M10 13v-4M7 11h6"/></svg>
+              JSON
+            </button>
+            <button onclick="exportTendersAsCSV()" class="text-sm rounded-lg px-3 py-2 font-semibold flex items-center gap-1.5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Download tenders as CSV/Excel">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M7 7h6M7 11h6M7 15h2"/></svg>
+              CSV
+            </button>
+            <button onclick="saveCurrentTendersAsAlert()" class="text-sm rounded-lg px-3 py-2 font-semibold flex items-center gap-1.5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Get emailed when new tenders match these filters">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15v.5a4 4 0 008 0V15"/><path d="M5.2 15h9.6c.6 0 .9-.7.5-1.2-.9-1-1.3-2-1.3-3.6V8.3a4 4 0 00-8 0v1.9c0 1.6-.4 2.6-1.3 3.6-.4.5-.1 1.2.5 1.2z"/></svg>
+              Alert
+            </button>
+          </div>
         </div>
         <div class="flex gap-3 mb-6 flex-wrap">
           <div class="relative flex-1 min-w-[220px]">
@@ -563,11 +614,6 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="benchmarks-grid"></div>
       </div>
 
-      <!-- Sources Panel -->
-      <div id="panel-sources" class="dashboard-panel hidden">
-        <h2 class="text-2xl font-bold section-header mb-6" style="color: var(--text-primary);">Data Sources</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="sources-grid"></div>
-      </div>
 
       <!-- Alerts Panel -->
       <div id="panel-alerts" class="dashboard-panel hidden">
@@ -1115,7 +1161,6 @@
       if (panel === 'tenders') loadTendersPanel();
       if (panel === 'awards') loadAwardsPanel();
       if (panel === 'benchmarks') loadBenchmarksPanel();
-      if (panel === 'sources') loadSourcesPanel();
       if (panel === 'alerts') loadAlertsPanel();
     }
 
@@ -1152,6 +1197,7 @@
 
       try {
         const res = await apiFetch(url);
+        currentTendersData = res.data;
         const container = document.getElementById('tenders-panel-list');
         if (res.data.length === 0) {
           container.innerHTML = `<p class="text-sm py-8 text-center" style="color: var(--text-muted);">No tenders match ${search ? `"${escapeHtml(search)}"` : 'these filters'}.</p>`;
@@ -1290,35 +1336,63 @@
       }
     }
 
-    async function loadSourcesPanel() {
-      try {
-        const res = await apiFetch('/api/v1/sources');
-        const grid = document.getElementById('sources-grid');
-        const icons = { ted_europa: '&#127466;&#127482;', sam_gov: '&#127482;&#127480;', contracts_finder: '&#127468;&#127463;', find_a_tender: '&#127468;&#127463;', world_bank: '&#127760;', canada_buys: '&#127464;&#127462;', who_procurement: '&#127758;', nhs_supply_chain: '&#127468;&#127463;' };
-        grid.innerHTML = res.data.map(s => `
-          <div class="glass-card p-6 fade-in">
-            <div class="text-3xl mb-3">${icons[s.id] || '&#127760;'}</div>
-            <h4 class="font-semibold text-lg mb-1" style="color: var(--gold);">${escapeHtml(s.name)}</h4>
-            <p class="text-sm mb-4" style="color: var(--text-secondary);">${escapeHtml(s.description)}</p>
-            <div class="space-y-2 text-sm">
-              <div class="flex justify-between">
-                <span style="color: var(--text-muted);">Region</span>
-                <span style="color: var(--text-primary);">${escapeHtml(s.region)}</span>
-              </div>
-              <div class="flex justify-between">
-                <span style="color: var(--text-muted);">Update Freq</span>
-                <span style="color: var(--text-primary);">${escapeHtml(s.updateFrequency)}</span>
-              </div>
-              <div class="flex justify-between">
-                <span style="color: var(--text-muted);">Status</span>
-                <span class="px-2 py-0.5 rounded-full text-xs" style="background: rgba(16,185,129,0.15); color: #10b981;">Active</span>
-              </div>
-            </div>
-          </div>
-        `).join('');
-      } catch (err) {
-        document.getElementById('sources-grid').innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+    let currentTendersData = [];
+
+    function downloadFile(filename, content, mimeType = 'application/json') {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    async function exportTendersAsJSON() {
+      if (!currentTendersData.length) {
+        alert('No tenders to export. Please load tenders first.');
+        return;
       }
+      const filename = `tenders_${new Date().toISOString().split('T')[0]}.json`;
+      const content = JSON.stringify(currentTendersData, null, 2);
+      downloadFile(filename, content, 'application/json');
+    }
+
+    async function exportTendersAsCSV() {
+      if (!currentTendersData.length) {
+        alert('No tenders to export. Please load tenders first.');
+        return;
+      }
+
+      const headers = ['Title', 'Source', 'Category', 'Buyer Country', 'Status', 'Value (USD)', 'Deadline'];
+      const rows = currentTendersData.map(t => [
+        escapeCSV(t.title),
+        t.source,
+        formatCategory(t.category),
+        t.buyer_country,
+        t.status,
+        t.value_usd || 'N/A',
+        t.deadline ? new Date(t.deadline).toLocaleDateString() : 'N/A'
+      ]);
+
+      const csv = [
+        headers.join(','),
+        ...rows.map(row => row.join(','))
+      ].join('\n');
+
+      const filename = `tenders_${new Date().toISOString().split('T')[0]}.csv`;
+      downloadFile(filename, csv, 'text/csv');
+    }
+
+    function escapeCSV(field) {
+      if (!field) return '';
+      if (typeof field !== 'string') field = String(field);
+      if (field.includes(',') || field.includes('"') || field.includes('\n')) {
+        return `"${field.replace(/"/g, '""')}"`;
+      }
+      return field;
     }
 
     function saveCurrentTendersAsAlert() {
