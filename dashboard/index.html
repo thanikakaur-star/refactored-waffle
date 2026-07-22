@@ -19,9 +19,10 @@
       --teal-light: #14b8a6;
       --border-gold: rgba(201,169,110,0.2);
       --border-gold-hover: rgba(201,169,110,0.4);
-      --text-primary: #e2e8f0;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
+      --text-primary: #d1d5db;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --text-inverse: #ffffff;
     }
 
     body {
@@ -32,6 +33,136 @@
 
     h2, h3.section-header {
       font-family: 'Playfair Display', serif;
+      color: var(--text-inverse);
+    }
+
+    /* Tooltip styles */
+    .tooltip-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      margin-left: 4px;
+      cursor: help;
+      border-radius: 50%;
+      background: rgba(201,169,110,0.15);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .tooltip-text {
+      visibility: hidden;
+      width: 240px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      text-align: left;
+      border: 1px solid var(--border-gold);
+      border-radius: 6px;
+      padding: 8px 10px;
+      position: absolute;
+      z-index: 100;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -120px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      font-size: 12px;
+      line-height: 1.4;
+      pointer-events: none;
+    }
+
+    .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -4px;
+      border-width: 4px;
+      border-style: solid;
+      border-color: var(--border-gold) transparent transparent transparent;
+    }
+
+    .tooltip-container:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-card) 25%, rgba(201,169,110,0.1) 50%, var(--bg-card) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skeleton-text {
+      height: 12px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .skeleton-card {
+      height: 200px;
+      border-radius: 12px;
+    }
+
+    /* Empty state styles */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .empty-state-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    /* Onboarding hint */
+    .onboarding-hint {
+      background: rgba(13,148,136,0.1);
+      border: 1px solid rgba(13,148,136,0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .onboarding-hint.hidden {
+      display: none;
     }
 
     .glass-card {
@@ -425,12 +556,24 @@
         <!-- Charts 2x2 Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div class="chart-card">
-            <h3 class="section-header text-sm font-semibold mb-1" style="color: var(--gold);">Monthly Tender Volume & Value</h3>
+            <div class="flex items-center gap-2">
+              <h3 class="section-header text-sm font-semibold" style="color: var(--gold);">Monthly Tender Volume & Value</h3>
+              <div class="tooltip-container">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-text">Tracks the count of new tenders published and their total value (USD) over time. Use this to identify seasonal patterns and market growth.</span>
+              </div>
+            </div>
             <p class="text-xs mb-4" style="color: var(--text-muted);">Tracking procurement activity across all sources</p>
             <canvas id="chart-monthly" height="200"></canvas>
           </div>
           <div class="chart-card">
-            <h3 class="section-header text-sm font-semibold mb-1" style="color: var(--gold);">Tenders by Region</h3>
+            <div class="flex items-center gap-2">
+              <h3 class="section-header text-sm font-semibold" style="color: var(--gold);">Tenders by Region</h3>
+              <div class="tooltip-container">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-text">Shows how procurement opportunities are distributed across geographic regions. Focus on regions with the highest tender volumes.</span>
+              </div>
+            </div>
             <p class="text-xs mb-4" style="color: var(--text-muted);">Geographic distribution of opportunities</p>
             <canvas id="chart-region" height="200"></canvas>
           </div>
@@ -438,12 +581,24 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div class="chart-card">
-            <h3 class="section-header text-sm font-semibold mb-1" style="color: var(--gold);">Procurement Categories</h3>
+            <div class="flex items-center gap-2">
+              <h3 class="section-header text-sm font-semibold" style="color: var(--gold);">Procurement Categories</h3>
+              <div class="tooltip-container">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-text">Breakdown of tenders by medical specialty (devices, pharma, IT, etc.). Filter by category to focus on your market segment.</span>
+              </div>
+            </div>
             <p class="text-xs mb-4" style="color: var(--text-muted);">Medical devices, pharma, IT, infrastructure & more</p>
             <canvas id="chart-category" height="200"></canvas>
           </div>
           <div class="chart-card">
-            <h3 class="section-header text-sm font-semibold mb-1" style="color: var(--gold);">Data Sources</h3>
+            <div class="flex items-center gap-2">
+              <h3 class="section-header text-sm font-semibold" style="color: var(--gold);">Data Sources</h3>
+              <div class="tooltip-container">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-text">Distribution of tenders across our scraped sources (TED Europa, SAM.gov, UK Find a Tender, Contracts Finder, World Bank, CanadaBuys).</span>
+              </div>
+            </div>
             <p class="text-xs mb-4" style="color: var(--text-muted);">Tenders aggregated from global procurement portals</p>
             <canvas id="chart-source" height="200"></canvas>
           </div>
@@ -532,7 +687,18 @@
             <option value="other">Other</option>
           </select>
         </div>
+        <!-- Onboarding Hint -->
+        <div id="tenders-hint" class="onboarding-hint">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 14v-4M10 7v.1"/></svg>
+          <span>Use the filters above to narrow results. Export as JSON/CSV or create an alert to receive email digests when new tenders match.</span>
+        </div>
+
         <div id="tenders-panel-list" class="space-y-3"></div>
+        <div id="tenders-empty" class="empty-state hidden">
+          <div class="empty-state-icon">📭</div>
+          <div class="empty-state-title">No tenders found</div>
+          <div class="empty-state-text">Try adjusting your filters or search terms. New tenders are added daily from our data sources.</div>
+        </div>
         <div id="tenders-pagination" class="flex items-center justify-between mt-6"></div>
       </div>
 
@@ -580,6 +746,11 @@
             <tbody id="awards-table-body"></tbody>
           </table>
         </div>
+        <div id="awards-empty" class="empty-state hidden">
+          <div class="empty-state-icon">🏆</div>
+          <div class="empty-state-title">No awards found</div>
+          <div class="empty-state-text">Contract awards data is added as new procurement cycles conclude. Check back soon or adjust your filters.</div>
+        </div>
         <div id="awards-pagination" class="flex items-center justify-between mt-6"></div>
       </div>
 
@@ -610,8 +781,18 @@
             <option value="other">Other</option>
           </select>
         </div>
-        <p class="text-xs mb-4" style="color: var(--text-muted);">Click a benchmark card to see matching open tenders.</p>
+        <!-- Onboarding Hint -->
+        <div class="onboarding-hint">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 14v-4M10 7v.1"/></svg>
+          <span>Benchmarks show average contract values, lead times, and market insights. Click a card to see matching open tenders.</span>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="benchmarks-grid"></div>
+        <div id="benchmarks-empty" class="empty-state hidden">
+          <div class="empty-state-icon">📊</div>
+          <div class="empty-state-title">No benchmarks available</div>
+          <div class="empty-state-text">Benchmarks are a Pro feature. Upgrade to access regional market data.</div>
+        </div>
       </div>
 
 
@@ -658,6 +839,11 @@
 
         <h3 class="font-semibold text-sm mb-4" style="color: var(--text-primary);">Your active alerts</h3>
         <div id="alerts-list" class="space-y-3"></div>
+        <div id="alerts-empty" class="empty-state hidden">
+          <div class="empty-state-icon">🔔</div>
+          <div class="empty-state-title">No alerts yet</div>
+          <div class="empty-state-text">Create an alert above to get emailed when new tenders match your criteria across all sources.</div>
+        </div>
       </div>
 
       </div> <!-- end #dashboard -->
@@ -1199,11 +1385,16 @@
         const res = await apiFetch(url);
         currentTendersData = res.data;
         const container = document.getElementById('tenders-panel-list');
+        const emptyState = document.getElementById('tenders-empty');
+
         if (res.data.length === 0) {
-          container.innerHTML = `<p class="text-sm py-8 text-center" style="color: var(--text-muted);">No tenders match ${search ? `"${escapeHtml(search)}"` : 'these filters'}.</p>`;
+          container.innerHTML = '';
+          emptyState.classList.remove('hidden');
           renderPagination('tenders-pagination', res.pagination, 'tenders');
           return;
         }
+
+        emptyState.classList.add('hidden');
         container.innerHTML = res.data.map((t, idx) => `
           <div class="glass-card p-5 fade-in" style="cursor: pointer;" onclick="toggleTenderDetail(${idx})" title="Click for compliance details and the original listing">
             <div class="flex items-start justify-between">
@@ -1235,9 +1426,11 @@
       } catch (err) {
         if (err.status === 429) {
           document.getElementById('tenders-panel-list').innerHTML = rateLimitPromptHtml();
+          document.getElementById('tenders-empty').classList.add('hidden');
           return;
         }
         document.getElementById('tenders-panel-list').innerHTML = `<p style="color: var(--text-muted);">Failed to load tenders: ${escapeHtml(err.message)}</p>`;
+        document.getElementById('tenders-empty').classList.add('hidden');
       }
     }
 
@@ -1260,9 +1453,13 @@
       try {
         const res = await apiFetch(url);
         const tbody = document.getElementById('awards-table-body');
+        const emptyState = document.getElementById('awards-empty');
+
         if (res.data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center" style="color: var(--text-muted);">No awards match these filters yet.</td></tr>`;
+          tbody.innerHTML = '';
+          emptyState.classList.remove('hidden');
         } else {
+          emptyState.classList.add('hidden');
           tbody.innerHTML = res.data.map(a => `
             <tr style="border-bottom: 1px solid rgba(148,163,184,0.06);">
               <td class="py-3 px-4 font-medium" style="color: var(--text-primary);">${escapeHtml(a.supplier_name)}</td>
@@ -1279,7 +1476,8 @@
 
         renderPagination('awards-pagination', res.pagination, 'awards');
       } catch (err) {
-        document.getElementById('awards-table-body').innerHTML = `<tr><td colspan="5" class="py-4 text-center" style="color: var(--text-muted);">${escapeHtml(err.message)}</td></tr>`;
+        document.getElementById('awards-table-body').innerHTML = '';
+        document.getElementById('awards-empty').classList.remove('hidden');
       }
     }
 
@@ -1295,43 +1493,53 @@
       try {
         const res = await apiFetch(url);
         const grid = document.getElementById('benchmarks-grid');
-        grid.innerHTML = res.data.map(b => `
-          <div class="glass-card p-6 fade-in" style="cursor: pointer;" onclick="goToTendersFiltered('${b.category}')" title="View open ${escapeHtml(formatCategory(b.category))} tenders">
-            <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(formatCategory(b.category))}</h4>
-            <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)} · ${escapeHtml(b.period || '')}</p>
-            <div class="space-y-3">
-              <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Avg Contract Value</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.avg_contract_value_usd || 0)}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Avg Lead Time</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${b.avg_lead_time_days || 0} days</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Tenders</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${(b.tender_count || 0).toLocaleString()}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Awards</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${(b.award_count || 0).toLocaleString()}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Compliance Rate</span>
-                <span class="font-semibold" style="color: var(--teal);">${(b.compliance_rate || 0).toFixed(1)}%</span>
+        const emptyState = document.getElementById('benchmarks-empty');
+
+        if (res.data.length === 0) {
+          grid.innerHTML = '';
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+          grid.innerHTML = res.data.map(b => `
+            <div class="glass-card p-6 fade-in" style="cursor: pointer;" onclick="goToTendersFiltered('${b.category}')" title="View open ${escapeHtml(formatCategory(b.category))} tenders">
+              <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(formatCategory(b.category))}</h4>
+              <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)} · ${escapeHtml(b.period || '')}</p>
+              <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Avg Contract Value</span>
+                  <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.avg_contract_value_usd || 0)}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Avg Lead Time</span>
+                  <span class="font-semibold" style="color: var(--text-primary);">${b.avg_lead_time_days || 0} days</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Tenders</span>
+                  <span class="font-semibold" style="color: var(--text-primary);">${(b.tender_count || 0).toLocaleString()}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Awards</span>
+                  <span class="font-semibold" style="color: var(--text-primary);">${(b.award_count || 0).toLocaleString()}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Compliance Rate</span>
+                  <span class="font-semibold" style="color: var(--teal);">${(b.compliance_rate || 0).toFixed(1)}%</span>
+                </div>
               </div>
             </div>
-          </div>
-        `).join('');
+          `).join('');
+        }
       } catch (err) {
         const grid = document.getElementById('benchmarks-grid');
         if (err.status === 403) {
-          // Free/Basic user hit the paywall — show the upgrade prompt instead of an error
           grid.innerHTML = upgradePromptHtml('Regional Benchmarks');
+          document.getElementById('benchmarks-empty').classList.add('hidden');
         } else if (err.status === 429) {
           grid.innerHTML = rateLimitPromptHtml();
+          document.getElementById('benchmarks-empty').classList.add('hidden');
         } else {
-          grid.innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+          grid.innerHTML = '';
+          document.getElementById('benchmarks-empty').classList.remove('hidden');
         }
       }
     }
@@ -1405,12 +1613,15 @@
 
     async function loadAlertsPanel() {
       const list = document.getElementById('alerts-list');
+      const emptyState = document.getElementById('alerts-empty');
       try {
         const res = await apiFetch('/api/v1/alerts');
         if (!res.data.length) {
-          list.innerHTML = `<p class="text-sm" style="color: var(--text-muted);">No alerts yet — create one above and we'll email you when a matching tender appears.</p>`;
+          list.innerHTML = '';
+          emptyState.classList.remove('hidden');
           return;
         }
+        emptyState.classList.add('hidden');
         list.innerHTML = res.data.map(a => `
           <div class="glass-card p-4 fade-in flex items-center justify-between flex-wrap gap-3">
             <div class="flex items-center flex-wrap gap-2 text-xs" style="color: var(--text-secondary);">
@@ -1425,7 +1636,8 @@
           </div>
         `).join('');
       } catch (err) {
-        list.innerHTML = `<p class="text-sm" style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+        list.innerHTML = '';
+        emptyState.classList.remove('hidden');
       }
     }
 
