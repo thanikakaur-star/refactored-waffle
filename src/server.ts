@@ -792,7 +792,7 @@ app.post("/api/admin/scrape", requireAdmin, async (req, res) => {
   scrapeInProgress = true;
   try {
     const { runScrapers } = await import("./scraper/run.js");
-    const summary = await runScrapers(source as never);
+    const summary = await runScrapers(source);
     res.json({ ok: true, summary });
   } catch (err) {
     logger.error("Manual scrape failed", { error: String(err) });

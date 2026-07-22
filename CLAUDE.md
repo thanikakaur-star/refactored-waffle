@@ -52,6 +52,7 @@ Copy `.env.example` to `.env` and fill in all values. Required:
 - `src/scraper/persist.ts` — Upserts scraped tenders/awards into Supabase
 - `src/scraper/sources/ted.ts` — TED Europa scraper (Playwright)
 - `src/scraper/sources/sam.ts` — SAM.gov scraper (official api.sam.gov Get Opportunities API — needs SAM_GOV_API_KEY)
+- `src/scraper/sources/govcon.ts` — GovCon API scraper (govconapi.com, third-party aggregator over the same federal data — needs GOVCON_API_KEY, persists under `sam_gov` source)
 - `src/scraper/sources/contracts-finder.ts` — Contracts Finder scraper (OCDS API, unverified endpoint — see file comment)
 - `src/scraper/sources/find-a-tender.ts` — Find a Tender Service scraper (OCDS API, unverified endpoint — see file comment)
 - `src/scraper/sources/uk-category-map.ts` — Keyword/CPV classifier for UK service & goods tenders

@@ -1,6 +1,7 @@
 import { chromium } from "playwright";
 import { TedEuropaScraper } from "./sources/ted.js";
 import { SamGovScraper } from "./sources/sam.js";
+import { GovconScraper } from "./sources/govcon.js";
 import { ContractsFinderScraper } from "./sources/contracts-finder.js";
 import { FindATenderScraper } from "./sources/find-a-tender.js";
 import { WorldBankScraper } from "./sources/world-bank.js";
@@ -9,7 +10,7 @@ import { getSupabaseClient } from "../db/client.js";
 import { logger } from "../utils/logger.js";
 import { checkAlertsAndNotify } from "../alerts/notifier.js";
 import { v4 as uuidv4 } from "uuid";
-import type { ScrapeResult, TenderSource } from "../types/index.js";
+import type { ScrapeResult } from "../types/index.js";
 import { BaseScraper } from "./base.js";
 import { ApiScraper } from "./api-base.js";
 
@@ -18,11 +19,23 @@ type AnyScraper = BaseScraper | ApiScraper;
 const ALL_SCRAPERS: AnyScraper[] = [
   new TedEuropaScraper(),
   new SamGovScraper(),
+  new GovconScraper(),
   new ContractsFinderScraper(),
   new FindATenderScraper(),
   new WorldBankScraper(),
   new CanadaBuysScraper(),
 ];
+
+// GovconScraper shares source="sam_gov" with SamGovScraper (both persist to
+// the same tender_source, deduped by (source, external_id) in persist.ts) —
+// but --source=govcon should still be able to target it alone since it's a
+// distinct HTTP call against a distinct API. Matched by constructor name
+// rather than adding a second TenderSource enum value just for CLI routing.
+function matchesFilter(scraper: AnyScraper, filter: string): boolean {
+  if (filter === "govcon") return scraper instanceof GovconScraper;
+  if (filter === "sam" || filter === "sam_gov") return scraper.source === "sam_gov" && !(scraper instanceof GovconScraper);
+  return scraper.source === filter;
+}
 
 async function logScrapeRun(result: ScrapeResult) {
   try {
@@ -48,9 +61,9 @@ async function logScrapeRun(result: ScrapeResult) {
  * Run the scrapers once. Safe to call from the CLI or from a scheduler.
  * Returns a summary so callers (e.g. the monthly cron job) can log the outcome.
  */
-export async function runScrapers(sourceFilter?: TenderSource) {
+export async function runScrapers(sourceFilter?: string) {
   const scrapers = sourceFilter
-    ? ALL_SCRAPERS.filter((s) => s.source === sourceFilter)
+    ? ALL_SCRAPERS.filter((s) => matchesFilter(s, sourceFilter))
     : ALL_SCRAPERS;
 
   if (scrapers.length === 0) {
@@ -137,7 +150,7 @@ export async function runScrapers(sourceFilter?: TenderSource) {
 const isDirectRun = process.argv[1] && import.meta.url === `file://${process.argv[1]}`;
 if (isDirectRun) {
   const sourceArg = process.argv.find((a) => a.startsWith("--source="));
-  const sourceFilter = sourceArg?.split("=")[1] as TenderSource | undefined;
+  const sourceFilter = sourceArg?.split("=")[1];
 
   runScrapers(sourceFilter).catch((err) => {
     logger.error("Scraper crashed", { error: String(err) });
