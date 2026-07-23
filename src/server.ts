@@ -984,8 +984,10 @@ app.get("/api/admin/sources", requireAdmin, async (_req, res) => {
   // as a short list rather than a single row because SAM.gov and GovCon both
   // log under source="sam_gov" (GovCon persists tenders under the same source
   // by design), so a single newest-row-per-source would mask one behind the
-  // other. Up to 2 most-recent runs per source keeps both visible.
-  const RUNS_PER_SOURCE = 2;
+  // other. In ALL_SCRAPERS order SAM.gov runs immediately before GovCon, so
+  // within one scrape batch the earlier of the two sam_gov rows is SAM.gov and
+  // the later is GovCon. Keep several rows so a full batch stays visible.
+  const RUNS_PER_SOURCE = 5;
   let lastRuns: Record<string, unknown[]> = {};
   if (USE_SUPABASE && supabase) {
     try {
