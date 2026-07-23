@@ -71,6 +71,13 @@ export class CanadaBuysScraper extends ApiScraper {
       const description = descIdx >= 0 ? (row[descIdx] ?? "") : "";
       const unspsc = unspscIdx >= 0 ? row[unspscIdx] : undefined;
       const categoryRaw = categoryIdx >= 0 ? row[categoryIdx] : undefined;
+      // The CSV's regionsOfDelivery column is a raw, multi-value list of
+      // provinces/cities ("*British Columbia *Manitoba", "*Longueuil", ...).
+      // buyer_region is meant to be a coarse geographic bucket for grouping
+      // (Europe / North America / United Kingdom / ...), consistent with the
+      // other sources — so pin it to "North America" and keep the granular
+      // delivery detail in rawData instead of polluting the region facet.
+      const deliveryRegions = regionIdx >= 0 ? row[regionIdx]?.trim() : "";
 
       const category = classifyUkTender(title, description, unspsc);
       if (!isHealthcare(unspsc, categoryRaw, category)) continue;
@@ -82,7 +89,7 @@ export class CanadaBuysScraper extends ApiScraper {
         description,
         buyerName: (orgIdx >= 0 ? row[orgIdx]?.trim() : "") || "Canadian Public Sector Buyer",
         buyerCountry: "CA",
-        buyerRegion: (regionIdx >= 0 ? row[regionIdx]?.trim() : "") || "Canada",
+        buyerRegion: "North America",
         category,
         status: mapStatus(statusIdx >= 0 ? row[statusIdx] : undefined),
         publishedAt: parseDate(publishedIdx >= 0 ? row[publishedIdx] : undefined) ?? new Date(),
@@ -93,7 +100,7 @@ export class CanadaBuysScraper extends ApiScraper {
         complianceCriteria: ["Canadian Free Trade Agreement / Government Contracts Regulations"],
         cpvCodes: unspsc ? [unspsc] : [],
         url: `${this.baseUrl}/en/tender-opportunities/tender-notice/${encodeURIComponent(reference)}`,
-        rawData: {},
+        rawData: deliveryRegions ? { deliveryRegions } : {},
       });
     }
 

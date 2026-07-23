@@ -1138,6 +1138,27 @@
       document.getElementById('stat-avg-value').textContent = formatCurrency(stats.avgContractValueUsd);
     }
 
+    // Collapse a { label: count } map into the top N slices by value, with the
+    // remainder rolled into a single "Other" slice. Keeps doughnut/pie charts
+    // readable no matter how many distinct labels the data contains (e.g. a
+    // source that emits dozens of granular region strings). Returns sorted
+    // { labels, values } ready for Chart.js.
+    function topNWithOther(map, n = 8) {
+      const entries = Object.entries(map || {})
+        .map(([label, value]) => [label, Number(value) || 0])
+        .filter(([, value]) => value > 0)
+        .sort((a, b) => b[1] - a[1]);
+      if (entries.length <= n) {
+        return { labels: entries.map(e => e[0]), values: entries.map(e => e[1]) };
+      }
+      const top = entries.slice(0, n);
+      const otherTotal = entries.slice(n).reduce((sum, e) => sum + e[1], 0);
+      const labels = top.map(e => e[0]);
+      const values = top.map(e => e[1]);
+      if (otherTotal > 0) { labels.push('Other'); values.push(otherTotal); }
+      return { labels, values };
+    }
+
     function renderCharts(stats) {
       Object.values(charts).forEach(c => c.destroy());
       charts = {};
@@ -1188,14 +1209,14 @@
 
       // Region doughnut
       const regionCtx = document.getElementById('chart-region').getContext('2d');
-      const regionLabels = Object.keys(stats.tendersByRegion);
+      const region = topNWithOther(stats.tendersByRegion, 6);
       charts.region = new Chart(regionCtx, {
         type: 'doughnut',
         data: {
-          labels: regionLabels,
+          labels: region.labels,
           datasets: [{
-            data: regionLabels.map(r => stats.tendersByRegion[r]),
-            backgroundColor: CHART_PALETTE.slice(0, regionLabels.length),
+            data: region.values,
+            backgroundColor: CHART_PALETTE.slice(0, region.labels.length),
             borderColor: '#12141d',
             borderWidth: 2,
           }],
@@ -1234,14 +1255,14 @@
 
       // Source pie
       const srcCtx = document.getElementById('chart-source').getContext('2d');
-      const srcLabels = Object.keys(stats.tendersBySource);
+      const source = topNWithOther(stats.tendersBySource, 8);
       charts.source = new Chart(srcCtx, {
         type: 'pie',
         data: {
-          labels: srcLabels.map(s => s.replace(/_/g, ' ').toUpperCase()),
+          labels: source.labels.map(s => s === 'Other' ? 'Other' : s.replace(/_/g, ' ').toUpperCase()),
           datasets: [{
-            data: srcLabels.map(s => stats.tendersBySource[s]),
-            backgroundColor: CHART_PALETTE.slice(0, srcLabels.length),
+            data: source.values,
+            backgroundColor: CHART_PALETTE.slice(0, source.labels.length),
             borderColor: '#12141d',
             borderWidth: 2,
           }],
