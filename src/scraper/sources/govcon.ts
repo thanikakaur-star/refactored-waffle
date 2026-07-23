@@ -1,4 +1,4 @@
-import { ApiScraper, SCRAPER_USER_AGENT } from "../api-base.js";
+import { ApiScraper, SCRAPER_USER_AGENT, sleep, retryAfterMs } from "../api-base.js";
 import { convertToUsd } from "../../utils/currency.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
@@ -103,7 +103,11 @@ export class GovconScraper extends ApiScraper {
 
   private readonly apiUrl = "https://govconapi.com/api/v1/opportunities/search";
   private readonly pageSize = 50;
-  private readonly maxPagesPerQuery = 10;
+  private readonly maxPagesPerQuery = 5;
+  // GovCon documents a ~15 requests/minute burst limit. Space calls ~4.5s
+  // apart (~13/min) to stay under it, and back off on a 429 rather than
+  // aborting the whole run.
+  private readonly requestDelayMs = 4500;
 
   protected async fetchTenders(): Promise<Partial<Tender>[]> {
     const apiKey = process.env.GOVCON_API_KEY;
@@ -113,7 +117,10 @@ export class GovconScraper extends ApiScraper {
 
     const tenders: Partial<Tender>[] = [];
     const seen = new Set<string>();
+    let firstRequest = true;
+    let aborted: string | null = null; // set to an auth error to fail the run loudly
 
+    outer:
     for (const [naics, category] of Object.entries(NAICS_CATEGORY_MAP)) {
       for (const noticeType of NOTICE_TYPES) {
         // Paginate this NAICS+notice_type combination. `page` is 1-based; the
@@ -127,6 +134,10 @@ export class GovconScraper extends ApiScraper {
             limit: String(this.pageSize),
             page: String(page),
           });
+
+          // Throttle: pause between calls (but not before the very first).
+          if (!firstRequest) await sleep(this.requestDelayMs);
+          firstRequest = false;
 
           let res: Response;
           try {
@@ -143,10 +154,38 @@ export class GovconScraper extends ApiScraper {
             break;
           }
 
+          if (res.status === 429) {
+            // Burst/rate limit — wait out the window and retry this page once.
+            const waitMs = retryAfterMs(res, 60000);
+            logger.warn("GovCon API: 429, backing off", { naics, noticeType, page, waitMs });
+            await sleep(waitMs);
+            try {
+              res = await fetch(`${this.apiUrl}?${params.toString()}`, {
+                headers: {
+                  Authorization: `Bearer ${apiKey}`,
+                  Accept: "application/json",
+                  "User-Agent": SCRAPER_USER_AGENT,
+                },
+                signal: AbortSignal.timeout(30000),
+              });
+            } catch (err) {
+              logger.warn("GovCon API: retry after 429 failed", { naics, noticeType, page, error: String(err) });
+              break;
+            }
+            // Still limited after waiting — stop the whole GovCon pass but keep
+            // everything collected so far (don't throw it all away).
+            if (res.status === 429) {
+              logger.warn("GovCon API: still 429 after backoff, stopping GovCon pass");
+              break outer;
+            }
+          }
+
           if (!res.ok) {
             const snippet = (await res.text().catch(() => "")).slice(0, 200);
-            if (res.status === 401 || res.status === 403 || res.status === 429) {
-              throw new Error(`GovCon API ${res.status}: ${snippet}`);
+            // Auth failures are fatal and affect every request — record and stop.
+            if (res.status === 401 || res.status === 403) {
+              aborted = `GovCon API ${res.status}: ${snippet}`;
+              break outer;
             }
             logger.warn("GovCon API: non-OK response", { naics, noticeType, page, status: res.status });
             break;
@@ -188,6 +227,12 @@ export class GovconScraper extends ApiScraper {
           if (opportunities.length < this.pageSize) break;
         }
       }
+    }
+
+    // Only a genuine auth failure aborts the run; a rate-limit stop keeps
+    // whatever was gathered before the limit.
+    if (aborted && tenders.length === 0) {
+      throw new Error(aborted);
     }
 
     logger.info("GovCon API: fetched opportunities", { count: tenders.length });

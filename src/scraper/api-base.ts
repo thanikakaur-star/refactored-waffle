@@ -9,6 +9,23 @@ export const SCRAPER_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
   "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Parse a Retry-After header (seconds, or an HTTP date) into milliseconds,
+// clamped to a sane ceiling so a hostile/huge value can't stall a run forever.
+export function retryAfterMs(res: Response, fallbackMs: number, ceilingMs = 130000): number {
+  const header = res.headers.get("retry-after");
+  if (header) {
+    const secs = Number(header);
+    if (!Number.isNaN(secs)) return Math.min(secs * 1000, ceilingMs);
+    const date = Date.parse(header);
+    if (!Number.isNaN(date)) return Math.min(Math.max(date - Date.now(), 0), ceilingMs);
+  }
+  return Math.min(fallbackMs, ceilingMs);
+}
+
 // An award pulled out of the same fetch as its tender, keyed by the
 // tender's externalId so it can be linked to the tender's real DB id
 // (and category) only after that tender has actually been persisted.

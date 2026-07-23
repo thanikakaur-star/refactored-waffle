@@ -1,4 +1,4 @@
-import { ApiScraper, SCRAPER_USER_AGENT } from "../api-base.js";
+import { ApiScraper, SCRAPER_USER_AGENT, sleep } from "../api-base.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
 
@@ -121,20 +121,6 @@ export class TedEuropaScraper extends ApiScraper {
   private readonly maxPages = 15;
   private readonly lookbackDays = 90;
 
-  // Fields we ask TED to return. Superset of candidate ids across eForms
-  // versions; the parser picks whichever are present.
-  private readonly requestFields = [
-    "publication-number", "ND",
-    "notice-title", "title-proc", "TI", "BT-21-Procedure",
-    "buyer-name", "AA", "BT-500-Business",
-    "buyer-country", "CY", "country",
-    "publication-date", "PD",
-    "deadline-receipt-tenders-date-lot", "deadline-receipt-request", "DT",
-    "classification-cpv", "CPV", "cpv",
-    "notice-type", "TD",
-    "links",
-  ];
-
   // Healthcare CPV divisions. TED expert search includes child codes of a
   // listed parent, so the two division roots cover all medical/pharma (33xxx)
   // and health & social-work services (85xxx) notices.
@@ -149,9 +135,13 @@ export class TedEuropaScraper extends ApiScraper {
     const seen = new Set<string>();
 
     for (let page = 1; page <= this.maxPages; page++) {
+      // NOTE: no `fields` param. TED v3 validates every requested field id
+      // against its (versioned, eForms) vocabulary and 400s the whole request
+      // on any unknown one — our earlier explicit list did exactly that. Omit
+      // it and TED returns its default projection, which the defensive parser
+      // below reads. `scope: ACTIVE` = currently-open notices only.
       const body = {
         query,
-        fields: this.requestFields,
         page,
         limit: this.pageSize,
         scope: "ACTIVE",
@@ -186,6 +176,10 @@ export class TedEuropaScraper extends ApiScraper {
       const data = (await res.json()) as TedSearchResponse;
       const notices = data.notices ?? [];
       if (notices.length === 0) break;
+
+      // Small inter-page pause — TED's API is shared infrastructure and the
+      // request itself can be slow; don't hammer it.
+      await sleep(500);
 
       for (const notice of notices) {
         const tender = this.mapNotice(notice);

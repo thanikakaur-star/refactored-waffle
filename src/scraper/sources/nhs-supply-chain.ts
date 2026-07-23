@@ -1,4 +1,4 @@
-import { ApiScraper, SCRAPER_USER_AGENT } from "../api-base.js";
+import { ApiScraper, SCRAPER_USER_AGENT, sleep, retryAfterMs } from "../api-base.js";
 import { convertToUsd } from "../../utils/currency.js";
 import { classifyUkTender } from "./uk-category-map.js";
 import { logger } from "../../utils/logger.js";
@@ -100,6 +100,10 @@ export class NHSSupplyChainScraper extends ApiScraper {
   private readonly pageLimit = 100;
   private readonly maxPages = 15;
   private readonly lookbackDays = 90;
+  // The Find a Tender OCDS API rate-limits to ~12 requests/minute, shared with
+  // the find_a_tender scraper that runs just before this one. Space pages
+  // ~5.5s apart (~11/min) and back off on a 429 rather than erroring to zero.
+  private readonly requestDelayMs = 5500;
 
   protected async fetchTenders(): Promise<Partial<Tender>[]> {
     const updatedFrom = new Date(Date.now() - this.lookbackDays * 24 * 60 * 60 * 1000).toISOString();
@@ -112,15 +116,31 @@ export class NHSSupplyChainScraper extends ApiScraper {
     let scanned = 0;
 
     for (let page = 0; page < this.maxPages && url; page++) {
-      const res = await fetch(url, {
+      if (page > 0) await sleep(this.requestDelayMs);
+
+      let res = await fetch(url, {
         headers: { Accept: "application/json", "User-Agent": SCRAPER_USER_AGENT },
         signal: AbortSignal.timeout(30000),
       });
 
+      if (res.status === 429) {
+        const waitMs = retryAfterMs(res, 120000);
+        logger.warn("NHS Supply Chain: 429, backing off", { page, waitMs });
+        await sleep(waitMs);
+        res = await fetch(url, {
+          headers: { Accept: "application/json", "User-Agent": SCRAPER_USER_AGENT },
+          signal: AbortSignal.timeout(30000),
+        });
+      }
+
       if (!res.ok) {
         const snippet = (await res.text().catch(() => "")).slice(0, 300);
-        if (page === 0) throw new Error(`NHS Supply Chain (FTS) returned ${res.status}: ${snippet}`);
-        logger.warn("NHS Supply Chain: non-OK on later page, stopping", { page, status: res.status });
+        // Keep any pages already collected; only a first-page failure with
+        // nothing gathered is a hard error.
+        if (page === 0 && out.length === 0) {
+          throw new Error(`NHS Supply Chain (FTS) returned ${res.status}: ${snippet}`);
+        }
+        logger.warn("NHS Supply Chain: non-OK, stopping", { page, status: res.status });
         break;
       }
 
