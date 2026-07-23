@@ -27,38 +27,89 @@ export class TedEuropaScraper extends BaseScraper {
   readonly source = "ted_europa" as const;
   readonly baseUrl = "https://ted.europa.eu";
 
-  private readonly searchUrl = `${this.baseUrl}/en/search/result?q=healthcare+medical+device&sortField=PD&sortOrder=desc`;
+  // Several targeted healthcare queries instead of one generic search — TED's
+  // relevance ranking means a single query only ever surfaces a narrow slice,
+  // so we sweep the main healthcare procurement segments explicitly. De-duped
+  // by notice URL across queries before fetching detail pages.
+  private readonly searchQueries = [
+    "medical device",
+    "pharmaceutical",
+    "surgical instrument",
+    "diagnostic equipment",
+    "laboratory equipment",
+    "personal protective equipment",
+    "hospital equipment",
+    "patient monitoring",
+    "healthcare IT",
+    "ambulance",
+  ];
+
+  // How many result pages to walk per query, and how many notices to parse in
+  // total per run (a safety cap so one run can't balloon unbounded — raise as
+  // throughput allows).
+  private readonly pagesPerQuery = 3;
+  private readonly maxNoticesPerRun = 400;
+
+  private searchUrl(query: string, pageNum: number): string {
+    const params = new URLSearchParams({
+      q: query,
+      sortField: "PD",
+      sortOrder: "desc",
+      page: String(pageNum),
+    });
+    return `${this.baseUrl}/en/search/result?${params.toString()}`;
+  }
 
   async extractTenders(page: Page): Promise<Partial<Tender>[]> {
     const tenders: Partial<Tender>[] = [];
 
-    const navigated = await this.safeNavigate(page, this.searchUrl);
-    if (!navigated) return tenders;
+    // Phase 1: collect notice links across every query + page, de-duped.
+    const noticeUrls = new Set<string>();
+    for (const query of this.searchQueries) {
+      for (let pageNum = 1; pageNum <= this.pagesPerQuery; pageNum++) {
+        const navigated = await this.safeNavigate(page, this.searchUrl(query, pageNum));
+        if (!navigated) break; // query/page unreachable — move to next query
 
-    await page.waitForTimeout(2000);
+        await page.waitForTimeout(1500 + Math.random() * 1000);
 
-    const noticeLinks = await page.$$eval(
-      "a[href*='/notice/']",
-      (links) => links.map((a) => a.getAttribute("href")).filter(Boolean).slice(0, 20)
-    );
+        const links = await page.$$eval(
+          "a[href*='/notice/']",
+          (els) => els.map((a) => a.getAttribute("href")).filter((h): h is string => !!h)
+        );
 
-    logger.info("TED: Found notice links", { count: noticeLinks.length });
+        if (links.length === 0) break; // no results on this page — stop paging this query
 
-    for (const link of noticeLinks) {
+        for (const link of links) {
+          const fullUrl = link.startsWith("http") ? link : `${this.baseUrl}${link}`;
+          noticeUrls.add(fullUrl);
+        }
+      }
+      if (noticeUrls.size >= this.maxNoticesPerRun) break;
+    }
+
+    logger.info("TED: collected unique notice links", { count: noticeUrls.size });
+
+    // Phase 2: fetch and parse each notice detail page, up to the run cap.
+    let parsed = 0;
+    for (const fullUrl of noticeUrls) {
+      if (parsed >= this.maxNoticesPerRun) break;
       try {
-        const fullUrl = link!.startsWith("http") ? link! : `${this.baseUrl}${link}`;
         const ok = await this.safeNavigate(page, fullUrl);
         if (!ok) continue;
 
         const tender = await this.parseTenderPage(page, fullUrl);
-        if (tender) tenders.push(tender);
+        if (tender) {
+          tenders.push(tender);
+          parsed++;
+        }
 
-        await page.waitForTimeout(1000 + Math.random() * 2000);
+        await page.waitForTimeout(1000 + Math.random() * 1500);
       } catch (err) {
-        logger.warn("TED: Failed to parse notice", { link, error: String(err) });
+        logger.warn("TED: Failed to parse notice", { url: fullUrl, error: String(err) });
       }
     }
 
+    logger.info("TED: tenders parsed", { count: tenders.length });
     return tenders;
   }
 
