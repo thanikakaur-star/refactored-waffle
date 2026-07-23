@@ -1,208 +1,127 @@
-import { ApiScraper, SCRAPER_USER_AGENT } from "../api-base.js";
+import type { Page } from "playwright";
+import { BaseScraper } from "../base.js";
 import { classifyUkTender } from "./uk-category-map.js";
 import { logger } from "../../utils/logger.js";
-import type { Tender, ProcurementCategory } from "../../types/index.js";
+import type { Tender, ContractAward, ProcurementCategory } from "../../types/index.js";
 
-// UNGM (United Nations Global Marketplace, ungm.org) is where WHO — like most
-// UN agencies — publishes its procurement notices. Its public tender search
-// is backed by a JSON endpoint the site's own frontend calls. We query it for
-// WHO notices and keep the health-relevant ones.
+// WHO (and the wider UN system) publishes procurement notices on UNGM
+// (ungm.org). UNGM's public notice search is a session/CSRF-protected ASP.NET
+// app with NO public JSON API — an unauthenticated fetch just gets an HTML
+// error page. So this source drives a real browser (Playwright) against the
+// public notices page and scrapes the rendered results, keeping WHO / health
+// notices.
 //
-// The response field names below are matched defensively (several candidate
-// keys per field) because UNGM's public payload isn't formally documented and
-// this sandbox's network policy blocks ungm.org, so the exact shape is
-// unverified against a live response. Run once on the server and check
-// scrape_runs / a raw dump before relying on it — a wrong field name degrades
-// to "missing" (notice skipped) rather than crashing the run.
+// NOTE: the DOM selectors below are unverified against live UNGM markup (this
+// sandbox can't reach ungm.org). To make the first live run self-correcting,
+// if no notice rows match, extractTenders throws with a snippet of the actual
+// rendered DOM — that surfaces in scrape_runs.errors so the selectors can be
+// fixed against real structure on the next pass.
 
-interface UngmNotice {
-  [key: string]: unknown;
+interface UngmRow {
+  id: string;
+  title: string;
+  href: string;
+  rowText: string;
 }
 
-interface UngmSearchResponse {
-  // Observed candidate wrappers across UNGM-style endpoints.
-  notices?: UngmNotice[];
-  Data?: UngmNotice[];
-  data?: UngmNotice[];
-  results?: UngmNotice[];
-  totalCount?: number;
-  TotalCount?: number;
-}
-
-// Pull the first present, non-empty value across a list of candidate keys
-// (case variations included) so slightly-off field-name guesses still resolve.
-function pick(notice: UngmNotice, keys: string[]): string | undefined {
-  for (const key of keys) {
-    const v = notice[key];
-    if (typeof v === "string" && v.trim()) return v.trim();
-    if (typeof v === "number") return String(v);
-  }
-  return undefined;
-}
-
-// UN two-/three-letter country hints → ISO-2 where obvious; otherwise pass the
-// raw string through (buyer_country is free-text, not constrained).
-function normalizeCountry(raw: string | undefined): string {
-  if (!raw) return "";
-  const trimmed = raw.trim();
-  if (trimmed.length === 2) return trimmed.toUpperCase();
-  return trimmed;
-}
-
-function parseDate(raw: string | undefined): Date | null {
-  if (!raw) return null;
-  const d = new Date(raw);
-  return Number.isNaN(d.getTime()) ? null : d;
-}
-
-/**
- * WHO Procurement via UNGM (ungm.org) — WHO's tender notices published on the
- * UN Global Marketplace. No API key required. Queries the public notice search
- * filtered to WHO as the publishing agency, keeps health-relevant notices, and
- * classifies them with the shared keyword/CPV classifier.
- *
- * NOTE: written to UNGM's observed public search contract but NOT verified
- * against a live response (this sandbox blocks ungm.org). Field access is
- * defensive; failures surface into scrape_runs.errors. Verify on the server
- * before relying on it.
- */
-export class WHOProcurementScraper extends ApiScraper {
+export class WHOProcurementScraper extends BaseScraper {
   readonly source = "who_procurement" as const;
   readonly baseUrl = "https://www.ungm.org";
 
-  private readonly apiUrl = "https://www.ungm.org/Public/Notice/Search";
-  private readonly pageSize = 100;
-  private readonly maxPages = 5;
+  private readonly searchUrl = `${this.baseUrl}/Public/Notice`;
 
-  protected async fetchTenders(): Promise<Partial<Tender>[]> {
-    const out: Partial<Tender>[] = [];
-    const seen = new Set<string>();
+  async extractTenders(page: Page): Promise<Partial<Tender>[]> {
+    const navigated = await this.safeNavigate(page, this.searchUrl);
+    if (!navigated) return [];
 
-    for (let page = 0; page < this.maxPages; page++) {
-      // UNGM's search is a POST with a JSON body; filter to WHO and newest-first.
-      const body = {
-        PageIndex: page,
-        PageSize: this.pageSize,
-        Title: "",
-        Description: "",
-        Agencies: ["WHO"],
-        UNOrganisations: ["WHO"],
-        SortField: "DatePublished",
-        SortAscending: false,
-      };
+    // UNGM renders its results grid client-side after an XHR — give it time.
+    await page.waitForTimeout(5000);
 
-      let res: Response;
-      try {
-        res = await fetch(this.apiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "User-Agent": SCRAPER_USER_AGENT,
-          },
-          body: JSON.stringify(body),
-          signal: AbortSignal.timeout(30000),
-        });
-      } catch (err) {
-        if (page === 0) throw new Error(`WHO/UNGM request failed: ${String(err)}`);
-        logger.warn("WHO/UNGM: request failed on later page, stopping", { page, error: String(err) });
-        break;
-      }
+    // Pull every anchor that points at a notice detail page, plus the text of
+    // its surrounding row, in one DOM pass. Using $$eval (not evaluate) so
+    // Playwright types the callback args and we avoid a DOM-lib dependency.
+    const rows: UngmRow[] = await page
+      .$$eval("a[href*='/Public/Notice/']", (anchors) =>
+        anchors
+          .map((a) => {
+            const href = a.getAttribute("href") || "";
+            const idMatch = href.match(/\/Public\/Notice\/(\d+)/);
+            const container =
+              a.closest("tr, .tableRow, .row, li, .searchResult, .ungm-list-item") || a.parentElement;
+            const rowText = (container?.textContent || "").replace(/\s+/g, " ").trim();
+            return {
+              id: idMatch ? idMatch[1] : "",
+              title: (a.textContent || "").replace(/\s+/g, " ").trim(),
+              href,
+              rowText,
+            };
+          })
+          .filter((r) => r.id),
+      )
+      .catch(() => [] as UngmRow[]);
 
-      if (!res.ok) {
-        const snippet = (await res.text().catch(() => "")).slice(0, 300);
-        if (page === 0) throw new Error(`WHO/UNGM returned ${res.status}: ${snippet}`);
-        logger.warn("WHO/UNGM: non-OK on later page, stopping", { page, status: res.status });
-        break;
-      }
-
-      // UNGM's public search is a session/CSRF-protected ASP.NET app, not a
-      // JSON API — an unauthenticated POST gets an HTML error page back. Detect
-      // that and fail with a clear, actionable message instead of a cryptic
-      // "Unexpected token '<'" JSON parse error.
-      const contentType = res.headers.get("content-type") ?? "";
-      if (!contentType.includes("json")) {
-        throw new Error(
-          "WHO/UNGM did not return JSON (got HTML) — ungm.org has no public JSON search API; " +
-          "it requires a browser session/anti-forgery token. This source needs browser automation " +
-          "or an alternative WHO procurement feed.",
-        );
-      }
-
-      const data = (await res.json()) as UngmSearchResponse | UngmNotice[];
-      const notices = Array.isArray(data)
-        ? data
-        : data.notices ?? data.Data ?? data.data ?? data.results ?? [];
-
-      if (notices.length === 0) break;
-
-      for (const n of notices) {
-        const externalId = pick(n, ["DisplayId", "Id", "id", "NoticeId", "noticeId", "Reference"]);
-        if (!externalId || seen.has(externalId)) continue;
-
-        const title = pick(n, ["Title", "title", "Name"]);
-        if (!title) continue;
-
-        // Keep only genuinely WHO notices in case the agency filter is loose.
-        const agency = pick(n, ["AgencyName", "UNOrganisation", "UNOrganization", "Organization", "agency"]) ?? "";
-        if (agency && !/who|world health/i.test(agency)) continue;
-
-        const description = pick(n, ["Description", "description", "Summary"]) ?? "";
-        const category = classifyUkTender(title, description);
-        // WHO notices are overwhelmingly health-related; keep everything except
-        // clearly-unclassifiable ("other") notices with no health keyword hit.
-        if (category === "other" && !/health|medical|pharma|vaccine|hospital|clinic|diagnostic/i.test(`${title} ${description}`)) {
-          continue;
-        }
-
-        seen.add(externalId);
-        out.push(this.mapNotice(n, externalId, title, description, category));
-      }
-
-      const total = Number(
-        (Array.isArray(data) ? undefined : data.totalCount ?? data.TotalCount) ?? NaN
-      );
-      if (!Number.isNaN(total) && (page + 1) * this.pageSize >= total) break;
-      if (notices.length < this.pageSize) break;
+    if (rows.length === 0) {
+      // Self-diagnostic: capture the rendered structure so the selectors can be
+      // corrected from a real sample (surfaces in scrape_runs.errors).
+      const snippet = await page
+        .$eval("body", (el) => (el.innerHTML || "").replace(/\s+/g, " ").slice(0, 900))
+        .catch(() => "(could not read body)");
+      throw new Error(`UNGM: no notice rows matched selectors. Rendered DOM snippet: ${snippet}`);
     }
 
-    logger.info("WHO/UNGM: health notices collected", { count: out.length });
+    const seen = new Set<string>();
+    const out: Partial<Tender>[] = [];
+    for (const row of rows) {
+      if (!row.id || seen.has(row.id)) continue;
+      if (!row.title) continue;
+
+      // Keep WHO notices, or clearly health-related notices from any UN agency
+      // (UNGM hosts many health buyers — WHO, UNICEF, UNFPA, etc.). The row
+      // text is the only agency signal we have without the detail page.
+      const isWho = /who\b|world health/i.test(row.rowText);
+      const category = classifyUkTender(row.title, row.rowText);
+      const healthText = /health|medical|pharma|vaccine|hospital|clinic|diagnostic|surgical|laborator/i.test(
+        `${row.title} ${row.rowText}`,
+      );
+      if (!isWho && !healthText && category === "other") continue;
+
+      seen.add(row.id);
+      out.push(this.mapRow(row, category));
+    }
+
+    logger.info("WHO/UNGM: notices scraped", { anchors: rows.length, kept: out.length });
     return out;
   }
 
-  private mapNotice(
-    notice: UngmNotice,
-    externalId: string,
-    title: string,
-    description: string,
-    category: ProcurementCategory,
-  ): Partial<Tender> {
-    const published = parseDate(pick(notice, ["Published", "DatePublished", "PublishedDate", "publishedDate"]));
-    const deadline = parseDate(pick(notice, ["Deadline", "DeadlineDate", "deadline", "ClosingDate"]));
-    const country = normalizeCountry(pick(notice, ["Country", "country", "DutyStation", "BeneficiaryCountry"]));
-    const noticeUrl = pick(notice, ["Url", "url", "Link"]);
+  async extractAwards(_page: Page): Promise<Partial<ContractAward>[]> {
+    return [];
+  }
+
+  private mapRow(row: UngmRow, category: ProcurementCategory): Partial<Tender> {
+    const url = row.href.startsWith("http") ? row.href : `${this.baseUrl}${row.href}`;
+    // Best-effort deadline: look for a dd-Mon-yyyy or ISO-ish date in the row.
+    const dateMatch = row.rowText.match(/\d{1,2}[-/\s][A-Za-z]{3,}[-/\s]\d{4}|\d{4}-\d{2}-\d{2}/);
+    const deadline = dateMatch ? new Date(dateMatch[0]) : null;
 
     return {
-      externalId,
+      externalId: row.id,
       source: "who_procurement",
-      title,
-      description,
-      buyerName: pick(notice, ["AgencyName", "UNOrganisation", "UNOrganization"]) ?? "World Health Organization",
-      buyerCountry: country || "CH", // WHO HQ is Geneva when a notice carries no country
+      title: row.title,
+      description: row.rowText.slice(0, 500),
+      buyerName: /who\b|world health/i.test(row.rowText) ? "World Health Organization" : "UN Agency (UNGM)",
+      buyerCountry: "CH",
       buyerRegion: "Global",
       category,
-      status: deadline && deadline.getTime() < Date.now() ? "closed" : "open",
-      publishedAt: published ?? new Date(),
-      deadline,
+      status: "open",
+      publishedAt: new Date(),
+      deadline: deadline && !Number.isNaN(deadline.getTime()) ? deadline : null,
       originalCurrency: "USD",
       originalValue: null,
       valueUsd: null,
       complianceCriteria: ["WHO procurement standards", "UNGM registration"],
       cpvCodes: [],
-      url: noticeUrl
-        ? (noticeUrl.startsWith("http") ? noticeUrl : `${this.baseUrl}${noticeUrl}`)
-        : `${this.baseUrl}/Public/Notice/${externalId}`,
-      rawData: { agency: pick(notice, ["AgencyName", "UNOrganisation"]), noticeType: pick(notice, ["NoticeType", "Type"]) },
+      url,
+      rawData: {},
     };
   }
 }
