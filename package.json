@@ -13,6 +13,8 @@
     "scrape:ted": "tsx src/scraper/run.ts --source=ted",
     "scrape:sam": "tsx src/scraper/run.ts --source=sam",
     "scrape:govcon": "tsx src/scraper/run.ts --source=govcon",
+    "scrape:who": "tsx src/scraper/run.ts --source=who",
+    "scrape:nhs": "tsx src/scraper/run.ts --source=nhs",
     "migrate": "tsx src/db/migrate.ts",
     "seed": "tsx src/db/seed.ts",
     "test": "vitest run",

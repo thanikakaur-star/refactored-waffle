@@ -3,7 +3,7 @@
 ## Architecture
 
 TypeScript/Node.js full-stack platform that aggregates global healthcare procurement data:
-- **Scraper pipeline**: Playwright scraper for TED Europa; API-based scrapers for SAM.gov (official Get Opportunities API), UK Contracts Finder and Find a Tender Service (OCDS APIs) — WHO and NHS Supply Chain are supported sources but have no scraper implementation yet
+- **Scraper pipeline**: Playwright scraper for TED Europa; API-based scrapers for SAM.gov (official Get Opportunities API), UK Contracts Finder and Find a Tender Service (OCDS APIs), World Bank, CanadaBuys, WHO Procurement (via UNGM) and NHS Supply Chain (SCCL notices via the UK Find a Tender OCDS feed)
 - **PostgreSQL via Supabase**: Normalized schema with currency standardization, regional benchmarks
 - **Secure API tier**: Express API with tiered API key authentication (free/basic/pro/enterprise)
 - **B2B Dashboard**: Tailwind CSS + Chart.js analytics dashboard for procurement visualization
@@ -53,6 +53,8 @@ Copy `.env.example` to `.env` and fill in all values. Required:
 - `src/scraper/sources/ted.ts` — TED Europa scraper (Playwright)
 - `src/scraper/sources/sam.ts` — SAM.gov scraper (official api.sam.gov Get Opportunities API — needs SAM_GOV_API_KEY)
 - `src/scraper/sources/govcon.ts` — GovCon API scraper (govconapi.com, third-party aggregator over the same federal data — needs GOVCON_API_KEY, persists under `sam_gov` source)
+- `src/scraper/sources/who.ts` — WHO Procurement scraper (WHO notices via UNGM public search, unverified endpoint — see file comment)
+- `src/scraper/sources/nhs-supply-chain.ts` — NHS Supply Chain scraper (SCCL-buyer notices filtered from the UK Find a Tender OCDS feed)
 - `src/scraper/sources/contracts-finder.ts` — Contracts Finder scraper (OCDS API, unverified endpoint — see file comment)
 - `src/scraper/sources/find-a-tender.ts` — Find a Tender Service scraper (OCDS API, unverified endpoint — see file comment)
 - `src/scraper/sources/uk-category-map.ts` — Keyword/CPV classifier for UK service & goods tenders

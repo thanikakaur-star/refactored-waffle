@@ -972,6 +972,8 @@ app.get("/api/admin/sources", requireAdmin, async (_req, res) => {
     { source: "find_a_tender", label: "Find a Tender (UK)", keyEnv: null },
     { source: "world_bank", label: "World Bank", keyEnv: null },
     { source: "canada_buys", label: "CanadaBuys", keyEnv: null },
+    { source: "who_procurement", label: "WHO Procurement (UNGM)", keyEnv: null },
+    { source: "nhs_supply_chain", label: "NHS Supply Chain (SCCL)", keyEnv: null },
   ].map((s) => ({
     ...s,
     keyRequired: s.keyEnv !== null,

@@ -6,6 +6,8 @@ import { ContractsFinderScraper } from "./sources/contracts-finder.js";
 import { FindATenderScraper } from "./sources/find-a-tender.js";
 import { WorldBankScraper } from "./sources/world-bank.js";
 import { CanadaBuysScraper } from "./sources/canada-buys.js";
+import { WHOProcurementScraper } from "./sources/who.js";
+import { NHSSupplyChainScraper } from "./sources/nhs-supply-chain.js";
 import { getSupabaseClient } from "../db/client.js";
 import { logger } from "../utils/logger.js";
 import { checkAlertsAndNotify } from "../alerts/notifier.js";
@@ -24,6 +26,8 @@ const ALL_SCRAPERS: AnyScraper[] = [
   new FindATenderScraper(),
   new WorldBankScraper(),
   new CanadaBuysScraper(),
+  new WHOProcurementScraper(),
+  new NHSSupplyChainScraper(),
 ];
 
 // GovconScraper shares source="sam_gov" with SamGovScraper (both persist to
@@ -34,6 +38,8 @@ const ALL_SCRAPERS: AnyScraper[] = [
 function matchesFilter(scraper: AnyScraper, filter: string): boolean {
   if (filter === "govcon") return scraper instanceof GovconScraper;
   if (filter === "sam" || filter === "sam_gov") return scraper.source === "sam_gov" && !(scraper instanceof GovconScraper);
+  if (filter === "who") return scraper.source === "who_procurement";
+  if (filter === "nhs") return scraper.source === "nhs_supply_chain";
   return scraper.source === filter;
 }
 
