@@ -25,6 +25,7 @@ interface ProcNotice {
 }
 
 interface ProcNoticesResponse {
+  total?: number | string;
   procnotices?: {
     procnotice?: ProcNotice[];
   };
@@ -56,42 +57,71 @@ export class WorldBankScraper extends ApiScraper {
   readonly baseUrl = "https://search.worldbank.org";
 
   private readonly rows = 200;
+  private readonly maxPages = 15;
   private readonly fields = [
     "id", "notice_type", "project_id", "project_name", "project_ctry_name",
     "region", "bid_description", "procurement_category", "procurement_method",
     "submission_deadline_date", "publication_date", "sector",
   ].join(",");
 
+  private pageUrl(offset: number): string {
+    return (
+      `${this.baseUrl}/api/v2/procnotices?format=json&rows=${this.rows}&os=${offset}` +
+      `&srt=publication_date&order=desc&fl=${encodeURIComponent(this.fields)}`
+    );
+  }
+
   protected async fetchTenders(): Promise<Partial<Tender>[]> {
-    const url =
-      `${this.baseUrl}/api/v2/procnotices?format=json&rows=${this.rows}` +
-      `&srt=publication_date&order=desc&fl=${encodeURIComponent(this.fields)}`;
-
-    const res = await fetch(url, {
-      headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(30000),
-    });
-
-    if (!res.ok) {
-      const snippet = (await res.text().catch(() => "")).slice(0, 300);
-      throw new Error(`World Bank API returned ${res.status}: ${snippet}`);
-    }
-
-    const data = (await res.json()) as ProcNoticesResponse;
-    const notices = data.procnotices?.procnotice ?? [];
-
     const out: Partial<Tender>[] = [];
-    for (const n of notices) {
-      if (!n.project_name && !n.bid_description) continue;
-      const title = n.project_name ?? n.bid_description ?? "";
-      const description = n.bid_description ?? "";
-      const category = classifyUkTender(title, description);
-      if (!isHealthcare(n, category)) continue;
-      if (!n.id) continue;
-      out.push(this.mapNotice(n, title, description, category));
+    const seen = new Set<string>();
+    let scanned = 0;
+
+    // Walk offset pages (os += rows) newest-first until a short/empty page,
+    // the reported total is exhausted, or the page cap is hit. The health
+    // filter runs per notice, so we page through the raw feed to surface the
+    // health-sector slice buried within it rather than just the newest 200.
+    for (let page = 0; page < this.maxPages; page++) {
+      const offset = page * this.rows;
+      const res = await fetch(this.pageUrl(offset), {
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(30000),
+      });
+
+      if (!res.ok) {
+        const snippet = (await res.text().catch(() => "")).slice(0, 300);
+        // First page failing is a hard error; a later page failing keeps what
+        // was already collected rather than throwing the whole run away.
+        if (page === 0) {
+          throw new Error(`World Bank API returned ${res.status}: ${snippet}`);
+        }
+        logger.warn("World Bank: non-OK on later page, stopping pagination", { page, status: res.status });
+        break;
+      }
+
+      const data = (await res.json()) as ProcNoticesResponse;
+      const notices = data.procnotices?.procnotice ?? [];
+      if (notices.length === 0) break;
+      scanned += notices.length;
+
+      for (const n of notices) {
+        if (!n.project_name && !n.bid_description) continue;
+        if (!n.id || seen.has(n.id)) continue;
+        const title = n.project_name ?? n.bid_description ?? "";
+        const description = n.bid_description ?? "";
+        const category = classifyUkTender(title, description);
+        if (!isHealthcare(n, category)) continue;
+        seen.add(n.id);
+        out.push(this.mapNotice(n, title, description, category));
+      }
+
+      // Stop once we've walked the whole reported result set, or the API
+      // returned a short final page.
+      const total = data.total != null ? Number(data.total) : undefined;
+      if (total !== undefined && !Number.isNaN(total) && offset + notices.length >= total) break;
+      if (notices.length < this.rows) break;
     }
 
-    logger.info("World Bank: healthcare tenders collected", { count: out.length });
+    logger.info("World Bank: healthcare tenders collected", { kept: out.length, noticesScanned: scanned });
     return out;
   }
 

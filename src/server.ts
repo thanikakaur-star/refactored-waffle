@@ -958,6 +958,47 @@ app.get("/api/admin/overview", requireAdmin, async (_req, res) => {
   }
 });
 
+// Scraper source diagnostics — which sources need an API key, whether that key
+// is actually present in this environment (boolean only, the value is never
+// exposed), and each source's most recent scrape run. Use this to confirm
+// SAM.gov / GovCon keys are wired up on the deployed server and to spot a
+// source that's silently erroring or returning nothing.
+app.get("/api/admin/sources", requireAdmin, async (_req, res) => {
+  const sources = [
+    { source: "ted_europa", label: "TED Europa", keyEnv: null as string | null },
+    { source: "sam_gov", label: "SAM.gov (official API)", keyEnv: "SAM_GOV_API_KEY" },
+    { source: "sam_gov", label: "GovCon API (govconapi.com)", keyEnv: "GOVCON_API_KEY" },
+    { source: "contracts_finder", label: "Contracts Finder (UK)", keyEnv: null },
+    { source: "find_a_tender", label: "Find a Tender (UK)", keyEnv: null },
+    { source: "world_bank", label: "World Bank", keyEnv: null },
+    { source: "canada_buys", label: "CanadaBuys", keyEnv: null },
+  ].map((s) => ({
+    ...s,
+    keyRequired: s.keyEnv !== null,
+    keyConfigured: s.keyEnv ? !!process.env[s.keyEnv] : null,
+  }));
+
+  // Latest scrape_runs row per source (best-effort — omitted in local mode).
+  let lastRuns: Record<string, unknown> = {};
+  if (USE_SUPABASE && supabase) {
+    try {
+      const { data } = await supabase
+        .from("scrape_runs")
+        .select("source, completed_at, tenders_found, tenders_new, errors, status, duration_ms")
+        .order("completed_at", { ascending: false })
+        .limit(200);
+      for (const run of data ?? []) {
+        // Rows come back newest-first, so the first one seen per source wins.
+        if (!lastRuns[(run as any).source]) lastRuns[(run as any).source] = run;
+      }
+    } catch (err) {
+      logger.warn("Admin sources: failed to read scrape_runs", { error: String(err) });
+    }
+  }
+
+  res.json({ data: { sources, lastRuns, mode: USE_SUPABASE ? "production" : "local" } });
+});
+
 // Resolve static asset directories — bulletproof for any CWD or __dirname
 const publicDir = [
   path.resolve(__dirname, "..", "public"),
