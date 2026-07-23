@@ -71,6 +71,13 @@ export class SamGovScraper extends ApiScraper {
 
   private readonly apiUrl = "https://api.sam.gov/opportunities/v2/search";
 
+  // api.sam.gov caps `limit` at 1000, but smaller pages are gentler and let us
+  // stop early per code. Walk offset pages until totalRecords is exhausted, a
+  // short page returns, or the per-code page cap is hit.
+  private readonly pageSize = 100;
+  private readonly maxPagesPerNaics = 10;
+  private readonly lookbackDays = 90;
+
   protected async fetchTenders(): Promise<Partial<Tender>[]> {
     const apiKey = process.env.SAM_GOV_API_KEY;
     if (!apiKey) {
@@ -78,47 +85,58 @@ export class SamGovScraper extends ApiScraper {
     }
 
     const postedTo = new Date();
-    const postedFrom = new Date(postedTo.getTime() - 90 * 24 * 60 * 60 * 1000);
+    const postedFrom = new Date(postedTo.getTime() - this.lookbackDays * 24 * 60 * 60 * 1000);
 
     const tenders: Partial<Tender>[] = [];
     const seen = new Set<string>();
 
     for (const [naics, category] of Object.entries(NAICS_CATEGORY_MAP)) {
-      const params = new URLSearchParams({
-        api_key: apiKey,
-        postedFrom: mmddyyyy(postedFrom),
-        postedTo: mmddyyyy(postedTo),
-        ncode: naics,
-        limit: "50",
-      });
-
-      let res: Response;
-      try {
-        res = await fetch(`${this.apiUrl}?${params.toString()}`, {
-          headers: { Accept: "application/json", "User-Agent": SCRAPER_USER_AGENT },
-          signal: AbortSignal.timeout(30000),
+      for (let page = 0; page < this.maxPagesPerNaics; page++) {
+        const offset = page * this.pageSize;
+        const params = new URLSearchParams({
+          api_key: apiKey,
+          postedFrom: mmddyyyy(postedFrom),
+          postedTo: mmddyyyy(postedTo),
+          ncode: naics,
+          limit: String(this.pageSize),
+          offset: String(offset),
         });
-      } catch (err) {
-        logger.warn("SAM.gov: request failed for NAICS", { naics, error: String(err) });
-        continue;
-      }
 
-      if (!res.ok) {
-        const snippet = (await res.text().catch(() => "")).slice(0, 200);
-        // A bad key / rate limit affects every code — fail loudly rather than loop.
-        if (res.status === 401 || res.status === 403 || res.status === 429) {
-          throw new Error(`SAM.gov API ${res.status}: ${snippet}`);
+        let res: Response;
+        try {
+          res = await fetch(`${this.apiUrl}?${params.toString()}`, {
+            headers: { Accept: "application/json", "User-Agent": SCRAPER_USER_AGENT },
+            signal: AbortSignal.timeout(30000),
+          });
+        } catch (err) {
+          logger.warn("SAM.gov: request failed for NAICS", { naics, page, error: String(err) });
+          break; // network hiccup on this code — move to the next NAICS
         }
-        logger.warn("SAM.gov: non-OK for NAICS", { naics, status: res.status });
-        continue;
-      }
 
-      const data = (await res.json()) as SamResponse;
-      for (const opp of data.opportunitiesData ?? []) {
-        const id = opp.noticeId ?? opp.solicitationNumber ?? "";
-        if (!id || seen.has(id)) continue;
-        seen.add(id);
-        tenders.push(this.mapOpportunity(opp, category));
+        if (!res.ok) {
+          const snippet = (await res.text().catch(() => "")).slice(0, 200);
+          // A bad key / rate limit affects every code — fail loudly rather than loop.
+          if (res.status === 401 || res.status === 403 || res.status === 429) {
+            throw new Error(`SAM.gov API ${res.status}: ${snippet}`);
+          }
+          logger.warn("SAM.gov: non-OK for NAICS", { naics, page, status: res.status });
+          break;
+        }
+
+        const data = (await res.json()) as SamResponse;
+        const batch = data.opportunitiesData ?? [];
+        for (const opp of batch) {
+          const id = opp.noticeId ?? opp.solicitationNumber ?? "";
+          if (!id || seen.has(id)) continue;
+          seen.add(id);
+          tenders.push(this.mapOpportunity(opp, category));
+        }
+
+        // Stop paging this code once we've walked its whole result set or the
+        // API returned a short/empty final page.
+        const total = data.totalRecords;
+        if (total !== undefined && offset + batch.length >= total) break;
+        if (batch.length < this.pageSize) break;
       }
     }
 

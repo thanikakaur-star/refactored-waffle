@@ -102,6 +102,8 @@ export class GovconScraper extends ApiScraper {
   readonly baseUrl = "https://govconapi.com";
 
   private readonly apiUrl = "https://govconapi.com/api/v1/opportunities/search";
+  private readonly pageSize = 50;
+  private readonly maxPagesPerQuery = 10;
 
   protected async fetchTenders(): Promise<Partial<Tender>[]> {
     const apiKey = process.env.GOVCON_API_KEY;
@@ -114,59 +116,76 @@ export class GovconScraper extends ApiScraper {
 
     for (const [naics, category] of Object.entries(NAICS_CATEGORY_MAP)) {
       for (const noticeType of NOTICE_TYPES) {
-        const params = new URLSearchParams({
-          naics,
-          notice_type: noticeType,
-          limit: "25",
-        });
-
-        let res: Response;
-        try {
-          res = await fetch(`${this.apiUrl}?${params.toString()}`, {
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-              Accept: "application/json",
-              "User-Agent": SCRAPER_USER_AGENT,
-            },
-            signal: AbortSignal.timeout(30000),
+        // Paginate this NAICS+notice_type combination. `page` is 1-based; the
+        // exact param name isn't documented, so a zero-new-results guard below
+        // stops us cleanly if the API ignores it and just re-serves page 1
+        // (rather than looping maxPagesPerQuery times over identical data).
+        for (let page = 1; page <= this.maxPagesPerQuery; page++) {
+          const params = new URLSearchParams({
+            naics,
+            notice_type: noticeType,
+            limit: String(this.pageSize),
+            page: String(page),
           });
-        } catch (err) {
-          logger.warn("GovCon API: request failed", { naics, noticeType, error: String(err) });
-          continue;
-        }
 
-        if (!res.ok) {
-          const snippet = (await res.text().catch(() => "")).slice(0, 200);
-          if (res.status === 401 || res.status === 403 || res.status === 429) {
-            throw new Error(`GovCon API ${res.status}: ${snippet}`);
-          }
-          logger.warn("GovCon API: non-OK response", { naics, noticeType, status: res.status });
-          continue;
-        }
-
-        const data = (await res.json()) as GovconSearchResponse;
-        const opportunities = data.data ?? data.results ?? [];
-
-        for (const opp of opportunities) {
-          const id = opp.notice_id ?? opp.solicitation_number ?? "";
-          if (!id || seen.has(id)) continue;
-          seen.add(id);
-          tenders.push(this.mapOpportunity(opp, category));
-
-          if (opp.award?.amount) {
-            this.pendingAwards.push({
-              tenderExternalId: id,
-              awardDate: opp.award.award_date ? new Date(opp.award.award_date) : new Date(),
-              supplierName: opp.award.awardee_name || "Unknown Supplier",
-              supplierCountry: opp.award.awardee_country || "US",
-              originalCurrency: "USD",
-              awardValue: opp.award.amount,
-              awardValueUsd: convertToUsd(opp.award.amount, "USD") ?? opp.award.amount,
-              frameworkType: null,
-              duration: opp.award.duration || null,
-              source: "sam_gov",
+          let res: Response;
+          try {
+            res = await fetch(`${this.apiUrl}?${params.toString()}`, {
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                Accept: "application/json",
+                "User-Agent": SCRAPER_USER_AGENT,
+              },
+              signal: AbortSignal.timeout(30000),
             });
+          } catch (err) {
+            logger.warn("GovCon API: request failed", { naics, noticeType, page, error: String(err) });
+            break;
           }
+
+          if (!res.ok) {
+            const snippet = (await res.text().catch(() => "")).slice(0, 200);
+            if (res.status === 401 || res.status === 403 || res.status === 429) {
+              throw new Error(`GovCon API ${res.status}: ${snippet}`);
+            }
+            logger.warn("GovCon API: non-OK response", { naics, noticeType, page, status: res.status });
+            break;
+          }
+
+          const data = (await res.json()) as GovconSearchResponse;
+          const opportunities = data.data ?? data.results ?? [];
+          if (opportunities.length === 0) break;
+
+          let newThisPage = 0;
+          for (const opp of opportunities) {
+            const id = opp.notice_id ?? opp.solicitation_number ?? "";
+            if (!id || seen.has(id)) continue;
+            seen.add(id);
+            newThisPage++;
+            tenders.push(this.mapOpportunity(opp, category));
+
+            if (opp.award?.amount) {
+              this.pendingAwards.push({
+                tenderExternalId: id,
+                awardDate: opp.award.award_date ? new Date(opp.award.award_date) : new Date(),
+                supplierName: opp.award.awardee_name || "Unknown Supplier",
+                supplierCountry: opp.award.awardee_country || "US",
+                originalCurrency: "USD",
+                awardValue: opp.award.amount,
+                awardValueUsd: convertToUsd(opp.award.amount, "USD") ?? opp.award.amount,
+                frameworkType: null,
+                duration: opp.award.duration || null,
+                source: "sam_gov",
+              });
+            }
+          }
+
+          // Stop if the page added nothing new (pagination param ignored, or
+          // fully-overlapping data), the total is exhausted, or it was short.
+          if (newThisPage === 0) break;
+          const total = data.total;
+          if (total !== undefined && page * this.pageSize >= total) break;
+          if (opportunities.length < this.pageSize) break;
         }
       }
     }
