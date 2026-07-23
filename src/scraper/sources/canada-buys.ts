@@ -1,4 +1,4 @@
-import { ApiScraper } from "../api-base.js";
+import { ApiScraper, SCRAPER_USER_AGENT } from "../api-base.js";
 import { classifyUkTender } from "./uk-category-map.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
@@ -25,7 +25,7 @@ export class CanadaBuysScraper extends ApiScraper {
 
   protected async fetchTenders(): Promise<Partial<Tender>[]> {
     const res = await fetch(this.csvUrl, {
-      headers: { Accept: "text/csv" },
+      headers: { Accept: "text/csv", "User-Agent": SCRAPER_USER_AGENT },
       signal: AbortSignal.timeout(45000),
     });
 

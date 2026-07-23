@@ -1,4 +1,4 @@
-import { ApiScraper } from "../api-base.js";
+import { ApiScraper, SCRAPER_USER_AGENT } from "../api-base.js";
 import { convertToUsd } from "../../utils/currency.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
@@ -95,7 +95,7 @@ export class SamGovScraper extends ApiScraper {
       let res: Response;
       try {
         res = await fetch(`${this.apiUrl}?${params.toString()}`, {
-          headers: { Accept: "application/json" },
+          headers: { Accept: "application/json", "User-Agent": SCRAPER_USER_AGENT },
           signal: AbortSignal.timeout(30000),
         });
       } catch (err) {

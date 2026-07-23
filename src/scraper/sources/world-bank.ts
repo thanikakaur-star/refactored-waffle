@@ -1,4 +1,4 @@
-import { ApiScraper } from "../api-base.js";
+import { ApiScraper, SCRAPER_USER_AGENT } from "../api-base.js";
 import { classifyUkTender } from "./uk-category-map.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
@@ -83,7 +83,7 @@ export class WorldBankScraper extends ApiScraper {
     for (let page = 0; page < this.maxPages; page++) {
       const offset = page * this.rows;
       const res = await fetch(this.pageUrl(offset), {
-        headers: { Accept: "application/json" },
+        headers: { Accept: "application/json", "User-Agent": SCRAPER_USER_AGENT },
         signal: AbortSignal.timeout(30000),
       });
 

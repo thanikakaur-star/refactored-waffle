@@ -1,4 +1,4 @@
-import { ApiScraper } from "../api-base.js";
+import { ApiScraper, SCRAPER_USER_AGENT } from "../api-base.js";
 import { convertToUsd } from "../../utils/currency.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
@@ -126,6 +126,7 @@ export class GovconScraper extends ApiScraper {
             headers: {
               Authorization: `Bearer ${apiKey}`,
               Accept: "application/json",
+              "User-Agent": SCRAPER_USER_AGENT,
             },
             signal: AbortSignal.timeout(30000),
           });

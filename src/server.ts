@@ -978,8 +978,13 @@ app.get("/api/admin/sources", requireAdmin, async (_req, res) => {
     keyConfigured: s.keyEnv ? !!process.env[s.keyEnv] : null,
   }));
 
-  // Latest scrape_runs row per source (best-effort — omitted in local mode).
-  let lastRuns: Record<string, unknown> = {};
+  // Recent scrape_runs per source (best-effort — omitted in local mode). Kept
+  // as a short list rather than a single row because SAM.gov and GovCon both
+  // log under source="sam_gov" (GovCon persists tenders under the same source
+  // by design), so a single newest-row-per-source would mask one behind the
+  // other. Up to 2 most-recent runs per source keeps both visible.
+  const RUNS_PER_SOURCE = 2;
+  let lastRuns: Record<string, unknown[]> = {};
   if (USE_SUPABASE && supabase) {
     try {
       const { data } = await supabase
@@ -988,8 +993,9 @@ app.get("/api/admin/sources", requireAdmin, async (_req, res) => {
         .order("completed_at", { ascending: false })
         .limit(200);
       for (const run of data ?? []) {
-        // Rows come back newest-first, so the first one seen per source wins.
-        if (!lastRuns[(run as any).source]) lastRuns[(run as any).source] = run;
+        const src = (run as any).source as string;
+        const bucket = (lastRuns[src] ??= []);
+        if (bucket.length < RUNS_PER_SOURCE) bucket.push(run);
       }
     } catch (err) {
       logger.warn("Admin sources: failed to read scrape_runs", { error: String(err) });

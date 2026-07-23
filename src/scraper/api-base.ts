@@ -2,6 +2,13 @@ import type { ScrapeResult, TenderSource, Tender, ContractAward } from "../types
 import { logger } from "../utils/logger.js";
 import { persistTenders, persistAwards } from "./persist.js";
 
+// A realistic browser User-Agent. Several government data endpoints (notably
+// CanadaBuys' CSV) reject the default Node/undici agent with a 403, so every
+// API-based scraper should send this. Kept in one place so it's easy to bump.
+export const SCRAPER_USER_AGENT =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+
 // An award pulled out of the same fetch as its tender, keyed by the
 // tender's externalId so it can be linked to the tender's real DB id
 // (and category) only after that tender has actually been persisted.
