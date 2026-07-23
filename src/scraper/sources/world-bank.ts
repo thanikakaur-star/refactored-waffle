@@ -3,48 +3,58 @@ import { classifyUkTender } from "./uk-category-map.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
 
-// World Bank procurement-notices API response shape — only fields we read.
-// Documented at https://search.worldbank.org/api/v2/procnotices (JSON/XML,
-// no key required). Field names confirmed from World Bank data-catalog docs;
-// NOTE: not yet verified against a live request (this sandbox blocks the
-// domain). Run once on the server and check scrape_runs before relying on
-// it — failures surface there rather than silently returning nothing.
+// World Bank procurement-notices API response shape — confirmed against a live
+// response from https://search.worldbank.org/api/v2/procnotices. `procnotices`
+// is a direct array (NOT { procnotice: [] }), and the per-notice field names
+// are as below (noticedate / submission_date, not publication_date /
+// submission_deadline_date; no sector/region fields).
 interface ProcNotice {
   id?: string;
-  notice_type?: string;
+  notice_type?: string;         // e.g. "Contract Award", "Invitation for Bids"
+  notice_status?: string;       // e.g. "Published"
+  noticedate?: string;          // publication date, "22-Jul-2026"
+  submission_date?: string;     // deadline, ISO "2026-07-22T00:00:00Z"
   project_id?: string;
   project_name?: string;
-  project_ctry_name?: string;
-  region?: string;
+  project_ctry_name?: string;   // full country name, e.g. "Turkiye"
+  bid_reference_no?: string;
   bid_description?: string;
-  procurement_category?: string;
-  procurement_method?: string;
-  submission_deadline_date?: string;
-  publication_date?: string;
-  sector?: string;
+  procurement_group?: string;   // e.g. "GO" (goods), "CW", "CS"
+  procurement_method_name?: string;
+  notice_text?: string;         // HTML blob
 }
 
 interface ProcNoticesResponse {
   total?: number | string;
-  procnotices?: {
-    procnotice?: ProcNotice[];
-  };
+  procnotices?: ProcNotice[];
 }
 
-// World Bank notices don't carry an explicit status field — infer it from
-// the submission deadline instead, since that's the only reliable signal.
-function inferStatus(deadline: string | undefined): "open" | "closed" {
+// notice_type of a "Contract Award" is an award; otherwise infer open/closed
+// from the submission deadline.
+function mapStatus(notice: ProcNotice): "open" | "closed" | "awarded" {
+  if (/award/i.test(notice.notice_type ?? "")) return "awarded";
+  const deadline = notice.submission_date;
   if (!deadline) return "open";
-  return new Date(deadline).getTime() > Date.now() ? "open" : "closed";
+  const t = new Date(deadline).getTime();
+  return Number.isNaN(t) || t > Date.now() ? "open" : "closed";
 }
 
-// World Bank notices aren't CPV-coded — classify off title/description
-// keywords plus the bank's own "sector"/"procurement_category" strings,
-// which frequently say "Health" outright for health-sector projects.
+// World Bank notices aren't CPV-coded and carry no sector field, so health
+// relevance is decided by keyword-scanning the project name + bid description
+// (+ the classifier landing on a real category).
 function isHealthcare(notice: ProcNotice, category: ProcurementCategory): boolean {
-  const tag = `${notice.sector ?? ""} ${notice.procurement_category ?? ""}`.toLowerCase();
-  if (/health|medical|pharma|hiv|malaria|nutrition/.test(tag)) return true;
+  const text = `${notice.project_name ?? ""} ${notice.bid_description ?? ""}`.toLowerCase();
+  if (/health|medical|hospital|clinic|pharma|vaccine|hiv|malaria|tuberculosis|nutrition|maternal|disease|surgical|diagnostic|laborator/.test(text)) {
+    return true;
+  }
   return category !== "other";
+}
+
+// Publication dates come as "22-Jul-2026"; deadlines as ISO. Handle both.
+function parseWbDate(raw: string | undefined): Date | null {
+  if (!raw) return null;
+  const d = new Date(raw);
+  return Number.isNaN(d.getTime()) ? null : d;
 }
 
 /**
@@ -57,17 +67,13 @@ export class WorldBankScraper extends ApiScraper {
   readonly baseUrl = "https://search.worldbank.org";
 
   private readonly rows = 200;
-  private readonly maxPages = 15;
-  private readonly fields = [
-    "id", "notice_type", "project_id", "project_name", "project_ctry_name",
-    "region", "bid_description", "procurement_category", "procurement_method",
-    "submission_deadline_date", "publication_date", "sector",
-  ].join(",");
+  private readonly maxPages = 20;
 
   private pageUrl(offset: number): string {
+    // Return all default fields (no `fl` projection) sorted newest-first.
     return (
       `${this.baseUrl}/api/v2/procnotices?format=json&rows=${this.rows}&os=${offset}` +
-      `&srt=publication_date&order=desc&fl=${encodeURIComponent(this.fields)}`
+      `&srt=noticedate&order=desc`
     );
   }
 
@@ -99,7 +105,7 @@ export class WorldBankScraper extends ApiScraper {
       }
 
       const data = (await res.json()) as ProcNoticesResponse;
-      const notices = data.procnotices?.procnotice ?? [];
+      const notices = data.procnotices ?? [];
       if (notices.length === 0) break;
       scanned += notices.length;
 
@@ -138,18 +144,18 @@ export class WorldBankScraper extends ApiScraper {
       description,
       buyerName: notice.project_name || "World Bank-Financed Project",
       buyerCountry: notice.project_ctry_name || "",
-      buyerRegion: notice.region || "Global",
+      buyerRegion: "Global",
       category,
-      status: inferStatus(notice.submission_deadline_date),
-      publishedAt: notice.publication_date ? new Date(notice.publication_date) : new Date(),
-      deadline: notice.submission_deadline_date ? new Date(notice.submission_deadline_date) : null,
+      status: mapStatus(notice),
+      publishedAt: parseWbDate(notice.noticedate) ?? new Date(),
+      deadline: parseWbDate(notice.submission_date),
       originalCurrency: "USD",
       originalValue: null,
       valueUsd: null,
       complianceCriteria: ["World Bank Procurement Regulations"],
       cpvCodes: [],
       url: `https://projects.worldbank.org/en/projects-operations/procurement-detail/${notice.id}`,
-      rawData: { projectId: notice.project_id, noticeType: notice.notice_type },
+      rawData: { projectId: notice.project_id, noticeType: notice.notice_type, reference: notice.bid_reference_no },
     };
   }
 }

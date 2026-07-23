@@ -116,6 +116,19 @@ export class WHOProcurementScraper extends ApiScraper {
         break;
       }
 
+      // UNGM's public search is a session/CSRF-protected ASP.NET app, not a
+      // JSON API — an unauthenticated POST gets an HTML error page back. Detect
+      // that and fail with a clear, actionable message instead of a cryptic
+      // "Unexpected token '<'" JSON parse error.
+      const contentType = res.headers.get("content-type") ?? "";
+      if (!contentType.includes("json")) {
+        throw new Error(
+          "WHO/UNGM did not return JSON (got HTML) — ungm.org has no public JSON search API; " +
+          "it requires a browser session/anti-forgery token. This source needs browser automation " +
+          "or an alternative WHO procurement feed.",
+        );
+      }
+
       const data = (await res.json()) as UngmSearchResponse | UngmNotice[];
       const notices = Array.isArray(data)
         ? data

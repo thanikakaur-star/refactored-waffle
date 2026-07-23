@@ -1,4 +1,5 @@
 import { ApiScraper, SCRAPER_USER_AGENT, sleep } from "../api-base.js";
+import { convertToUsd } from "../../utils/currency.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
 
@@ -133,6 +134,9 @@ export class TedEuropaScraper extends ApiScraper {
   // canonical v3 notice-level ids. Legacy 2-letter TED codes (ND/TI/PD/...)
   // are deliberately omitted — those are what triggered the 400s. If TED still
   // rejects one, its error names the culprit; adjust here.
+  // All confirmed against TED's live supported-fields vocabulary. The earlier
+  // 400 was a single bad id: "deadline-receipt-tenders-date-lot" (plural) —
+  // the real field is singular "deadline-receipt-tender-date-lot".
   private readonly requestFields = [
     "publication-number",
     "notice-title",
@@ -140,7 +144,8 @@ export class TedEuropaScraper extends ApiScraper {
     "buyer-name",
     "buyer-country",
     "publication-date",
-    "deadline-receipt-tenders-date-lot",
+    "deadline-receipt-tender-date-lot",
+    "total-value",
     "links",
   ];
 
@@ -235,11 +240,16 @@ export class TedEuropaScraper extends ApiScraper {
       fieldText(notice, ["notice-title", "title-proc", "title-lot", "BT-21-Procedure", "BT-21-Lot", "name-buyer"]) ||
       `${this.mapCpvToCategory(cpvCodes).replace(/_/g, " ")} tender — ${externalId}`;
 
-    const country = fieldText(notice, ["buyer-country", "CY", "country"]);
-    const publishedRaw = fieldText(notice, ["publication-date", "PD"]);
+    const country = fieldText(notice, ["buyer-country", "organisation-country-buyer"]);
+    const publishedRaw = fieldText(notice, ["publication-date"]);
     const deadlineRaw = fieldText(notice, [
-      "deadline-receipt-tenders-date-lot", "deadline-receipt-request", "DT",
+      "deadline-receipt-tender-date-lot", "deadline-date-lot", "deadline", "deadline-receipt-request",
     ]);
+
+    // total-value may be a plain number or an object; take the first numeric.
+    const valueRaw = fieldText(notice, ["total-value"]);
+    const value = valueRaw ? Number(valueRaw.replace(/[^\d.]/g, "")) : NaN;
+    const originalValue = Number.isFinite(value) && value > 0 ? value : null;
 
     // links can be an object like { html: { ENG: "https://..." } } or a string.
     const link = this.extractLink(notice["links"]) || `${this.baseUrl}/en/notice/-/detail/${externalId}`;
@@ -248,8 +258,8 @@ export class TedEuropaScraper extends ApiScraper {
       externalId,
       source: "ted_europa",
       title,
-      description: fieldText(notice, ["notice-title", "title-proc"]) || title,
-      buyerName: fieldText(notice, ["buyer-name", "AA", "BT-500-Business"]) || "European Public Buyer",
+      description: title,
+      buyerName: fieldText(notice, ["buyer-name", "organisation-name-buyer"]) || "European Public Buyer",
       buyerCountry: country ? country.slice(0, 2).toUpperCase() : "EU",
       buyerRegion: "Europe",
       category,
@@ -257,12 +267,12 @@ export class TedEuropaScraper extends ApiScraper {
       publishedAt: this.parseDate(publishedRaw) ?? new Date(),
       deadline: this.parseDate(deadlineRaw),
       originalCurrency: "EUR",
-      originalValue: null,
-      valueUsd: null,
+      originalValue,
+      valueUsd: originalValue != null ? convertToUsd(originalValue, "EUR") : null,
       complianceCriteria: ["EU public procurement directives"],
       cpvCodes,
       url: link,
-      rawData: { noticeType: fieldText(notice, ["notice-type", "TD"]) },
+      rawData: { noticeType: fieldText(notice, ["notice-type"]) },
     };
   }
 
