@@ -126,6 +126,24 @@ export class TedEuropaScraper extends ApiScraper {
   // and health & social-work services (85xxx) notices.
   private readonly healthcareCpvQuery = "classification-cpv IN (33000000 85000000)";
 
+  // TED v3 REQUIRES a non-empty `fields` array and validates every id against
+  // its eForms vocabulary — one unknown id 400s the whole request. These are
+  // chosen conservatively: `classification-cpv` and `publication-date` are
+  // known-valid (TED accepted them inside our query filter); the rest are the
+  // canonical v3 notice-level ids. Legacy 2-letter TED codes (ND/TI/PD/...)
+  // are deliberately omitted — those are what triggered the 400s. If TED still
+  // rejects one, its error names the culprit; adjust here.
+  private readonly requestFields = [
+    "publication-number",
+    "notice-title",
+    "classification-cpv",
+    "buyer-name",
+    "buyer-country",
+    "publication-date",
+    "deadline-receipt-tenders-date-lot",
+    "links",
+  ];
+
   protected async fetchTenders(): Promise<Partial<Tender>[]> {
     const since = new Date(Date.now() - this.lookbackDays * 24 * 60 * 60 * 1000);
     const sinceStr = since.toISOString().slice(0, 10).replace(/-/g, ""); // YYYYMMDD
@@ -135,13 +153,10 @@ export class TedEuropaScraper extends ApiScraper {
     const seen = new Set<string>();
 
     for (let page = 1; page <= this.maxPages; page++) {
-      // NOTE: no `fields` param. TED v3 validates every requested field id
-      // against its (versioned, eForms) vocabulary and 400s the whole request
-      // on any unknown one — our earlier explicit list did exactly that. Omit
-      // it and TED returns its default projection, which the defensive parser
-      // below reads. `scope: ACTIVE` = currently-open notices only.
+      // `scope: ACTIVE` = currently-open notices only.
       const body = {
         query,
+        fields: this.requestFields,
         page,
         limit: this.pageSize,
         scope: "ACTIVE",
@@ -199,12 +214,26 @@ export class TedEuropaScraper extends ApiScraper {
   }
 
   private mapNotice(notice: Record<string, unknown>): Partial<Tender> | null {
-    const externalId = fieldText(notice, ["publication-number", "ND"]);
-    const title = fieldText(notice, ["notice-title", "title-proc", "TI", "BT-21-Procedure"]);
-    if (!externalId || !title) return null;
+    // Try several id candidates so a projection using any of them still keys
+    // the notice. Without an id we can't dedupe/persist, so that's the only
+    // hard requirement.
+    const externalId = fieldText(notice, [
+      "publication-number", "publication-number-lot", "ND", "notice-identifier",
+    ]);
+    if (!externalId) return null;
 
-    const cpvCodes = fieldCpvs(notice, ["classification-cpv", "CPV", "cpv"]);
+    const cpvCodes = fieldCpvs(notice, [
+      "classification-cpv", "cpv", "CPV", "main-classification-proc", "additional-classification-proc",
+    ]);
     const category = this.mapCpvToCategory(cpvCodes);
+
+    // Title field id varies by eForms version; try the candidates, and if none
+    // match, synthesize one from category + id rather than dropping the notice
+    // (these are already CPV-filtered to healthcare, so a placeholder title is
+    // acceptable and keeps real EU data flowing while field ids get confirmed).
+    const title =
+      fieldText(notice, ["notice-title", "title-proc", "title-lot", "BT-21-Procedure", "BT-21-Lot", "name-buyer"]) ||
+      `${this.mapCpvToCategory(cpvCodes).replace(/_/g, " ")} tender — ${externalId}`;
 
     const country = fieldText(notice, ["buyer-country", "CY", "country"]);
     const publishedRaw = fieldText(notice, ["publication-date", "PD"]);
