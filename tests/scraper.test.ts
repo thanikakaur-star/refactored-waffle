@@ -5,7 +5,7 @@ import { GovconScraper } from "../src/scraper/sources/govcon.js";
 import { WHOProcurementScraper } from "../src/scraper/sources/who.js";
 import { NHSSupplyChainScraper } from "../src/scraper/sources/nhs-supply-chain.js";
 
-describe("TedEuropaScraper", () => {
+describe("TedEuropaScraper (official API)", () => {
   it("has correct source identifier", () => {
     const scraper = new TedEuropaScraper();
     expect(scraper.source).toBe("ted_europa");
@@ -14,14 +14,6 @@ describe("TedEuropaScraper", () => {
   it("has correct base URL", () => {
     const scraper = new TedEuropaScraper();
     expect(scraper.baseUrl).toBe("https://ted.europa.eu");
-  });
-
-  it("returns empty results when browser not initialized", async () => {
-    const scraper = new TedEuropaScraper();
-    const result = await scraper.scrape();
-    expect(result.source).toBe("ted_europa");
-    expect(result.errors.length).toBeGreaterThan(0);
-    expect(result.tendersFound).toBe(0);
   });
 });
 

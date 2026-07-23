@@ -40,6 +40,7 @@ function matchesFilter(scraper: AnyScraper, filter: string): boolean {
   if (filter === "sam" || filter === "sam_gov") return scraper.source === "sam_gov" && !(scraper instanceof GovconScraper);
   if (filter === "who") return scraper.source === "who_procurement";
   if (filter === "nhs") return scraper.source === "nhs_supply_chain";
+  if (filter === "ted") return scraper.source === "ted_europa";
   return scraper.source === filter;
 }
 
