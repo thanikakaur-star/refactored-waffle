@@ -363,7 +363,7 @@ const tendersFilters = z.object({
   category: z.enum([
     "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
     "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
-    "surgical_instruments", "telemedicine", "clinical_services", "allied_health", "social_care", "other",
+    "surgical_instruments", "telemedicine", "clinical_services", "allied_health", "paramedic_services", "patient_transport", "social_care", "other",
   ]).optional(),
   status: z.enum(["open", "closed", "awarded", "cancelled", "planned"]).optional(),
   country: z.string().max(5).optional(),
@@ -439,7 +439,7 @@ const awardsFilters = z.object({
   category: z.enum([
     "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
     "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
-    "surgical_instruments", "telemedicine", "clinical_services", "allied_health", "social_care", "other",
+    "surgical_instruments", "telemedicine", "clinical_services", "allied_health", "paramedic_services", "patient_transport", "social_care", "other",
   ]).optional(),
   source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "world_bank", "canada_buys", "manual"]).optional(),
   minValue: z.coerce.number().min(0).optional(),
@@ -591,7 +591,7 @@ const createAlertSchema = z.object({
   category: z.enum([
     "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
     "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
-    "surgical_instruments", "telemedicine", "clinical_services", "allied_health", "social_care", "other",
+    "surgical_instruments", "telemedicine", "clinical_services", "allied_health", "paramedic_services", "patient_transport", "social_care", "other",
   ]).optional(),
   source: z.enum(["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "world_bank", "canada_buys", "manual"]).optional(),
   region: z.string().max(50).optional(),
