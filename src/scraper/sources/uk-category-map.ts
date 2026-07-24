@@ -4,6 +4,9 @@ import type { ProcurementCategory } from "../../types/index.js";
 // clean CPV code the way equipment tenders do, so keyword matching on the
 // title/description comes first, falling back to CPV prefix matching.
 const KEYWORD_CATEGORY_MAP: Array<{ keywords: RegExp; category: ProcurementCategory }> = [
+  // Ambulance / emergency medical services — checked FIRST so they don't fall
+  // into allied_health via the broad "paramedical services" CPV (85142000).
+  { keywords: /ambulance|paramedic|rettungsdienst|emergency medical|patient transport|rescue service/i, category: "clinical_services" },
   // Allied health / rehabilitation therapies — checked before clinical_services
   // so OT & physiotherapy land in their own category rather than the generic
   // clinical bucket.
@@ -29,6 +32,7 @@ const CPV_CATEGORY_MAP: Record<string, ProcurementCategory> = {
   "38000000": "laboratory_equipment",
   "48000000": "health_it",
   "85140000": "telemedicine",
+  "85143000": "clinical_services", // ambulance services — keep out of allied_health
   "85142100": "allied_health", // physiotherapy services
   "85142000": "allied_health", // paramedical services (physio, OT, SLT, etc.)
   "85312500": "allied_health", // rehabilitation services
