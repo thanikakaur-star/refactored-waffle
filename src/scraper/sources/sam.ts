@@ -69,7 +69,10 @@ export class SamGovScraper extends ApiScraper {
   readonly source = "sam_gov" as const;
   readonly baseUrl = "https://sam.gov";
 
-  private readonly apiUrl = "https://api.sam.gov/opportunities/v2/search";
+  // Must include the `/prod/` path segment — the bare
+  // /opportunities/v2/search path 404s. (Confirmed: a direct call to
+  // api.sam.gov/prod/opportunities/v2/search works.)
+  private readonly apiUrl = "https://api.sam.gov/prod/opportunities/v2/search";
 
   // api.sam.gov caps `limit` at 1000, but smaller pages are gentler and let us
   // stop early per code. Walk offset pages until totalRecords is exhausted, a

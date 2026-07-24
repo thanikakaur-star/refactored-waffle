@@ -156,7 +156,10 @@ export class GovconScraper extends ApiScraper {
 
           if (res.status === 429) {
             // Burst/rate limit — wait out the window and retry this page once.
-            const waitMs = retryAfterMs(res, 60000);
+            // GovCon's own message says the burst cap resets within 60s, so
+            // cap the wait at 65s even if a Retry-After header claims longer,
+            // to avoid stalling the whole sequential scrape.
+            const waitMs = retryAfterMs(res, 60000, 65000);
             logger.warn("GovCon API: 429, backing off", { naics, noticeType, page, waitMs });
             await sleep(waitMs);
             try {
