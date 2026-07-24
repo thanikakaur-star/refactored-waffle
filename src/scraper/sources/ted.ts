@@ -21,6 +21,8 @@ const CPV_CATEGORY_MAP: Record<string, ProcurementCategory> = {
   "38000000": "laboratory_equipment",
   "48000000": "health_it",
   "85100000": "clinical_services",
+  "85142100": "allied_health", // physiotherapy services
+  "85142000": "allied_health", // paramedical services (physio, OT, SLT)
   "85140000": "telemedicine",
   "85300000": "social_care",
   "85310000": "social_care",

@@ -5,7 +5,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HealthProcure Intel — Healthcare Procurement Intelligence API & Data Platform</title>
-  <meta name="description" content="Track healthcare procurement tenders from TED Europa, SAM.gov, UK Find a Tender, and Contracts Finder in one API and dashboard. Real-time tender alerts, contract award data, and regional pricing benchmarks across 85+ countries." />
+  <meta name="description" content="Track healthcare procurement tenders from TED Europa, UK Find a Tender, Contracts Finder, NHS Supply Chain, US federal contracts, CanadaBuys, the World Bank, and WHO in one API and dashboard. Real-time tender alerts, contract award data, and regional pricing benchmarks across 100+ countries." />
   <meta name="keywords" content="healthcare procurement, tender alerts, procurement API, TED Europa, SAM.gov, UK Find a Tender, Contracts Finder, medical device tenders, government healthcare contracts, procurement intelligence, contract award data, healthcare tender data" />
   <meta name="author" content="HealthProcure Intel" />
   <meta name="robots" content="index, follow" />
@@ -66,7 +66,7 @@
           {
             "@type": "Question",
             "name": "What data sources do you cover?",
-            "acceptedAnswer": { "@type": "Answer", "text": "We aggregate data from four major procurement portals: TED Europa (EU public procurement across 27 member states), SAM.gov (US federal contracts), Find a Tender (UK above-threshold public contracts including NHS trusts and NHS Supply Chain), and Contracts Finder (UK local authority and NHS contracts below the high-value threshold)." }
+            "acceptedAnswer": { "@type": "Answer", "text": "We aggregate data from eight procurement sources: TED Europa (EU public procurement across 27 member states), US federal contracts, Find a Tender (UK above-threshold public contracts including NHS trusts), Contracts Finder (UK local authority and NHS contracts), NHS Supply Chain (SCCL framework notices), CanadaBuys (Canadian public sector), the World Bank (globally-financed development projects), and WHO/UN procurement via UNGM." }
           },
           {
             "@type": "Question",
@@ -225,13 +225,13 @@
         <div>
           <p class="fade-up flex items-center gap-2.5 text-xs font-mono text-gray-500 tracking-wide mb-7">
             <span class="w-1.5 h-1.5 rounded-full bg-teal-light"></span>
-            5 procurement portals &middot; scraped daily &middot; zero manual checking
+            8 procurement sources &middot; scraped daily &middot; zero manual checking
           </p>
           <h1 class="fade-up font-display text-4xl sm:text-5xl lg:text-[3.4rem] font-bold leading-[1.1] tracking-tight mb-7 text-white" style="text-wrap: balance;">
-            Stop refreshing five government portals for <em class="italic text-gold">every</em> healthcare tender.
+            Stop refreshing a dozen government portals for <em class="italic text-gold">every</em> healthcare tender.
           </h1>
           <p class="fade-up max-w-xl text-lg text-gray-400 leading-relaxed mb-9 font-light">
-            Medical devices, pharmaceuticals, diagnostics, surgical instruments, PPE, health IT, and more — TED Europa, SAM.gov, UK Find a Tender, Contracts Finder, and the World Bank, normalized into one searchable feed with CPV classification and daily alerts.
+            Medical devices, pharmaceuticals, diagnostics, surgical instruments, PPE, health IT, clinical services, and more — from TED Europa, UK Find a Tender &amp; Contracts Finder, NHS Supply Chain, US federal contracts, CanadaBuys, the World Bank, and WHO — normalized into one searchable feed with CPV classification and daily alerts.
           </p>
           <div class="fade-up flex flex-col sm:flex-row items-start gap-4 mb-10">
             <a href="#cta" class="w-full sm:w-auto text-center px-8 py-4 rounded-full bg-gold text-dark font-semibold text-base hover:opacity-90 transition-all duration-200">
@@ -242,7 +242,7 @@
             </a>
           </div>
           <div class="fade-up flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-gray-500 font-mono">
-            <span>5 <span class="text-gray-600">markets</span></span>
+            <span>8 <span class="text-gray-600">sources</span></span>
             <span class="w-px h-4 bg-white/10"></span>
             <span>Daily <span class="text-gray-600">refresh</span></span>
             <span class="w-px h-4 bg-white/10"></span>
@@ -296,11 +296,11 @@
               <!-- Data flowing indicator -->
               <div class="flex items-center justify-center gap-2 pt-2 text-xs text-gray-500">
                 <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                Data syncing across 5 markets
+                Data syncing across 8 sources
               </div>
             </div>
           </div>
-          <p class="mt-4 text-xs text-gray-600 pl-1">Real tenders from TED Europa, SAM.gov, UK Find a Tender, Contracts Finder, and World Bank — updated daily</p>
+          <p class="mt-4 text-xs text-gray-600 pl-1">Real tenders from TED Europa, UK Find a Tender, Contracts Finder, NHS Supply Chain, US federal, CanadaBuys, World Bank &amp; WHO — updated daily</p>
         </div>
       </div>
     </div>
@@ -585,7 +585,7 @@
               <span class="font-display text-2xl font-bold text-dark">1</span>
             </div>
             <h3 class="font-display text-xl font-semibold text-white mb-3">Scrape</h3>
-            <p class="text-sm text-gray-400 leading-relaxed">Our Playwright-powered scrapers monitor 4 major procurement portals 24/7. Headless browsers handle dynamic content, CAPTCHAs, and pagination automatically.</p>
+            <p class="text-sm text-gray-400 leading-relaxed">Our scrapers monitor 8 procurement sources across the EU, UK, US, Canada and global development banks — via official APIs where available and headless browsers where not, handling pagination and dynamic content automatically.</p>
           </div>
         </div>
         <!-- Step 2 -->
@@ -907,7 +907,7 @@
             <span class="faq-icon text-gold text-xl font-light flex-shrink-0">+</span>
           </button>
           <div class="faq-answer px-6">
-            <p class="text-sm text-gray-400 leading-relaxed pb-6">We currently aggregate data from four major procurement portals: TED Europa (EU public procurement across 27 member states), SAM.gov (US federal contracts worth $700B+ annually), Find a Tender (the UK's official portal for above-threshold public contracts, including NHS trusts and NHS Supply Chain tenders), and Contracts Finder (UK local authority and NHS contracts below the high-value threshold). Enterprise clients can request additional portal integrations.</p>
+            <p class="text-sm text-gray-400 leading-relaxed pb-6">We currently aggregate data from eight procurement sources: TED Europa (EU public procurement across 27 member states), US federal contracts worth $700B+ annually, Find a Tender (the UK's official portal for above-threshold public contracts, including NHS trusts), Contracts Finder (UK local authority and NHS contracts below the high-value threshold), NHS Supply Chain (SCCL framework notices), CanadaBuys (Canadian public sector), the World Bank (globally-financed development projects across 100+ countries), and WHO/UN procurement via UNGM. Enterprise clients can request additional portal integrations.</p>
           </div>
         </div>
         <!-- FAQ 2 -->

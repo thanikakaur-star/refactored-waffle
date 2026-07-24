@@ -4,7 +4,11 @@ import type { ProcurementCategory } from "../../types/index.js";
 // clean CPV code the way equipment tenders do, so keyword matching on the
 // title/description comes first, falling back to CPV prefix matching.
 const KEYWORD_CATEGORY_MAP: Array<{ keywords: RegExp; category: ProcurementCategory }> = [
-  { keywords: /occupational therap|physiotherap|speech.?and.?language|nursing agency|clinical staff|therapist/i, category: "clinical_services" },
+  // Allied health / rehabilitation therapies — checked before clinical_services
+  // so OT & physiotherapy land in their own category rather than the generic
+  // clinical bucket.
+  { keywords: /occupational therap|physiotherap|physical therap|\bphysio\b|speech.?and.?language|\bslt\b|dietet|podiatr|osteopath|rehabilitation therap/i, category: "allied_health" },
+  { keywords: /nursing agency|clinical staff|\blocum\b|therapist/i, category: "clinical_services" },
   { keywords: /social care|adult social|children.?s social|domiciliary care|care worker|residential care|social work/i, category: "social_care" },
   { keywords: /personal protective equipment|\bppe\b|surgical gown|face mask/i, category: "personal_protective_equipment" },
   { keywords: /surgical instrument|robotic surgery|surgical kit|surgical device|surgical stapler|endoscop|laparoscop|arthroscop|orthopaedic implant|orthopedic implant|scalpel|forceps|operating theatre equipment|operating room equipment/i, category: "surgical_instruments" },
@@ -25,7 +29,9 @@ const CPV_CATEGORY_MAP: Record<string, ProcurementCategory> = {
   "38000000": "laboratory_equipment",
   "48000000": "health_it",
   "85140000": "telemedicine",
-  "85142000": "clinical_services", // medical practitioner / paramedical services
+  "85142100": "allied_health", // physiotherapy services
+  "85142000": "allied_health", // paramedical services (physio, OT, SLT, etc.)
+  "85312500": "allied_health", // rehabilitation services
   "85300000": "social_care", // social work and related services
   "85310000": "social_care", // social work services
   "45000000": "hospital_infrastructure",

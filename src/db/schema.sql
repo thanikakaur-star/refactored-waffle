@@ -17,7 +17,8 @@ CREATE TYPE tender_status AS ENUM (
 CREATE TYPE procurement_category AS ENUM (
   'medical_devices', 'pharmaceuticals', 'health_it', 'laboratory_equipment',
   'hospital_infrastructure', 'personal_protective_equipment', 'diagnostics',
-  'surgical_instruments', 'telemedicine', 'clinical_services', 'social_care', 'other'
+  'surgical_instruments', 'telemedicine', 'clinical_services', 'allied_health',
+  'social_care', 'other'
 );
 
 CREATE TYPE api_tier AS ENUM ('free', 'basic', 'pro', 'enterprise');

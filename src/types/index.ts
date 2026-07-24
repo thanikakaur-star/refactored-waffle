@@ -92,6 +92,7 @@ export type ProcurementCategory =
   | "surgical_instruments"
   | "telemedicine"
   | "clinical_services"
+  | "allied_health"
   | "social_care"
   | "other";
 
