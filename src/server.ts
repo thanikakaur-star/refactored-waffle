@@ -817,6 +817,44 @@ app.get("/api/v1/pricing", (_req, res) => {
   });
 });
 
+// Public "Live Intelligence Feed" for the landing page — a small, unauthenticated
+// teaser of the most recent tenders (marketing surface, not the real API). Only
+// display-safe fields, capped at 12 rows, and cached in-memory for 60s so it
+// can't hammer the database from public traffic.
+let feedCache: { at: number; data: unknown[] } = { at: 0, data: [] };
+const FEED_TTL_MS = 60_000;
+
+app.get("/api/v1/feed", async (_req, res) => {
+  const now = Date.now();
+  if (now - feedCache.at < FEED_TTL_MS && feedCache.data.length) {
+    res.json({ data: feedCache.data, cached: true });
+    return;
+  }
+  try {
+    let rows: Array<Record<string, unknown>> = [];
+    if (USE_SUPABASE && supabase) {
+      const { data } = await supabase
+        .from("tenders")
+        .select("source, category, title, value_usd, deadline, buyer_country, status")
+        .order("published_at", { ascending: false })
+        .limit(12);
+      rows = data ?? [];
+    } else {
+      const { data } = localStore.queryTenders({ page: 1, pageSize: 12 } as never);
+      rows = (data ?? []).map((t: any) => ({
+        source: t.source, category: t.category, title: t.title,
+        value_usd: t.valueUsd ?? t.value_usd, deadline: t.deadline,
+        buyer_country: t.buyerCountry ?? t.buyer_country, status: t.status,
+      }));
+    }
+    feedCache = { at: now, data: rows };
+    res.json({ data: rows, cached: false });
+  } catch (err) {
+    logger.warn("Public feed query failed", { error: String(err) });
+    res.json({ data: feedCache.data, cached: true });
+  }
+});
+
 // --- Admin (private) ---
 
 // Gate admin endpoints behind a single secret token (set ADMIN_TOKEN on the

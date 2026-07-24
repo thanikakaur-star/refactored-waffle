@@ -260,43 +260,44 @@
               <span class="ml-3 text-xs text-gray-500 font-mono">Live Intelligence Feed</span>
             </div>
             <div class="p-4 sm:p-5 space-y-3 max-h-72 overflow-hidden">
-              <!-- Tender 1 -->
-              <div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors">
-                <div class="flex items-start justify-between gap-2">
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs text-gold font-semibold uppercase tracking-wide">TED Europa • Medical Devices</p>
-                    <p class="text-sm text-white font-medium mt-1 truncate">MRI Equipment Supply Framework</p>
-                    <p class="text-xs text-gray-400 mt-1">Contract value: €2.4M • Deadline: 45 days</p>
+              <!-- Live feed items — populated from /api/v1/feed; the three below
+                   are the fallback shown until real tenders load. -->
+              <div id="feed-items" class="space-y-3">
+                <div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex-1 min-w-0">
+                      <p class="text-xs text-gold font-semibold uppercase tracking-wide">TED Europa • Medical Devices</p>
+                      <p class="text-sm text-white font-medium mt-1 truncate">MRI Equipment Supply Framework</p>
+                      <p class="text-xs text-gray-400 mt-1">Contract value: €2.4M • Deadline: 45 days</p>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">New</span>
                   </div>
-                  <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">New</span>
                 </div>
-              </div>
-              <!-- Tender 2 -->
-              <div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors" style="animation-delay: 1s;">
-                <div class="flex items-start justify-between gap-2">
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs text-gold font-semibold uppercase tracking-wide">UK Find a Tender • Surgical Instruments</p>
-                    <p class="text-sm text-white font-medium mt-1 truncate">Sterile Surgical Instruments Supply</p>
-                    <p class="text-xs text-gray-400 mt-1">Contract value: £1.2M • NHS Supply Chain</p>
+                <div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors" style="animation-delay: 1s;">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex-1 min-w-0">
+                      <p class="text-xs text-gold font-semibold uppercase tracking-wide">UK Find a Tender • Surgical Instruments</p>
+                      <p class="text-sm text-white font-medium mt-1 truncate">Sterile Surgical Instruments Supply</p>
+                      <p class="text-xs text-gray-400 mt-1">Contract value: £1.2M • NHS Supply Chain</p>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">New</span>
                   </div>
-                  <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">New</span>
                 </div>
-              </div>
-              <!-- Tender 3 -->
-              <div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors" style="animation-delay: 2s;">
-                <div class="flex items-start justify-between gap-2">
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs text-gold font-semibold uppercase tracking-wide">SAM.gov • Pharmaceuticals</p>
-                    <p class="text-sm text-white font-medium mt-1 truncate">Biotech Manufacturing Equipment</p>
-                    <p class="text-xs text-gray-400 mt-1">Contract value: $3.8M • US Federal</p>
+                <div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors" style="animation-delay: 2s;">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex-1 min-w-0">
+                      <p class="text-xs text-gold font-semibold uppercase tracking-wide">SAM.gov • Pharmaceuticals</p>
+                      <p class="text-sm text-white font-medium mt-1 truncate">Biotech Manufacturing Equipment</p>
+                      <p class="text-xs text-gray-400 mt-1">Contract value: $3.8M • US Federal</p>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">New</span>
                   </div>
-                  <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">New</span>
                 </div>
               </div>
               <!-- Data flowing indicator -->
               <div class="flex items-center justify-center gap-2 pt-2 text-xs text-gray-500">
                 <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                Data syncing across 8 sources
+                <span id="feed-status">Data syncing across 8 sources</span>
               </div>
             </div>
           </div>
@@ -1291,6 +1292,82 @@
           nav.classList.add('bg-dark/80');
         }
       });
+    })();
+  </script>
+
+  <!-- Live Intelligence Feed: pull real recent tenders and rotate them -->
+  <script>
+    (function liveFeed() {
+      var itemsEl = document.getElementById('feed-items');
+      var statusEl = document.getElementById('feed-status');
+      if (!itemsEl) return;
+
+      var SOURCE_LABELS = {
+        ted_europa: 'TED Europa', sam_gov: 'US Federal', contracts_finder: 'UK Contracts Finder',
+        find_a_tender: 'UK Find a Tender', world_bank: 'World Bank', canada_buys: 'CanadaBuys',
+        who_procurement: 'WHO', nhs_supply_chain: 'NHS Supply Chain', manual: 'HealthProcure'
+      };
+      function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+      function titleCase(s) { return String(s || '').replace(/_/g, ' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); }); }
+      function fmtValue(v) {
+        if (v == null || isNaN(v) || v <= 0) return '';
+        if (v >= 1e9) return '$' + (v/1e9).toFixed(1) + 'B';
+        if (v >= 1e6) return '$' + (v/1e6).toFixed(1) + 'M';
+        if (v >= 1e3) return '$' + Math.round(v/1e3) + 'K';
+        return '$' + Math.round(v);
+      }
+      function fmtDeadline(d) {
+        if (!d) return '';
+        var days = Math.ceil((new Date(d).getTime() - Date.now()) / 86400000);
+        if (isNaN(days)) return '';
+        if (days < 0) return 'Closed';
+        if (days === 0) return 'Closes today';
+        return 'Deadline: ' + days + ' day' + (days === 1 ? '' : 's');
+      }
+      function card(t, isNew) {
+        var meta = [fmtValue(t.value_usd) && ('Contract value: ' + fmtValue(t.value_usd)), fmtDeadline(t.deadline), t.buyer_country].filter(Boolean).join(' • ');
+        var badge = (t.status === 'awarded')
+          ? '<span class="text-xs px-2 py-1 rounded bg-gold/20 text-gold font-medium">Award</span>'
+          : '<span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">' + (isNew ? 'New' : 'Open') + '</span>';
+        return '<div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors">'
+          + '<div class="flex items-start justify-between gap-2"><div class="flex-1 min-w-0">'
+          + '<p class="text-xs text-gold font-semibold uppercase tracking-wide">' + esc(SOURCE_LABELS[t.source] || titleCase(t.source)) + ' • ' + esc(titleCase(t.category)) + '</p>'
+          + '<p class="text-sm text-white font-medium mt-1 truncate">' + esc(t.title) + '</p>'
+          + (meta ? '<p class="text-xs text-gray-400 mt-1">' + esc(meta) + '</p>' : '')
+          + '</div>' + badge + '</div></div>';
+      }
+
+      var feed = [];   // full fetched list
+      var start = 0;   // rotation window start
+      var timer = null;
+
+      function renderWindow() {
+        if (!feed.length) return;
+        var view = [];
+        for (var i = 0; i < 3 && i < feed.length; i++) view.push(feed[(start + i) % feed.length]);
+        itemsEl.innerHTML = view.map(function(t, i){ return card(t, i === 0); }).join('');
+        start = (start + 1) % feed.length;
+      }
+
+      function fetchFeed() {
+        fetch('/api/v1/feed', { headers: { 'Accept': 'application/json' } })
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(res){
+            if (res && res.data && res.data.length) {
+              feed = res.data;
+              start = 0;
+              renderWindow();
+              if (statusEl) statusEl.textContent = 'Live — ' + feed.length + ' recent tenders across 8 sources';
+              if (!timer && feed.length > 3) {
+                timer = setInterval(renderWindow, 3500); // rotate for a "live" feel
+              }
+            }
+          })
+          .catch(function(){ /* keep the static fallback on any error */ });
+      }
+
+      fetchFeed();
+      setInterval(fetchFeed, 300000); // refresh the underlying data every 5 min
     })();
   </script>
 </body>
