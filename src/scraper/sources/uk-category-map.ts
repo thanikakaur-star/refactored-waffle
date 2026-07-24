@@ -11,11 +11,14 @@ const KEYWORD_CATEGORY_MAP: Array<{ keywords: RegExp; category: ProcurementCateg
   // allied_health so they don't fall into it via the broad "paramedical
   // services" CPV (85142000).
   { keywords: /ambulance|paramedic|rettungsdienst|emergency medical|rescue service|emergency response/i, category: "paramedic_services" },
-  // Allied health / rehabilitation therapies AND allied-health equipment
-  // (OT equipment — mobility aids, home adaptations, assistive tech, daily
-  // living aids). Checked before clinical_services so OT & physiotherapy land
-  // in their own category rather than the generic clinical bucket.
-  { keywords: /occupational therap|physiotherap|physical therap|\bphysio\b|speech.?and.?language|\bslt\b|dietet|podiatr|osteopath|rehabilitation therap|occupational therapy equipment|\bot equipment\b|mobility aid|walking aid|home adaptation|assistive technolog|daily living aid|grab rail|rehabilitation equipment|disability equipment/i, category: "allied_health" },
+  // Occupational therapy — services AND OT equipment (mobility aids, home
+  // adaptations, assistive tech, daily living aids). Its own category, checked
+  // before allied_health so OT is separable from physiotherapy.
+  { keywords: /occupational therap|\bot service|\bot equipment\b|occupational therapy equipment|home adaptation|daily living aid|assistive technolog|mobility aid|walking aid|grab rail|disability equipment|independent living aid|sensory equipment|reablement/i, category: "occupational_therapy" },
+  // Allied health / rehabilitation therapies (physiotherapy, SLT, dietetics,
+  // podiatry, osteopathy, rehab). Checked before clinical_services so these
+  // land in their own category rather than the generic clinical bucket.
+  { keywords: /physiotherap|physical therap|\bphysio\b|speech.?and.?language|\bslt\b|dietet|podiatr|osteopath|rehabilitation therap|rehabilitation equipment/i, category: "allied_health" },
   { keywords: /nursing agency|clinical staff|\blocum\b|therapist/i, category: "clinical_services" },
   { keywords: /social care|adult social|children.?s social|domiciliary care|care worker|residential care|social work/i, category: "social_care" },
   { keywords: /personal protective equipment|\bppe\b|surgical gown|face mask/i, category: "personal_protective_equipment" },
@@ -41,8 +44,8 @@ const CPV_CATEGORY_MAP: Record<string, ProcurementCategory> = {
   "85142100": "allied_health", // physiotherapy services
   "85142000": "allied_health", // paramedical services (physio, OT, SLT, etc.)
   "85312500": "allied_health", // rehabilitation services
-  "33196200": "allied_health", // devices for the disabled (OT equipment)
-  "33196000": "allied_health", // medical aids (OT / assistive equipment)
+  "33196200": "occupational_therapy", // devices for the disabled (OT equipment)
+  "33196000": "occupational_therapy", // medical aids (OT / assistive equipment)
   "85300000": "social_care", // social work and related services
   "85310000": "social_care", // social work services
   "45000000": "hospital_infrastructure",

@@ -93,6 +93,7 @@ export type ProcurementCategory =
   | "telemedicine"
   | "clinical_services"
   | "allied_health"
+  | "occupational_therapy"
   | "paramedic_services"
   | "patient_transport"
   | "social_care"
