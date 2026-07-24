@@ -1126,6 +1126,10 @@
         sidebarStatus.innerHTML = '<span class="w-2 h-2 rounded-full inline-block pulse-glow" style="background: #10b981;"></span><span style="color: #10b981;">Connected</span>';
 
         showState('dashboard');
+
+        // Deep link: land the user straight on a filtered view, e.g.
+        // /dashboard?panel=tenders&category=allied_health (shareable link).
+        applyPendingDeepLink();
       } catch (err) {
         if (err.status === 429) {
           showError(err.message + '  You can upgrade for a higher daily limit, or come back tomorrow.');
@@ -1751,17 +1755,46 @@
 
     // Auto-connect: accept a key from ?key= (e.g. straight after free signup)
     // or from a previously saved session, so the user lands connected.
+    // Deep-link support: /dashboard?panel=tenders&category=allied_health lands
+    // the visitor straight on a pre-filtered view once they're connected. The
+    // intent is stashed (and kept in sessionStorage) so it survives the moment
+    // between arriving and connecting a key.
+    function captureDeepLink() {
+      var params = new URLSearchParams(window.location.search);
+      var panel = params.get('panel');
+      var category = params.get('category');
+      if (panel || category) {
+        try { sessionStorage.setItem('hpi_deeplink', JSON.stringify({ panel: panel, category: category })); } catch (e) {}
+      }
+    }
+    function applyPendingDeepLink() {
+      var raw = null;
+      try { raw = sessionStorage.getItem('hpi_deeplink'); } catch (e) {}
+      if (!raw) return;
+      try { sessionStorage.removeItem('hpi_deeplink'); } catch (e) {}
+      var link;
+      try { link = JSON.parse(raw); } catch (e) { return; }
+      if (link && (link.panel === 'tenders' || link.category)) {
+        goToTendersFiltered(link.category || '');
+      } else if (link && link.panel) {
+        var el = document.querySelector('.sidebar-link[data-panel="' + link.panel + '"]');
+        if (el) switchPanel(link.panel, el, null);
+      }
+    }
+
     (function initDashboard() {
+      captureDeepLink();
       var urlKey = new URLSearchParams(window.location.search).get('key');
       var savedKey = null;
       try { savedKey = localStorage.getItem('hpi_api_key'); } catch (e) {}
       var startKey = urlKey || savedKey;
+      // Strip params from the URL so the key isn't left in history and the
+      // address bar stays clean (the deep-link intent is already stashed).
+      if ((urlKey || window.location.search) && window.history.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
       if (startKey) {
         document.getElementById('apiKeyField').value = startKey;
-        // Strip the key from the URL so it isn't left in the address bar / history.
-        if (urlKey && window.history.replaceState) {
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
         loadDashboard();
       }
     })();
