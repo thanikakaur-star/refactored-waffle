@@ -136,18 +136,70 @@ app.use(express.json());
 
 // Kept in sync with the limits advertised on the pricing page, since these are
 // now enforced — what we promise must match what we allow.
-const TIER_LIMITS: Record<ApiTier, { requestsPerDay: number; maxPageSize: number }> = {
-  free: { requestsPerDay: 100, maxPageSize: 20 },
-  basic: { requestsPerDay: 1000, maxPageSize: 50 },
-  pro: { requestsPerDay: 10000, maxPageSize: 200 },
-  enterprise: { requestsPerDay: 1000000, maxPageSize: 500 },
+// maxResults is the total result window a tier can page through on list
+// endpoints (tenders/awards). -1 = unlimited. Without this cap, page size and
+// the daily request count are the only limits, so a free user can simply
+// paginate through the entire database — which is what paid tiers are meant to
+// unlock. Free/basic now hit a hard wall and get an upgrade prompt.
+const TIER_LIMITS: Record<ApiTier, { requestsPerDay: number; maxPageSize: number; maxResults: number }> = {
+  free: { requestsPerDay: 100, maxPageSize: 20, maxResults: 100 },
+  basic: { requestsPerDay: 1000, maxPageSize: 50, maxResults: 1000 },
+  pro: { requestsPerDay: 10000, maxPageSize: 200, maxResults: -1 },
+  enterprise: { requestsPerDay: 1000000, maxPageSize: 500, maxResults: -1 },
 };
 
 interface AuthReq extends Request {
-  tierLimits?: { requestsPerDay: number; maxPageSize: number };
+  tierLimits?: { requestsPerDay: number; maxPageSize: number; maxResults: number };
   tier?: ApiTier;
   apiKeyId?: string;
   apiKeyEmail?: string;
+}
+
+// Enforce a tier's total result window on a list endpoint. Returns the DB range
+// to read and whether the requested page falls entirely beyond the window (a
+// hard paywall — free/basic can't paginate past their cap to reach all data).
+function resultWindow(
+  tier: ApiTier | undefined,
+  maxResults: number | undefined,
+  page: number,
+  pageSize: number,
+) {
+  const cap = maxResults ?? 100;
+  const offset = (page - 1) * pageSize;
+  const unlimited = cap === -1;
+  const wallHit = !unlimited && offset >= cap;
+  // Don't let a page straddling the cap over-read past it.
+  const rangeEnd = unlimited ? offset + pageSize - 1 : Math.min(offset + pageSize - 1, cap - 1);
+  return { offset, rangeEnd, wallHit, cap, unlimited, tier: tier ?? "free" };
+}
+
+// Response for a page requested beyond the tier's window.
+function paywallResponse(page: number, pageSize: number, cap: number, tier: string) {
+  return {
+    data: [],
+    pagination: { page, pageSize, total: cap, totalPages: Math.ceil(cap / pageSize) },
+    meta: {
+      tier,
+      resultWindow: cap,
+      limitReached: true,
+      message: `Your ${tier} plan can access the first ${cap.toLocaleString()} results. Upgrade to Pro to see every matching record.`,
+    },
+  };
+}
+
+// Cap the reported total/pages to the window, and flag when more exists behind
+// the paywall so the client can show an upgrade prompt.
+function windowMeta(total: number, cap: number, unlimited: boolean, tier: string) {
+  const windowTotal = unlimited ? total : Math.min(total, cap);
+  return {
+    windowTotal,
+    meta: {
+      tier,
+      resultWindow: unlimited ? null : cap,
+      totalAvailable: total,
+      limitReached: !unlimited && total > cap,
+    },
+  };
 }
 
 // Per-day request counter, keyed by API key. Resets each calendar day (UTC).
@@ -334,6 +386,13 @@ app.get("/api/v1/tenders", authMiddleware, async (req: AuthReq, res) => {
   const f = parsed.data;
   f.pageSize = Math.min(f.pageSize, req.tierLimits?.maxPageSize ?? 20);
 
+  const win = resultWindow(req.tier, req.tierLimits?.maxResults, f.page, f.pageSize);
+  // Hard paywall: the requested page is entirely beyond the tier's window.
+  if (win.wallHit) {
+    res.json(paywallResponse(f.page, f.pageSize, win.cap, win.tier));
+    return;
+  }
+
   if (USE_SUPABASE && supabase) {
     let query = supabase.from("tenders").select("*", { count: "exact" });
     if (f.source) query = query.eq("source", f.source);
@@ -346,13 +405,16 @@ app.get("/api/v1/tenders", authMiddleware, async (req: AuthReq, res) => {
     if (f.publishedAfter) query = query.gte("published_at", f.publishedAfter);
     if (f.publishedBefore) query = query.lte("published_at", f.publishedBefore);
     if (f.search) query = query.textSearch("search_vector", f.search, { type: "websearch" });
-    const offset = (f.page - 1) * f.pageSize;
-    const { data, count, error } = await query.order("published_at", { ascending: false }).range(offset, offset + f.pageSize - 1);
+    const { data, count, error } = await query.order("published_at", { ascending: false }).range(win.offset, win.rangeEnd);
     if (error) { res.status(500).json({ error: "Database query failed" }); return; }
-    res.json({ data: data ?? [], pagination: { page: f.page, pageSize: f.pageSize, total: count ?? 0, totalPages: Math.ceil((count ?? 0) / f.pageSize) } });
+    const { windowTotal, meta } = windowMeta(count ?? 0, win.cap, win.unlimited, win.tier);
+    res.json({ data: data ?? [], pagination: { page: f.page, pageSize: f.pageSize, total: windowTotal, totalPages: Math.ceil(windowTotal / f.pageSize) }, meta });
   } else {
     const { data, total } = localStore.queryTenders(f);
-    res.json({ data, pagination: { page: f.page, pageSize: f.pageSize, total, totalPages: Math.ceil(total / f.pageSize) } });
+    const { windowTotal, meta } = windowMeta(total, win.cap, win.unlimited, win.tier);
+    // Local store already sliced by page; drop rows that fall past the window.
+    const capped = win.unlimited ? data : data.slice(0, Math.max(0, win.cap - win.offset));
+    res.json({ data: capped, pagination: { page: f.page, pageSize: f.pageSize, total: windowTotal, totalPages: Math.ceil(windowTotal / f.pageSize) }, meta });
   }
 });
 
@@ -397,6 +459,12 @@ app.get("/api/v1/awards", authMiddleware, async (req: AuthReq, res) => {
   const f = parsed.data;
   f.pageSize = Math.min(f.pageSize, req.tierLimits?.maxPageSize ?? 20);
 
+  const win = resultWindow(req.tier, req.tierLimits?.maxResults, f.page, f.pageSize);
+  if (win.wallHit) {
+    res.json(paywallResponse(f.page, f.pageSize, win.cap, win.tier));
+    return;
+  }
+
   if (USE_SUPABASE && supabase) {
     let query = supabase.from("contract_awards").select("*", { count: "exact" });
     if (f.tenderId) query = query.eq("tender_id", f.tenderId);
@@ -408,13 +476,15 @@ app.get("/api/v1/awards", authMiddleware, async (req: AuthReq, res) => {
     if (f.maxValue) query = query.lte("award_value_usd", f.maxValue);
     if (f.awardedAfter) query = query.gte("award_date", f.awardedAfter);
     if (f.awardedBefore) query = query.lte("award_date", f.awardedBefore);
-    const offset = (f.page - 1) * f.pageSize;
-    const { data, count, error } = await query.order("award_date", { ascending: false }).range(offset, offset + f.pageSize - 1);
+    const { data, count, error } = await query.order("award_date", { ascending: false }).range(win.offset, win.rangeEnd);
     if (error) { res.status(500).json({ error: "Database query failed" }); return; }
-    res.json({ data: data ?? [], pagination: { page: f.page, pageSize: f.pageSize, total: count ?? 0, totalPages: Math.ceil((count ?? 0) / f.pageSize) } });
+    const { windowTotal, meta } = windowMeta(count ?? 0, win.cap, win.unlimited, win.tier);
+    res.json({ data: data ?? [], pagination: { page: f.page, pageSize: f.pageSize, total: windowTotal, totalPages: Math.ceil(windowTotal / f.pageSize) }, meta });
   } else {
     const { data, total } = localStore.queryAwards(f);
-    res.json({ data, pagination: { page: f.page, pageSize: f.pageSize, total, totalPages: Math.ceil(total / f.pageSize) } });
+    const { windowTotal, meta } = windowMeta(total, win.cap, win.unlimited, win.tier);
+    const capped = win.unlimited ? data : data.slice(0, Math.max(0, win.cap - win.offset));
+    res.json({ data: capped, pagination: { page: f.page, pageSize: f.pageSize, total: windowTotal, totalPages: Math.ceil(windowTotal / f.pageSize) }, meta });
   }
 });
 
@@ -739,10 +809,10 @@ app.post("/api/v1/signup/free", async (req, res) => {
 app.get("/api/v1/pricing", (_req, res) => {
   res.json({
     data: [
-      { tier: "free", name: "Free", price: 0, requestsPerDay: 100, maxPageSize: 20, benchmarks: false },
-      { tier: "basic", name: "Basic", price: 4900, stripePriceId: "price_1TlrGvC3JZLLw9RVUSzeqONA", requestsPerDay: 1000, maxPageSize: 50, benchmarks: false },
-      { tier: "pro", name: "Pro", price: 19900, stripePriceId: "price_1TvExtC3JZLLw9RVXpliAtZR", requestsPerDay: 10000, maxPageSize: 200, benchmarks: true, featured: true },
-      { tier: "enterprise", name: "Enterprise", price: 49900, stripePriceId: "price_1TlrIaC3JZLLw9RVctcI96FW", requestsPerDay: -1, maxPageSize: 500, benchmarks: true },
+      { tier: "free", name: "Free", price: 0, requestsPerDay: 100, maxPageSize: 20, maxResults: 100, benchmarks: false },
+      { tier: "basic", name: "Basic", price: 4900, stripePriceId: "price_1TlrGvC3JZLLw9RVUSzeqONA", requestsPerDay: 1000, maxPageSize: 50, maxResults: 1000, benchmarks: false },
+      { tier: "pro", name: "Pro", price: 19900, stripePriceId: "price_1TvExtC3JZLLw9RVXpliAtZR", requestsPerDay: 10000, maxPageSize: 200, maxResults: -1, benchmarks: true, featured: true },
+      { tier: "enterprise", name: "Enterprise", price: 49900, stripePriceId: "price_1TlrIaC3JZLLw9RVctcI96FW", requestsPerDay: -1, maxPageSize: 500, maxResults: -1, benchmarks: true },
     ],
   });
 });
