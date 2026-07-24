@@ -1,6 +1,13 @@
 import { chromium } from "playwright";
 import { TedEuropaScraper } from "./sources/ted.js";
-import { SamGovScraper } from "./sources/sam.js";
+// SamGovScraper (official api.sam.gov) is intentionally NOT in ALL_SCRAPERS —
+// api.sam.gov returns 404 at its Istio/Envoy edge for every path (opportunities
+// AND entity APIs) from this deployment's egress, i.e. it appears to block
+// cloud/datacenter IPs. GovconScraper covers the same US federal opportunity
+// data (via govconapi.com, which does serve us). The class is kept so it can be
+// re-enabled if ever run from an allowlisted network. See git history + the
+// scrape_runs diagnostics for the 404 investigation.
+// import { SamGovScraper } from "./sources/sam.js";
 import { GovconScraper } from "./sources/govcon.js";
 import { ContractsFinderScraper } from "./sources/contracts-finder.js";
 import { FindATenderScraper } from "./sources/find-a-tender.js";
@@ -20,7 +27,7 @@ type AnyScraper = BaseScraper | ApiScraper;
 
 const ALL_SCRAPERS: AnyScraper[] = [
   new TedEuropaScraper(),
-  new SamGovScraper(),
+  // new SamGovScraper(),  // disabled — api.sam.gov 404s from this egress (see import note); GovCon covers federal
   new GovconScraper(),
   new ContractsFinderScraper(),
   new FindATenderScraper(),
@@ -30,14 +37,12 @@ const ALL_SCRAPERS: AnyScraper[] = [
   new NHSSupplyChainScraper(),
 ];
 
-// GovconScraper shares source="sam_gov" with SamGovScraper (both persist to
-// the same tender_source, deduped by (source, external_id) in persist.ts) —
-// but --source=govcon should still be able to target it alone since it's a
-// distinct HTTP call against a distinct API. Matched by constructor name
-// rather than adding a second TenderSource enum value just for CLI routing.
+// GovconScraper persists under source="sam_gov" (the US federal tender_source).
+// With the official SamGovScraper disabled (api.sam.gov 404s from this egress),
+// GovCon is the sole sam_gov source, so the sam/sam_gov/govcon filters all
+// target it.
 function matchesFilter(scraper: AnyScraper, filter: string): boolean {
-  if (filter === "govcon") return scraper instanceof GovconScraper;
-  if (filter === "sam" || filter === "sam_gov") return scraper.source === "sam_gov" && !(scraper instanceof GovconScraper);
+  if (filter === "govcon" || filter === "sam" || filter === "sam_gov") return scraper instanceof GovconScraper;
   if (filter === "who") return scraper.source === "who_procurement";
   if (filter === "nhs") return scraper.source === "nhs_supply_chain";
   if (filter === "ted") return scraper.source === "ted_europa";
