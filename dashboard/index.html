@@ -1415,7 +1415,7 @@
         if (res.data.length === 0) {
           container.innerHTML = '';
           emptyState.classList.remove('hidden');
-          renderPagination('tenders-pagination', res.pagination, 'tenders');
+          renderPagination('tenders-pagination', res.pagination, 'tenders', res.meta);
           return;
         }
 
@@ -1447,7 +1447,7 @@
           </div>
         `).join('') + ((userTier === 'free' || userTier === 'basic') ? tendersUpsellHtml() : '');
 
-        renderPagination('tenders-pagination', res.pagination, 'tenders');
+        renderPagination('tenders-pagination', res.pagination, 'tenders', res.meta);
       } catch (err) {
         if (err.status === 429) {
           document.getElementById('tenders-panel-list').innerHTML = rateLimitPromptHtml();
@@ -1499,7 +1499,7 @@
           `).join('');
         }
 
-        renderPagination('awards-pagination', res.pagination, 'awards');
+        renderPagination('awards-pagination', res.pagination, 'awards', res.meta);
       } catch (err) {
         document.getElementById('awards-table-body').innerHTML = '';
         document.getElementById('awards-empty').classList.remove('hidden');
@@ -1708,19 +1708,38 @@
       }
     }
 
-    function renderPagination(containerId, pagination, type) {
+    function renderPagination(containerId, pagination, type, meta) {
       if (!pagination) return;
       const { page, pageSize, total } = pagination;
       const totalPages = Math.ceil(total / pageSize);
-      if (totalPages <= 1) { document.getElementById(containerId).innerHTML = ''; return; }
+      // meta.limitReached: this tier's result window is smaller than the true
+      // total, i.e. there are more records behind the paywall.
+      const limitReached = !!(meta && meta.limitReached);
+      const totalAvailable = (meta && meta.totalAvailable) || total;
+      const tier = (meta && meta.tier) || userTier || 'free';
+      const atWindowEnd = page >= totalPages; // last page this tier can reach
+
+      if (totalPages <= 1 && !limitReached) { document.getElementById(containerId).innerHTML = ''; return; }
 
       const btnStyle = 'background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-secondary);';
+      const upgradeStyle = 'background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f; font-weight: 600;';
+
+      // At the end of a capped window, "Next" is a hard stop — replace it with
+      // an upgrade CTA so the user converts instead of hitting a dead button.
+      const nextControl = (limitReached && atWindowEnd)
+        ? `<button class="px-3 py-1 rounded text-sm" style="${upgradeStyle}" onclick="startCheckout('pro')">Unlock all ${Number(totalAvailable).toLocaleString()} &rarr;</button>`
+        : `<button class="px-3 py-1 rounded text-sm ${page >= totalPages ? 'opacity-30' : ''}" style="${btnStyle}" ${page >= totalPages ? 'disabled' : ''} onclick="paginate('${type}', ${page+1})">Next</button>`;
+
+      const countLine = limitReached
+        ? `Showing ${(page-1)*pageSize+1}&ndash;${Math.min(page*pageSize, total)} of ${Number(total).toLocaleString()} &middot; <span style="color: var(--gold);">${tier.charAt(0).toUpperCase()+tier.slice(1)} plan caps at ${Number(total).toLocaleString()} of ${Number(totalAvailable).toLocaleString()} total</span>`
+        : `Showing ${(page-1)*pageSize+1}&ndash;${Math.min(page*pageSize, total)} of ${Number(total).toLocaleString()}`;
+
       document.getElementById(containerId).innerHTML = `
-        <p class="text-xs" style="color: var(--text-muted);">Showing ${(page-1)*pageSize+1}–${Math.min(page*pageSize, total)} of ${total}</p>
+        <p class="text-xs" style="color: var(--text-muted);">${countLine}</p>
         <div class="flex gap-2">
           <button class="px-3 py-1 rounded text-sm ${page <= 1 ? 'opacity-30' : ''}" style="${btnStyle}" ${page <= 1 ? 'disabled' : ''} onclick="paginate('${type}', ${page-1})">Prev</button>
           <span class="px-3 py-1 text-sm font-semibold" style="color: white;">${page} / ${totalPages}</span>
-          <button class="px-3 py-1 rounded text-sm ${page >= totalPages ? 'opacity-30' : ''}" style="${btnStyle}" ${page >= totalPages ? 'disabled' : ''} onclick="paginate('${type}', ${page+1})">Next</button>
+          ${nextControl}
         </div>
       `;
     }
