@@ -14,11 +14,11 @@ const KEYWORD_CATEGORY_MAP: Array<{ keywords: RegExp; category: ProcurementCateg
   // Occupational therapy — services AND OT equipment (mobility aids, home
   // adaptations, assistive tech, daily living aids). Its own category, checked
   // before allied_health so OT is separable from physiotherapy.
-  { keywords: /occupational therap|\bot service|\bot equipment\b|occupational therapy equipment|home adaptation|daily living aid|assistive technolog|mobility aid|walking aid|grab rail|disability equipment|independent living aid|sensory equipment|reablement/i, category: "occupational_therapy" },
+  { keywords: /occupational therap|\bot service|\bot equipment\b|occupational therapy equipment|home adaptation|daily living aid|assistive technolog|mobility aid|walking aid|grab rail|disability equipment|rehabilitation equipment|independent living aid|sensory equipment|reablement/i, category: "occupational_therapy" },
   // Allied health / rehabilitation therapies (physiotherapy, SLT, dietetics,
   // podiatry, osteopathy, rehab). Checked before clinical_services so these
   // land in their own category rather than the generic clinical bucket.
-  { keywords: /physiotherap|physical therap|\bphysio\b|speech.?and.?language|\bslt\b|dietet|podiatr|osteopath|rehabilitation therap|rehabilitation equipment/i, category: "allied_health" },
+  { keywords: /physiotherap|physical therap|\bphysio\b|speech.?and.?language|\bslt\b|dietet|podiatr|osteopath|rehabilitation therap/i, category: "allied_health" },
   { keywords: /nursing agency|clinical staff|\blocum\b|therapist/i, category: "clinical_services" },
   { keywords: /social care|adult social|children.?s social|domiciliary care|care worker|residential care|social work/i, category: "social_care" },
   { keywords: /personal protective equipment|\bppe\b|surgical gown|face mask/i, category: "personal_protective_equipment" },
