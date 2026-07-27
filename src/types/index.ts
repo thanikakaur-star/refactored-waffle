@@ -99,7 +99,7 @@ export type ProcurementCategory =
   | "social_care"
   | "other";
 
-export type ApiTier = "free" | "basic" | "pro" | "enterprise";
+export type ApiTier = "free" | "basic" | "growth" | "pro" | "enterprise";
 
 export interface ScrapeResult {
   source: TenderSource;

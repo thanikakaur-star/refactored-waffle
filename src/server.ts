@@ -68,6 +68,8 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
   const STRIPE_PRICES: Record<string, ApiTier> = {
     "price_1TlrIaC3JZLLw9RVctcI96FW": "enterprise",
     "price_1TvExtC3JZLLw9RVXpliAtZR": "pro",
+    // TODO: replace with the real £99 Growth price id from your Stripe dashboard.
+    "price_GROWTH_REPLACE_ME": "growth",
     "price_1TlrGvC3JZLLw9RVUSzeqONA": "basic",
   };
 
@@ -75,6 +77,7 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
     if (STRIPE_PRICES[priceId]) return STRIPE_PRICES[priceId];
     if (amount === 49900) return "enterprise";
     if (amount === 19900) return "pro";
+    if (amount === 9900) return "growth";
     if (amount === 4900) return "basic";
     return "basic";
   }
@@ -144,6 +147,7 @@ app.use(express.json());
 const TIER_LIMITS: Record<ApiTier, { requestsPerDay: number; maxPageSize: number; maxResults: number }> = {
   free: { requestsPerDay: 100, maxPageSize: 20, maxResults: 100 },
   basic: { requestsPerDay: 1000, maxPageSize: 50, maxResults: 1000 },
+  growth: { requestsPerDay: 3000, maxPageSize: 100, maxResults: 5000 },
   pro: { requestsPerDay: 10000, maxPageSize: 200, maxResults: -1 },
   enterprise: { requestsPerDay: 1000000, maxPageSize: 500, maxResults: -1 },
 };
@@ -585,7 +589,7 @@ app.get("/api/v1/sources", authMiddleware, (_req, res) => {
 // Chain, Find a Tender, and TED Europa each notify you separately — except
 // this covers every source in one alert.
 
-const ALERT_LIMITS: Record<ApiTier, number> = { free: 3, basic: 3, pro: 20, enterprise: 100 };
+const ALERT_LIMITS: Record<ApiTier, number> = { free: 3, basic: 3, growth: 10, pro: 20, enterprise: 100 };
 
 const createAlertSchema = z.object({
   category: z.enum([
@@ -811,6 +815,7 @@ app.get("/api/v1/pricing", (_req, res) => {
     data: [
       { tier: "free", name: "Free", price: 0, requestsPerDay: 100, maxPageSize: 20, maxResults: 100, benchmarks: false },
       { tier: "basic", name: "Basic", price: 4900, stripePriceId: "price_1TlrGvC3JZLLw9RVUSzeqONA", requestsPerDay: 1000, maxPageSize: 50, maxResults: 1000, benchmarks: false },
+      { tier: "growth", name: "Growth", price: 9900, stripePriceId: "price_GROWTH_REPLACE_ME", requestsPerDay: 3000, maxPageSize: 100, maxResults: 5000, benchmarks: false },
       { tier: "pro", name: "Pro", price: 19900, stripePriceId: "price_1TvExtC3JZLLw9RVXpliAtZR", requestsPerDay: 10000, maxPageSize: 200, maxResults: -1, benchmarks: true, featured: true },
       { tier: "enterprise", name: "Enterprise", price: 49900, stripePriceId: "price_1TlrIaC3JZLLw9RVctcI96FW", requestsPerDay: -1, maxPageSize: 500, maxResults: -1, benchmarks: true },
     ],
@@ -997,7 +1002,7 @@ app.get("/api/admin/seo", requireAdmin, async (req, res) => {
 // Business overview — signups, subscribers, MRR, usage, content counts
 app.get("/api/admin/overview", requireAdmin, async (_req, res) => {
   // Monthly price per tier, in USD
-  const TIER_PRICE_USD: Record<string, number> = { free: 0, basic: 49, pro: 199, enterprise: 499 };
+  const TIER_PRICE_USD: Record<string, number> = { free: 0, basic: 49, growth: 99, pro: 199, enterprise: 499 };
 
   try {
     if (USE_SUPABASE && supabase) {
@@ -1009,7 +1014,7 @@ app.get("/api/admin/overview", requireAdmin, async (_req, res) => {
       ]);
 
       const keys = (keysRes.data ?? []).filter((k: any) => k.is_active !== false);
-      const byTier: Record<string, number> = { free: 0, basic: 0, pro: 0, enterprise: 0 };
+      const byTier: Record<string, number> = { free: 0, basic: 0, growth: 0, pro: 0, enterprise: 0 };
       let mrr = 0;
       let totalRequests = 0;
       let requestsToday = 0;
@@ -1026,7 +1031,7 @@ app.get("/api/admin/overview", requireAdmin, async (_req, res) => {
         if (k.created_at && new Date(k.created_at).getTime() >= weekAgo) signups7d += 1;
       }
 
-      const paying = byTier.basic + byTier.pro + byTier.enterprise;
+      const paying = byTier.basic + byTier.growth + byTier.pro + byTier.enterprise;
 
       // Most recent signups (up to 5)
       const recent = [...keys]
