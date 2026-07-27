@@ -1,5 +1,6 @@
 import { ApiScraper, SCRAPER_USER_AGENT } from "../api-base.js";
 import { classifyUkTender } from "./uk-category-map.js";
+import { regionForCountry } from "../regions.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
 
@@ -44,7 +45,7 @@ function mapStatus(notice: ProcNotice): "open" | "closed" | "awarded" {
 // (+ the classifier landing on a real category).
 function isHealthcare(notice: ProcNotice, category: ProcurementCategory): boolean {
   const text = `${notice.project_name ?? ""} ${notice.bid_description ?? ""}`.toLowerCase();
-  if (/health|medical|hospital|clinic|pharma|vaccine|hiv|malaria|tuberculosis|nutrition|maternal|disease|surgical|diagnostic|laborator/.test(text)) {
+  if (/health|medical|hospital|clinic|pharma|vaccine|hiv|malaria|tuberculosis|nutrition|maternal|disease|surgical|diagnostic|laborator|menstrual|sanitary|hygiene|\bwash\b|sanitation/.test(text)) {
     return true;
   }
   return category !== "other";
@@ -144,7 +145,7 @@ export class WorldBankScraper extends ApiScraper {
       description,
       buyerName: notice.project_name || "World Bank-Financed Project",
       buyerCountry: notice.project_ctry_name || "",
-      buyerRegion: "Global",
+      buyerRegion: regionForCountry(notice.project_ctry_name),
       category,
       status: mapStatus(notice),
       publishedAt: parseWbDate(notice.noticedate) ?? new Date(),

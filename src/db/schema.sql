@@ -18,7 +18,8 @@ CREATE TYPE procurement_category AS ENUM (
   'medical_devices', 'pharmaceuticals', 'health_it', 'laboratory_equipment',
   'hospital_infrastructure', 'personal_protective_equipment', 'diagnostics',
   'surgical_instruments', 'telemedicine', 'clinical_services', 'allied_health',
-  'occupational_therapy', 'paramedic_services', 'patient_transport', 'social_care', 'other'
+  'occupational_therapy', 'paramedic_services', 'patient_transport', 'social_care',
+  'menstrual_health', 'wash_hygiene', 'other'
 );
 
 CREATE TYPE api_tier AS ENUM ('free', 'basic', 'pro', 'enterprise');

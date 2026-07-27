@@ -4,6 +4,15 @@ import type { ProcurementCategory } from "../../types/index.js";
 // clean CPV code the way equipment tenders do, so keyword matching on the
 // title/description comes first, falling back to CPV prefix matching.
 const KEYWORD_CATEGORY_MAP: Array<{ keywords: RegExp; category: ProcurementCategory }> = [
+  // Menstrual health — very specific, checked first so period/sanitary products
+  // don't get swept into PPE, pharma or the generic buckets. "sanitary" alone is
+  // deliberately NOT matched (sanitary sewer / sanitaryware / sanitary landfill
+  // are unrelated); it must be qualified as a sanitary product/pad/towel.
+  { keywords: /menstrual|menstruation|sanitary (?:pad|towel|napkin|protection|product|ware(?:s)? for menstrual)|sanitary pad|menstrual cup|reusable pad|period product|period poverty|period dignity|dignity kit|dignity pack|feminine hygiene|femcare|tampon/i, category: "menstrual_health" },
+  // Water, sanitation & hygiene (WASH) — school sanitation, hygiene kits,
+  // latrines, handwashing, menstrual hygiene management. Checked before the
+  // clinical categories so Asan-relevant WASH tenders surface as their own set.
+  { keywords: /\bwash\b|water[, ]+sanitation[, ]+(?:and )?hygiene|school sanitation|hygiene kit|hygiene pack|latrine|handwashing|hand.?washing|sanitation facilit|toilet block|ablution|menstrual hygiene management|\bmhm\b/i, category: "wash_hygiene" },
   // Patient transport (usually non-emergency) — checked before paramedic so an
   // explicit "patient transport service" doesn't get swept up as ambulance.
   { keywords: /patient transport|non.?emergency transport|\bpts\b|non.?emergency patient/i, category: "patient_transport" },

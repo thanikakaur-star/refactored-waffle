@@ -97,6 +97,8 @@ export type ProcurementCategory =
   | "paramedic_services"
   | "patient_transport"
   | "social_care"
+  | "menstrual_health"
+  | "wash_hygiene"
   | "other";
 
 export type ApiTier = "free" | "basic" | "growth" | "pro" | "enterprise";
