@@ -217,6 +217,23 @@ describe("Static serving", () => {
     expect(html).toContain("HealthProcure Intel");
   });
 
+  it("serves sitemap.xml as XML, not HTML", async () => {
+    const res = await fetch(`${BASE}/sitemap.xml`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type") ?? "").toContain("xml");
+    const body = await res.text();
+    expect(body.startsWith("<?xml")).toBe(true);
+    expect(body).toContain("<urlset");
+  });
+
+  it("serves robots.txt as plain text", async () => {
+    const res = await fetch(`${BASE}/robots.txt`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type") ?? "").toContain("text/plain");
+    const body = await res.text();
+    expect(body).toContain("Sitemap:");
+  });
+
   it("serves the tenders hub at /tenders", async () => {
     const res = await fetch(`${BASE}/tenders`);
     expect(res.status).toBe(200);

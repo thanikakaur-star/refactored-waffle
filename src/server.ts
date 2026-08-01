@@ -1205,6 +1205,17 @@ app.use((req, res, next) => {
   next();
 });
 
+// Serve sitemap.xml and robots.txt from explicit routes with the correct
+// content-types, BEFORE static/SPA handling. Google rejects a sitemap served
+// as text/html ("Sitemap is HTML"), so we never want these falling through to
+// any HTML handler — this guarantees the raw file with an XML/plain mime type.
+app.get("/sitemap.xml", (_req, res) => {
+  res.type("application/xml").sendFile(path.join(publicDir, "sitemap.xml"));
+});
+app.get("/robots.txt", (_req, res) => {
+  res.type("text/plain").sendFile(path.join(publicDir, "robots.txt"));
+});
+
 // Serve marketing site
 app.use(express.static(publicDir));
 app.get("/", (_req, res) => {
