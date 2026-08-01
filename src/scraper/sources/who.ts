@@ -69,6 +69,19 @@ export class WHOProcurementScraper extends BaseScraper {
       throw new Error(`UNGM: no notice rows matched selectors. Rendered DOM snippet: ${snippet}`);
     }
 
+    // Diagnostic: UNGM returns notice anchors but we keep 0 — is that because
+    // the default page shows non-health notices (so we must search), or because
+    // rowText extraction is failing so nothing classifies? Log a sample of what
+    // we actually got (title + rowText) to tell the two apart on the next run.
+    logger.info("UNGM: anchor sample", {
+      total: rows.length,
+      sample: rows.slice(0, 15).map((r) => ({
+        title: r.title.slice(0, 80),
+        rowTextLen: r.rowText.length,
+        rowText: r.rowText.slice(0, 120),
+      })),
+    });
+
     const seen = new Set<string>();
     const out: Partial<Tender>[] = [];
     for (const row of rows) {
