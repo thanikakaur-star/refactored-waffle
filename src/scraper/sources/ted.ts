@@ -28,8 +28,7 @@ const CPV_CATEGORY_MAP: Record<string, ProcurementCategory> = {
   "85142000": "allied_health", // paramedical services (physio, OT, SLT)
   "33196200": "occupational_therapy", // devices for the disabled (OT equipment)
   "33196000": "occupational_therapy", // medical aids (OT / assistive equipment)
-  "33771000": "menstrual_health", // sanitary paper products (pads, tampons, towels)
-  "33770000": "menstrual_health", // sanitary paper
+  "33771100": "menstrual_health", // sanitary towels or tampons (the precise menstrual code)
   "85140000": "telemedicine",
   "85300000": "social_care",
   "85310000": "social_care",

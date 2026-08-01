@@ -110,14 +110,40 @@ export async function persistAwards(awards: Partial<ContractAward>[]): Promise<{
   const skipped = awards.length - rows.length;
   if (rows.length === 0) return { persisted: 0, failed: skipped };
 
+  // Same batch hazard as tenders: two rows sharing the ON CONFLICT target
+  // (source, external_id) fail the whole upsert ("cannot affect row a second
+  // time"). Find a Tender emits repeated award ids across OCDS releases. Dedup
+  // non-null keys (keep last), but preserve every null external_id — NULLs are
+  // distinct under the unique constraint, so they don't conflict.
+  const deduped: typeof rows = [];
+  const indexByKey = new Map<string, number>();
+  for (const row of rows) {
+    if (row.external_id == null) {
+      deduped.push(row);
+      continue;
+    }
+    const key = `${row.source}::${row.external_id}`;
+    const existing = indexByKey.get(key);
+    if (existing != null) {
+      deduped[existing] = row;
+    } else {
+      indexByKey.set(key, deduped.length);
+      deduped.push(row);
+    }
+  }
+  const duplicatesDropped = rows.length - deduped.length;
+  if (duplicatesDropped > 0) {
+    logger.warn("Dropped duplicate (source, external_id) award rows within batch", { duplicatesDropped });
+  }
+
   const { error, count } = await client
     .from("contract_awards")
-    .upsert(rows, { onConflict: "source,external_id", count: "exact" });
+    .upsert(deduped, { onConflict: "source,external_id", count: "exact" });
 
   if (error) {
     logger.error("Failed to persist awards", { error: error.message });
-    return { persisted: 0, failed: rows.length };
+    return { persisted: 0, failed: deduped.length };
   }
 
-  return { persisted: count ?? rows.length, failed: skipped };
+  return { persisted: count ?? deduped.length, failed: skipped };
 }
