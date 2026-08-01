@@ -69,7 +69,7 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
     "price_1TlrIaC3JZLLw9RVctcI96FW": "enterprise",
     "price_1TvExtC3JZLLw9RVXpliAtZR": "pro",
     // TODO: replace with the real £99 Growth price id from your Stripe dashboard.
-    "price_GROWTH_REPLACE_ME": "growth",
+    "price_1TzfciC3JZLLw9RVLUILgmDw": "growth",
     "price_1TlrGvC3JZLLw9RVUSzeqONA": "basic",
   };
 
@@ -815,7 +815,7 @@ app.get("/api/v1/pricing", (_req, res) => {
     data: [
       { tier: "free", name: "Free", price: 0, requestsPerDay: 100, maxPageSize: 20, maxResults: 100, benchmarks: false },
       { tier: "basic", name: "Basic", price: 4900, stripePriceId: "price_1TlrGvC3JZLLw9RVUSzeqONA", requestsPerDay: 1000, maxPageSize: 50, maxResults: 1000, benchmarks: false },
-      { tier: "growth", name: "Growth", price: 9900, stripePriceId: "price_GROWTH_REPLACE_ME", requestsPerDay: 3000, maxPageSize: 100, maxResults: 5000, benchmarks: false },
+      { tier: "growth", name: "Growth", price: 9900, stripePriceId: "price_1TzfciC3JZLLw9RVLUILgmDw", requestsPerDay: 3000, maxPageSize: 100, maxResults: 5000, benchmarks: false },
       { tier: "pro", name: "Pro", price: 19900, stripePriceId: "price_1TvExtC3JZLLw9RVXpliAtZR", requestsPerDay: 10000, maxPageSize: 200, maxResults: -1, benchmarks: true, featured: true },
       { tier: "enterprise", name: "Enterprise", price: 49900, stripePriceId: "price_1TlrIaC3JZLLw9RVctcI96FW", requestsPerDay: -1, maxPageSize: 500, maxResults: -1, benchmarks: true },
     ],
