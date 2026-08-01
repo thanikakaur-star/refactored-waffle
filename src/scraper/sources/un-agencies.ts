@@ -59,6 +59,10 @@ export class UnAgenciesScraper extends BaseScraper {
     const out: Partial<Tender>[] = [];
     let anchorsSeen = 0;
     let lastDomSnippet = "";
+    // Sample of links that looked plausible but were NOT matched — surfaces the
+    // real link/title structure so the linkPattern/relevance filter can be tuned
+    // without needing a failing run (the scraper can succeed at low yield).
+    const unmatchedSample: Array<{ title: string; href: string }> = [];
 
     for (const agency of AGENCIES) {
       for (const url of agency.urls) {
@@ -88,7 +92,14 @@ export class UnAgenciesScraper extends BaseScraper {
         anchorsSeen += rows.length;
 
         for (const r of rows) {
-          if (!agency.linkPattern.test(`${r.href} ${r.title}`)) continue;
+          if (!agency.linkPattern.test(`${r.href} ${r.title}`)) {
+            // Capture a few plausible-looking (dated / longish) non-matches to
+            // reveal what real tender links look like on these pages.
+            if (unmatchedSample.length < 20 && r.title.length > 25) {
+              unmatchedSample.push({ title: r.title.slice(0, 90), href: r.href.slice(0, 120) });
+            }
+            continue;
+          }
           const id = this.deriveId(agency.name, r.href);
           if (!id || seen.has(id)) continue;
 
@@ -120,7 +131,13 @@ export class UnAgenciesScraper extends BaseScraper {
       );
     }
 
-    logger.info("UN agencies: notices scraped", { anchorsSeen, kept: out.length });
+    logger.info("UN agencies: notices scraped", {
+      anchorsSeen,
+      kept: out.length,
+      // If yield is low, this shows what real tender links look like so the
+      // filter can be tuned. Trim once the selectors are dialled in.
+      unmatchedSample: out.length < 10 ? unmatchedSample : undefined,
+    });
     return out;
   }
 
