@@ -35,7 +35,12 @@ const ALL_SCRAPERS: AnyScraper[] = [
   new WorldBankScraper(),
   new CanadaBuysScraper(),
   new WHOProcurementScraper(),
-  new UnAgenciesScraper(),
+  // UnAgenciesScraper disabled — a live diagnostic run proved UNICEF.org and
+  // UNFPA.org have NO scrapable tender listings; both are CMS/marketing sites
+  // that funnel all procurement to UNGM (their pages only expose topic/nav
+  // links + a product catalogue, no notices). UNGM is therefore the single real
+  // UN tender source (see who.ts). Class kept for reference / possible reuse.
+  // new UnAgenciesScraper(),
   new NHSSupplyChainScraper(),
 ];
 
