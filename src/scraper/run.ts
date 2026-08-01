@@ -14,6 +14,7 @@ import { FindATenderScraper } from "./sources/find-a-tender.js";
 import { WorldBankScraper } from "./sources/world-bank.js";
 import { CanadaBuysScraper } from "./sources/canada-buys.js";
 import { WHOProcurementScraper } from "./sources/who.js";
+import { UnAgenciesScraper } from "./sources/un-agencies.js";
 import { NHSSupplyChainScraper } from "./sources/nhs-supply-chain.js";
 import { getSupabaseClient } from "../db/client.js";
 import { logger } from "../utils/logger.js";
@@ -34,6 +35,7 @@ const ALL_SCRAPERS: AnyScraper[] = [
   new WorldBankScraper(),
   new CanadaBuysScraper(),
   new WHOProcurementScraper(),
+  new UnAgenciesScraper(),
   new NHSSupplyChainScraper(),
 ];
 
@@ -44,6 +46,7 @@ const ALL_SCRAPERS: AnyScraper[] = [
 function matchesFilter(scraper: AnyScraper, filter: string): boolean {
   if (filter === "govcon" || filter === "sam" || filter === "sam_gov") return scraper instanceof GovconScraper;
   if (filter === "who") return scraper.source === "who_procurement";
+  if (filter === "unicef" || filter === "unfpa" || filter === "un") return scraper.source === "un_agencies";
   if (filter === "nhs") return scraper.source === "nhs_supply_chain";
   if (filter === "ted") return scraper.source === "ted_europa";
   return scraper.source === filter;

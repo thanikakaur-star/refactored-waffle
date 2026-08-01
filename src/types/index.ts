@@ -72,6 +72,7 @@ export type TenderSource =
   | "ted_europa"
   | "sam_gov"
   | "who_procurement"
+  | "un_agencies"
   | "nhs_supply_chain"
   | "contracts_finder"
   | "find_a_tender"

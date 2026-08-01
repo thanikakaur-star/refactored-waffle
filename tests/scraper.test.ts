@@ -3,6 +3,7 @@ import { TedEuropaScraper } from "../src/scraper/sources/ted.js";
 import { SamGovScraper } from "../src/scraper/sources/sam.js";
 import { GovconScraper } from "../src/scraper/sources/govcon.js";
 import { WHOProcurementScraper } from "../src/scraper/sources/who.js";
+import { UnAgenciesScraper } from "../src/scraper/sources/un-agencies.js";
 import { NHSSupplyChainScraper } from "../src/scraper/sources/nhs-supply-chain.js";
 
 describe("TedEuropaScraper (official API)", () => {
@@ -72,6 +73,12 @@ describe("WHOProcurementScraper (UNGM)", () => {
 
   it("has correct base URL", () => {
     expect(new WHOProcurementScraper().baseUrl).toBe("https://www.ungm.org");
+  });
+});
+
+describe("UnAgenciesScraper (UNICEF / UNFPA)", () => {
+  it("has the un_agencies source identifier", () => {
+    expect(new UnAgenciesScraper().source).toBe("un_agencies");
   });
 });
 
