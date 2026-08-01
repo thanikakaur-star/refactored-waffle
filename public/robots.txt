@@ -1,5 +1,10 @@
 User-agent: *
 Allow: /
+# Public, read-only marketing feeds — allow crawling so the live-tender
+# widgets on /tenders pages render for search engines. Everything else under
+# /api/ stays blocked.
+Allow: /api/v1/public-tenders
+Allow: /api/v1/feed
 Disallow: /api/
 Disallow: /webhooks/
 Disallow: /health
