@@ -113,8 +113,12 @@ export class WorldBankScraper extends ApiScraper {
       for (const n of notices) {
         if (!n.project_name && !n.bid_description) continue;
         if (!n.id || seen.has(n.id)) continue;
-        const title = n.project_name ?? n.bid_description ?? "";
-        const description = n.bid_description ?? "";
+        // Prefer the specific bid/package description as the title — many
+        // packages share one project_name, so titling by project made dozens of
+        // distinct notices look like identical duplicates. Fall back to the
+        // project name when a package description isn't provided.
+        const title = n.bid_description ?? n.project_name ?? "";
+        const description = n.bid_description ?? n.project_name ?? "";
         const category = classifyUkTender(title, description);
         if (!isHealthcare(n, category)) continue;
         seen.add(n.id);
