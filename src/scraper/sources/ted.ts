@@ -1,5 +1,6 @@
 import { ApiScraper, SCRAPER_USER_AGENT, sleep } from "../api-base.js";
 import { convertToUsd } from "../../utils/currency.js";
+import { classifyUkTender } from "./uk-category-map.js";
 import { logger } from "../../utils/logger.js";
 import type { Tender, ProcurementCategory } from "../../types/index.js";
 
@@ -27,6 +28,8 @@ const CPV_CATEGORY_MAP: Record<string, ProcurementCategory> = {
   "85142000": "allied_health", // paramedical services (physio, OT, SLT)
   "33196200": "occupational_therapy", // devices for the disabled (OT equipment)
   "33196000": "occupational_therapy", // medical aids (OT / assistive equipment)
+  "33771000": "menstrual_health", // sanitary paper products (pads, tampons, towels)
+  "33770000": "menstrual_health", // sanitary paper
   "85140000": "telemedicine",
   "85300000": "social_care",
   "85310000": "social_care",
@@ -236,15 +239,22 @@ export class TedEuropaScraper extends ApiScraper {
     const cpvCodes = fieldCpvs(notice, [
       "classification-cpv", "cpv", "CPV", "main-classification-proc", "additional-classification-proc",
     ]);
-    const category = this.mapCpvToCategory(cpvCodes);
-
     // Title field id varies by eForms version; try the candidates, and if none
-    // match, synthesize one from category + id rather than dropping the notice
-    // (these are already CPV-filtered to healthcare, so a placeholder title is
-    // acceptable and keeps real EU data flowing while field ids get confirmed).
+    // match, synthesize one from the CPV category + id rather than dropping the
+    // notice (these are already CPV-filtered to healthcare, so a placeholder
+    // title is acceptable and keeps real EU data flowing while field ids get
+    // confirmed).
     const title =
       fieldText(notice, ["notice-title", "title-proc", "title-lot", "BT-21-Procedure", "BT-21-Lot", "name-buyer"]) ||
       `${this.mapCpvToCategory(cpvCodes).replace(/_/g, " ")} tender — ${externalId}`;
+
+    // Classify keyword-first (on the title), falling back to the CPV map. This
+    // lets categories the CPV division fallback can't express — menstrual_health,
+    // wash_hygiene, occupational_therapy — win: e.g. sanitary products carry CPV
+    // 3377xxxx which would otherwise collapse to the generic "33 → medical
+    // devices" default and never surface as menstrual health.
+    const keywordCategory = classifyUkTender(title, title);
+    const category = keywordCategory !== "other" ? keywordCategory : this.mapCpvToCategory(cpvCodes);
 
     const country = fieldText(notice, ["buyer-country", "organisation-country-buyer"]);
     const publishedRaw = fieldText(notice, ["publication-date"]);
