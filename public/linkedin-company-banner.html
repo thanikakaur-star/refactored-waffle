@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LinkedIn Company Banner — HealthProcure Intel</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #111; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+    .banner {
+      width: 1128px;
+      height: 191px;
+      background: #0a0a0f;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #0d0f16 0%, #0a0a0f 50%, #0e1019 100%);
+    }
+
+    .orb {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      top: -300px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(201,169,110,0.04) 0%, transparent 60%);
+    }
+
+    .h-lines {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 46px,
+        rgba(201,169,110,0.02) 46px,
+        rgba(201,169,110,0.02) 47px
+      );
+    }
+
+    .bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(201,169,110,0.1) 15%,
+        #c9a96e 40%,
+        #d4af37 50%,
+        #c9a96e 60%,
+        rgba(201,169,110,0.1) 85%,
+        transparent 100%
+      );
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #f1f5f9;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: #c9a96e;
+    }
+
+    .subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #64748b;
+      letter-spacing: 1px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .stat {
+      padding: 0 24px;
+      border-left: 1px solid rgba(201,169,110,0.08);
+      text-align: center;
+    }
+
+    .stat:first-child {
+      border-left: none;
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #c9a96e;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .url {
+      position: absolute;
+      bottom: 10px;
+      right: 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      color: #334155;
+      letter-spacing: 0.5px;
+      z-index: 2;
+    }
+    .url em {
+      font-style: normal;
+      color: rgba(201,169,110,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="bg"></div>
+    <div class="orb"></div>
+    <div class="h-lines"></div>
+    <div class="bottom-bar"></div>
+
+    <div class="content">
+      <h1>Every Healthcare Tender. <em>One Platform.</em></h1>
+      <div class="subtitle">Real-time procurement intelligence from TED Europa, SAM.gov, WHO & NHS Supply Chain</div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">$50B+</div>
+          <div class="stat-label">Tenders</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">85+</div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Sources</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">Free</div>
+          <div class="stat-label">To Start</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="url"><em>healthprocureintel</em>.com</div>
+  </div>
+</body>
+</html>

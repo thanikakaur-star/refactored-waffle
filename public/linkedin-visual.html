@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthProcure Intel — LinkedIn Visual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0a0f; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; }
+
+    .card {
+      width: 1200px;
+      height: 628px;
+      background: linear-gradient(135deg, #0a0a0f 0%, #12141d 40%, #0a0a0f 100%);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px;
+    }
+
+    .glow-tl {
+      position: absolute;
+      top: -120px;
+      left: -120px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .glow-br {
+      position: absolute;
+      bottom: -100px;
+      right: -100px;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(13,148,136,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,169,110,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,169,110,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .border-line {
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(201,169,110,0.12);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(201,169,110,0.1);
+      border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: #c9a96e;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #e2e8f0;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-text span { color: #c9a96e; }
+
+    .headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 700;
+      color: #e2e8f0;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+    }
+
+    .headline em {
+      font-style: normal;
+      background: linear-gradient(135deg, #c9a96e, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 44px;
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+
+    .sources {
+      display: flex;
+      gap: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .source {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(201,169,110,0.06);
+      border: 1px solid rgba(201,169,110,0.15);
+      border-radius: 10px;
+      padding: 12px 20px;
+    }
+
+    .source-flag { font-size: 22px; }
+    .source-name { font-size: 14px; font-weight: 600; color: #c9a96e; }
+    .source-desc { font-size: 11px; color: #64748b; }
+
+    .url-bar {
+      position: absolute;
+      bottom: 30px;
+      right: 80px;
+      font-size: 14px;
+      color: #64748b;
+      letter-spacing: 1px;
+      z-index: 2;
+    }
+
+    .url-bar span { color: #c9a96e; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="glow-tl"></div>
+    <div class="glow-br"></div>
+    <div class="grid-overlay"></div>
+    <div class="border-line"></div>
+
+    <div class="logo">
+      <div class="logo-icon">HP</div>
+      <div class="logo-text">Health<span>Procure</span> Intel</div>
+    </div>
+
+    <h1 class="headline">The Intelligence Layer for <em>Global Healthcare Procurement</em></h1>
+
+    <p class="subtitle">One API. One dashboard. Every healthcare tender across 85+ countries. Real-time aggregation from government portals worldwide.</p>
+
+    <div class="sources">
+      <div class="source">
+        <span class="source-flag">🇪🇺</span>
+        <div>
+          <div class="source-name">TED Europa</div>
+          <div class="source-desc">EU procurement</div>
+        </div>
+      </div>
+      <div class="source">
+        <span class="source-flag">🇺🇸</span>
+        <div>
+          <div class="source-name">SAM.gov</div>
+          <div class="source-desc">US federal</div>
+        </div>
+      </div>
+      <div class="source">
+        <span class="source-flag">🌐</span>
+        <div>
+          <div class="source-name">WHO</div>
+          <div class="source-desc">Global health</div>
+        </div>
+      </div>
+      <div class="source">
+        <span class="source-flag">🇬🇧</span>
+        <div>
+          <div class="source-name">NHS Supply Chain</div>
+          <div class="source-desc">UK frameworks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="url-bar"><span>healthprocureintel</span>.com</div>
+  </div>
+</body>
+</html>

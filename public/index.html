@@ -4,8 +4,91 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HealthProcure Intel — The Intelligence Layer for Global Healthcare Procurement</title>
-  <meta name="description" content="Aggregate, normalize, and analyze $50B+ in procurement data from TED Europa, SAM.gov, WHO, and NHS Supply Chain. One API. Every opportunity." />
+  <title>HealthProcure Intel — Healthcare Procurement Intelligence API & Data Platform</title>
+  <meta name="description" content="Track healthcare procurement tenders from TED Europa, UK Find a Tender, Contracts Finder, NHS Supply Chain, US federal contracts, CanadaBuys, the World Bank, and WHO in one API and dashboard. Real-time tender alerts, contract award data, and regional pricing benchmarks across 100+ countries." />
+  <meta name="keywords" content="healthcare procurement, tender alerts, procurement API, TED Europa, SAM.gov, UK Find a Tender, Contracts Finder, medical device tenders, government healthcare contracts, procurement intelligence, contract award data, healthcare tender data" />
+  <meta name="author" content="HealthProcure Intel" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://healthprocureintel.com/" />
+
+  <!-- Open Graph / LinkedIn / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://healthprocureintel.com/" />
+  <meta property="og:title" content="HealthProcure Intel — Healthcare Procurement Intelligence Platform" />
+  <meta property="og:description" content="Track healthcare procurement tenders from TED Europa, SAM.gov, UK Find a Tender, and Contracts Finder in one API and dashboard. One API. Every opportunity." />
+  <meta property="og:image" content="https://healthprocureintel.com/logo-hp.png" />
+  <meta property="og:site_name" content="HealthProcure Intel" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HealthProcure Intel — Healthcare Procurement Intelligence Platform" />
+  <meta name="twitter:description" content="Track healthcare procurement tenders from TED Europa, SAM.gov, UK Find a Tender, and Contracts Finder in one API. One API. Every opportunity." />
+  <meta name="twitter:image" content="https://healthprocureintel.com/logo-hp.png" />
+
+  <!-- Structured Data: Organization + Product + FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://healthprocureintel.com/#organization",
+        "name": "HealthProcure Intel",
+        "url": "https://healthprocureintel.com/",
+        "logo": "https://healthprocureintel.com/logo-hp.png",
+        "description": "Global healthcare procurement intelligence platform aggregating tender data from TED Europa, SAM.gov, UK Find a Tender, and Contracts Finder.",
+        "email": "hello@healthprocureintel.com",
+        "sameAs": ["https://www.linkedin.com/company/healthprocure-intel"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://healthprocureintel.com/#website",
+        "url": "https://healthprocureintel.com/",
+        "name": "HealthProcure Intel",
+        "publisher": { "@id": "https://healthprocureintel.com/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "HealthProcure Intel API",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": "Healthcare procurement intelligence API aggregating and normalizing tender data from TED Europa, SAM.gov, UK Find a Tender, and Contracts Finder across 85+ countries.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "GBP",
+          "description": "Free tier with 100 requests per day, no credit card required."
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What data sources do you cover?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We aggregate data from eight procurement sources: TED Europa (EU public procurement across 27 member states), US federal contracts, Find a Tender (UK above-threshold public contracts including NHS trusts), Contracts Finder (UK local authority and NHS contracts), NHS Supply Chain (SCCL framework notices), CanadaBuys (Canadian public sector), the World Bank (globally-financed development projects), and WHO/UN procurement via UNGM." }
+          },
+          {
+            "@type": "Question",
+            "name": "How fresh is the data?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Our Playwright-powered scrapers run daily across all four portals. New tenders are typically indexed within 24 hours of publication on the source portal." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need a credit card for the free tier?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. The free tier requires only an email address. You receive an API key immediately with 100 requests per day and no credit card required." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I cancel my subscription anytime?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. All paid plans are billed monthly via Stripe with no long-term commitments. You can cancel at any time from your Stripe customer portal." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -23,17 +106,17 @@
               muted: '#b8975a',
             },
             dark: {
-              DEFAULT: '#0a0a0f',
-              100: '#12141d',
-              200: '#0f1117',
-              300: '#181b27',
+              DEFAULT: '#000000',
+              100: '#0a0a0f',
+              200: '#121212',
+              300: '#1a1a1a',
               400: '#1e2130',
               500: '#252839',
             },
             teal: {
-              DEFAULT: '#1a7a6d',
-              light: '#0d9488',
-              dark: '#145f55',
+              DEFAULT: '#0d9488',
+              light: '#14b8a6',
+              dark: '#0d7a70',
             },
           },
           fontFamily: {
@@ -45,37 +128,26 @@
     };
   </script>
   <style>
-    body { font-family: 'Inter', system-ui, sans-serif; background-color: #0a0a0f; color: #e2e8f0; }
+    html, body { overflow-x: hidden; max-width: 100%; }
+    body { font-family: 'Inter', system-ui, sans-serif; background-color: #000000; color: #d1d5db; }
+    /* WCAG AA compliant text colors for dark mode */
+    p, span, li { color: #d1d5db; }
+    h1, h2, h3, h4, h5, h6 { color: #ffffff; }
+    .text-secondary { color: #e5e7eb; }
+    .text-muted { color: #d1d5db; }
+    /* Mobile overflow safety: keep code blocks scrollable internally, never stretch the page */
+    pre { max-width: 100%; }
+    .code-block { max-width: 100%; }
     .hero-gradient {
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 40%, rgba(201,169,110,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 80% 20%, rgba(26,122,109,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 100% 100% at 50% 100%, rgba(10,10,15,1) 0%, transparent 50%),
-        linear-gradient(180deg, #0a0a0f 0%, #0f1117 50%, #0a0a0f 100%);
-      animation: gradientShift 12s ease-in-out infinite alternate;
+      background: #000000;
     }
-    @keyframes gradientShift {
-      0% { background-position: 0% 0%, 100% 0%, 50% 100%, 0% 0%; }
-      100% { background-position: 100% 100%, 0% 100%, 50% 0%, 0% 0%; }
-    }
-    .shimmer {
-      background: linear-gradient(110deg, #c9a96e 0%, #d4c4a0 25%, #d4af37 50%, #c9a96e 75%, #a8883f 100%);
-      background-size: 200% 100%;
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmer 6s ease-in-out infinite;
-    }
-    @keyframes shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-    .glass { background:rgba(255,255,255,0.03); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.06); }
-    .glass-strong { background:rgba(255,255,255,0.05); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.08); }
+    .glass { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.15); }
+    .glass-strong { background: #0a0a0f; border: 1px solid rgba(201,169,110,0.2); }
     .fade-up { opacity:0; transform:translateY(32px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .fade-up.visible { opacity:1; transform:translateY(0); }
-    .hover-lift { transition:transform 0.3s ease, box-shadow 0.3s ease; }
-    .hover-lift:hover { transform:translateY(-6px); box-shadow:0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(201,169,110,0.06); }
-    .gold-glow { box-shadow:0 0 40px rgba(212,175,55,0.12), 0 0 80px rgba(201,169,110,0.06); }
-    .nav-blur { backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); }
-    @keyframes borderGlow { 0%,100%{border-color:rgba(201,169,110,0.3)} 50%{border-color:rgba(212,175,55,0.6)} }
-    .border-glow { animation:borderGlow 3s ease-in-out infinite; }
+    .hover-lift { transition:border-color 0.3s ease; }
+    .hover-lift:hover { border-color: rgba(201,169,110,0.3); }
+    .nav-blur { }
     .counter { font-variant-numeric:tabular-nums; }
     section[id] { scroll-margin-top:5rem; }
     .code-block { background:#0d0f18; border:1px solid rgba(255,255,255,0.06); }
@@ -88,9 +160,10 @@
     .faq-answer.open { max-height:400px; }
     .faq-icon { transition:transform 0.3s ease; }
     .faq-icon.open { transform:rotate(45deg); }
-    .product-card { position:relative; overflow:hidden; }
-    .product-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, transparent, rgba(201,169,110,0.5), transparent); opacity:0; transition:opacity 0.3s ease; }
-    .product-card:hover::before { opacity:1; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .animate-slide-up { animation:slideUp 0.5s ease-out forwards; }
+    .product-card { position:relative; transition:border-color 0.3s ease, background 0.3s ease; }
+    .product-card:hover { border-color:rgba(201,169,110,0.22); background:rgba(255,255,255,0.06); }
   </style>
 </head>
 <body class="antialiased">
@@ -100,7 +173,7 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
       <div class="flex items-center justify-between h-16 lg:h-20">
         <a href="#" class="flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/10">
+          <div class="w-10 h-10 rounded-lg bg-gold flex items-center justify-center">
             <span class="font-display font-bold text-dark text-lg tracking-tight">HP</span>
           </div>
           <span class="hidden sm:block font-body font-semibold text-white text-lg tracking-tight">
@@ -111,11 +184,16 @@
           <a href="#products" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Products</a>
           <a href="#sources" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Data Sources</a>
           <a href="#pricing" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Pricing</a>
+          <a href="/tenders" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Tenders</a>
+          <a href="/blog" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Blog</a>
           <a href="/docs" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">API Docs</a>
           <a href="/dashboard" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Dashboard</a>
         </div>
-        <div class="flex items-center gap-4">
-          <a href="#cta" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-sm hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20">
+        <div class="flex items-center gap-3">
+          <a href="mailto:hello@healthprocureintel.com?subject=Demo%20Request%20%E2%80%94%20HealthProcure%20Intel&body=Hi%20Thanika%2C%0D%0A%0D%0AI'd%20like%20to%20book%20a%20demo%20of%20HealthProcure%20Intel.%0D%0A%0D%0ACompany%3A%20%0D%0ARole%3A%20%0D%0ABest%20times%20to%20talk%3A%20%0D%0A%0D%0AThanks!" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gold/30 text-gold font-semibold text-sm hover:bg-gold/5 hover:border-gold/50 transition-all duration-200">
+            Book a Demo
+          </a>
+          <a href="#cta" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold text-dark font-semibold text-sm hover:opacity-90 transition-all duration-200">
             Get Started Free
           </a>
           <button id="mobile-menu-btn" class="md:hidden text-gray-400 hover:text-white" aria-label="Toggle menu">
@@ -128,105 +206,120 @@
           <a href="#products" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">Products</a>
           <a href="#sources" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">Data Sources</a>
           <a href="#pricing" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">Pricing</a>
+          <a href="/blog" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">Blog</a>
           <a href="/docs" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">API Docs</a>
           <a href="/dashboard" class="text-sm text-gray-400 hover:text-gold transition-colors py-1">Dashboard</a>
-          <a href="#cta" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-sm mt-2">Get Started Free</a>
+          <a href="mailto:hello@healthprocureintel.com?subject=Demo%20Request%20%E2%80%94%20HealthProcure%20Intel&body=Hi%20Thanika%2C%0D%0A%0D%0AI'd%20like%20to%20book%20a%20demo%20of%20HealthProcure%20Intel.%0D%0A%0D%0ACompany%3A%20%0D%0ARole%3A%20%0D%0ABest%20times%20to%20talk%3A%20%0D%0A%0D%0AThanks!" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-gold/30 text-gold font-semibold text-sm mt-2">Book a Demo</a>
+          <a href="#cta" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-gold text-dark font-semibold text-sm hover:opacity-90 transition-all duration-200">Get Started Free</a>
         </div>
       </div>
     </div>
   </nav>
 
   <!-- ============ HERO SECTION ============ -->
-  <section class="hero-gradient relative min-h-screen flex items-center justify-center overflow-hidden">
+  <section class="hero-gradient relative overflow-hidden">
     <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%221%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    <div class="relative max-w-7xl mx-auto px-6 lg:px-8 text-center pt-24 pb-20">
-      <div class="fade-up">
-        <p class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-gold text-xs font-medium tracking-wider uppercase mb-8">
-          <span class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
-          B2B Intelligence Platform
-        </p>
-      </div>
-      <h1 class="fade-up font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.08] tracking-tight mb-8">
-        <span class="shimmer">The Intelligence Layer</span><br />
-        <span class="text-white">for Global Healthcare</span><br />
-        <span class="text-white">Procurement</span>
-      </h1>
-      <p class="fade-up max-w-3xl mx-auto text-lg sm:text-xl text-gray-400 leading-relaxed mb-12 font-light">
-        Aggregate, normalize, and analyze <span class="text-white font-medium">$50B+</span> in procurement data from the world's largest healthcare purchasing portals. <span class="text-gold">One API. Every opportunity.</span>
-      </p>
-      <div class="fade-up flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-        <a href="#cta" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-base hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-xl shadow-gold/20 hover:shadow-gold/30">
-          Start Free — No Credit Card
-        </a>
-        <a href="/docs" class="w-full sm:w-auto px-8 py-4 rounded-xl border border-gold/30 text-gold font-semibold text-base hover:bg-gold/5 hover:border-gold/50 transition-all duration-200">
-          Explore API Docs
-        </a>
-      </div>
+    <div class="relative w-full min-w-0 max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-24 lg:pt-40 lg:pb-32">
+      <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-14 lg:gap-10 items-center">
 
-      <!-- Stats -->
-      <div class="fade-up grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
-        <div class="glass rounded-2xl p-6 hover-lift">
-          <p class="counter text-3xl sm:text-4xl font-display font-bold text-white mb-1" data-target="12000" data-suffix="+">0</p>
-          <p class="text-sm text-gray-500 font-medium">Tenders Tracked</p>
-        </div>
-        <div class="glass rounded-2xl p-6 hover-lift">
-          <p class="counter text-3xl sm:text-4xl font-display font-bold text-white mb-1" data-target="85" data-suffix="+">0</p>
-          <p class="text-sm text-gray-500 font-medium">Countries</p>
-        </div>
-        <div class="glass rounded-2xl p-6 hover-lift">
-          <p class="counter text-3xl sm:text-4xl font-display font-bold text-gold mb-1" data-prefix="$" data-target="50" data-suffix="B+">0</p>
-          <p class="text-sm text-gray-500 font-medium">Contract Value</p>
-        </div>
-        <div class="glass rounded-2xl p-6 hover-lift">
-          <p class="counter text-3xl sm:text-4xl font-display font-bold text-white mb-1" data-target="4">0</p>
-          <p class="text-sm text-gray-500 font-medium">Live Sources</p>
-        </div>
-      </div>
-
-      <!-- Mock API Response -->
-      <div class="fade-up max-w-3xl mx-auto">
-        <div class="code-block rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
-          <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
-            <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
-            <span class="w-3 h-3 rounded-full bg-yellow-500/60"></span>
-            <span class="w-3 h-3 rounded-full bg-green-500/60"></span>
-            <span class="ml-3 text-xs text-gray-500 font-mono">GET /api/v1/tenders?source=ted&category=medical_devices&limit=1</span>
+        <!-- Left: thesis -->
+        <div>
+          <p class="fade-up flex items-center gap-2.5 text-xs font-mono text-gold/80 tracking-[0.18em] uppercase mb-6">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-light"></span>
+            The intelligence layer for global healthcare procurement
+          </p>
+          <h1 class="fade-up font-display text-4xl sm:text-5xl lg:text-[3.4rem] font-bold leading-[1.1] tracking-tight mb-7 text-white" style="text-wrap: balance;">
+            Stop refreshing a dozen government portals for <em class="italic text-gold">every</em> healthcare tender.
+          </h1>
+          <p class="fade-up max-w-xl text-lg text-gray-400 leading-relaxed mb-9 font-light">
+            Medical devices, pharmaceuticals, diagnostics, surgical instruments, PPE, health IT, clinical services, and more — from TED Europa, UK Find a Tender &amp; Contracts Finder, NHS Supply Chain, US federal contracts, CanadaBuys, the World Bank, and WHO — normalized into one searchable feed with CPV classification and daily alerts.
+          </p>
+          <div class="fade-up flex flex-col sm:flex-row items-start gap-4 mb-10">
+            <a href="#cta" class="w-full sm:w-auto text-center px-8 py-4 rounded-full bg-gold text-dark font-semibold text-base hover:opacity-90 transition-all duration-200">
+              Start Free — No Credit Card
+            </a>
+            <a href="/dashboard" class="w-full sm:w-auto text-center px-8 py-4 rounded-full border border-gold text-gold font-semibold text-base hover:bg-gold hover:text-dark transition-all duration-200">
+              See the Dashboard
+            </a>
           </div>
-          <pre class="p-5 text-sm font-mono leading-relaxed overflow-x-auto text-left"><code><span class="code-comment">// 200 OK — Response in 42ms</span>
-{
-  <span class="code-key">"total"</span>: <span class="code-number">3847</span>,
-  <span class="code-key">"page"</span>: <span class="code-number">1</span>,
-  <span class="code-key">"data"</span>: [{
-    <span class="code-key">"id"</span>: <span class="code-string">"ted-2026-128947"</span>,
-    <span class="code-key">"title"</span>: <span class="code-string">"MRI Equipment Supply — University Hospital Munich"</span>,
-    <span class="code-key">"source"</span>: <span class="code-string">"ted_europa"</span>,
-    <span class="code-key">"country"</span>: <span class="code-string">"DE"</span>,
-    <span class="code-key">"value_usd"</span>: <span class="code-number">2450000</span>,
-    <span class="code-key">"original_currency"</span>: <span class="code-string">"EUR"</span>,
-    <span class="code-key">"original_value"</span>: <span class="code-number">2280000</span>,
-    <span class="code-key">"category"</span>: <span class="code-string">"medical_devices"</span>,
-    <span class="code-key">"deadline"</span>: <span class="code-string">"2026-07-15T14:00:00Z"</span>,
-    <span class="code-key">"status"</span>: <span class="code-string">"open"</span>
-  }]
-}</code></pre>
+          <div class="fade-up flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-gray-500 font-mono">
+            <span>8 <span class="text-gray-600">sources</span></span>
+            <span class="w-px h-4 bg-white/10"></span>
+            <span>Daily <span class="text-gray-600">refresh</span></span>
+            <span class="w-px h-4 bg-white/10"></span>
+            <span>£0 <span class="text-gray-600">to start</span></span>
+          </div>
+        </div>
+
+        <!-- Right: the product itself, as the thesis image -->
+        <div class="fade-up w-full min-w-0">
+          <div class="rounded-lg overflow-hidden border border-gold/15 bg-dark-100">
+            <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
+              <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500/60"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500/60"></span>
+              <span class="ml-3 text-xs text-gray-500 font-mono">Live Intelligence Feed</span>
+            </div>
+            <div class="p-4 sm:p-5 space-y-3 max-h-72 overflow-hidden">
+              <!-- Live feed items — populated from /api/v1/feed; the three below
+                   are the fallback shown until real tenders load. -->
+              <div id="feed-items" class="space-y-3">
+                <div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex-1 min-w-0">
+                      <p class="text-xs text-gold font-semibold uppercase tracking-wide">TED Europa • Medical Devices</p>
+                      <p class="text-sm text-white font-medium mt-1 truncate">MRI Equipment Supply Framework</p>
+                      <p class="text-xs text-gray-400 mt-1">Contract value: €2.4M • Deadline: 45 days</p>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">New</span>
+                  </div>
+                </div>
+                <div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors" style="animation-delay: 1s;">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex-1 min-w-0">
+                      <p class="text-xs text-gold font-semibold uppercase tracking-wide">UK Find a Tender • Surgical Instruments</p>
+                      <p class="text-sm text-white font-medium mt-1 truncate">Sterile Surgical Instruments Supply</p>
+                      <p class="text-xs text-gray-400 mt-1">Contract value: £1.2M • NHS Supply Chain</p>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">New</span>
+                  </div>
+                </div>
+                <div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors" style="animation-delay: 2s;">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex-1 min-w-0">
+                      <p class="text-xs text-gold font-semibold uppercase tracking-wide">SAM.gov • Pharmaceuticals</p>
+                      <p class="text-sm text-white font-medium mt-1 truncate">Biotech Manufacturing Equipment</p>
+                      <p class="text-xs text-gray-400 mt-1">Contract value: $3.8M • US Federal</p>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">New</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Data flowing indicator -->
+              <div class="flex items-center justify-center gap-2 pt-2 text-xs text-gray-500">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                <span id="feed-status">Data syncing across 8 sources</span>
+              </div>
+            </div>
+          </div>
+          <p class="mt-4 text-xs text-gray-600 pl-1">Real tenders from TED Europa, UK Find a Tender, Contracts Finder, NHS Supply Chain, US federal, CanadaBuys, World Bank &amp; WHO — updated daily</p>
         </div>
       </div>
     </div>
-    <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark-200 to-transparent"></div>
   </section>
 
   <!-- ============ DATA SOURCES ============ -->
-  <section id="sources" class="relative py-24 lg:py-32 bg-dark-200">
+  <section id="sources" class="relative py-24 lg:py-32 bg-dark-200 overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
       <div class="text-center mb-16 fade-up">
         <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">Trusted Data Sources</p>
-        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Four Pillars of Procurement Data</h2>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Five Markets, One Feed</h2>
         <p class="max-w-2xl mx-auto text-gray-400 text-lg">We aggregate from the world's most authoritative healthcare procurement databases, covering every major market.</p>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <!-- TED Europa -->
-        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group">
-          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600/20 to-blue-400/10 flex items-center justify-center mb-6 border border-blue-500/10">
+        <div class="fade-up glass-strong rounded-lg p-8 hover-lift group">
+          <div class="w-14 h-14 rounded-xl bg-blue-600/10 flex items-center justify-center mb-6 border border-blue-500/10">
             <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10zM2 12h20"/></svg>
           </div>
           <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">TED Europa</h3>
@@ -239,8 +332,8 @@
           </div>
         </div>
         <!-- SAM.gov -->
-        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group" style="transition-delay:0.1s">
-          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-red-600/20 to-red-400/10 flex items-center justify-center mb-6 border border-red-500/10">
+        <div class="fade-up glass-strong rounded-lg p-8 hover-lift group" style="transition-delay:0.1s">
+          <div class="w-14 h-14 rounded-xl bg-red-600/10 flex items-center justify-center mb-6 border border-red-500/10">
             <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 21V7l9-4 9 4v14M3 7l9 4m0 0l9-4m-9 4v10"/></svg>
           </div>
           <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">SAM.gov</h3>
@@ -252,32 +345,45 @@
             <span class="text-xs px-2 py-1 rounded-md bg-red-500/10 text-red-400/80 border border-red-500/10">Set-Asides</span>
           </div>
         </div>
-        <!-- WHO -->
-        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group" style="transition-delay:0.2s">
-          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-teal/20 to-teal-light/10 flex items-center justify-center mb-6 border border-teal/10">
-            <svg class="w-7 h-7 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M2 12h20M12 2c2.5 2.8 4 6.2 4 10s-1.5 7.2-4 10c-2.5-2.8-4-6.2-4-10s1.5-7.2 4-10z"/></svg>
+        <!-- Find a Tender -->
+        <div class="fade-up glass-strong rounded-lg p-8 hover-lift group" style="transition-delay:0.2s">
+          <div class="w-14 h-14 rounded-xl bg-teal/10 flex items-center justify-center mb-6 border border-teal/10">
+            <svg class="w-7 h-7 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M21 21l-4.35-4.35"/></svg>
           </div>
-          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">WHO Procurement</h3>
-          <p class="text-xs text-teal-light/70 font-medium uppercase tracking-wider mb-3">Global — 194 Member States</p>
-          <p class="text-sm text-gray-400 leading-relaxed mb-4">Global health procurement from the World Health Organization. Pre-qualified supplier data. Covers 194 member states across infectious disease, diagnostics, and essential medicines.</p>
+          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">Find a Tender</h3>
+          <p class="text-xs text-teal-light/70 font-medium uppercase tracking-wider mb-3">United Kingdom — High-Value Contracts</p>
+          <p class="text-sm text-gray-400 leading-relaxed mb-4">The UK's official portal for above-threshold public contracts — including NHS trusts and NHS Supply Chain tenders. Open OCDS data with CPV classification and full notice detail.</p>
           <div class="flex flex-wrap gap-2">
-            <span class="text-xs px-2 py-1 rounded-md bg-teal/10 text-teal-light/80 border border-teal/10">Pre-Qualified</span>
-            <span class="text-xs px-2 py-1 rounded-md bg-teal/10 text-teal-light/80 border border-teal/10">194 States</span>
-            <span class="text-xs px-2 py-1 rounded-md bg-teal/10 text-teal-light/80 border border-teal/10">Diagnostics</span>
+            <span class="text-xs px-2 py-1 rounded-md bg-teal/10 text-teal-light/80 border border-teal/10">OCDS Data</span>
+            <span class="text-xs px-2 py-1 rounded-md bg-teal/10 text-teal-light/80 border border-teal/10">NHS Tenders</span>
+            <span class="text-xs px-2 py-1 rounded-md bg-teal/10 text-teal-light/80 border border-teal/10">CPV Codes</span>
           </div>
         </div>
-        <!-- NHS -->
-        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift group" style="transition-delay:0.3s">
-          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-600/20 to-indigo-400/10 flex items-center justify-center mb-6 border border-indigo-500/10">
+        <!-- Contracts Finder -->
+        <div class="fade-up glass-strong rounded-lg p-8 hover-lift group" style="transition-delay:0.3s">
+          <div class="w-14 h-14 rounded-xl bg-indigo-600/10 flex items-center justify-center mb-6 border border-indigo-500/10">
             <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12M6 12h12M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/></svg>
           </div>
-          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">NHS Supply Chain</h3>
-          <p class="text-xs text-indigo-400/70 font-medium uppercase tracking-wider mb-3">United Kingdom — National Health Service</p>
-          <p class="text-sm text-gray-400 leading-relaxed mb-4">UK National Health Service procurement. GBP 15B+ annual spend. Framework agreements, dynamic purchasing systems, and lot-level detail across all NHS trusts.</p>
+          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">Contracts Finder</h3>
+          <p class="text-xs text-indigo-400/70 font-medium uppercase tracking-wider mb-3">United Kingdom — Local Authority &amp; NHS</p>
+          <p class="text-sm text-gray-400 leading-relaxed mb-4">UK public sector contracts below the high-value threshold — local authorities, NHS trusts, and clinical service commissions including therapy, social care, and community health.</p>
           <div class="flex flex-wrap gap-2">
-            <span class="text-xs px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400/80 border border-indigo-500/10">Frameworks</span>
-            <span class="text-xs px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400/80 border border-indigo-500/10">GBP 15B+ /yr</span>
-            <span class="text-xs px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400/80 border border-indigo-500/10">Lot-Level</span>
+            <span class="text-xs px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400/80 border border-indigo-500/10">Local Authority</span>
+            <span class="text-xs px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400/80 border border-indigo-500/10">Clinical Services</span>
+            <span class="text-xs px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400/80 border border-indigo-500/10">Social Care</span>
+          </div>
+        </div>
+        <!-- World Bank -->
+        <div class="fade-up glass-strong rounded-lg p-8 hover-lift group" style="transition-delay:0.4s">
+          <div class="w-14 h-14 rounded-xl bg-emerald-600/10 flex items-center justify-center mb-6 border border-emerald-500/10">
+            <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M2 12h20M12 2c2.5 2.8 4 6.2 4 10s-1.5 7.2-4 10c-2.5-2.8-4-6.2-4-10s1.5-7.2 4-10z"/></svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">World Bank</h3>
+          <p class="text-xs text-emerald-400/70 font-medium uppercase tracking-wider mb-3">Global — Development Financing</p>
+          <p class="text-sm text-gray-400 leading-relaxed mb-4">Procurement notices for World Bank-financed development projects worldwide, including health-sector infrastructure and equipment contracts.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400/80 border border-emerald-500/10">Development Projects</span>
+            <span class="text-xs px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400/80 border border-emerald-500/10">Global Reach</span>
           </div>
         </div>
       </div>
@@ -285,8 +391,7 @@
   </section>
 
   <!-- ============ PRODUCTS & SERVICES ============ -->
-  <section id="products" class="relative py-24 lg:py-32 bg-dark">
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-gold/[0.02] to-transparent rounded-full blur-3xl"></div>
+  <section id="products" class="relative py-24 lg:py-32 bg-dark overflow-hidden">
     <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
       <div class="text-center mb-16 fade-up">
         <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">Our Products</p>
@@ -294,84 +399,18 @@
         <p class="max-w-2xl mx-auto text-gray-400 text-lg">Four distinct product offerings to match how your team consumes procurement intelligence — from raw API access to white-label enterprise feeds.</p>
       </div>
 
-      <!-- Product 1: Procurement Data API -->
-      <div class="fade-up mb-8">
-        <div class="product-card glass-strong rounded-2xl p-8 lg:p-10 hover-lift">
-          <div class="grid lg:grid-cols-2 gap-10 items-start">
-            <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold-dark/10 flex items-center justify-center border border-gold/10">
-                  <svg class="w-7 h-7 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-                </div>
-                <div>
-                  <h3 class="font-display text-2xl font-bold text-white">Procurement Data API</h3>
-                  <p class="text-sm text-gold/70">RESTful API with 7 endpoints</p>
-                </div>
-              </div>
-              <p class="text-gray-400 leading-relaxed mb-6">Real-time REST API delivering normalized procurement data from all four sources. Filter by source, category, country, value range, date, and full-text search. Paginated responses with exact counts in JSON format, fully documented at /docs.</p>
-              <ul class="space-y-3 mb-6">
-                <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>7 RESTful endpoints with full documentation</li>
-                <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Filter by source, category, country, value range, date</li>
-                <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Full-text search across titles and descriptions</li>
-                <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Paginated responses with exact total counts</li>
-                <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>JSON format, ready for any integration</li>
-              </ul>
-              <div class="glass rounded-xl p-4 mb-6">
-                <p class="text-xs text-gold/70 font-semibold uppercase tracking-wider mb-2">Perfect for</p>
-                <p class="text-sm text-gray-400">Developers building procurement tools, analysts integrating data into BI platforms, compliance teams automating tender monitoring.</p>
-              </div>
-              <a href="/docs" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-sm hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20">
-                View API Docs
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-              </a>
-            </div>
-            <div>
-              <div class="code-block rounded-xl overflow-hidden">
-                <div class="flex items-center gap-2 px-4 py-2.5 border-b border-white/5">
-                  <span class="w-2.5 h-2.5 rounded-full bg-red-500/60"></span>
-                  <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/60"></span>
-                  <span class="w-2.5 h-2.5 rounded-full bg-green-500/60"></span>
-                  <span class="ml-2 text-xs text-gray-500 font-mono">terminal</span>
-                </div>
-                <pre class="p-4 text-xs sm:text-sm font-mono leading-relaxed overflow-x-auto"><code><span class="code-comment"># Fetch open medical device tenders in Germany</span>
-<span class="text-gray-300">curl</span> <span class="code-string">"https://api.healthprocure.intel/v1/tenders\
-  ?source=ted&amp;country=DE\
-  &amp;category=medical_devices\
-  &amp;status=open&amp;limit=5"</span> \
-  -H <span class="code-string">"Authorization: Bearer hpi_a1b2c3..."</span>
-
-<span class="code-comment"># Response: 200 OK</span>
-{
-  <span class="code-key">"total"</span>: <span class="code-number">247</span>,
-  <span class="code-key">"page"</span>: <span class="code-number">1</span>,
-  <span class="code-key">"per_page"</span>: <span class="code-number">5</span>,
-  <span class="code-key">"data"</span>: [
-    {
-      <span class="code-key">"id"</span>: <span class="code-string">"ted-2026-128947"</span>,
-      <span class="code-key">"title"</span>: <span class="code-string">"MRI Equipment Supply"</span>,
-      <span class="code-key">"buyer"</span>: <span class="code-string">"University Hospital Munich"</span>,
-      <span class="code-key">"value_usd"</span>: <span class="code-number">2450000</span>,
-      <span class="code-key">"deadline"</span>: <span class="code-string">"2026-07-15"</span>
-    }
-  ]
-}</code></pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- Product 2: Analytics Dashboard -->
       <div class="fade-up mb-8">
-        <div class="product-card glass-strong rounded-2xl p-8 lg:p-10 hover-lift">
-          <div class="grid lg:grid-cols-2 gap-10 items-start">
+        <div class="product-card glass-strong rounded-lg p-5 sm:p-8 lg:p-10 hover-lift">
+          <div class="grid lg:grid-cols-2 gap-6 sm:gap-10 items-start">
             <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-teal/20 to-teal-light/10 flex items-center justify-center border border-teal/10">
-                  <svg class="w-7 h-7 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              <div class="flex items-center gap-3 sm:gap-4 mb-6">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-teal/10 flex items-center justify-center border border-teal/10 flex-shrink-0">
+                  <svg class="w-6 h-6 sm:w-7 sm:h-7 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                 </div>
                 <div>
-                  <h3 class="font-display text-2xl font-bold text-white">Analytics Dashboard</h3>
+                  <h3 class="font-display text-xl sm:text-2xl font-bold text-white">Analytics Dashboard</h3>
                   <p class="text-sm text-teal-light/70">Interactive B2B intelligence at /dashboard</p>
                 </div>
               </div>
@@ -412,10 +451,10 @@
                 </div>
               </div>
               <div class="space-y-3">
-                <div class="flex items-center justify-between text-sm"><span class="text-gray-400">Medical Devices</span><div class="flex-1 mx-3 h-2 rounded-full bg-dark-400 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-gold to-gold-dark" style="width:72%"></div></div><span class="text-gold text-xs font-medium">72%</span></div>
-                <div class="flex items-center justify-between text-sm"><span class="text-gray-400">Pharmaceuticals</span><div class="flex-1 mx-3 h-2 rounded-full bg-dark-400 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-teal to-teal-light" style="width:58%"></div></div><span class="text-teal-light text-xs font-medium">58%</span></div>
-                <div class="flex items-center justify-between text-sm"><span class="text-gray-400">IT Systems</span><div class="flex-1 mx-3 h-2 rounded-full bg-dark-400 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-indigo-600 to-indigo-400" style="width:41%"></div></div><span class="text-indigo-400 text-xs font-medium">41%</span></div>
-                <div class="flex items-center justify-between text-sm"><span class="text-gray-400">Facilities</span><div class="flex-1 mx-3 h-2 rounded-full bg-dark-400 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-purple-600 to-purple-400" style="width:29%"></div></div><span class="text-purple-400 text-xs font-medium">29%</span></div>
+                <div class="flex items-center justify-between text-sm"><span class="text-gray-400">Medical Devices</span><div class="flex-1 mx-3 h-2 rounded-full bg-dark-400 overflow-hidden"><div class="h-full rounded-full bg-gold" style="width:72%"></div></div><span class="text-gold text-xs font-medium">72%</span></div>
+                <div class="flex items-center justify-between text-sm"><span class="text-gray-400">Pharmaceuticals</span><div class="flex-1 mx-3 h-2 rounded-full bg-dark-400 overflow-hidden"><div class="h-full rounded-full bg-teal" style="width:58%"></div></div><span class="text-teal-light text-xs font-medium">58%</span></div>
+                <div class="flex items-center justify-between text-sm"><span class="text-gray-400">IT Systems</span><div class="flex-1 mx-3 h-2 rounded-full bg-dark-400 overflow-hidden"><div class="h-full rounded-full bg-indigo-600" style="width:41%"></div></div><span class="text-indigo-400 text-xs font-medium">41%</span></div>
+                <div class="flex items-center justify-between text-sm"><span class="text-gray-400">Facilities</span><div class="flex-1 mx-3 h-2 rounded-full bg-dark-400 overflow-hidden"><div class="h-full rounded-full bg-purple-600" style="width:29%"></div></div><span class="text-purple-400 text-xs font-medium">29%</span></div>
               </div>
             </div>
           </div>
@@ -424,15 +463,15 @@
 
       <!-- Product 3: Regional Benchmarks -->
       <div class="fade-up mb-8">
-        <div class="product-card glass-strong rounded-2xl p-8 lg:p-10 hover-lift">
-          <div class="grid lg:grid-cols-2 gap-10 items-start">
+        <div class="product-card glass-strong rounded-lg p-5 sm:p-8 lg:p-10 hover-lift">
+          <div class="grid lg:grid-cols-2 gap-6 sm:gap-10 items-start">
             <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-600/20 to-purple-400/10 flex items-center justify-center border border-purple-500/10">
-                  <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              <div class="flex items-center gap-3 sm:gap-4 mb-6">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-purple-600/10 flex items-center justify-center border border-purple-500/10 flex-shrink-0">
+                  <svg class="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                 </div>
                 <div>
-                  <h3 class="font-display text-2xl font-bold text-white">Regional Benchmarks</h3>
+                  <h3 class="font-display text-xl sm:text-2xl font-bold text-white">Regional Benchmarks</h3>
                   <p class="text-sm text-purple-400/70">Pro &amp; Enterprise Tiers</p>
                 </div>
               </div>
@@ -455,14 +494,16 @@
             </div>
             <div class="glass rounded-xl p-6">
               <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4">Sample Benchmark: Medical Devices (Q2 2026)</p>
-              <div class="space-y-4">
-                <div class="flex items-center justify-between border-b border-white/5 pb-3">
-                  <span class="text-sm text-gray-400">Region</span><span class="text-sm text-gray-400">Avg Lead Time</span><span class="text-sm text-gray-400">Avg Value</span><span class="text-sm text-gray-400">Win Rate</span>
+              <div class="space-y-4 overflow-x-auto">
+                <div class="min-w-[320px]">
+                  <div class="flex items-center justify-between border-b border-white/5 pb-3">
+                    <span class="text-xs sm:text-sm text-gray-400 w-1/4">Region</span><span class="text-xs sm:text-sm text-gray-400 w-1/4 text-center">Lead Time</span><span class="text-xs sm:text-sm text-gray-400 w-1/4 text-center">Avg Value</span><span class="text-xs sm:text-sm text-gray-400 w-1/4 text-right">Win Rate</span>
+                  </div>
+                  <div class="flex items-center justify-between py-1"><span class="text-xs sm:text-sm text-white w-1/4">EU (DACH)</span><span class="text-xs sm:text-sm text-gray-300 w-1/4 text-center">42 days</span><span class="text-xs sm:text-sm text-gold w-1/4 text-center">$1.8M</span><span class="text-xs sm:text-sm text-teal-light w-1/4 text-right">18%</span></div>
+                  <div class="flex items-center justify-between py-1"><span class="text-xs sm:text-sm text-white w-1/4">US Federal</span><span class="text-xs sm:text-sm text-gray-300 w-1/4 text-center">67 days</span><span class="text-xs sm:text-sm text-gold w-1/4 text-center">$3.2M</span><span class="text-xs sm:text-sm text-teal-light w-1/4 text-right">12%</span></div>
+                  <div class="flex items-center justify-between py-1"><span class="text-xs sm:text-sm text-white w-1/4">UK NHS</span><span class="text-xs sm:text-sm text-gray-300 w-1/4 text-center">35 days</span><span class="text-xs sm:text-sm text-gold w-1/4 text-center">$950K</span><span class="text-xs sm:text-sm text-teal-light w-1/4 text-right">22%</span></div>
+                  <div class="flex items-center justify-between py-1"><span class="text-xs sm:text-sm text-white w-1/4">Find a Tender</span><span class="text-xs sm:text-sm text-gray-300 w-1/4 text-center">54 days</span><span class="text-xs sm:text-sm text-gold w-1/4 text-center">$2.1M</span><span class="text-xs sm:text-sm text-teal-light w-1/4 text-right">9%</span></div>
                 </div>
-                <div class="flex items-center justify-between"><span class="text-sm text-white">EU (DACH)</span><span class="text-sm text-gray-300">42 days</span><span class="text-sm text-gold">$1.8M</span><span class="text-sm text-teal-light">18%</span></div>
-                <div class="flex items-center justify-between"><span class="text-sm text-white">US Federal</span><span class="text-sm text-gray-300">67 days</span><span class="text-sm text-gold">$3.2M</span><span class="text-sm text-teal-light">12%</span></div>
-                <div class="flex items-center justify-between"><span class="text-sm text-white">UK NHS</span><span class="text-sm text-gray-300">35 days</span><span class="text-sm text-gold">$950K</span><span class="text-sm text-teal-light">22%</span></div>
-                <div class="flex items-center justify-between"><span class="text-sm text-white">WHO Global</span><span class="text-sm text-gray-300">54 days</span><span class="text-sm text-gold">$2.1M</span><span class="text-sm text-teal-light">9%</span></div>
               </div>
             </div>
           </div>
@@ -471,15 +512,15 @@
 
       <!-- Product 4: Enterprise Data Feeds -->
       <div class="fade-up mb-8">
-        <div class="product-card glass-strong rounded-2xl p-8 lg:p-10 hover-lift border border-gold/10">
-          <div class="grid lg:grid-cols-2 gap-10 items-start">
+        <div class="product-card glass-strong rounded-lg p-5 sm:p-8 lg:p-10 hover-lift border border-gold/10">
+          <div class="grid lg:grid-cols-2 gap-6 sm:gap-10 items-start">
             <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold-bright/10 flex items-center justify-center border border-gold/20">
-                  <svg class="w-7 h-7 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              <div class="flex items-center gap-3 sm:gap-4 mb-6">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-gold/10 flex items-center justify-center border border-gold/15 flex-shrink-0">
+                  <svg class="w-6 h-6 sm:w-7 sm:h-7 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                 </div>
                 <div>
-                  <h3 class="font-display text-2xl font-bold text-white">Custom Enterprise Data Feeds</h3>
+                  <h3 class="font-display text-xl sm:text-2xl font-bold text-white">Custom Enterprise Data Feeds</h3>
                   <p class="text-sm text-gold/70">Enterprise Tier — Dedicated Pipelines</p>
                 </div>
               </div>
@@ -492,11 +533,11 @@
                 <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>99.9% uptime SLA guarantee</li>
                 <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Priority support with dedicated account manager</li>
               </ul>
-              <div class="glass rounded-xl p-4 mb-6">
-                <p class="text-xs text-gold/70 font-semibold uppercase tracking-wider mb-2">Perfect for</p>
+              <div class="rounded-lg p-4 mb-6 border border-gold/15 bg-gold/5">
+                <p class="text-xs text-gold font-semibold uppercase tracking-wider mb-2">Perfect for</p>
                 <p class="text-sm text-gray-400">Large medical device manufacturers, pharmaceutical distributors, Group Purchasing Organizations (GPOs), and health system supply chain teams.</p>
               </div>
-              <a href="#pricing" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-sm hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20">
+              <a href="#pricing" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gold text-dark font-semibold text-sm hover:opacity-90 transition-all duration-200">
                 Contact Sales
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
               </a>
@@ -539,21 +580,20 @@
         <p class="max-w-xl mx-auto text-gray-400 text-lg">Raw procurement data transformed into actionable insights, delivered through a clean API and interactive dashboard.</p>
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 relative">
-        <div class="hidden lg:block absolute top-1/2 left-[15%] right-[15%] h-px bg-gradient-to-r from-gold/5 via-gold/20 to-gold/5 -translate-y-1/2"></div>
         <!-- Step 1 -->
         <div class="fade-up relative">
-          <div class="glass-strong rounded-2xl p-8 text-center relative z-10">
-            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold/20">
+          <div class="glass-strong rounded-lg p-8 text-center relative z-10">
+            <div class="w-16 h-16 rounded-full bg-gold flex items-center justify-center mx-auto mb-6">
               <span class="font-display text-2xl font-bold text-dark">1</span>
             </div>
             <h3 class="font-display text-xl font-semibold text-white mb-3">Scrape</h3>
-            <p class="text-sm text-gray-400 leading-relaxed">Our Playwright-powered scrapers monitor 4 major procurement portals 24/7. Headless browsers handle dynamic content, CAPTCHAs, and pagination automatically.</p>
+            <p class="text-sm text-gray-400 leading-relaxed">Our scrapers monitor 8 procurement sources across the EU, UK, US, Canada and global development banks — via official APIs where available and headless browsers where not, handling pagination and dynamic content automatically.</p>
           </div>
         </div>
         <!-- Step 2 -->
         <div class="fade-up relative" style="transition-delay:0.1s">
-          <div class="glass-strong rounded-2xl p-8 text-center relative z-10">
-            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold/20">
+          <div class="glass-strong rounded-lg p-8 text-center relative z-10">
+            <div class="w-16 h-16 rounded-full bg-gold flex items-center justify-center mx-auto mb-6">
               <span class="font-display text-2xl font-bold text-dark">2</span>
             </div>
             <h3 class="font-display text-xl font-semibold text-white mb-3">Normalize</h3>
@@ -562,8 +602,8 @@
         </div>
         <!-- Step 3 -->
         <div class="fade-up relative" style="transition-delay:0.2s">
-          <div class="glass-strong rounded-2xl p-8 text-center relative z-10">
-            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold/20">
+          <div class="glass-strong rounded-lg p-8 text-center relative z-10">
+            <div class="w-16 h-16 rounded-full bg-gold flex items-center justify-center mx-auto mb-6">
               <span class="font-display text-2xl font-bold text-dark">3</span>
             </div>
             <h3 class="font-display text-xl font-semibold text-white mb-3">Store</h3>
@@ -572,8 +612,8 @@
         </div>
         <!-- Step 4 -->
         <div class="fade-up relative" style="transition-delay:0.3s">
-          <div class="glass-strong rounded-2xl p-8 text-center relative z-10">
-            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold/20">
+          <div class="glass-strong rounded-lg p-8 text-center relative z-10">
+            <div class="w-16 h-16 rounded-full bg-gold flex items-center justify-center mx-auto mb-6">
               <span class="font-display text-2xl font-bold text-dark">4</span>
             </div>
             <h3 class="font-display text-xl font-semibold text-white mb-3">Deliver</h3>
@@ -585,8 +625,7 @@
   </section>
 
   <!-- ============ FEATURES GRID ============ -->
-  <section id="features" class="relative py-24 lg:py-32 bg-dark">
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-teal/[0.02] to-transparent rounded-full blur-3xl"></div>
+  <section id="features" class="relative py-24 lg:py-32 bg-dark overflow-hidden">
     <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
       <div class="text-center mb-16 fade-up">
         <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">Platform Capabilities</p>
@@ -707,25 +746,25 @@
   </section>
 
   <!-- ============ PRICING ============ -->
-  <section id="pricing" class="relative py-24 lg:py-32 bg-dark-200">
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-gold/[0.03] to-transparent rounded-full blur-3xl"></div>
+  <section id="pricing" class="relative py-24 lg:py-32 bg-dark-200 overflow-hidden">
     <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
       <div class="text-center mb-16 fade-up">
         <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">Pricing</p>
-        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Plans for Every Scale</h2>
-        <p class="max-w-xl mx-auto text-gray-400 text-lg">Start free. Scale as your procurement intelligence needs grow. All plans billed monthly via Stripe.</p>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Plans that pay for themselves</h2>
+        <p class="max-w-2xl mx-auto text-gray-400 text-lg">Win <span class="text-white font-medium">one</span> contract because you saw it first, and the subscription pays for itself many times over. Start free, upgrade when the intelligence is earning its keep. Billed monthly via Stripe, cancel anytime.</p>
       </div>
 
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 items-start">
         <!-- Free -->
-        <div class="fade-up glass rounded-2xl p-8 hover-lift">
+        <div class="fade-up glass rounded-2xl p-6 hover-lift">
           <h3 class="font-display text-lg font-semibold text-white mb-1">Free</h3>
           <p class="text-sm text-gray-500 mb-6">Get started exploring</p>
           <div class="mb-6">
-            <span class="font-display text-4xl font-bold text-white">$0</span>
+            <span class="font-display text-4xl font-bold text-white">£0</span>
             <span class="text-gray-500 text-sm">/month</span>
           </div>
           <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-white">First 100 tenders</span></li>
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>100 requests per day</li>
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>20 results per page</li>
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Basic filters (source, country)</li>
@@ -738,14 +777,15 @@
         </div>
 
         <!-- Basic -->
-        <div class="fade-up glass rounded-2xl p-8 hover-lift" style="transition-delay:0.1s">
+        <div class="fade-up glass rounded-2xl p-6 hover-lift" style="transition-delay:0.1s">
           <h3 class="font-display text-lg font-semibold text-white mb-1">Basic</h3>
           <p class="text-sm text-gray-500 mb-6">For growing teams</p>
           <div class="mb-6">
-            <span class="font-display text-4xl font-bold text-white">$49</span>
+            <span class="font-display text-4xl font-bold text-white">£49</span>
             <span class="text-gray-500 text-sm">/month</span>
           </div>
           <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-white">1,000 tenders accessible</span></li>
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>1,000 requests per day</li>
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>50 results per page</li>
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>All filters &amp; full-text search</li>
@@ -754,22 +794,42 @@
             <li class="flex items-start gap-3 text-sm text-gray-500"><svg class="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span class="line-through">Regional benchmarks</span></li>
             <li class="flex items-start gap-3 text-sm text-gray-500"><svg class="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span class="line-through">Custom data feeds</span></li>
           </ul>
-          <button onclick="alert('Coming soon — Stripe integration pending')" class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">Subscribe</button>
+          <button onclick="openCheckoutModal('price_1TlrGvC3JZLLw9RVUSzeqONA')" class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">Subscribe</button>
+        </div>
+
+        <!-- Growth -->
+        <div class="fade-up glass rounded-2xl p-6 hover-lift" style="transition-delay:0.15s">
+          <h3 class="font-display text-lg font-semibold text-white mb-1">Growth</h3>
+          <p class="text-sm text-gray-500 mb-6">For active bidders</p>
+          <div class="mb-6">
+            <span class="font-display text-4xl font-bold text-white">£99</span>
+            <span class="text-gray-500 text-sm">/month</span>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-white">5,000 tenders accessible</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>3,000 requests per day</li>
+            <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>All filters &amp; full-text search</li>
+            <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>10 saved tender alerts</li>
+            <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Email support</li>
+            <li class="flex items-start gap-3 text-sm text-gray-500"><svg class="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span class="line-through">Regional benchmarks</span></li>
+          </ul>
+          <button onclick="openCheckoutModal('price_GROWTH_REPLACE_ME')" class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">Subscribe</button>
         </div>
 
         <!-- Pro (Featured) -->
         <div class="fade-up relative lg:-mt-4" style="transition-delay:0.2s">
           <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-            <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-gold to-gold-dark text-dark text-xs font-bold uppercase tracking-wider">Most Popular</span>
+            <span class="px-4 py-1.5 rounded-full bg-gold text-dark text-xs font-bold uppercase tracking-wider">Most Popular</span>
           </div>
-          <div class="glass-strong rounded-2xl p-8 border-2 border-gold/30 border-glow gold-glow hover-lift">
+          <div class="glass-strong rounded-lg p-6 border-2 border-gold/30 border-glow gold-glow hover-lift">
             <h3 class="font-display text-lg font-semibold text-gold mb-1">Pro</h3>
             <p class="text-sm text-gray-500 mb-6">For procurement teams</p>
             <div class="mb-6">
-              <span class="font-display text-4xl font-bold text-white">$199</span>
+              <span class="font-display text-4xl font-bold text-white">£199</span>
               <span class="text-gray-500 text-sm">/month</span>
             </div>
             <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-white font-medium">Unlimited tenders</span></li>
               <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>10,000 requests per day</li>
               <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>200 results per page</li>
               <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>All filters &amp; full-text search</li>
@@ -778,16 +838,16 @@
               <li class="flex items-start gap-3 text-sm text-gray-300"><svg class="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Priority email support</li>
               <li class="flex items-start gap-3 text-sm text-gray-500"><svg class="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span class="line-through">Custom data feeds</span></li>
             </ul>
-            <button onclick="alert('Coming soon — Stripe integration pending')" class="w-full py-3 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark text-sm font-bold hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20">Subscribe</button>
+            <button onclick="openCheckoutModal('price_1TvExtC3JZLLw9RVXpliAtZR')" class="w-full py-3 rounded-full bg-gold text-dark text-sm font-bold hover:opacity-90 transition-all duration-200">Subscribe</button>
           </div>
         </div>
 
         <!-- Enterprise -->
-        <div class="fade-up glass rounded-2xl p-8 hover-lift" style="transition-delay:0.3s">
+        <div class="fade-up glass rounded-2xl p-6 hover-lift" style="transition-delay:0.3s">
           <h3 class="font-display text-lg font-semibold text-white mb-1">Enterprise</h3>
           <p class="text-sm text-gray-500 mb-6">Custom solutions</p>
           <div class="mb-6">
-            <span class="font-display text-4xl font-bold text-white">$499</span>
+            <span class="font-display text-4xl font-bold text-white">£499</span>
             <span class="text-gray-500 text-sm">/month</span>
           </div>
           <ul class="space-y-3 mb-8">
@@ -799,7 +859,7 @@
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Dedicated account manager</li>
             <li class="flex items-start gap-3 text-sm text-gray-400"><svg class="w-5 h-5 text-teal-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>99.9% uptime SLA</li>
           </ul>
-          <button onclick="alert('Coming soon — Stripe integration pending')" class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">Contact Sales</button>
+          <button onclick="openCheckoutModal('price_1TlrIaC3JZLLw9RVctcI96FW')" class="w-full py-3 rounded-lg border border-white/10 text-white text-sm font-semibold hover:border-gold/30 hover:text-gold transition-all duration-200">Subscribe</button>
         </div>
       </div>
 
@@ -828,71 +888,28 @@
   </section>
 
   <!-- ============ TESTIMONIALS ============ -->
-  <section class="relative py-24 lg:py-32 bg-dark">
+  <section class="relative py-24 lg:py-32 bg-dark overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
       <div class="text-center mb-16 fade-up">
-        <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">What Our Clients Say</p>
-        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Trusted by Procurement Leaders</h2>
+        <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">Early Feedback</p>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">What People Are Saying</h2>
         <p class="max-w-xl mx-auto text-gray-400 text-lg">
-          Teams across medical devices, pharmaceuticals, and health IT rely on HealthProcure Intel to find and win procurement opportunities worldwide.
+          We're newly launched — here's genuine feedback from early conversations with procurement and healthcare teams.
         </p>
       </div>
-      <!-- Trust metrics -->
-      <div class="grid grid-cols-3 gap-6 max-w-2xl mx-auto mb-12 fade-up">
-        <div class="text-center">
-          <p class="font-display text-2xl font-bold text-gold">250+</p>
-          <p class="text-xs text-gray-500 mt-1">Active Teams</p>
-        </div>
-        <div class="text-center">
-          <p class="font-display text-2xl font-bold text-gold">18</p>
-          <p class="text-xs text-gray-500 mt-1">Countries</p>
-        </div>
-        <div class="text-center">
-          <p class="font-display text-2xl font-bold text-gold">4.9/5</p>
-          <p class="text-xs text-gray-500 mt-1">Avg Rating</p>
-        </div>
-      </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift">
-          <div class="flex items-center gap-1 mb-4">
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          <blockquote class="text-gray-300 text-sm leading-relaxed mb-6">"HealthProcure Intel replaced 3 separate tools we were using to track procurement opportunities across the EU and US. The normalized data and single API saved our team dozens of hours per week."</blockquote>
+      <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div class="fade-up glass-strong rounded-lg p-8 hover-lift">
+          <blockquote class="text-gray-300 text-sm leading-relaxed mb-6">"A genuinely useful way to see healthcare tenders in one place."</blockquote>
           <div class="border-t border-white/5 pt-4">
-            <p class="text-white text-sm font-semibold">Head of Procurement</p>
-            <p class="text-gray-500 text-xs">European Medical Devices Co.</p>
+            <p class="text-white text-sm font-semibold">Team Member</p>
+            <p class="text-gray-500 text-xs">PA Consulting</p>
           </div>
         </div>
-        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift" style="transition-delay:0.1s">
-          <div class="flex items-center gap-1 mb-4">
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          <blockquote class="text-gray-300 text-sm leading-relaxed mb-6">"The regional benchmarks alone saved us from underbidding on a $4M NHS framework contract. Understanding average contract values and win rates by region completely changed our pricing strategy."</blockquote>
+        <div class="fade-up glass-strong rounded-lg p-8 hover-lift" style="transition-delay:0.1s">
+          <blockquote class="text-gray-300 text-sm leading-relaxed mb-6">"Great platform — exactly the kind of tool procurement teams need."</blockquote>
           <div class="border-t border-white/5 pt-4">
-            <p class="text-white text-sm font-semibold">VP Supply Chain</p>
-            <p class="text-gray-500 text-xs">US Pharmaceutical Distributor</p>
-          </div>
-        </div>
-        <div class="fade-up glass-strong rounded-2xl p-8 hover-lift" style="transition-delay:0.2s">
-          <div class="flex items-center gap-1 mb-4">
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          <blockquote class="text-gray-300 text-sm leading-relaxed mb-6">"We integrated the API in one afternoon. The documentation was clear, the JSON responses are clean, and the hpi_ key system just works. Our procurement monitoring pipeline was live by end of day."</blockquote>
-          <div class="border-t border-white/5 pt-4">
-            <p class="text-white text-sm font-semibold">CTO</p>
-            <p class="text-gray-500 text-xs">Health IT Startup</p>
+            <p class="text-white text-sm font-semibold">Founder</p>
+            <p class="text-gray-500 text-xs">Riverfront Physiotherapy</p>
           </div>
         </div>
       </div>
@@ -900,7 +917,7 @@
   </section>
 
   <!-- ============ FAQ ============ -->
-  <section id="faq" class="relative py-24 lg:py-32 bg-dark-200">
+  <section id="faq" class="relative py-24 lg:py-32 bg-dark-200 overflow-hidden">
     <div class="max-w-3xl mx-auto px-6 lg:px-8">
       <div class="text-center mb-16 fade-up">
         <p class="text-gold text-sm font-semibold tracking-wider uppercase mb-4">FAQ</p>
@@ -914,7 +931,7 @@
             <span class="faq-icon text-gold text-xl font-light flex-shrink-0">+</span>
           </button>
           <div class="faq-answer px-6">
-            <p class="text-sm text-gray-400 leading-relaxed pb-6">We currently aggregate data from four major procurement portals: TED Europa (EU public procurement across 27 member states), SAM.gov (US federal contracts worth $700B+ annually), WHO Procurement (global health procurement covering 194 member states), and NHS Supply Chain (UK National Health Service with GBP 15B+ annual spend). Enterprise clients can request additional portal integrations.</p>
+            <p class="text-sm text-gray-400 leading-relaxed pb-6">We currently aggregate data from eight procurement sources: TED Europa (EU public procurement across 27 member states), US federal contracts worth $700B+ annually, Find a Tender (the UK's official portal for above-threshold public contracts, including NHS trusts), Contracts Finder (UK local authority and NHS contracts below the high-value threshold), NHS Supply Chain (SCCL framework notices), CanadaBuys (Canadian public sector), the World Bank (globally-financed development projects across 100+ countries), and WHO/UN procurement via UNGM. Enterprise clients can request additional portal integrations.</p>
           </div>
         </div>
         <!-- FAQ 2 -->
@@ -973,8 +990,6 @@
 
   <!-- ============ CTA SECTION ============ -->
   <section id="cta" class="relative py-24 lg:py-32 bg-dark overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-r from-gold/[0.03] via-transparent to-teal/[0.03]"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-b from-gold/[0.04] to-transparent rounded-full blur-3xl"></div>
     <div class="relative max-w-3xl mx-auto px-6 lg:px-8 text-center">
       <div class="fade-up">
         <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
@@ -984,10 +999,15 @@
         <p class="text-lg text-gray-400 mb-10 max-w-xl mx-auto">Get your free API key in seconds. Start querying 12,000+ tenders across 85+ countries immediately.</p>
         <form id="signup-form" class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-4">
           <input type="email" id="signup-email" placeholder="Enter your work email" required class="flex-1 px-5 py-4 rounded-xl bg-dark-400 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/20 transition-all duration-200" />
-          <button type="submit" id="signup-btn" class="px-8 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-dark font-semibold text-sm hover:from-gold-bright hover:to-gold transition-all duration-200 shadow-lg shadow-gold/20 whitespace-nowrap">Get Free API Key</button>
+          <button type="submit" id="signup-btn" class="px-8 py-4 rounded-full bg-gold text-dark font-semibold text-sm hover:opacity-90 transition-all duration-200 whitespace-nowrap">Get Free API Key</button>
         </form>
         <p class="text-xs text-gray-600 mb-6">No credit card required. 100 requests per day. Upgrade anytime.</p>
         <div id="signup-result" class="hidden max-w-lg mx-auto"></div>
+        <p class="text-sm text-gray-500 mt-8">
+          Prefer to talk it through first?
+          <a href="mailto:hello@healthprocureintel.com?subject=Demo%20Request%20%E2%80%94%20HealthProcure%20Intel&body=Hi%20Thanika%2C%0D%0A%0D%0AI'd%20like%20to%20book%20a%20demo%20of%20HealthProcure%20Intel.%0D%0A%0D%0ACompany%3A%20%0D%0ARole%3A%20%0D%0ABest%20times%20to%20talk%3A%20%0D%0A%0D%0AThanks!" class="text-gold hover:underline font-medium">Book a demo</a>
+          and we'll walk you through it live.
+        </p>
       </div>
     </div>
   </section>
@@ -999,7 +1019,7 @@
         <!-- Brand -->
         <div class="lg:col-span-1">
           <div class="flex items-center gap-3 mb-4">
-            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+            <div class="w-9 h-9 rounded-lg bg-gold flex items-center justify-center">
               <span class="font-display font-bold text-dark text-sm">HP</span>
             </div>
             <span class="font-body font-semibold text-white">HealthProcure <span class="text-gold">Intel</span></span>
@@ -1012,7 +1032,8 @@
           <ul class="space-y-2.5">
             <li><a href="/docs" class="text-sm text-gray-500 hover:text-gold transition-colors">API Documentation</a></li>
             <li><a href="/dashboard" class="text-sm text-gray-500 hover:text-gold transition-colors">Dashboard</a></li>
-            <li><a href="/docs" class="text-sm text-gray-500 hover:text-gold transition-colors">API Docs</a></li>
+            <li><a href="/tenders" class="text-sm text-gray-500 hover:text-gold transition-colors">Browse Tenders</a></li>
+            <li><a href="/blog" class="text-sm text-gray-500 hover:text-gold transition-colors">Blog</a></li>
             <li><a href="#pricing" class="text-sm text-gray-500 hover:text-gold transition-colors">Pricing</a></li>
           </ul>
         </div>
@@ -1022,24 +1043,24 @@
           <ul class="space-y-2.5">
             <li><a href="/terms" class="text-sm text-gray-500 hover:text-gold transition-colors">Terms of Service</a></li>
             <li><a href="/privacy" class="text-sm text-gray-500 hover:text-gold transition-colors">Privacy Policy</a></li>
+            <li><a href="/carbon-reduction-policy" class="text-sm text-gray-500 hover:text-gold transition-colors">Carbon Reduction Policy</a></li>
+            <li><a href="/modern-slavery-statement" class="text-sm text-gray-500 hover:text-gold transition-colors">Modern Slavery Statement</a></li>
           </ul>
         </div>
         <!-- Company -->
         <div>
           <h4 class="text-sm font-semibold text-white mb-4">Company</h4>
           <ul class="space-y-2.5">
-            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">About</a></li>
-            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">Contact</a></li>
-            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">Blog</a></li>
+            <li><a href="#sources" class="text-sm text-gray-500 hover:text-gold transition-colors">About</a></li>
+            <li><a href="mailto:hello@healthprocureintel.com" class="text-sm text-gray-500 hover:text-gold transition-colors">Contact</a></li>
+            <li><a href="#faq" class="text-sm text-gray-500 hover:text-gold transition-colors">FAQ</a></li>
           </ul>
         </div>
         <!-- Connect -->
         <div>
           <h4 class="text-sm font-semibold text-white mb-4">Connect</h4>
           <ul class="space-y-2.5">
-            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">LinkedIn</a></li>
-            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">Twitter</a></li>
-            <li><a href="#" class="text-sm text-gray-500 hover:text-gold transition-colors">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/company/healthprocure-intel" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 hover:text-gold transition-colors">LinkedIn</a></li>
           </ul>
         </div>
       </div>
@@ -1049,6 +1070,23 @@
       </div>
     </div>
   </footer>
+
+  <!-- Checkout Email Modal -->
+  <div id="checkout-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4" style="background: rgba(10,10,15,0.8); backdrop-filter: blur(4px);">
+    <div class="glass-strong rounded-lg p-8 w-full max-w-sm border border-gold/20">
+      <h3 class="font-display text-xl font-semibold text-white mb-2">Almost there</h3>
+      <p class="text-sm text-gray-400 mb-5">Enter your email and we'll take you to secure checkout via Stripe.</p>
+      <form id="checkout-form">
+        <input id="checkout-email" type="email" required placeholder="you@company.com"
+          class="w-full px-4 py-3 rounded-lg bg-dark-300 border border-white/10 text-white text-sm mb-2 focus:outline-none focus:border-gold/50" />
+        <p id="checkout-error" class="hidden text-xs text-red-400 mb-3"></p>
+        <div class="flex gap-3 mt-4">
+          <button type="button" onclick="closeCheckoutModal()" class="flex-1 py-3 rounded-lg border border-white/10 text-gray-300 text-sm font-semibold hover:border-white/20 transition-all duration-200">Cancel</button>
+          <button id="checkout-submit" type="submit" class="flex-1 py-3 rounded-full bg-gold text-dark text-sm font-bold hover:opacity-90 transition-all duration-200">Continue</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ============ SCRIPTS ============ -->
   <script>
@@ -1150,8 +1188,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: email })
         })
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
+        .then(function(res) { return res.json().then(function(data) { return { status: res.status, data: data }; }); })
+        .then(function(result) {
+          var data = result.data;
           resultDiv.classList.remove('hidden');
           if (data.apiKey) {
             resultDiv.innerHTML =
@@ -1160,29 +1199,40 @@
                 '<div class="code-block rounded-lg p-4 mb-3">' +
                   '<code class="text-gold text-sm font-mono break-all">' + escapeHtml(data.apiKey) + '</code>' +
                 '</div>' +
-                '<p class="text-xs text-gray-500">Save this key securely — it will not be shown again. Use it in the <code class="text-gold/70">Authorization: Bearer</code> header.</p>' +
+                '<p class="text-xs text-gray-500 mb-4">Save this key securely — it will not be shown again. Use it in the <code class="text-gold/70">X-API-Key</code> header.</p>' +
+                '<a href="/dashboard?key=' + encodeURIComponent(data.apiKey) + '" class="inline-block px-5 py-2.5 rounded-full bg-gold text-dark text-sm font-semibold hover:opacity-90 transition-all duration-200">Open the Dashboard →</a>' +
               '</div>';
-          } else {
+          } else if (result.status === 409) {
+            // Already have a key for this email — don't offer a dead-end error.
             resultDiv.innerHTML =
               '<div class="glass-strong rounded-xl p-6 text-left">' +
-                '<p class="text-red-400 text-sm font-semibold mb-1">Something went wrong</p>' +
-                '<p class="text-xs text-gray-500">' + escapeHtml(data.error || 'Please try again later.') + '</p>' +
+                '<p class="text-gold text-sm font-semibold mb-2">You already have a key</p>' +
+                '<p class="text-xs text-gray-400 mb-3">There\'s already a free API key for this email. If you\'ve lost it, we\'ll re-send it.</p>' +
+                '<a href="mailto:hello@healthprocureintel.com?subject=Recover%20API%20Key&body=Please%20re-send%20the%20API%20key%20for%3A%20' + encodeURIComponent(email) + '" class="inline-block px-5 py-2.5 rounded-lg border border-gold/30 text-gold text-sm font-semibold hover:bg-gold/5 transition-all duration-200">Recover My Key</a>' +
               '</div>';
+          } else {
+            showSignupFallback(email, resultDiv);
           }
           submitBtn.disabled = false;
           submitBtn.textContent = 'Get Free API Key';
         })
         .catch(function(err) {
           resultDiv.classList.remove('hidden');
-          resultDiv.innerHTML =
-            '<div class="glass-strong rounded-xl p-6 text-left">' +
-              '<p class="text-red-400 text-sm font-semibold mb-1">Connection error</p>' +
-              '<p class="text-xs text-gray-500">Could not reach the server. Please try again later.</p>' +
-            '</div>';
+          showSignupFallback(email, resultDiv);
           submitBtn.disabled = false;
           submitBtn.textContent = 'Get Free API Key';
         });
       });
+
+      // Guaranteed path to a key even if the API call fails — never a dead end.
+      function showSignupFallback(email, resultDiv) {
+        resultDiv.innerHTML =
+          '<div class="glass-strong rounded-xl p-6 text-left">' +
+            '<p class="text-gold text-sm font-semibold mb-2">Thanks for your interest!</p>' +
+            '<p class="text-xs text-gray-400 mb-3">We couldn\'t create your key automatically just now, but we\'ll send it to you directly — usually within a few hours.</p>' +
+            '<a href="mailto:hello@healthprocureintel.com?subject=Free%20API%20Key%20Request&body=Please%20send%20me%20a%20free%20API%20key.%20My%20email%3A%20' + encodeURIComponent(email) + '" class="inline-block px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-dark text-sm font-semibold hover:from-gold-bright hover:to-gold transition-all duration-200">Email Us for Your Key</a>' +
+          '</div>';
+      }
 
       function escapeHtml(str) {
         var div = document.createElement('div');
@@ -1190,6 +1240,69 @@
         return div.innerHTML;
       }
     })();
+
+    // Stripe checkout
+    function openCheckoutModal(priceId) {
+      var modal = document.getElementById('checkout-modal');
+      modal.dataset.priceId = priceId || '';
+      document.getElementById('checkout-error').classList.add('hidden');
+      document.getElementById('checkout-email').value = '';
+      modal.classList.remove('hidden');
+      document.getElementById('checkout-email').focus();
+    }
+
+    function closeCheckoutModal() {
+      var modal = document.getElementById('checkout-modal');
+      modal.classList.add('hidden');
+      delete modal.dataset.priceId;
+    }
+
+    document.getElementById('checkout-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeCheckoutModal();
+    });
+
+    document.getElementById('checkout-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var priceId = document.getElementById('checkout-modal').dataset.priceId;
+      var email = document.getElementById('checkout-email').value.trim();
+      var errorEl = document.getElementById('checkout-error');
+      var submitBtn = document.getElementById('checkout-submit');
+      if (!priceId) {
+        errorEl.textContent = 'Something went wrong opening this form — please close it and click Subscribe again.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        errorEl.textContent = 'Please enter a valid email address.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      errorEl.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Redirecting…';
+      fetch('/api/v1/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId: priceId, email: email })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          errorEl.textContent = data.error || 'Could not start checkout. Please try again.';
+          errorEl.classList.remove('hidden');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Continue';
+        }
+      })
+      .catch(function() {
+        errorEl.textContent = 'Could not reach the server. Please try again later.';
+        errorEl.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Continue';
+      });
+    });
 
     // Navbar background on scroll
     (function() {
@@ -1203,6 +1316,82 @@
           nav.classList.add('bg-dark/80');
         }
       });
+    })();
+  </script>
+
+  <!-- Live Intelligence Feed: pull real recent tenders and rotate them -->
+  <script>
+    (function liveFeed() {
+      var itemsEl = document.getElementById('feed-items');
+      var statusEl = document.getElementById('feed-status');
+      if (!itemsEl) return;
+
+      var SOURCE_LABELS = {
+        ted_europa: 'TED Europa', sam_gov: 'US Federal', contracts_finder: 'UK Contracts Finder',
+        find_a_tender: 'UK Find a Tender', world_bank: 'World Bank', canada_buys: 'CanadaBuys',
+        who_procurement: 'WHO', un_agencies: 'UNICEF / UNFPA', nhs_supply_chain: 'NHS Supply Chain', manual: 'HealthProcure'
+      };
+      function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+      function titleCase(s) { return String(s || '').replace(/_/g, ' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); }); }
+      function fmtValue(v) {
+        if (v == null || isNaN(v) || v <= 0) return '';
+        if (v >= 1e9) return '$' + (v/1e9).toFixed(1) + 'B';
+        if (v >= 1e6) return '$' + (v/1e6).toFixed(1) + 'M';
+        if (v >= 1e3) return '$' + Math.round(v/1e3) + 'K';
+        return '$' + Math.round(v);
+      }
+      function fmtDeadline(d) {
+        if (!d) return '';
+        var days = Math.ceil((new Date(d).getTime() - Date.now()) / 86400000);
+        if (isNaN(days)) return '';
+        if (days < 0) return 'Closed';
+        if (days === 0) return 'Closes today';
+        return 'Deadline: ' + days + ' day' + (days === 1 ? '' : 's');
+      }
+      function card(t, isNew) {
+        var meta = [fmtValue(t.value_usd) && ('Contract value: ' + fmtValue(t.value_usd)), fmtDeadline(t.deadline), t.buyer_country].filter(Boolean).join(' • ');
+        var badge = (t.status === 'awarded')
+          ? '<span class="text-xs px-2 py-1 rounded bg-gold/20 text-gold font-medium">Award</span>'
+          : '<span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-300 font-medium">' + (isNew ? 'New' : 'Open') + '</span>';
+        return '<div class="animate-slide-up p-3 rounded-lg bg-white/5 border border-gold/20 hover:border-gold/40 transition-colors">'
+          + '<div class="flex items-start justify-between gap-2"><div class="flex-1 min-w-0">'
+          + '<p class="text-xs text-gold font-semibold uppercase tracking-wide">' + esc(SOURCE_LABELS[t.source] || titleCase(t.source)) + ' • ' + esc(titleCase(t.category)) + '</p>'
+          + '<p class="text-sm text-white font-medium mt-1 truncate">' + esc(t.title) + '</p>'
+          + (meta ? '<p class="text-xs text-gray-400 mt-1">' + esc(meta) + '</p>' : '')
+          + '</div>' + badge + '</div></div>';
+      }
+
+      var feed = [];   // full fetched list
+      var start = 0;   // rotation window start
+      var timer = null;
+
+      function renderWindow() {
+        if (!feed.length) return;
+        var view = [];
+        for (var i = 0; i < 3 && i < feed.length; i++) view.push(feed[(start + i) % feed.length]);
+        itemsEl.innerHTML = view.map(function(t, i){ return card(t, i === 0); }).join('');
+        start = (start + 1) % feed.length;
+      }
+
+      function fetchFeed() {
+        fetch('/api/v1/feed', { headers: { 'Accept': 'application/json' } })
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(res){
+            if (res && res.data && res.data.length) {
+              feed = res.data;
+              start = 0;
+              renderWindow();
+              if (statusEl) statusEl.textContent = 'Live — ' + feed.length + ' recent tenders across 8 sources';
+              if (!timer && feed.length > 3) {
+                timer = setInterval(renderWindow, 3500); // rotate for a "live" feel
+              }
+            }
+          })
+          .catch(function(){ /* keep the static fallback on any error */ });
+      }
+
+      fetchFeed();
+      setInterval(fetchFeed, 300000); // refresh the underlying data every 5 min
     })();
   </script>
 </body>

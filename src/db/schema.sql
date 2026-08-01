@@ -6,7 +6,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Enum types
 CREATE TYPE tender_source AS ENUM (
-  'ted_europa', 'sam_gov', 'who_procurement', 'nhs_supply_chain', 'manual'
+  'ted_europa', 'sam_gov', 'who_procurement', 'un_agencies', 'nhs_supply_chain',
+  'contracts_finder', 'find_a_tender', 'world_bank', 'canada_buys', 'manual'
 );
 
 CREATE TYPE tender_status AS ENUM (
@@ -16,7 +17,9 @@ CREATE TYPE tender_status AS ENUM (
 CREATE TYPE procurement_category AS ENUM (
   'medical_devices', 'pharmaceuticals', 'health_it', 'laboratory_equipment',
   'hospital_infrastructure', 'personal_protective_equipment', 'diagnostics',
-  'surgical_instruments', 'telemedicine', 'other'
+  'surgical_instruments', 'telemedicine', 'clinical_services', 'allied_health',
+  'occupational_therapy', 'paramedic_services', 'patient_transport', 'social_care',
+  'menstrual_health', 'wash_hygiene', 'other'
 );
 
 CREATE TYPE api_tier AS ENUM ('free', 'basic', 'pro', 'enterprise');
@@ -50,7 +53,10 @@ CREATE TABLE IF NOT EXISTS tenders (
 -- Contract awards
 CREATE TABLE IF NOT EXISTS contract_awards (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  external_id TEXT,
   tender_id UUID REFERENCES tenders(id) ON DELETE CASCADE,
+  tender_title TEXT,
+  category procurement_category,
   award_date TIMESTAMPTZ NOT NULL,
   supplier_name TEXT NOT NULL,
   supplier_country TEXT DEFAULT '',
@@ -60,7 +66,8 @@ CREATE TABLE IF NOT EXISTS contract_awards (
   framework_type TEXT,
   duration TEXT,
   source tender_source NOT NULL,
-  scraped_at TIMESTAMPTZ DEFAULT NOW()
+  scraped_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(source, external_id)
 );
 
 -- Pre-computed regional benchmarks
@@ -87,11 +94,28 @@ CREATE TABLE IF NOT EXISTS api_keys (
   tier api_tier DEFAULT 'free',
   is_active BOOLEAN DEFAULT true,
   request_count INTEGER DEFAULT 0,
+  daily_request_count INTEGER DEFAULT 0,
+  daily_reset_date DATE,
   last_used_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   expires_at TIMESTAMPTZ,
   stripe_customer_id TEXT,
   stripe_subscription_id TEXT
+);
+
+-- Saved tender alerts — notify a user by email when new tenders match their filters
+CREATE TABLE IF NOT EXISTS tender_alerts (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  api_key_id UUID NOT NULL REFERENCES api_keys(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  category procurement_category,
+  source tender_source,
+  region TEXT,
+  country TEXT,
+  keyword TEXT,
+  is_active BOOLEAN DEFAULT true,
+  last_notified_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Scrape run logs
@@ -109,6 +133,15 @@ CREATE TABLE IF NOT EXISTS scrape_runs (
   status TEXT DEFAULT 'running'
 );
 
+-- Full-text search over title + description, kept as a real (generated,
+-- stored) column so PostgREST's .textSearch() can target it directly —
+-- querying just "title" would miss anything only mentioned in the
+-- description, and wouldn't use a GIN index built on the combined
+-- expression anyway. coalesce() guards against description ever being NULL
+-- (it's TEXT DEFAULT '' but not NOT NULL) collapsing the whole vector.
+ALTER TABLE tenders ADD COLUMN search_vector tsvector
+  GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || coalesce(description, ''))) STORED;
+
 -- Indexes for query performance
 CREATE INDEX idx_tenders_source ON tenders(source);
 CREATE INDEX idx_tenders_status ON tenders(status);
@@ -116,7 +149,7 @@ CREATE INDEX idx_tenders_category ON tenders(category);
 CREATE INDEX idx_tenders_country ON tenders(buyer_country);
 CREATE INDEX idx_tenders_published ON tenders(published_at DESC);
 CREATE INDEX idx_tenders_value ON tenders(value_usd DESC NULLS LAST);
-CREATE INDEX idx_tenders_search ON tenders USING gin(to_tsvector('english', title || ' ' || description));
+CREATE INDEX idx_tenders_search ON tenders USING gin(search_vector);
 CREATE INDEX idx_awards_tender ON contract_awards(tender_id);
 CREATE INDEX idx_awards_date ON contract_awards(award_date DESC);
 CREATE INDEX idx_benchmarks_region ON supply_chain_benchmarks(region, category);

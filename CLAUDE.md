@@ -3,7 +3,7 @@
 ## Architecture
 
 TypeScript/Node.js full-stack platform that aggregates global healthcare procurement data:
-- **Scraper pipeline**: Playwright-based scrapers for TED Europa, SAM.gov, WHO, NHS Supply Chain
+- **Scraper pipeline**: Playwright scraper for TED Europa; API-based scrapers for SAM.gov (official Get Opportunities API), UK Contracts Finder and Find a Tender Service (OCDS APIs), World Bank, CanadaBuys, WHO Procurement (via UNGM) and NHS Supply Chain (SCCL notices via the UK Find a Tender OCDS feed)
 - **PostgreSQL via Supabase**: Normalized schema with currency standardization, regional benchmarks
 - **Secure API tier**: Express API with tiered API key authentication (free/basic/pro/enterprise)
 - **B2B Dashboard**: Tailwind CSS + Chart.js analytics dashboard for procurement visualization
@@ -37,6 +37,8 @@ Copy `.env.example` to `.env` and fill in all values. Required:
 | `STRIPE_SECRET_KEY` | Stripe API key for subscriptions |
 | `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
 | `API_PORT` | Server port (default 3000) |
+| `RESEND_API_KEY` | Optional — powers tender alert emails via Resend |
+| `ALERT_FROM_EMAIL` | Optional — sender address for alert emails |
 
 ## Project Layout
 
@@ -46,8 +48,16 @@ Copy `.env.example` to `.env` and fill in all values. Required:
 - `src/db/client.ts` — Supabase client singleton
 - `src/db/seed.ts` — Sample healthcare procurement data
 - `src/scraper/base.ts` — Abstract Playwright scraper base class
-- `src/scraper/sources/ted.ts` — TED Europa scraper
-- `src/scraper/sources/sam.ts` — SAM.gov scraper
+- `src/scraper/api-base.ts` — Abstract API-based scraper base class (no browser needed)
+- `src/scraper/persist.ts` — Upserts scraped tenders/awards into Supabase
+- `src/scraper/sources/ted.ts` — TED Europa scraper (Playwright)
+- `src/scraper/sources/sam.ts` — SAM.gov scraper (official api.sam.gov Get Opportunities API — needs SAM_GOV_API_KEY)
+- `src/scraper/sources/govcon.ts` — GovCon API scraper (govconapi.com, third-party aggregator over the same federal data — needs GOVCON_API_KEY, persists under `sam_gov` source)
+- `src/scraper/sources/who.ts` — WHO Procurement scraper (WHO notices via UNGM public search, unverified endpoint — see file comment)
+- `src/scraper/sources/nhs-supply-chain.ts` — NHS Supply Chain scraper (SCCL-buyer notices filtered from the UK Find a Tender OCDS feed)
+- `src/scraper/sources/contracts-finder.ts` — Contracts Finder scraper (OCDS API, unverified endpoint — see file comment)
+- `src/scraper/sources/find-a-tender.ts` — Find a Tender Service scraper (OCDS API, unverified endpoint — see file comment)
+- `src/scraper/sources/uk-category-map.ts` — Keyword/CPV classifier for UK service & goods tenders
 - `src/scraper/run.ts` — Scraper orchestrator with CLI flags
 - `src/api/middleware/auth.ts` — API key authentication + tier enforcement
 - `src/api/routes/tenders.ts` — Tender listing/filtering API
@@ -56,6 +66,8 @@ Copy `.env.example` to `.env` and fill in all values. Required:
 - `src/api/routes/stripe-webhooks.ts` — Stripe subscription lifecycle
 - `src/utils/currency.ts` — Multi-currency conversion (30+ currencies)
 - `src/utils/logger.ts` — Structured JSON logging
+- `src/utils/email.ts` — Resend email client for alert notifications
+- `src/alerts/notifier.ts` — Matches saved tender alerts and emails digests after each scrape
 - `src/types/index.ts` — TypeScript type definitions
 - `dashboard/index.html` — B2B analytics dashboard (Tailwind + Chart.js)
 - `tests/` — Vitest unit tests

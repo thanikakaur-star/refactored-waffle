@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Logo — HealthProcure Intel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1a1a1a; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+    .logo {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(145deg, #0a0a0f, #12141d);
+      border-radius: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .border {
+      position: absolute;
+      inset: 6px;
+      border: 1.5px solid rgba(201,169,110,0.2);
+      border-radius: 42px;
+    }
+
+    .glow {
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(201,169,110,0.1) 0%, transparent 60%);
+    }
+
+    .glow-bottom {
+      position: absolute;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 60%);
+    }
+
+    .letters {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 120px;
+      background: linear-gradient(145deg, #c9a96e, #d4af37, #c9a96e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 4px;
+      position: relative;
+      z-index: 2;
+      line-height: 1;
+    }
+
+    .sub {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: #64748b;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      margin-top: 16px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .line {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #c9a96e, transparent);
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <div class="border"></div>
+    <div class="glow"></div>
+    <div class="glow-bottom"></div>
+    <div class="letters">HP</div>
+    <div class="line"></div>
+    <div class="sub">HealthProcure</div>
+  </div>
+</body>
+</html>

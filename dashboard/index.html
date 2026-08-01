@@ -10,17 +10,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-base: #0a0a0f;
-      --bg-card: #12141d;
-      --bg-input: #1a1d28;
+      --bg-base: #000000;
+      --bg-card: #0a0a0f;
+      --bg-input: #121212;
       --gold: #c9a96e;
       --gold-highlight: #d4af37;
       --teal: #0d9488;
-      --border-gold: rgba(201,169,110,0.15);
-      --border-gold-hover: rgba(201,169,110,0.35);
-      --text-primary: #e2e8f0;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
+      --teal-light: #14b8a6;
+      --border-gold: rgba(201,169,110,0.2);
+      --border-gold-hover: rgba(201,169,110,0.4);
+      --text-primary: #d1d5db;
+      --text-secondary: #e5e7eb;
+      --text-muted: #d1d5db;
+      --text-inverse: #ffffff;
     }
 
     body {
@@ -31,6 +33,136 @@
 
     h2, h3.section-header {
       font-family: 'Playfair Display', serif;
+      color: var(--text-inverse);
+    }
+
+    /* Tooltip styles */
+    .tooltip-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      margin-left: 4px;
+      cursor: help;
+      border-radius: 50%;
+      background: rgba(201,169,110,0.15);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .tooltip-text {
+      visibility: hidden;
+      width: 240px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      text-align: left;
+      border: 1px solid var(--border-gold);
+      border-radius: 6px;
+      padding: 8px 10px;
+      position: absolute;
+      z-index: 100;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -120px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      font-size: 12px;
+      line-height: 1.4;
+      pointer-events: none;
+    }
+
+    .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -4px;
+      border-width: 4px;
+      border-style: solid;
+      border-color: var(--border-gold) transparent transparent transparent;
+    }
+
+    .tooltip-container:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-card) 25%, rgba(201,169,110,0.1) 50%, var(--bg-card) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skeleton-text {
+      height: 12px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .skeleton-card {
+      height: 200px;
+      border-radius: 12px;
+    }
+
+    /* Empty state styles */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .empty-state-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    /* Onboarding hint */
+    .onboarding-hint {
+      background: rgba(13,148,136,0.1);
+      border: 1px solid rgba(13,148,136,0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .onboarding-hint.hidden {
+      display: none;
     }
 
     .glass-card {
@@ -104,10 +236,14 @@
     }
 
     .sidebar-link .icon {
-      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       width: 24px;
-      text-align: center;
+      flex-shrink: 0;
+      color: inherit;
     }
+    .sidebar-link .icon svg { width: 17px; height: 17px; }
 
     .main-content {
       margin-left: 240px;
@@ -143,15 +279,55 @@
 
     /* Gold button */
     .btn-gold {
-      background: linear-gradient(135deg, var(--gold), var(--gold-highlight));
+      background: var(--gold);
       color: #0a0a0f;
       font-weight: 600;
       transition: all 0.25s ease;
+      border-radius: 24px;
     }
 
     .btn-gold:hover {
-      box-shadow: 0 4px 20px rgba(201,169,110,0.35);
+      opacity: 0.9;
       transform: translateY(-1px);
+    }
+
+    /* KPI Card Enhancement */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Chart Card Enhancement */
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.25s ease;
+    }
+
+    .chart-card:hover {
+      border-color: var(--border-gold-hover);
+      box-shadow: 0 4px 16px rgba(201,169,110,0.08);
     }
 
     /* Mobile sidebar */
@@ -204,12 +380,12 @@
     <!-- Logo -->
     <div class="p-6 pb-4">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #c9a96e, #d4af37);">
-          <span class="text-sm font-bold" style="color: #0a0a0f;">HP</span>
+        <div class="w-11 h-11 flex items-center justify-center" style="background: linear-gradient(150deg, #cdb079 0%, #b8975a 100%); border-radius: 11px; border: 1px solid rgba(212,175,55,0.35); box-shadow: 0 2px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15);">
+          <span style="font-family: 'Playfair Display', serif; font-weight: 600; font-size: 19px; letter-spacing: 0.5px; color: #0a0a0f;">HP</span>
         </div>
         <div>
-          <h1 class="text-sm font-bold" style="color: var(--gold);">HealthProcure</h1>
-          <p class="text-xs" style="color: var(--text-muted);">Intel Platform</p>
+          <h1 style="font-family: 'Playfair Display', serif; font-weight: 600; font-size: 16px; letter-spacing: 0.2px; color: var(--gold); line-height: 1.1;">HealthProcure</h1>
+          <p class="text-xs" style="color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; font-size: 9px; margin-top: 2px;">Intel Platform</p>
         </div>
       </div>
     </div>
@@ -218,25 +394,34 @@
 
     <!-- Nav Links -->
     <nav class="flex-1 py-4">
-      <a href="#" class="sidebar-link active" data-panel="overview" onclick="switchPanel('overview', this)">
-        <span class="icon">&#9632;</span> Overview
+      <a href="#" class="sidebar-link active" data-panel="overview" onclick="switchPanel('overview', this, event)">
+        <span class="icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="6.5" height="6.5" rx="1.3"/><rect x="11" y="2.5" width="6.5" height="6.5" rx="1.3"/><rect x="2.5" y="11" width="6.5" height="6.5" rx="1.3"/><rect x="11" y="11" width="6.5" height="6.5" rx="1.3"/></svg></span> Overview
       </a>
-      <a href="#" class="sidebar-link" data-panel="tenders" onclick="switchPanel('tenders', this)">
-        <span class="icon">&#9998;</span> Tenders
+      <a href="#" class="sidebar-link" data-panel="tenders" onclick="switchPanel('tenders', this, event)">
+        <span class="icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h7l3 3v12H5z"/><path d="M12 2.5v3h3"/><path d="M7.3 10.5h5.4M7.3 13.3h5.4M7.3 7.7h2.7"/></svg></span> Tenders
       </a>
-      <a href="#" class="sidebar-link" data-panel="awards" onclick="switchPanel('awards', this)">
-        <span class="icon">&#9733;</span> Awards
+      <a href="#" class="sidebar-link" data-panel="awards" onclick="switchPanel('awards', this, event)">
+        <span class="icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7.3" r="4.3"/><path d="M7.2 10.9L6 17.5l4-2.1 4 2.1-1.2-6.6"/></svg></span> Awards
       </a>
-      <a href="#" class="sidebar-link" data-panel="benchmarks" onclick="switchPanel('benchmarks', this)">
-        <span class="icon">&#9650;</span> Benchmarks
+      <a href="#" class="sidebar-link" data-panel="benchmarks" onclick="switchPanel('benchmarks', this, event)">
+        <span class="icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.5V11m4.5 6.5V7m4.5 10.5V4m4.5 13.5V9"/></svg></span> Benchmarks
       </a>
-      <a href="#" class="sidebar-link" data-panel="sources" onclick="switchPanel('sources', this)">
-        <span class="icon">&#9881;</span> Sources
+      <a href="#" class="sidebar-link" data-panel="alerts" onclick="switchPanel('alerts', this, event)">
+        <span class="icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15v.5a4 4 0 008 0V15"/><path d="M5.2 15h9.6c.6 0 .9-.7.5-1.2-.9-1-1.3-2-1.3-3.6V8.3a4 4 0 00-8 0v1.9c0 1.6-.4 2.6-1.3 3.6-.4.5-.1 1.2.5 1.2z"/></svg></span> Alerts
       </a>
     </nav>
 
+    <!-- Upgrade CTA (shown only for free/basic users) -->
+    <div id="sidebar-upgrade" class="px-5 mt-auto hidden">
+      <button onclick="startCheckout('pro')" class="w-full px-4 py-3 rounded-lg font-semibold text-sm flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15.5V4.5M5 9.5l5-5 5 5"/></svg>
+        Upgrade to Pro
+      </button>
+      <p class="text-xs text-center mt-2" style="color: var(--text-muted);">Unlock benchmarks &amp; more</p>
+    </div>
+
     <!-- API Status at bottom -->
-    <div class="p-5 mt-auto">
+    <div class="p-5">
       <div class="h-px mb-4" style="background: var(--border-gold);"></div>
       <div id="sidebar-status" class="flex items-center gap-2 text-xs" style="color: var(--text-muted);">
         <span class="w-2 h-2 rounded-full bg-gray-600 inline-block"></span>
@@ -282,7 +467,7 @@
       <div id="welcome" class="py-16 fade-in">
         <div class="text-center max-w-3xl mx-auto mb-12">
           <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold);">
-            <span class="text-3xl" style="color: var(--gold);">&#9769;</span>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="5" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="17.5" r="2.2"/><circle cx="12" cy="12" r="2.6"/><path d="M6.9 7.4L10 10.3M17.2 6.5L14 10M7.8 16.3L10.3 13.8M16.2 15.9L13.9 13.8"/></svg>
           </div>
           <h2 class="text-3xl font-bold mb-4 section-header" style="color: var(--text-primary);">Global Healthcare Procurement Intelligence</h2>
           <p class="text-base mb-2" style="color: var(--text-secondary);">
@@ -290,7 +475,7 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-5 max-w-6xl mx-auto">
           <div class="glass-card p-5 fade-in stagger-1">
             <div class="text-2xl mb-3">&#127466;&#127482;</div>
             <h3 class="font-semibold text-sm" style="color: var(--gold);">TED Europa</h3>
@@ -302,14 +487,24 @@
             <p class="text-xs mt-1" style="color: var(--text-muted);">US federal contracts</p>
           </div>
           <div class="glass-card p-5 fade-in stagger-3">
-            <div class="text-2xl mb-3">&#127758;</div>
-            <h3 class="font-semibold text-sm" style="color: var(--gold);">WHO Procurement</h3>
-            <p class="text-xs mt-1" style="color: var(--text-muted);">Global health tenders</p>
+            <div class="text-2xl mb-3">&#127468;&#127463;</div>
+            <h3 class="font-semibold text-sm" style="color: var(--gold);">Find a Tender</h3>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">UK high-value contracts (incl. NHS)</p>
           </div>
           <div class="glass-card p-5 fade-in stagger-4">
             <div class="text-2xl mb-3">&#127468;&#127463;</div>
-            <h3 class="font-semibold text-sm" style="color: var(--gold);">NHS Supply Chain</h3>
-            <p class="text-xs mt-1" style="color: var(--text-muted);">UK health frameworks</p>
+            <h3 class="font-semibold text-sm" style="color: var(--gold);">Contracts Finder</h3>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">UK local authority &amp; NHS contracts</p>
+          </div>
+          <div class="glass-card p-5 fade-in stagger-4">
+            <div class="text-2xl mb-3">&#127760;</div>
+            <h3 class="font-semibold text-sm" style="color: var(--gold);">World Bank</h3>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">Global development projects</p>
+          </div>
+          <div class="glass-card p-5 fade-in stagger-4">
+            <div class="text-2xl mb-3">&#127464;&#127462;</div>
+            <h3 class="font-semibold text-sm" style="color: var(--gold);">CanadaBuys</h3>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">Canadian public sector tenders</p>
           </div>
         </div>
 
@@ -327,7 +522,7 @@
           <div class="stat-card glass-card p-6 fade-in stagger-1">
             <div class="flex items-center justify-between mb-3">
               <p class="text-xs font-medium uppercase tracking-wider" style="color: var(--text-muted);">Total Tenders</p>
-              <span class="text-lg" style="color: var(--gold);">&#9830;</span>
+              <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5l7 3.5 7-3.5"/></svg>
             </div>
             <p id="stat-total" class="text-3xl font-bold" style="color: var(--text-primary);">--</p>
             <p class="text-xs mt-2" style="color: var(--text-muted);">Across all sources</p>
@@ -335,7 +530,7 @@
           <div class="stat-card glass-card p-6 fade-in stagger-2">
             <div class="flex items-center justify-between mb-3">
               <p class="text-xs font-medium uppercase tracking-wider" style="color: var(--text-muted);">Open Tenders</p>
-              <span class="text-lg" style="color: var(--teal);">&#9679;</span>
+              <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.8 2.8"/></svg>
             </div>
             <p id="stat-open" class="text-3xl font-bold" style="color: var(--teal);">--</p>
             <p class="text-xs mt-2" style="color: var(--text-muted);">Active opportunities</p>
@@ -343,7 +538,7 @@
           <div class="stat-card glass-card p-6 fade-in stagger-3">
             <div class="flex items-center justify-between mb-3">
               <p class="text-xs font-medium uppercase tracking-wider" style="color: var(--text-muted);">Total Award Value</p>
-              <span class="text-lg" style="color: var(--gold);">&#9733;</span>
+              <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 6.3v7.4M12.2 8c0-1-1-1.7-2.2-1.7s-2.2.6-2.2 1.6c0 2.3 4.4 1.1 4.4 3.4 0 1-1 1.7-2.2 1.7s-2.2-.7-2.2-1.7"/></svg>
             </div>
             <p id="stat-award-value" class="text-3xl font-bold" style="color: var(--gold);">--</p>
             <p class="text-xs mt-2" style="color: var(--text-muted);">USD equivalent</p>
@@ -351,7 +546,7 @@
           <div class="stat-card glass-card p-6 fade-in stagger-4">
             <div class="flex items-center justify-between mb-3">
               <p class="text-xs font-medium uppercase tracking-wider" style="color: var(--text-muted);">Avg Contract Value</p>
-              <span class="text-lg" style="color: #6366f1;">&#9670;</span>
+              <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="var(--gold-highlight)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15.5h14M5 15.5v-4.2M9 15.5V6.7M13 15.5v-7"/><path d="M4 8.5l4-3.3 3.5 2 4.5-4"/></svg>
             </div>
             <p id="stat-avg-value" class="text-3xl font-bold" style="color: var(--text-primary);">--</p>
             <p class="text-xs mt-2" style="color: var(--text-muted);">Per awarded contract</p>
@@ -359,24 +554,52 @@
         </div>
 
         <!-- Charts 2x2 Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
-          <div class="glass-card p-6">
-            <h3 class="section-header text-sm font-semibold mb-4" style="color: var(--gold);">Monthly Tender Volume & Value</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div class="chart-card">
+            <div class="flex items-center gap-2">
+              <h3 class="section-header text-sm font-semibold" style="color: var(--gold);">Monthly Tender Volume & Value</h3>
+              <div class="tooltip-container">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-text">Tracks the count of new tenders published and their total value (USD) over time. Use this to identify seasonal patterns and market growth.</span>
+              </div>
+            </div>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">Tracking procurement activity across all sources</p>
             <canvas id="chart-monthly" height="200"></canvas>
           </div>
-          <div class="glass-card p-6">
-            <h3 class="section-header text-sm font-semibold mb-4" style="color: var(--gold);">Tenders by Region</h3>
+          <div class="chart-card">
+            <div class="flex items-center gap-2">
+              <h3 class="section-header text-sm font-semibold" style="color: var(--gold);">Tenders by Region</h3>
+              <div class="tooltip-container">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-text">Shows how procurement opportunities are distributed across geographic regions. Focus on regions with the highest tender volumes.</span>
+              </div>
+            </div>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">Geographic distribution of opportunities</p>
             <canvas id="chart-region" height="200"></canvas>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
-          <div class="glass-card p-6">
-            <h3 class="section-header text-sm font-semibold mb-4" style="color: var(--gold);">Procurement Categories</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div class="chart-card">
+            <div class="flex items-center gap-2">
+              <h3 class="section-header text-sm font-semibold" style="color: var(--gold);">Procurement Categories</h3>
+              <div class="tooltip-container">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-text">Breakdown of tenders by medical specialty (devices, pharma, IT, etc.). Filter by category to focus on your market segment.</span>
+              </div>
+            </div>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">Medical devices, pharma, IT, infrastructure & more</p>
             <canvas id="chart-category" height="200"></canvas>
           </div>
-          <div class="glass-card p-6">
-            <h3 class="section-header text-sm font-semibold mb-4" style="color: var(--gold);">Data Sources</h3>
+          <div class="chart-card">
+            <div class="flex items-center gap-2">
+              <h3 class="section-header text-sm font-semibold" style="color: var(--gold);">Data Sources</h3>
+              <div class="tooltip-container">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-text">Distribution of tenders across our scraped sources (TED Europa, SAM.gov, UK Find a Tender, Contracts Finder, World Bank, CanadaBuys).</span>
+              </div>
+            </div>
+            <p class="text-xs mb-4" style="color: var(--text-muted);">Tenders aggregated from global procurement portals</p>
             <canvas id="chart-source" height="200"></canvas>
           </div>
         </div>
@@ -411,46 +634,125 @@
 
       <!-- Tenders Panel -->
       <div id="panel-tenders" class="dashboard-panel hidden">
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
           <h2 class="text-2xl font-bold section-header" style="color: var(--text-primary);">Tenders</h2>
-          <div class="flex gap-3">
-            <select id="tender-filter-status" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
-              <option value="">All Statuses</option>
-              <option value="open">Open</option>
-              <option value="closed">Closed</option>
-              <option value="awarded">Awarded</option>
-            </select>
-            <select id="tender-filter-source" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
-              <option value="">All Sources</option>
-              <option value="ted_europa">TED Europa</option>
-              <option value="sam_gov">SAM.gov</option>
-              <option value="who_procurement">WHO</option>
-              <option value="nhs_supply_chain">NHS</option>
-            </select>
+          <div class="flex gap-2 flex-wrap">
+            <button onclick="exportTendersAsJSON()" class="text-sm rounded-lg px-3 py-2 font-semibold flex items-center gap-1.5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Download tenders as JSON">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M10 13v-4M7 11h6"/></svg>
+              JSON
+            </button>
+            <button onclick="exportTendersAsCSV()" class="text-sm rounded-lg px-3 py-2 font-semibold flex items-center gap-1.5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Download tenders as CSV/Excel">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M7 7h6M7 11h6M7 15h2"/></svg>
+              CSV
+            </button>
+            <button onclick="saveCurrentTendersAsAlert()" class="text-sm rounded-lg px-3 py-2 font-semibold flex items-center gap-1.5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold); color: var(--gold);" title="Get emailed when new tenders match these filters">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15v.5a4 4 0 008 0V15"/><path d="M5.2 15h9.6c.6 0 .9-.7.5-1.2-.9-1-1.3-2-1.3-3.6V8.3a4 4 0 00-8 0v1.9c0 1.6-.4 2.6-1.3 3.6-.4.5-.1 1.2.5 1.2z"/></svg>
+              Alert
+            </button>
           </div>
         </div>
+        <div class="flex gap-3 mb-6 flex-wrap">
+          <div class="relative flex-1 min-w-[220px]">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="var(--text-muted)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;"><circle cx="8.5" cy="8.5" r="6"/><path d="M17 17l-4-4"/></svg>
+            <input id="tender-search" type="text" placeholder="Search tenders (title, description)..." oninput="debouncedSearchTenders()" class="text-sm rounded-lg pl-9 pr-3 py-2 w-full" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
+          </div>
+          <select id="tender-filter-status" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+            <option value="awarded">Awarded</option>
+          </select>
+          <select id="tender-filter-source" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Sources</option>
+            <option value="ted_europa">TED Europa</option>
+            <option value="sam_gov">SAM.gov</option>
+            <option value="contracts_finder">Contracts Finder (UK)</option>
+            <option value="find_a_tender">Find a Tender (UK)</option>
+            <option value="world_bank">World Bank</option>
+            <option value="canada_buys">CanadaBuys</option>
+            <option value="who_procurement">WHO / UNGM</option>
+            <option value="un_agencies">UNICEF / UNFPA</option>
+            <option value="nhs_supply_chain">NHS Supply Chain</option>
+          </select>
+          <select id="tender-filter-category" onchange="loadTendersPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Categories</option>
+            <option value="medical_devices">Medical Devices</option>
+            <option value="pharmaceuticals">Pharmaceuticals</option>
+            <option value="health_it">Health IT</option>
+            <option value="laboratory_equipment">Laboratory Equipment</option>
+            <option value="hospital_infrastructure">Hospital Infrastructure</option>
+            <option value="personal_protective_equipment">PPE</option>
+            <option value="diagnostics">Diagnostics</option>
+            <option value="surgical_instruments">Surgical Instruments</option>
+            <option value="telemedicine">Telemedicine</option>
+            <option value="clinical_services">Clinical Services</option>
+            <option value="allied_health">Allied Health (Physio, SLT)</option>
+            <option value="occupational_therapy">Occupational Therapy</option>
+            <option value="paramedic_services">Paramedic Services</option>
+            <option value="patient_transport">Patient Transport</option>
+            <option value="social_care">Social Care</option>
+            <option value="menstrual_health">Menstrual Health</option>
+            <option value="wash_hygiene">WASH &amp; Hygiene</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <!-- Onboarding Hint -->
+        <div id="tenders-hint" class="onboarding-hint">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 14v-4M10 7v.1"/></svg>
+          <span>Use the filters above to narrow results. Export as JSON/CSV or create an alert to receive email digests when new tenders match.</span>
+        </div>
+
         <div id="tenders-panel-list" class="space-y-3"></div>
+        <div id="tenders-empty" class="empty-state hidden">
+          <div class="empty-state-icon">📭</div>
+          <div class="empty-state-title">No tenders found</div>
+          <div class="empty-state-text">Try adjusting your filters or search terms. New tenders are added daily from our data sources.</div>
+        </div>
         <div id="tenders-pagination" class="flex items-center justify-between mt-6"></div>
       </div>
 
       <!-- Awards Panel -->
       <div id="panel-awards" class="dashboard-panel hidden">
         <h2 class="text-2xl font-bold section-header mb-6" style="color: var(--text-primary);">Contract Awards</h2>
-        <div class="flex gap-3 mb-6">
+        <div class="flex gap-3 mb-6 flex-wrap">
+          <select id="award-filter-category" onchange="loadAwardsPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Categories</option>
+            <option value="medical_devices">Medical Devices</option>
+            <option value="pharmaceuticals">Pharmaceuticals</option>
+            <option value="health_it">Health IT</option>
+            <option value="laboratory_equipment">Laboratory Equipment</option>
+            <option value="hospital_infrastructure">Hospital Infrastructure</option>
+            <option value="personal_protective_equipment">PPE</option>
+            <option value="diagnostics">Diagnostics</option>
+            <option value="surgical_instruments">Surgical Instruments</option>
+            <option value="telemedicine">Telemedicine</option>
+            <option value="clinical_services">Clinical Services</option>
+            <option value="allied_health">Allied Health (Physio, SLT)</option>
+            <option value="occupational_therapy">Occupational Therapy</option>
+            <option value="paramedic_services">Paramedic Services</option>
+            <option value="patient_transport">Patient Transport</option>
+            <option value="social_care">Social Care</option>
+            <option value="menstrual_health">Menstrual Health</option>
+            <option value="wash_hygiene">WASH &amp; Hygiene</option>
+            <option value="other">Other</option>
+          </select>
           <select id="award-filter-country" onchange="loadAwardsPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
             <option value="">All Countries</option>
             <option value="US">United States</option>
             <option value="GB">United Kingdom</option>
+            <option value="CA">Canada</option>
             <option value="DE">Germany</option>
             <option value="FR">France</option>
             <option value="CH">Switzerland</option>
           </select>
+          <input id="award-filter-supplier" type="text" placeholder="Search supplier name..." oninput="debouncedLoadAwards()" class="text-sm rounded-lg px-3 py-2 flex-1 min-w-[200px]" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-sm dark-table">
             <thead>
               <tr style="border-bottom: 1px solid rgba(148,163,184,0.1);">
                 <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Supplier</th>
+                <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Won</th>
                 <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Country</th>
                 <th class="text-right py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Value (USD)</th>
                 <th class="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider" style="color: var(--text-muted);">Awarded</th>
@@ -458,6 +760,11 @@
             </thead>
             <tbody id="awards-table-body"></tbody>
           </table>
+        </div>
+        <div id="awards-empty" class="empty-state hidden">
+          <div class="empty-state-icon">🏆</div>
+          <div class="empty-state-title">No awards found</div>
+          <div class="empty-state-text">Contract awards data is added as new procurement cycles conclude. Check back soon or adjust your filters.</div>
         </div>
         <div id="awards-pagination" class="flex items-center justify-between mt-6"></div>
       </div>
@@ -473,14 +780,102 @@
             <option value="Asia-Pacific">Asia-Pacific</option>
             <option value="Africa">Africa</option>
           </select>
+          <select id="bench-filter-category" onchange="loadBenchmarksPanel()" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+            <option value="">All Categories</option>
+            <option value="medical_devices">Medical Devices</option>
+            <option value="pharmaceuticals">Pharmaceuticals</option>
+            <option value="health_it">Health IT</option>
+            <option value="laboratory_equipment">Laboratory Equipment</option>
+            <option value="hospital_infrastructure">Hospital Infrastructure</option>
+            <option value="personal_protective_equipment">PPE</option>
+            <option value="diagnostics">Diagnostics</option>
+            <option value="surgical_instruments">Surgical Instruments</option>
+            <option value="telemedicine">Telemedicine</option>
+            <option value="clinical_services">Clinical Services</option>
+            <option value="allied_health">Allied Health (Physio, SLT)</option>
+            <option value="occupational_therapy">Occupational Therapy</option>
+            <option value="paramedic_services">Paramedic Services</option>
+            <option value="patient_transport">Patient Transport</option>
+            <option value="social_care">Social Care</option>
+            <option value="menstrual_health">Menstrual Health</option>
+            <option value="wash_hygiene">WASH &amp; Hygiene</option>
+            <option value="other">Other</option>
+          </select>
         </div>
+        <!-- Onboarding Hint -->
+        <div class="onboarding-hint">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 14v-4M10 7v.1"/></svg>
+          <span>Benchmarks show average contract values, lead times, and market insights. Click a card to see matching open tenders.</span>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="benchmarks-grid"></div>
+        <div id="benchmarks-empty" class="empty-state hidden">
+          <div class="empty-state-icon">📊</div>
+          <div class="empty-state-title">No benchmarks available</div>
+          <div class="empty-state-text">Benchmarks are a Pro feature. Upgrade to access regional market data.</div>
+        </div>
       </div>
 
-      <!-- Sources Panel -->
-      <div id="panel-sources" class="dashboard-panel hidden">
-        <h2 class="text-2xl font-bold section-header mb-6" style="color: var(--text-primary);">Data Sources</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="sources-grid"></div>
+
+      <!-- Alerts Panel -->
+      <div id="panel-alerts" class="dashboard-panel hidden">
+        <h2 class="text-2xl font-bold section-header mb-2" style="color: var(--text-primary);">Tender Alerts</h2>
+        <p class="text-sm mb-6" style="color: var(--text-secondary);">One alert, every source — instead of checking NHS Supply Chain, Find a Tender, Scotland/Ireland portals and TED Europa separately, save a filter here once and we'll email you when a new tender matches it.</p>
+
+        <div class="glass-card p-6 mb-8">
+          <h3 class="font-semibold text-sm mb-4" style="color: var(--gold);">Create a new alert</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+            <select id="alert-category" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+              <option value="">Any Category</option>
+              <option value="medical_devices">Medical Devices</option>
+              <option value="pharmaceuticals">Pharmaceuticals</option>
+              <option value="health_it">Health IT</option>
+              <option value="laboratory_equipment">Laboratory Equipment</option>
+              <option value="hospital_infrastructure">Hospital Infrastructure</option>
+              <option value="personal_protective_equipment">PPE</option>
+              <option value="diagnostics">Diagnostics</option>
+              <option value="surgical_instruments">Surgical Instruments</option>
+              <option value="telemedicine">Telemedicine</option>
+              <option value="clinical_services">Clinical Services</option>
+              <option value="allied_health">Allied Health (Physio, SLT)</option>
+              <option value="occupational_therapy">Occupational Therapy</option>
+              <option value="paramedic_services">Paramedic Services</option>
+              <option value="patient_transport">Patient Transport</option>
+              <option value="social_care">Social Care</option>
+              <option value="menstrual_health">Menstrual Health</option>
+              <option value="wash_hygiene">WASH &amp; Hygiene</option>
+            <option value="menstrual_health">Menstrual Health</option>
+            <option value="wash_hygiene">WASH &amp; Hygiene</option>
+              <option value="other">Other</option>
+            </select>
+            <select id="alert-source" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);">
+              <option value="">Any Source</option>
+              <option value="ted_europa">TED Europa</option>
+              <option value="sam_gov">SAM.gov</option>
+              <option value="contracts_finder">Contracts Finder (UK)</option>
+              <option value="find_a_tender">Find a Tender (UK)</option>
+              <option value="world_bank">World Bank</option>
+              <option value="canada_buys">CanadaBuys</option>
+              <option value="who_procurement">WHO / UNGM</option>
+              <option value="un_agencies">UNICEF / UNFPA</option>
+              <option value="nhs_supply_chain">NHS Supply Chain</option>
+            </select>
+            <input id="alert-country" type="text" maxlength="5" placeholder="Country code (e.g. GB)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
+            <input id="alert-region" type="text" maxlength="50" placeholder="Region (e.g. Europe)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
+            <input id="alert-keyword" type="text" maxlength="200" placeholder="Keyword (e.g. surgical)" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
+            <input id="alert-email" type="email" placeholder="Notify email" class="text-sm rounded-lg px-3 py-2" style="background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary);" />
+          </div>
+          <button onclick="createAlert()" class="btn-gold text-sm px-5 py-2 rounded-lg">Create Alert</button>
+          <span id="alert-form-message" class="text-xs ml-3" style="color: var(--text-muted);"></span>
+        </div>
+
+        <h3 class="font-semibold text-sm mb-4" style="color: var(--text-primary);">Your active alerts</h3>
+        <div id="alerts-list" class="space-y-3"></div>
+        <div id="alerts-empty" class="empty-state hidden">
+          <div class="empty-state-icon">🔔</div>
+          <div class="empty-state-title">No alerts yet</div>
+          <div class="empty-state-text">Create an alert above to get emailed when new tenders match your criteria across all sources.</div>
+        </div>
       </div>
 
       </div> <!-- end #dashboard -->
@@ -488,7 +883,7 @@
       <!-- Error State -->
       <div id="error" class="hidden text-center py-24">
         <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.2);">
-          <span class="text-3xl">&#9888;</span>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 9.5v5M12 17.2v.1"/></svg>
         </div>
         <h2 class="text-xl font-bold mb-2 section-header" style="color: var(--text-primary);">Connection Failed</h2>
         <p id="error-message" class="mb-5 text-sm" style="color: var(--text-secondary);"></p>
@@ -501,13 +896,36 @@
     </main>
   </div>
 
+  <!-- Checkout Email Modal -->
+  <div id="checkout-modal" style="display: none; position: fixed; inset: 0; z-index: 60; align-items: center; justify-content: center; padding: 1rem; background: rgba(10,10,15,0.8); backdrop-filter: blur(4px);">
+    <div class="glass-card" style="padding: 2rem; width: 100%; max-width: 24rem; border: 1px solid var(--border-gold); border-radius: 1rem;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">Almost there</h3>
+      <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.25rem;">Enter your email and we'll take you to secure checkout via Stripe.</p>
+      <form id="checkout-form-dash">
+        <input id="checkout-email-dash" type="email" required placeholder="you@company.com"
+          class="text-sm rounded-lg px-3 py-2" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-primary); margin-bottom: 0.5rem;" />
+        <p id="checkout-error-dash" class="hidden text-xs" style="color: #f43f5e; margin-bottom: 0.75rem;"></p>
+        <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+          <button type="button" onclick="closeCheckoutModal()" class="text-sm" style="flex: 1; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-gold); color: var(--text-secondary); background: transparent; font-weight: 600;">Cancel</button>
+          <button id="checkout-submit-dash" type="submit" class="btn-gold text-sm" style="flex: 1; padding: 0.75rem; border-radius: 0.5rem;">Continue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
-    // Chart.js dark theme defaults
-    Chart.defaults.color = '#94a3b8';
-    Chart.defaults.borderColor = 'rgba(148,163,184,0.1)';
+    // Chart.js dark theme defaults. Guarded: if the Chart.js CDN fails to
+    // load (ad-blocker, network hiccup, offline), this would otherwise throw
+    // and silently kill every line below it in this script — tenders,
+    // search, awards, alerts, checkout — not just the charts.
+    if (typeof Chart !== 'undefined') {
+      Chart.defaults.color = '#94a3b8';
+      Chart.defaults.borderColor = 'rgba(148,163,184,0.1)';
+    }
 
     const API_BASE = window.location.origin;
     let apiKey = '';
+    let userTier = 'free';
     let charts = {};
 
     // Theme colors
@@ -550,6 +968,9 @@
     function showWelcome() {
       showState('welcome');
       document.getElementById('apiKeyField').value = '';
+      apiKey = '';
+      try { localStorage.removeItem('hpi_api_key'); } catch (e) {}
+      document.getElementById('sidebar-upgrade').classList.add('hidden');
     }
 
     function showError(message) {
@@ -563,14 +984,143 @@
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || `HTTP ${res.status}`);
+        const err = new Error(body.error || `HTTP ${res.status}`);
+        err.status = res.status;
+        throw err;
       }
       return res.json();
+    }
+
+    // Stripe checkout — kick off a subscription from inside the dashboard
+    const PRICE_IDS = {
+      basic: 'price_1TlrGvC3JZLLw9RVUSzeqONA',
+      growth: 'price_1TzfciC3JZLLw9RVLUILgmDw',
+      pro: 'price_1TvExtC3JZLLw9RVXpliAtZR',
+      enterprise: 'price_1TlrIaC3JZLLw9RVctcI96FW',
+    };
+
+    function startCheckout(tier) {
+      const priceId = PRICE_IDS[tier];
+      if (!priceId) return;
+      const modal = document.getElementById('checkout-modal');
+      modal.dataset.priceId = priceId;
+      document.getElementById('checkout-error-dash').classList.add('hidden');
+      document.getElementById('checkout-email-dash').value = '';
+      modal.style.display = 'flex';
+      document.getElementById('checkout-email-dash').focus();
+    }
+
+    function closeCheckoutModal() {
+      const modal = document.getElementById('checkout-modal');
+      modal.style.display = 'none';
+      delete modal.dataset.priceId;
+    }
+
+    document.getElementById('checkout-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeCheckoutModal();
+    });
+
+    document.getElementById('checkout-form-dash').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const priceId = document.getElementById('checkout-modal').dataset.priceId;
+      const email = document.getElementById('checkout-email-dash').value.trim();
+      const errorEl = document.getElementById('checkout-error-dash');
+      const submitBtn = document.getElementById('checkout-submit-dash');
+      if (!priceId) {
+        errorEl.textContent = 'Something went wrong opening this form — please close it and click Upgrade again.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        errorEl.textContent = 'Please enter a valid email address.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      errorEl.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Redirecting…';
+      try {
+        const res = await fetch(`${API_BASE}/api/v1/checkout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ priceId, email }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          errorEl.textContent = data.error || 'Could not start checkout. Please try again.';
+          errorEl.classList.remove('hidden');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Continue';
+        }
+      } catch (e) {
+        errorEl.textContent = 'Could not reach the server. Please try again later.';
+        errorEl.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Continue';
+      }
+    });
+
+    // Subtle inline nudge shown to free/basic users who are capped on page size
+    function tendersUpsellHtml() {
+      const planName = userTier.charAt(0).toUpperCase() + userTier.slice(1);
+      return `
+        <div class="glass-card p-4 fade-in flex items-center justify-between flex-wrap gap-3" style="border: 1px solid var(--border-gold);">
+          <p class="text-xs" style="color: var(--text-secondary);">
+            You're on the <span style="color: var(--gold);">${escapeHtml(planName)}</span> plan — capped at ${userTier === 'basic' ? 50 : 20} results per page. Pro shows 200 per page and unlocks regional benchmarks.
+          </p>
+          <button onclick="startCheckout('pro')" class="px-4 py-2 rounded-lg font-semibold text-xs flex-shrink-0" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+            Upgrade to Pro
+          </button>
+        </div>
+      `;
+    }
+
+    // Shown when a user hits their daily request limit (HTTP 429)
+    function rateLimitPromptHtml() {
+      return `
+        <div class="glass-card p-8 text-center" style="grid-column: 1 / -1; border: 1px solid var(--border-gold);">
+          <div style="font-size: 32px; margin-bottom: 12px;">⏳</div>
+          <h3 class="text-xl font-bold mb-2" style="color: var(--gold); font-family: 'Playfair Display', serif;">You've hit today's request limit</h3>
+          <p class="text-sm mb-6" style="color: var(--text-secondary); max-width: 460px; margin: 0 auto;">
+            You're on the <span style="color: var(--gold);">${escapeHtml(userTier.charAt(0).toUpperCase() + userTier.slice(1))}</span> plan. Upgrade for a higher daily limit, or come back tomorrow when it resets.
+          </p>
+          <button onclick="startCheckout('pro')" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+            Upgrade to Pro
+          </button>
+        </div>
+      `;
+    }
+
+    // Renders the "upgrade to unlock" prompt shown when a free user hits a paid feature
+    function upgradePromptHtml(featureName) {
+      return `
+        <div class="glass-card p-8 text-center" style="grid-column: 1 / -1; border: 1px solid var(--border-gold);">
+          <div style="font-size: 32px; margin-bottom: 12px;">🔒</div>
+          <h3 class="text-xl font-bold mb-2" style="color: var(--gold); font-family: 'Playfair Display', serif;">${escapeHtml(featureName)} is a Pro feature</h3>
+          <p class="text-sm mb-6" style="color: var(--text-secondary); max-width: 460px; margin: 0 auto;">
+            Unlock regional benchmarks — average contract values, lead times, win rates and compliance by market — plus 10,000 requests/day and 200 results per page.
+          </p>
+          <div class="flex items-center justify-center gap-3 flex-wrap">
+            <button onclick="startCheckout('pro')" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f;">
+              Upgrade to Pro — £199/mo
+            </button>
+            <button onclick="startCheckout('enterprise')" class="px-6 py-3 rounded-lg font-semibold text-sm" style="border: 1px solid var(--border-gold); color: var(--gold); background: transparent;">
+              See Enterprise
+            </button>
+          </div>
+          <p class="text-xs mt-4" style="color: var(--text-muted);">Cancel anytime · Secure billing via Stripe</p>
+        </div>
+      `;
     }
 
     async function loadDashboard() {
       apiKey = document.getElementById('apiKeyField').value.trim();
       if (!apiKey) return;
+
+      // Remember the key so returning to the dashboard reconnects automatically.
+      try { localStorage.setItem('hpi_api_key', apiKey); } catch (e) {}
 
       showState('loading');
 
@@ -582,6 +1132,10 @@
 
         const stats = statsRes.data;
         const tenders = tendersRes.data;
+        userTier = (statsRes.meta && statsRes.meta.tier) || 'free';
+
+        // Show the sidebar Upgrade CTA only for free/basic users
+        document.getElementById('sidebar-upgrade').classList.toggle('hidden', !(userTier === 'free' || userTier === 'basic'));
 
         renderStats(stats);
         renderCharts(stats);
@@ -601,8 +1155,16 @@
         sidebarStatus.innerHTML = '<span class="w-2 h-2 rounded-full inline-block pulse-glow" style="background: #10b981;"></span><span style="color: #10b981;">Connected</span>';
 
         showState('dashboard');
+
+        // Deep link: land the user straight on a filtered view, e.g.
+        // /dashboard?panel=tenders&category=allied_health (shareable link).
+        applyPendingDeepLink();
       } catch (err) {
-        showError(err.message);
+        if (err.status === 429) {
+          showError(err.message + '  You can upgrade for a higher daily limit, or come back tomorrow.');
+        } else {
+          showError(err.message);
+        }
       }
     }
 
@@ -611,6 +1173,27 @@
       document.getElementById('stat-open').textContent = stats.openTenders.toLocaleString();
       document.getElementById('stat-award-value').textContent = formatCurrency(stats.totalAwardValueUsd);
       document.getElementById('stat-avg-value').textContent = formatCurrency(stats.avgContractValueUsd);
+    }
+
+    // Collapse a { label: count } map into the top N slices by value, with the
+    // remainder rolled into a single "Other" slice. Keeps doughnut/pie charts
+    // readable no matter how many distinct labels the data contains (e.g. a
+    // source that emits dozens of granular region strings). Returns sorted
+    // { labels, values } ready for Chart.js.
+    function topNWithOther(map, n = 8) {
+      const entries = Object.entries(map || {})
+        .map(([label, value]) => [label, Number(value) || 0])
+        .filter(([, value]) => value > 0)
+        .sort((a, b) => b[1] - a[1]);
+      if (entries.length <= n) {
+        return { labels: entries.map(e => e[0]), values: entries.map(e => e[1]) };
+      }
+      const top = entries.slice(0, n);
+      const otherTotal = entries.slice(n).reduce((sum, e) => sum + e[1], 0);
+      const labels = top.map(e => e[0]);
+      const values = top.map(e => e[1]);
+      if (otherTotal > 0) { labels.push('Other'); values.push(otherTotal); }
+      return { labels, values };
     }
 
     function renderCharts(stats) {
@@ -663,14 +1246,14 @@
 
       // Region doughnut
       const regionCtx = document.getElementById('chart-region').getContext('2d');
-      const regionLabels = Object.keys(stats.tendersByRegion);
+      const region = topNWithOther(stats.tendersByRegion, 6);
       charts.region = new Chart(regionCtx, {
         type: 'doughnut',
         data: {
-          labels: regionLabels,
+          labels: region.labels,
           datasets: [{
-            data: regionLabels.map(r => stats.tendersByRegion[r]),
-            backgroundColor: CHART_PALETTE.slice(0, regionLabels.length),
+            data: region.values,
+            backgroundColor: CHART_PALETTE.slice(0, region.labels.length),
             borderColor: '#12141d',
             borderWidth: 2,
           }],
@@ -709,14 +1292,14 @@
 
       // Source pie
       const srcCtx = document.getElementById('chart-source').getContext('2d');
-      const srcLabels = Object.keys(stats.tendersBySource);
+      const source = topNWithOther(stats.tendersBySource, 8);
       charts.source = new Chart(srcCtx, {
         type: 'pie',
         data: {
-          labels: srcLabels.map(s => s.replace(/_/g, ' ').toUpperCase()),
+          labels: source.labels.map(s => s === 'Other' ? 'Other' : s.replace(/_/g, ' ').toUpperCase()),
           datasets: [{
-            data: srcLabels.map(s => stats.tendersBySource[s]),
-            backgroundColor: CHART_PALETTE.slice(0, srcLabels.length),
+            data: source.values,
+            backgroundColor: CHART_PALETTE.slice(0, source.labels.length),
             borderColor: '#12141d',
             borderWidth: 2,
           }],
@@ -775,17 +1358,46 @@
     let tenderPage = 1;
     let awardPage = 1;
 
-    function switchPanel(panel, linkEl) {
-      if (!apiKey && panel !== 'overview') return;
-      event.preventDefault();
+    function switchPanel(panel, linkEl, evt) {
+      if (evt) evt.preventDefault();
       currentPanel = panel;
 
       document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
       if (linkEl) linkEl.classList.add('active');
 
+      if (!apiKey) {
+        showState('dashboard');
+        document.querySelectorAll('.dashboard-panel').forEach(p => p.classList.add('hidden'));
+        const target = document.getElementById('panel-' + panel);
+        if (target) {
+          target.classList.remove('hidden');
+          target.classList.add('fade-in');
+          if (panel === 'overview') {
+            showState('welcome');
+            return;
+          } else {
+            if (!target.querySelector('.connect-prompt')) {
+              const prompt = document.createElement('div');
+              prompt.className = 'connect-prompt text-center py-16';
+              prompt.innerHTML = `
+                <div class="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5" style="background: rgba(201,169,110,0.1); border: 1px solid var(--border-gold);">
+                  <span class="text-2xl" style="color: var(--gold);">&#128274;</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">API Key Required</h3>
+                <p class="text-sm mb-5" style="color: var(--text-secondary);">Enter your API key above to access this section.</p>
+                <button onclick="document.getElementById('apiKeyField').focus()" class="btn-gold text-sm px-5 py-2 rounded-lg">Enter API Key</button>
+              `;
+              target.appendChild(prompt);
+            }
+          }
+        }
+        return;
+      }
+
       document.querySelectorAll('.dashboard-panel').forEach(p => p.classList.add('hidden'));
       const target = document.getElementById('panel-' + panel);
       if (target) {
+        target.querySelector('.connect-prompt')?.remove();
         target.classList.remove('hidden');
         target.classList.add('fade-in');
       }
@@ -793,21 +1405,56 @@
       if (panel === 'tenders') loadTendersPanel();
       if (panel === 'awards') loadAwardsPanel();
       if (panel === 'benchmarks') loadBenchmarksPanel();
-      if (panel === 'sources') loadSourcesPanel();
+      if (panel === 'alerts') loadAlertsPanel();
+    }
+
+    function goToTendersFiltered(category) {
+      const categoryField = document.getElementById('tender-filter-category');
+      if (categoryField) categoryField.value = category || '';
+      tenderPage = 1;
+      const linkEl = document.querySelector('.sidebar-link[data-panel="tenders"]');
+      switchPanel('tenders', linkEl, null);
+    }
+
+    function toggleTenderDetail(idx) {
+      const el = document.getElementById(`tender-detail-${idx}`);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    let tendersSearchDebounceTimer = null;
+    function debouncedSearchTenders() {
+      clearTimeout(tendersSearchDebounceTimer);
+      tendersSearchDebounceTimer = setTimeout(() => { tenderPage = 1; loadTendersPanel(); }, 350);
     }
 
     async function loadTendersPanel() {
       const status = document.getElementById('tender-filter-status').value;
       const source = document.getElementById('tender-filter-source').value;
-      let url = `/api/v1/tenders?pageSize=20&page=${tenderPage}`;
-      if (status) url += `&status=${status}`;
-      if (source) url += `&source=${source}`;
+      const category = document.getElementById('tender-filter-category').value;
+      const search = document.getElementById('tender-search').value.trim();
+      const params = new URLSearchParams({ pageSize: '20', page: String(tenderPage) });
+      if (status) params.set('status', status);
+      if (source) params.set('source', source);
+      if (category) params.set('category', category);
+      if (search) params.set('search', search);
+      const url = `/api/v1/tenders?${params.toString()}`;
 
       try {
         const res = await apiFetch(url);
+        currentTendersData = res.data;
         const container = document.getElementById('tenders-panel-list');
-        container.innerHTML = res.data.map(t => `
-          <div class="glass-card p-5 fade-in">
+        const emptyState = document.getElementById('tenders-empty');
+
+        if (res.data.length === 0) {
+          container.innerHTML = '';
+          emptyState.classList.remove('hidden');
+          renderPagination('tenders-pagination', res.pagination, 'tenders', res.meta);
+          return;
+        }
+
+        emptyState.classList.add('hidden');
+        container.innerHTML = res.data.map((t, idx) => `
+          <div class="glass-card p-5 fade-in" style="cursor: pointer;" onclick="toggleTenderDetail(${idx})" title="Click for compliance details and the original listing">
             <div class="flex items-start justify-between">
               <div class="flex-1 min-w-0">
                 <h4 class="font-semibold text-sm" style="color: var(--text-primary);">${escapeHtml(t.title)}</h4>
@@ -824,119 +1471,308 @@
                   style="${t.status === 'open' ? 'background: rgba(16,185,129,0.15); color: #10b981;' : t.status === 'awarded' ? 'background: rgba(201,169,110,0.15); color: var(--gold);' : 'background: rgba(148,163,184,0.1); color: #64748b;'}">${t.status}</span>
               </div>
             </div>
+            <div id="tender-detail-${idx}" class="hidden mt-4 pt-4 space-y-2" style="border-top: 1px solid rgba(148,163,184,0.1);" onclick="event.stopPropagation()">
+              ${t.description ? `<p class="text-xs" style="color: var(--text-secondary);">${escapeHtml(t.description)}</p>` : ''}
+              ${(t.compliance_criteria && t.compliance_criteria.length) ? `<p class="text-xs"><span style="color: var(--text-muted);">Compliance criteria:</span> ${t.compliance_criteria.map(escapeHtml).join(', ')}</p>` : ''}
+              ${(t.cpv_codes && t.cpv_codes.length) ? `<p class="text-xs"><span style="color: var(--text-muted);">CPV codes:</span> ${t.cpv_codes.map(escapeHtml).join(', ')}</p>` : ''}
+              ${t.url ? `<a href="${escapeHtml(t.url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-semibold mt-1" style="color: var(--gold);">View Original Listing &amp; Bid Instructions &#8599;</a>` : ''}
+            </div>
           </div>
-        `).join('');
+        `).join('') + ((userTier === 'free' || userTier === 'basic') ? tendersUpsellHtml() : '');
 
-        renderPagination('tenders-pagination', res.pagination, 'tenders');
+        renderPagination('tenders-pagination', res.pagination, 'tenders', res.meta);
       } catch (err) {
+        if (err.status === 429) {
+          document.getElementById('tenders-panel-list').innerHTML = rateLimitPromptHtml();
+          document.getElementById('tenders-empty').classList.add('hidden');
+          return;
+        }
         document.getElementById('tenders-panel-list').innerHTML = `<p style="color: var(--text-muted);">Failed to load tenders: ${escapeHtml(err.message)}</p>`;
+        document.getElementById('tenders-empty').classList.add('hidden');
       }
     }
 
+    let awardsDebounceTimer = null;
+    function debouncedLoadAwards() {
+      clearTimeout(awardsDebounceTimer);
+      awardsDebounceTimer = setTimeout(() => { awardPage = 1; loadAwardsPanel(); }, 350);
+    }
+
     async function loadAwardsPanel() {
+      const category = document.getElementById('award-filter-category').value;
       const country = document.getElementById('award-filter-country').value;
-      let url = `/api/v1/awards?pageSize=20&page=${awardPage}`;
-      if (country) url += `&supplierCountry=${country}`;
+      const supplierName = document.getElementById('award-filter-supplier').value.trim();
+      const params = new URLSearchParams({ pageSize: '20', page: String(awardPage) });
+      if (category) params.set('category', category);
+      if (country) params.set('supplierCountry', country);
+      if (supplierName) params.set('supplierName', supplierName);
+      const url = `/api/v1/awards?${params.toString()}`;
 
       try {
         const res = await apiFetch(url);
         const tbody = document.getElementById('awards-table-body');
-        tbody.innerHTML = res.data.map(a => `
-          <tr style="border-bottom: 1px solid rgba(148,163,184,0.06);">
-            <td class="py-3 px-4 font-medium" style="color: var(--text-primary);">${escapeHtml(a.supplier_name)}</td>
-            <td class="py-3 px-4" style="color: var(--text-secondary);">${escapeHtml(a.supplier_country)}</td>
-            <td class="py-3 px-4 text-right font-semibold" style="color: var(--gold);">${formatCurrency(a.award_value_usd)}</td>
-            <td class="py-3 px-4" style="color: var(--text-muted);">${new Date(a.award_date).toLocaleDateString()}</td>
-          </tr>
-        `).join('');
+        const emptyState = document.getElementById('awards-empty');
 
-        renderPagination('awards-pagination', res.pagination, 'awards');
+        if (res.data.length === 0) {
+          tbody.innerHTML = '';
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+          tbody.innerHTML = res.data.map(a => `
+            <tr style="border-bottom: 1px solid rgba(148,163,184,0.06);">
+              <td class="py-3 px-4 font-medium" style="color: var(--text-primary);">${escapeHtml(a.supplier_name)}</td>
+              <td class="py-3 px-4" style="color: var(--text-secondary); max-width: 320px;">
+                ${a.tender_title ? escapeHtml(a.tender_title) : '<span style="color: var(--text-muted);">—</span>'}
+                ${a.category ? `<span class="ml-1 text-xs" style="color: var(--gold);">· ${escapeHtml(formatCategory(a.category))}</span>` : ''}
+              </td>
+              <td class="py-3 px-4" style="color: var(--text-secondary);">${escapeHtml(a.supplier_country)}</td>
+              <td class="py-3 px-4 text-right font-semibold" style="color: var(--gold);">${formatCurrency(a.award_value_usd)}</td>
+              <td class="py-3 px-4" style="color: var(--text-muted);">${new Date(a.award_date).toLocaleDateString()}</td>
+            </tr>
+          `).join('');
+        }
+
+        renderPagination('awards-pagination', res.pagination, 'awards', res.meta);
       } catch (err) {
-        document.getElementById('awards-table-body').innerHTML = `<tr><td colspan="4" class="py-4 text-center" style="color: var(--text-muted);">${escapeHtml(err.message)}</td></tr>`;
+        document.getElementById('awards-table-body').innerHTML = '';
+        document.getElementById('awards-empty').classList.remove('hidden');
       }
     }
 
     async function loadBenchmarksPanel() {
       const region = document.getElementById('bench-filter-region').value;
-      let url = '/api/v1/analytics/benchmarks';
-      if (region) url += `?region=${encodeURIComponent(region)}`;
+      const category = document.getElementById('bench-filter-category').value;
+      const params = new URLSearchParams();
+      if (region) params.set('region', region);
+      if (category) params.set('category', category);
+      const qs = params.toString();
+      let url = '/api/v1/analytics/benchmarks' + (qs ? `?${qs}` : '');
 
       try {
         const res = await apiFetch(url);
         const grid = document.getElementById('benchmarks-grid');
-        grid.innerHTML = res.data.map(b => `
-          <div class="glass-card p-6 fade-in">
-            <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(b.product_category)}</h4>
-            <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)}</p>
-            <div class="space-y-3">
-              <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Avg Price</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.avg_price_usd)}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Median Price</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.median_price_usd)}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Range</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.min_price_usd)} – ${formatCurrency(b.max_price_usd)}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span style="color: var(--text-secondary);">Sample Size</span>
-                <span class="font-semibold" style="color: var(--text-primary);">${b.sample_size}</span>
+        const emptyState = document.getElementById('benchmarks-empty');
+
+        if (res.data.length === 0) {
+          grid.innerHTML = '';
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+          grid.innerHTML = res.data.map(b => `
+            <div class="glass-card p-6 fade-in" style="cursor: pointer;" onclick="goToTendersFiltered('${b.category}')" title="View open ${escapeHtml(formatCategory(b.category))} tenders">
+              <h4 class="font-semibold text-sm mb-1" style="color: var(--gold);">${escapeHtml(formatCategory(b.category))}</h4>
+              <p class="text-xs mb-4" style="color: var(--text-muted);">${escapeHtml(b.region)} · ${escapeHtml(b.period || '')}</p>
+              <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Avg Contract Value</span>
+                  <span class="font-semibold" style="color: var(--text-primary);">${formatCurrency(b.avg_contract_value_usd || 0)}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Avg Lead Time</span>
+                  <span class="font-semibold" style="color: var(--text-primary);">${b.avg_lead_time_days || 0} days</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Tenders</span>
+                  <span class="font-semibold" style="color: var(--text-primary);">${(b.tender_count || 0).toLocaleString()}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Awards</span>
+                  <span class="font-semibold" style="color: var(--text-primary);">${(b.award_count || 0).toLocaleString()}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span style="color: var(--text-secondary);">Compliance Rate</span>
+                  <span class="font-semibold" style="color: var(--teal);">${(b.compliance_rate || 0).toFixed(1)}%</span>
+                </div>
               </div>
             </div>
-          </div>
-        `).join('');
+          `).join('');
+        }
       } catch (err) {
-        document.getElementById('benchmarks-grid').innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+        const grid = document.getElementById('benchmarks-grid');
+        if (err.status === 403) {
+          grid.innerHTML = upgradePromptHtml('Regional Benchmarks');
+          document.getElementById('benchmarks-empty').classList.add('hidden');
+        } else if (err.status === 429) {
+          grid.innerHTML = rateLimitPromptHtml();
+          document.getElementById('benchmarks-empty').classList.add('hidden');
+        } else {
+          grid.innerHTML = '';
+          document.getElementById('benchmarks-empty').classList.remove('hidden');
+        }
       }
     }
 
-    async function loadSourcesPanel() {
+    let currentTendersData = [];
+
+    function downloadFile(filename, content, mimeType = 'application/json') {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    async function exportTendersAsJSON() {
+      if (!currentTendersData.length) {
+        alert('No tenders to export. Please load tenders first.');
+        return;
+      }
+      const filename = `tenders_${new Date().toISOString().split('T')[0]}.json`;
+      const content = JSON.stringify(currentTendersData, null, 2);
+      downloadFile(filename, content, 'application/json');
+    }
+
+    async function exportTendersAsCSV() {
+      if (!currentTendersData.length) {
+        alert('No tenders to export. Please load tenders first.');
+        return;
+      }
+
+      const headers = ['Title', 'Source', 'Category', 'Buyer Country', 'Status', 'Value (USD)', 'Deadline'];
+      const rows = currentTendersData.map(t => [
+        escapeCSV(t.title),
+        t.source,
+        formatCategory(t.category),
+        t.buyer_country,
+        t.status,
+        t.value_usd || 'N/A',
+        t.deadline ? new Date(t.deadline).toLocaleDateString() : 'N/A'
+      ]);
+
+      const csv = [
+        headers.join(','),
+        ...rows.map(row => row.join(','))
+      ].join('\n');
+
+      const filename = `tenders_${new Date().toISOString().split('T')[0]}.csv`;
+      downloadFile(filename, csv, 'text/csv');
+    }
+
+    function escapeCSV(field) {
+      if (!field) return '';
+      if (typeof field !== 'string') field = String(field);
+      if (field.includes(',') || field.includes('"') || field.includes('\n')) {
+        return `"${field.replace(/"/g, '""')}"`;
+      }
+      return field;
+    }
+
+    function saveCurrentTendersAsAlert() {
+      document.getElementById('alert-category').value = document.getElementById('tender-filter-category').value;
+      document.getElementById('alert-source').value = document.getElementById('tender-filter-source').value;
+      document.getElementById('alert-keyword').value = document.getElementById('tender-search').value.trim();
+      const linkEl = document.querySelector('.sidebar-link[data-panel="alerts"]');
+      switchPanel('alerts', linkEl, null);
+    }
+
+    async function loadAlertsPanel() {
+      const list = document.getElementById('alerts-list');
+      const emptyState = document.getElementById('alerts-empty');
       try {
-        const res = await apiFetch('/api/v1/sources');
-        const grid = document.getElementById('sources-grid');
-        const icons = { ted_europa: '&#127466;&#127482;', sam_gov: '&#127482;&#127480;', who_procurement: '&#127758;', nhs_supply_chain: '&#127468;&#127463;' };
-        grid.innerHTML = res.data.map(s => `
-          <div class="glass-card p-6 fade-in">
-            <div class="text-3xl mb-3">${icons[s.id] || '&#127760;'}</div>
-            <h4 class="font-semibold text-lg mb-1" style="color: var(--gold);">${escapeHtml(s.name)}</h4>
-            <p class="text-sm mb-4" style="color: var(--text-secondary);">${escapeHtml(s.description)}</p>
-            <div class="space-y-2 text-sm">
-              <div class="flex justify-between">
-                <span style="color: var(--text-muted);">Region</span>
-                <span style="color: var(--text-primary);">${escapeHtml(s.region)}</span>
-              </div>
-              <div class="flex justify-between">
-                <span style="color: var(--text-muted);">Update Freq</span>
-                <span style="color: var(--text-primary);">${escapeHtml(s.updateFrequency)}</span>
-              </div>
-              <div class="flex justify-between">
-                <span style="color: var(--text-muted);">Status</span>
-                <span class="px-2 py-0.5 rounded-full text-xs" style="background: rgba(16,185,129,0.15); color: #10b981;">Active</span>
-              </div>
+        const res = await apiFetch('/api/v1/alerts');
+        if (!res.data.length) {
+          list.innerHTML = '';
+          emptyState.classList.remove('hidden');
+          return;
+        }
+        emptyState.classList.add('hidden');
+        list.innerHTML = res.data.map(a => `
+          <div class="glass-card p-4 fade-in flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center flex-wrap gap-2 text-xs" style="color: var(--text-secondary);">
+              ${a.category ? `<span class="px-2 py-0.5 rounded" style="background: rgba(201,169,110,0.1); color: var(--gold);">${escapeHtml(formatCategory(a.category))}</span>` : ''}
+              ${a.source ? `<span class="px-2 py-0.5 rounded" style="background: rgba(201,169,110,0.1); color: var(--gold);">${escapeHtml(a.source)}</span>` : ''}
+              ${a.region ? `<span>${escapeHtml(a.region)}</span>` : ''}
+              ${a.country ? `<span>${escapeHtml(a.country)}</span>` : ''}
+              ${a.keyword ? `<span>&ldquo;${escapeHtml(a.keyword)}&rdquo;</span>` : ''}
+              <span style="color: var(--text-muted);">&rarr; ${escapeHtml(a.email)}</span>
             </div>
+            <button onclick="deleteAlert('${a.id}')" class="text-xs px-3 py-1 rounded-lg" style="background: rgba(244,63,94,0.1); color: #f43f5e; border: 1px solid rgba(244,63,94,0.2);">Delete</button>
           </div>
         `).join('');
       } catch (err) {
-        document.getElementById('sources-grid').innerHTML = `<p style="color: var(--text-muted);">${escapeHtml(err.message)}</p>`;
+        list.innerHTML = '';
+        emptyState.classList.remove('hidden');
       }
     }
 
-    function renderPagination(containerId, pagination, type) {
+    async function createAlert() {
+      const msg = document.getElementById('alert-form-message');
+      const body = {
+        category: document.getElementById('alert-category').value || undefined,
+        source: document.getElementById('alert-source').value || undefined,
+        region: document.getElementById('alert-region').value.trim() || undefined,
+        country: document.getElementById('alert-country').value.trim() || undefined,
+        keyword: document.getElementById('alert-keyword').value.trim() || undefined,
+        email: document.getElementById('alert-email').value.trim() || undefined,
+      };
+      msg.textContent = 'Saving…';
+      try {
+        const res = await fetch(`${API_BASE}/api/v1/alerts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          msg.textContent = data.error || 'Could not create alert.';
+          return;
+        }
+        msg.textContent = 'Alert created.';
+        document.getElementById('alert-keyword').value = '';
+        loadAlertsPanel();
+      } catch (err) {
+        msg.textContent = 'Could not reach the server.';
+      }
+    }
+
+    async function deleteAlert(id) {
+      try {
+        await fetch(`${API_BASE}/api/v1/alerts/${id}`, {
+          method: 'DELETE',
+          headers: { 'X-API-Key': apiKey },
+        });
+        loadAlertsPanel();
+      } catch (err) {
+        alert('Could not delete alert. Please try again.');
+      }
+    }
+
+    function renderPagination(containerId, pagination, type, meta) {
       if (!pagination) return;
       const { page, pageSize, total } = pagination;
       const totalPages = Math.ceil(total / pageSize);
-      if (totalPages <= 1) { document.getElementById(containerId).innerHTML = ''; return; }
+      // meta.limitReached: this tier's result window is smaller than the true
+      // total, i.e. there are more records behind the paywall.
+      const limitReached = !!(meta && meta.limitReached);
+      const totalAvailable = (meta && meta.totalAvailable) || total;
+      const tier = (meta && meta.tier) || userTier || 'free';
+      const atWindowEnd = page >= totalPages; // last page this tier can reach
+
+      if (totalPages <= 1 && !limitReached) { document.getElementById(containerId).innerHTML = ''; return; }
 
       const btnStyle = 'background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text-secondary);';
+      const upgradeStyle = 'background: linear-gradient(135deg, #c9a96e, #a8883f); color: #0a0a0f; font-weight: 600;';
+
+      // At the end of a capped window, "Next" is a hard stop — replace it with
+      // an upgrade CTA so the user converts instead of hitting a dead button.
+      const nextControl = (limitReached && atWindowEnd)
+        ? `<button class="px-3 py-1 rounded text-sm" style="${upgradeStyle}" onclick="startCheckout('pro')">Unlock all ${Number(totalAvailable).toLocaleString()} &rarr;</button>`
+        : `<button class="px-3 py-1 rounded text-sm ${page >= totalPages ? 'opacity-30' : ''}" style="${btnStyle}" ${page >= totalPages ? 'disabled' : ''} onclick="paginate('${type}', ${page+1})">Next</button>`;
+
+      const countLine = limitReached
+        ? `Showing ${(page-1)*pageSize+1}&ndash;${Math.min(page*pageSize, total)} of ${Number(total).toLocaleString()} &middot; <span style="color: var(--gold);">${tier.charAt(0).toUpperCase()+tier.slice(1)} plan caps at ${Number(total).toLocaleString()} of ${Number(totalAvailable).toLocaleString()} total</span>`
+        : `Showing ${(page-1)*pageSize+1}&ndash;${Math.min(page*pageSize, total)} of ${Number(total).toLocaleString()}`;
+
       document.getElementById(containerId).innerHTML = `
-        <p class="text-xs" style="color: var(--text-muted);">Showing ${(page-1)*pageSize+1}–${Math.min(page*pageSize, total)} of ${total}</p>
+        <p class="text-xs" style="color: var(--text-muted);">${countLine}</p>
         <div class="flex gap-2">
           <button class="px-3 py-1 rounded text-sm ${page <= 1 ? 'opacity-30' : ''}" style="${btnStyle}" ${page <= 1 ? 'disabled' : ''} onclick="paginate('${type}', ${page-1})">Prev</button>
-          <span class="px-3 py-1 text-sm" style="color: var(--text-muted);">${page} / ${totalPages}</span>
-          <button class="px-3 py-1 rounded text-sm ${page >= totalPages ? 'opacity-30' : ''}" style="${btnStyle}" ${page >= totalPages ? 'disabled' : ''} onclick="paginate('${type}', ${page+1})">Next</button>
+          <span class="px-3 py-1 text-sm font-semibold" style="color: white;">${page} / ${totalPages}</span>
+          ${nextControl}
         </div>
       `;
     }
@@ -945,6 +1781,52 @@
       if (type === 'tenders') { tenderPage = page; loadTendersPanel(); }
       if (type === 'awards') { awardPage = page; loadAwardsPanel(); }
     }
+
+    // Auto-connect: accept a key from ?key= (e.g. straight after free signup)
+    // or from a previously saved session, so the user lands connected.
+    // Deep-link support: /dashboard?panel=tenders&category=allied_health lands
+    // the visitor straight on a pre-filtered view once they're connected. The
+    // intent is stashed (and kept in sessionStorage) so it survives the moment
+    // between arriving and connecting a key.
+    function captureDeepLink() {
+      var params = new URLSearchParams(window.location.search);
+      var panel = params.get('panel');
+      var category = params.get('category');
+      if (panel || category) {
+        try { sessionStorage.setItem('hpi_deeplink', JSON.stringify({ panel: panel, category: category })); } catch (e) {}
+      }
+    }
+    function applyPendingDeepLink() {
+      var raw = null;
+      try { raw = sessionStorage.getItem('hpi_deeplink'); } catch (e) {}
+      if (!raw) return;
+      try { sessionStorage.removeItem('hpi_deeplink'); } catch (e) {}
+      var link;
+      try { link = JSON.parse(raw); } catch (e) { return; }
+      if (link && (link.panel === 'tenders' || link.category)) {
+        goToTendersFiltered(link.category || '');
+      } else if (link && link.panel) {
+        var el = document.querySelector('.sidebar-link[data-panel="' + link.panel + '"]');
+        if (el) switchPanel(link.panel, el, null);
+      }
+    }
+
+    (function initDashboard() {
+      captureDeepLink();
+      var urlKey = new URLSearchParams(window.location.search).get('key');
+      var savedKey = null;
+      try { savedKey = localStorage.getItem('hpi_api_key'); } catch (e) {}
+      var startKey = urlKey || savedKey;
+      // Strip params from the URL so the key isn't left in history and the
+      // address bar stays clean (the deep-link intent is already stashed).
+      if ((urlKey || window.location.search) && window.history.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+      if (startKey) {
+        document.getElementById('apiKeyField').value = startKey;
+        loadDashboard();
+      }
+    })();
   </script>
 </body>
 </html>

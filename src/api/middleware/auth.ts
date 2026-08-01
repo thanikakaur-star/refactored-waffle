@@ -6,6 +6,7 @@ import type { ApiKey, ApiTier } from "../../types/index.js";
 const TIER_LIMITS: Record<ApiTier, { requestsPerDay: number; maxPageSize: number }> = {
   free: { requestsPerDay: 50, maxPageSize: 10 },
   basic: { requestsPerDay: 500, maxPageSize: 50 },
+  growth: { requestsPerDay: 3000, maxPageSize: 100 },
   pro: { requestsPerDay: 5000, maxPageSize: 100 },
   enterprise: { requestsPerDay: 50000, maxPageSize: 500 },
 };

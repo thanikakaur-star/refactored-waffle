@@ -16,8 +16,8 @@ import type {
 
 describe("Type definitions", () => {
   it("TenderSource includes expected sources", () => {
-    const sources: TenderSource[] = ["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "manual"];
-    expect(sources).toHaveLength(5);
+    const sources: TenderSource[] = ["ted_europa", "sam_gov", "who_procurement", "nhs_supply_chain", "contracts_finder", "find_a_tender", "manual"];
+    expect(sources).toHaveLength(7);
   });
 
   it("TenderStatus includes expected statuses", () => {
@@ -29,9 +29,9 @@ describe("Type definitions", () => {
     const categories: ProcurementCategory[] = [
       "medical_devices", "pharmaceuticals", "health_it", "laboratory_equipment",
       "hospital_infrastructure", "personal_protective_equipment", "diagnostics",
-      "surgical_instruments", "telemedicine", "other",
+      "surgical_instruments", "telemedicine", "clinical_services", "social_care", "other",
     ];
-    expect(categories).toHaveLength(10);
+    expect(categories).toHaveLength(12);
   });
 
   it("ApiTier defines subscription tiers", () => {

@@ -24,7 +24,10 @@ export interface Tender {
 
 export interface ContractAward {
   id: string;
-  tenderId: string;
+  externalId: string | null;
+  tenderId: string | null;
+  tenderTitle: string | null;
+  category: ProcurementCategory | null;
   awardDate: Date;
   supplierName: string;
   supplierCountry: string;
@@ -65,7 +68,17 @@ export interface ApiKey {
   stripeSubscriptionId: string | null;
 }
 
-export type TenderSource = "ted_europa" | "sam_gov" | "who_procurement" | "nhs_supply_chain" | "manual";
+export type TenderSource =
+  | "ted_europa"
+  | "sam_gov"
+  | "who_procurement"
+  | "un_agencies"
+  | "nhs_supply_chain"
+  | "contracts_finder"
+  | "find_a_tender"
+  | "world_bank"
+  | "canada_buys"
+  | "manual";
 
 export type TenderStatus = "open" | "closed" | "awarded" | "cancelled" | "planned";
 
@@ -79,9 +92,17 @@ export type ProcurementCategory =
   | "diagnostics"
   | "surgical_instruments"
   | "telemedicine"
+  | "clinical_services"
+  | "allied_health"
+  | "occupational_therapy"
+  | "paramedic_services"
+  | "patient_transport"
+  | "social_care"
+  | "menstrual_health"
+  | "wash_hygiene"
   | "other";
 
-export type ApiTier = "free" | "basic" | "pro" | "enterprise";
+export type ApiTier = "free" | "basic" | "growth" | "pro" | "enterprise";
 
 export interface ScrapeResult {
   source: TenderSource;

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HealthProcure Intel — LinkedIn Banner (Dark)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    body {
+      background: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      padding: 20px;
+    }
+
+    .container {
+      width: 1584px;
+      height: 396px;
+      background: linear-gradient(135deg, #0a0a0f 0%, #0f1018 40%, #12141d 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Subtle grid pattern */
+    .grid-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,169,110,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,169,110,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: 0;
+    }
+
+    /* Gold accent glow top-right */
+    .glow-1 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(201,169,110,0.1) 0%, transparent 65%);
+      border-radius: 50%;
+      top: -200px;
+      right: 100px;
+      z-index: 0;
+    }
+
+    /* Teal accent glow bottom-left */
+    .glow-2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(13,148,136,0.07) 0%, transparent 65%);
+      border-radius: 50%;
+      bottom: -180px;
+      left: 80px;
+      z-index: 0;
+    }
+
+    /* Gold line accent */
+    .gold-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #c9a96e 30%, #d4af37 50%, #c9a96e 70%, transparent 100%);
+      z-index: 2;
+    }
+
+    .gold-line-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #c9a96e 30%, #d4af37 50%, #c9a96e 70%, transparent 100%);
+      z-index: 2;
+    }
+
+    /* Content layout */
+    .content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      padding: 0 80px;
+      width: 100%;
+    }
+
+    /* Logo */
+    .logo-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #c9a96e, #d4af37);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(201,169,110,0.3);
+    }
+
+    .logo-icon span {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 36px;
+      color: #0a0a0f;
+      letter-spacing: -1px;
+    }
+
+    /* Divider */
+    .divider {
+      width: 1px;
+      height: 200px;
+      background: linear-gradient(180deg, transparent 0%, rgba(201,169,110,0.3) 30%, rgba(201,169,110,0.3) 70%, transparent 100%);
+      flex-shrink: 0;
+    }
+
+    /* Text block */
+    .text-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: #e2e8f0;
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+
+    .brand-name .gold {
+      color: #c9a96e;
+    }
+
+    .tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+      line-height: 1.5;
+    }
+
+    /* Source pills */
+    .sources {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .source-pill {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(201,169,110,0.2);
+      background: rgba(201,169,110,0.05);
+      font-size: 12px;
+      font-weight: 500;
+      color: #c9a96e;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Right side decorative element */
+    .data-visual {
+      position: absolute;
+      right: 80px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      opacity: 0.5;
+      z-index: 0;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bar {
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #c9a96e, rgba(201,169,110,0.3));
+    }
+
+    .bar-label {
+      font-size: 9px;
+      color: #64748b;
+      width: 60px;
+      text-align: right;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Instructions */
+    .instructions {
+      position: fixed;
+      bottom: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="grid-pattern"></div>
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+    <div class="gold-line"></div>
+    <div class="gold-line-bottom"></div>
+
+    <div class="content">
+      <!-- Logo -->
+      <div class="logo-block">
+        <div class="logo-icon">
+          <span>HP</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Text -->
+      <div class="text-block">
+        <div class="brand-name">
+          <span class="gold">HealthProcure</span> Intel
+        </div>
+        <div class="tagline">
+          Global Healthcare Procurement Intelligence
+        </div>
+        <div class="sources">
+          <span class="source-pill">TED Europa</span>
+          <span class="source-pill">SAM.gov</span>
+          <span class="source-pill">WHO</span>
+          <span class="source-pill">NHS Supply Chain</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative data bars -->
+    <div class="data-visual">
+      <div class="bar-row">
+        <span class="bar-label">Medical</span>
+        <div class="bar" style="width: 120px;"></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Pharma</span>
+        <div class="bar" style="width: 85px;"></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Health IT</span>
+        <div class="bar" style="width: 95px;"></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Diagnostics</span>
+        <div class="bar" style="width: 70px;"></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">PPE</span>
+        <div class="bar" style="width: 55px;"></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Surgical</span>
+        <div class="bar" style="width: 65px;"></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Lab Equip</span>
+        <div class="bar" style="width: 50px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="instructions">
+    Open in browser → right-click the banner → "Save image as" or take a screenshot (1584 × 396px)
+  </p>
+
+</body>
+</html>

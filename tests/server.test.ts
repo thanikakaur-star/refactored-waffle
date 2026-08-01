@@ -159,9 +159,46 @@ describe("GET /api/v1/sources", () => {
   it("returns data source list", async () => {
     const { status, body } = await apiFetch("/api/v1/sources");
     expect(status).toBe(200);
-    expect(body.data.length).toBe(4);
+    expect(body.data.length).toBe(6);
     expect(body.data.map((s: any) => s.id)).toContain("ted_europa");
     expect(body.data.map((s: any) => s.id)).toContain("sam_gov");
+    expect(body.data.map((s: any) => s.id)).toContain("contracts_finder");
+    expect(body.data.map((s: any) => s.id)).toContain("find_a_tender");
+  });
+});
+
+describe("POST /api/v1/signup/free", () => {
+  async function postJson(path: string, body: unknown) {
+    const res = await fetch(`${BASE}${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    return { status: res.status, body: await res.json() };
+  }
+
+  it("rejects an invalid email", async () => {
+    const { status } = await postJson("/api/v1/signup/free", { email: "not-an-email" });
+    expect(status).toBe(400);
+  });
+
+  it("issues a free key that actually authenticates", async () => {
+    const email = `signup-test-${Date.now()}@example.com`;
+    const { status, body } = await postJson("/api/v1/signup/free", { email });
+    expect(status).toBe(200);
+    expect(body.apiKey).toMatch(/^hpi_/);
+    expect(body.tier).toBe("free");
+
+    // The whole point: the returned key must work on an authed endpoint.
+    const { status: authStatus } = await apiFetch("/api/v1/tenders", body.apiKey);
+    expect(authStatus).toBe(200);
+  });
+
+  it("returns 409 for a duplicate email", async () => {
+    const email = `dup-test-${Date.now()}@example.com`;
+    await postJson("/api/v1/signup/free", { email });
+    const { status } = await postJson("/api/v1/signup/free", { email });
+    expect(status).toBe(409);
   });
 });
 
@@ -178,5 +215,47 @@ describe("Static serving", () => {
     expect(res.status).toBe(200);
     const html = await res.text();
     expect(html).toContain("HealthProcure Intel");
+  });
+
+  it("serves sitemap.xml as XML, not HTML", async () => {
+    const res = await fetch(`${BASE}/sitemap.xml`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type") ?? "").toContain("xml");
+    const body = await res.text();
+    expect(body.startsWith("<?xml")).toBe(true);
+    expect(body).toContain("<urlset");
+  });
+
+  it("serves robots.txt as plain text", async () => {
+    const res = await fetch(`${BASE}/robots.txt`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type") ?? "").toContain("text/plain");
+    const body = await res.text();
+    expect(body).toContain("Sitemap:");
+  });
+
+  it("serves the tenders hub at /tenders", async () => {
+    const res = await fetch(`${BASE}/tenders`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain("Healthcare tenders by category");
+  });
+
+  it("serves a programmatic SEO tender page with a canonical URL", async () => {
+    const res = await fetch(`${BASE}/tenders/medical-devices-tenders-uk`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain("Medical Device Tenders");
+    expect(html).toContain('rel="canonical"');
+    expect(html).toContain("/tenders/medical-devices-tenders-uk");
+  });
+});
+
+describe("Public tenders feed (SEO pages data source)", () => {
+  it("returns a JSON data array without auth and accepts filters", async () => {
+    const res = await fetch(`${BASE}/api/v1/public-tenders?category=medical_devices&region=United%20Kingdom`);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(Array.isArray(body.data)).toBe(true);
   });
 });

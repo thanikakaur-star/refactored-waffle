@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Support — HealthProcure Intel</title>
+  <meta name="description" content="Get help with HealthProcure Intel. Contact our support team for questions about your account, API, billing, or healthcare procurement data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              DEFAULT: '#c9a96e',
+              light: '#d4c4a0',
+              dark: '#a8883f',
+              bright: '#d4af37',
+              muted: '#b8975a',
+            },
+            dark: {
+              DEFAULT: '#0a0a0f',
+              100: '#12141d',
+              200: '#0f1117',
+              300: '#181b27',
+              400: '#1e2130',
+              500: '#252839',
+            },
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'Georgia', 'serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #0a0a0f;
+      color: #e2e8f0;
+    }
+    .nav-blur {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0f; }
+    ::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.3); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(201,169,110,0.5); }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-dark/80 border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <a href="/" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/10">
+            <span class="font-display font-bold text-dark text-lg tracking-tight">HP</span>
+          </div>
+          <span class="hidden sm:block font-body font-semibold text-white text-lg tracking-tight">
+            HealthProcure <span class="text-gold">Intel</span>
+          </span>
+        </a>
+        <div class="flex items-center gap-8">
+          <a href="/" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Home</a>
+          <a href="/dashboard" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Dashboard</a>
+          <a href="/terms" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Terms</a>
+          <a href="/privacy" class="text-sm text-gray-400 hover:text-gold transition-colors duration-200">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="pt-32 pb-12 px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">Customer Support</h1>
+      <p class="text-gray-400 text-lg">We're here to help. Choose how you'd like to get in touch.</p>
+      <div class="mt-6 w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto"></div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-6 lg:px-8 pb-24">
+
+    <!-- Contact Cards -->
+    <div class="grid md:grid-cols-2 gap-6 mb-16">
+
+      <div class="bg-dark-100 border border-white/5 rounded-xl p-8 hover:border-gold/20 transition-colors duration-300">
+        <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </div>
+        <h2 class="font-display text-xl font-semibold text-white mb-2">Email Support</h2>
+        <p class="text-gray-400 text-sm mb-4">For general enquiries, account help, and technical support.</p>
+        <a href="mailto:support@healthprocureintel.com" class="text-gold hover:underline text-sm font-medium">support@healthprocureintel.com</a>
+        <p class="text-gray-500 text-xs mt-2">We aim to respond within 24 hours on business days.</p>
+      </div>
+
+      <div class="bg-dark-100 border border-white/5 rounded-xl p-8 hover:border-gold/20 transition-colors duration-300">
+        <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </div>
+        <h2 class="font-display text-xl font-semibold text-white mb-2">Enterprise Support</h2>
+        <p class="text-gray-400 text-sm mb-4">For Enterprise plan customers with dedicated SLA support.</p>
+        <a href="mailto:enterprise@healthprocureintel.com" class="text-gold hover:underline text-sm font-medium">enterprise@healthprocureintel.com</a>
+        <p class="text-gray-500 text-xs mt-2">Priority response within 4 hours.</p>
+      </div>
+
+      <div class="bg-dark-100 border border-white/5 rounded-xl p-8 hover:border-gold/20 transition-colors duration-300">
+        <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h2 class="font-display text-xl font-semibold text-white mb-2">Billing & Subscriptions</h2>
+        <p class="text-gray-400 text-sm mb-4">Questions about payments, invoices, plan changes, or refunds.</p>
+        <a href="mailto:billing@healthprocureintel.com" class="text-gold hover:underline text-sm font-medium">billing@healthprocureintel.com</a>
+        <p class="text-gray-500 text-xs mt-2">Include your account email for faster resolution.</p>
+      </div>
+
+      <div class="bg-dark-100 border border-white/5 rounded-xl p-8 hover:border-gold/20 transition-colors duration-300">
+        <div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h2 class="font-display text-xl font-semibold text-white mb-2">LinkedIn</h2>
+        <p class="text-gray-400 text-sm mb-4">Follow us for updates, tender highlights, and procurement insights.</p>
+        <a href="https://www.linkedin.com/company/healthprocure-intel" target="_blank" rel="noopener noreferrer" class="text-gold hover:underline text-sm font-medium">HealthProcure Intel on LinkedIn</a>
+        <p class="text-gray-500 text-xs mt-2">Send us a message on LinkedIn anytime.</p>
+      </div>
+
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="mb-16">
+      <h2 class="font-display text-2xl font-semibold text-white mb-8 text-center">Frequently Asked Questions</h2>
+
+      <div class="space-y-4">
+        <div class="bg-dark-100 border border-white/5 rounded-xl p-6">
+          <h3 class="text-white font-medium mb-2">How do I get my API key?</h3>
+          <p class="text-gray-400 text-sm">Sign up for a free account on our <a href="/#cta" class="text-gold hover:underline">homepage</a>. Your API key will be emailed to you immediately. Free tier includes 100 requests per day.</p>
+        </div>
+
+        <div class="bg-dark-100 border border-white/5 rounded-xl p-6">
+          <h3 class="text-white font-medium mb-2">How do I upgrade my plan?</h3>
+          <p class="text-gray-400 text-sm">Click any Subscribe button on our <a href="/#pricing" class="text-gold hover:underline">pricing section</a> to upgrade via Stripe. Your API key limits will be updated automatically.</p>
+        </div>
+
+        <div class="bg-dark-100 border border-white/5 rounded-xl p-6">
+          <h3 class="text-white font-medium mb-2">How do I cancel my subscription?</h3>
+          <p class="text-gray-400 text-sm">Email <a href="mailto:billing@healthprocureintel.com" class="text-gold hover:underline">billing@healthprocureintel.com</a> with your account email. Cancellation takes effect at the end of your current billing period.</p>
+        </div>
+
+        <div class="bg-dark-100 border border-white/5 rounded-xl p-6">
+          <h3 class="text-white font-medium mb-2">Where does the procurement data come from?</h3>
+          <p class="text-gray-400 text-sm">We aggregate data from four public sources: TED Europa (EU tenders), SAM.gov (US federal contracts), WHO Procurement (global health), and NHS Supply Chain (UK healthcare). Data is updated in real time.</p>
+        </div>
+
+        <div class="bg-dark-100 border border-white/5 rounded-xl p-6">
+          <h3 class="text-white font-medium mb-2">Is my data secure?</h3>
+          <p class="text-gray-400 text-sm">Yes. We use industry-standard encryption, never store payment details (handled by Stripe), and comply with GDPR. See our <a href="/privacy" class="text-gold hover:underline">Privacy Policy</a> for full details.</p>
+        </div>
+
+        <div class="bg-dark-100 border border-white/5 rounded-xl p-6">
+          <h3 class="text-white font-medium mb-2">What if I need a custom integration?</h3>
+          <p class="text-gray-400 text-sm">Enterprise plan customers get access to custom integrations, dedicated support, and SLA guarantees. Contact <a href="mailto:enterprise@healthprocureintel.com" class="text-gold hover:underline">enterprise@healthprocureintel.com</a> to discuss your needs.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Response Times -->
+    <div class="bg-dark-100 border border-white/5 rounded-xl p-8">
+      <h2 class="font-display text-xl font-semibold text-white mb-6 text-center">Support Response Times</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-white/10">
+              <th class="text-left px-6 py-3 text-gray-400 font-medium">Plan</th>
+              <th class="text-left px-6 py-3 text-gray-400 font-medium">Email Response</th>
+              <th class="text-left px-6 py-3 text-gray-400 font-medium">Support Channel</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            <tr class="bg-dark-100/50">
+              <td class="px-6 py-4 font-medium text-white">Free</td>
+              <td class="px-6 py-4 text-gray-400">48 hours</td>
+              <td class="px-6 py-4 text-gray-400">Email</td>
+            </tr>
+            <tr class="bg-dark-100/30">
+              <td class="px-6 py-4 font-medium text-white">Basic</td>
+              <td class="px-6 py-4 text-gray-400">24 hours</td>
+              <td class="px-6 py-4 text-gray-400">Email</td>
+            </tr>
+            <tr class="bg-dark-100/50">
+              <td class="px-6 py-4 font-medium text-white">Pro</td>
+              <td class="px-6 py-4 text-gold">12 hours</td>
+              <td class="px-6 py-4 text-gray-400">Priority email</td>
+            </tr>
+            <tr class="bg-dark-100/30">
+              <td class="px-6 py-4 font-medium text-white">Enterprise</td>
+              <td class="px-6 py-4 text-gold">4 hours</td>
+              <td class="px-6 py-4 text-gray-400">Dedicated support + SLA</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 py-12 px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <p>&copy; 2026 HealthProcure Intel. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href="/terms" class="hover:text-gold transition-colors duration-200">Terms of Service</a>
+        <a href="/privacy" class="hover:text-gold transition-colors duration-200">Privacy Policy</a>
+        <a href="/" class="hover:text-gold transition-colors duration-200">Home</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

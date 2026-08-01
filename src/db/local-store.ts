@@ -27,7 +27,10 @@ export interface TenderRow {
 
 export interface AwardRow {
   id: string;
+  external_id: string | null;
   tender_id: string | null;
+  tender_title: string | null;
+  category: string | null;
   award_date: string;
   supplier_name: string;
   supplier_country: string;
@@ -68,6 +71,20 @@ export interface ApiKeyRow {
   stripe_subscription_id: string | null;
 }
 
+export interface AlertRow {
+  id: string;
+  api_key_id: string;
+  email: string;
+  category: ProcurementCategory | null;
+  source: TenderSource | null;
+  region: string | null;
+  country: string | null;
+  keyword: string | null;
+  is_active: boolean;
+  last_notified_at: string | null;
+  created_at: string;
+}
+
 function uuid(): string {
   return crypto.randomUUID();
 }
@@ -76,179 +93,179 @@ const DEV_API_KEY = "hpi_dev_000000000000000000000000000000000000000000000000000
 
 const SEED_TENDERS: TenderRow[] = [
   {
-    id: uuid(), external_id: "TED-2024-001234", source: "ted_europa",
+    id: uuid(), external_id: "TED-2026-001234", source: "ted_europa",
     title: "Supply of MRI Scanners for Regional Hospital Network — Germany",
     description: "Framework agreement for supply, installation, and maintenance of 3T MRI systems across 12 university hospitals in Bavaria",
     buyer_name: "Bayerische Krankenhausgesellschaft", buyer_country: "DE", buyer_region: "Europe",
     category: "medical_devices", status: "open",
-    published_at: "2024-09-01T08:00:00Z", deadline: "2024-11-15T17:00:00Z",
+    published_at: "2026-05-15T08:00:00Z", deadline: "2026-08-30T17:00:00Z",
     original_currency: "EUR", original_value: 28500000, value_usd: 31065000,
     compliance_criteria: ["CE marking", "ISO 13485", "EU MDR 2017/745"], cpv_codes: ["33111000-1"],
-    url: "https://ted.europa.eu/notice/2024-001234", raw_data: {},
+    url: "https://ted.europa.eu/notice/2026-001234", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "SAM-W912DY-24-R-0089", source: "sam_gov",
+    id: uuid(), external_id: "SAM-W912DY-26-R-0089", source: "sam_gov",
     title: "Telehealth Platform for Veterans Affairs Medical Centers",
     description: "Acquisition of cloud-based telehealth and remote patient monitoring platform for 37 VA medical centers nationwide",
     buyer_name: "Department of Veterans Affairs", buyer_country: "US", buyer_region: "North America",
     category: "telemedicine", status: "open",
-    published_at: "2024-08-20T14:00:00Z", deadline: "2024-10-30T23:59:00Z",
+    published_at: "2026-06-01T14:00:00Z", deadline: "2026-09-15T23:59:00Z",
     original_currency: "USD", original_value: 42000000, value_usd: 42000000,
     compliance_criteria: ["FedRAMP High", "HIPAA", "Section 508", "FISMA"], cpv_codes: ["85140000-2"],
     url: "https://sam.gov/opp/W912DY-24-R-0089", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "NHS-SC-2024-PPE-0456", source: "nhs_supply_chain",
+    id: uuid(), external_id: "NHS-SC-2026-PPE-0456", source: "nhs_supply_chain",
     title: "National PPE Framework — Surgical Gowns and Drapes",
     description: "Multi-lot framework for supply of sterile and non-sterile surgical gowns, drapes, and procedural packs to NHS Trusts across England",
     buyer_name: "NHS Supply Chain", buyer_country: "GB", buyer_region: "Europe",
     category: "personal_protective_equipment", status: "open",
-    published_at: "2024-09-10T09:00:00Z", deadline: "2024-12-01T12:00:00Z",
+    published_at: "2026-05-20T09:00:00Z", deadline: "2026-08-15T12:00:00Z",
     original_currency: "GBP", original_value: 15000000, value_usd: 19050000,
     compliance_criteria: ["BSI certification", "NHS commercial standards", "Modern Slavery Act"], cpv_codes: ["33199000-1"],
     url: "https://nhssupplychain.nhs.uk/frameworks/PPE-0456", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "WHO-PRO-2024-DIAG-078", source: "who_procurement",
+    id: uuid(), external_id: "WHO-PRO-2026-DIAG-078", source: "who_procurement",
     title: "Rapid Diagnostic Test Kits — Sub-Saharan Africa Distribution",
     description: "Procurement of WHO-prequalified rapid diagnostic test kits for malaria, HIV, and tuberculosis for distribution across 14 countries",
     buyer_name: "World Health Organization", buyer_country: "CH", buyer_region: "Africa",
     category: "diagnostics", status: "awarded",
-    published_at: "2024-06-01T10:00:00Z", deadline: "2024-08-15T23:59:00Z",
+    published_at: "2026-03-01T10:00:00Z", deadline: "2026-05-15T23:59:00Z",
     original_currency: "USD", original_value: 8700000, value_usd: 8700000,
     compliance_criteria: ["WHO prequalification", "GMP certification", "ISO 13485"], cpv_codes: ["33124100-6"],
     url: "https://www.who.int/procurement/DIAG-078", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "TED-2024-005678", source: "ted_europa",
+    id: uuid(), external_id: "TED-2026-005678", source: "ted_europa",
     title: "Laboratory Automation Systems — Swedish National Board of Health",
     description: "Design, supply, and commissioning of fully automated clinical laboratory systems for 6 regional laboratories in Sweden",
     buyer_name: "Socialstyrelsen", buyer_country: "SE", buyer_region: "Europe",
     category: "laboratory_equipment", status: "open",
-    published_at: "2024-09-15T07:00:00Z", deadline: "2024-12-20T16:00:00Z",
+    published_at: "2026-06-10T07:00:00Z", deadline: "2026-09-20T16:00:00Z",
     original_currency: "SEK", original_value: 180000000, value_usd: 17280000,
     compliance_criteria: ["CE-IVD", "ISO 15189", "GDPR data handling"], cpv_codes: ["38000000-5"],
-    url: "https://ted.europa.eu/notice/2024-005678", raw_data: {},
+    url: "https://ted.europa.eu/notice/2026-005678", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "SAM-FA8732-24-R-0012", source: "sam_gov",
+    id: uuid(), external_id: "SAM-FA8732-26-R-0012", source: "sam_gov",
     title: "Next-Generation Patient Monitoring Systems — DoD Military Hospitals",
     description: "Procurement of wireless patient monitoring systems with real-time vital sign telemetry for 22 military treatment facilities",
     buyer_name: "Defense Health Agency", buyer_country: "US", buyer_region: "North America",
     category: "medical_devices", status: "open",
-    published_at: "2024-10-01T12:00:00Z", deadline: "2025-01-15T23:59:00Z",
+    published_at: "2026-06-15T12:00:00Z", deadline: "2026-10-01T23:59:00Z",
     original_currency: "USD", original_value: 67000000, value_usd: 67000000,
     compliance_criteria: ["FDA 510(k)", "HIPAA", "FedRAMP Moderate", "MIL-STD-810G"], cpv_codes: ["33195000-3"],
     url: "https://sam.gov/opp/FA8732-24-R-0012", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "TED-2024-009012", source: "ted_europa",
+    id: uuid(), external_id: "TED-2026-009012", source: "ted_europa",
     title: "Hospital Information System Upgrade — French Public Hospitals",
     description: "Modernization of electronic health record systems across 45 public hospitals in Ile-de-France region",
     buyer_name: "Assistance Publique – Hopitaux de Paris", buyer_country: "FR", buyer_region: "Europe",
     category: "health_it", status: "open",
-    published_at: "2024-10-05T08:00:00Z", deadline: "2025-02-01T17:00:00Z",
+    published_at: "2026-06-05T08:00:00Z", deadline: "2026-10-15T17:00:00Z",
     original_currency: "EUR", original_value: 95000000, value_usd: 103550000,
     compliance_criteria: ["GDPR", "HDS certification", "Interop santé standards"], cpv_codes: ["48814000-7"],
-    url: "https://ted.europa.eu/notice/2024-009012", raw_data: {},
+    url: "https://ted.europa.eu/notice/2026-009012", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "WHO-PRO-2024-SURG-034", source: "who_procurement",
+    id: uuid(), external_id: "WHO-PRO-2026-SURG-034", source: "who_procurement",
     title: "Surgical Instrument Kits for Emergency Field Hospitals",
     description: "Supply of standardized surgical instrument kits for WHO emergency response operations in conflict zones",
     buyer_name: "World Health Organization", buyer_country: "CH", buyer_region: "Global",
     category: "surgical_instruments", status: "open",
-    published_at: "2024-07-15T10:00:00Z", deadline: "2024-09-30T23:59:00Z",
+    published_at: "2026-04-15T10:00:00Z", deadline: "2026-07-30T23:59:00Z",
     original_currency: "USD", original_value: 3200000, value_usd: 3200000,
     compliance_criteria: ["WHO prequalification", "ISO 7153-1", "CE marking"], cpv_codes: ["33162000-3"],
     url: "https://www.who.int/procurement/SURG-034", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "NHS-SC-2024-PHARMA-089", source: "nhs_supply_chain",
+    id: uuid(), external_id: "NHS-SC-2026-PHARMA-089", source: "nhs_supply_chain",
     title: "Generic Pharmaceuticals Framework — Cardiovascular and Respiratory",
     description: "National framework agreement for supply of generic cardiovascular and respiratory medications to all NHS trusts",
     buyer_name: "NHS Supply Chain", buyer_country: "GB", buyer_region: "Europe",
     category: "pharmaceuticals", status: "planned",
-    published_at: "2024-11-01T09:00:00Z", deadline: "2025-03-01T12:00:00Z",
+    published_at: "2026-07-01T09:00:00Z", deadline: "2026-11-01T12:00:00Z",
     original_currency: "GBP", original_value: 220000000, value_usd: 279400000,
     compliance_criteria: ["MHRA authorization", "GMP", "NHS Standard Contract"], cpv_codes: ["33600000-6"],
     url: "https://nhssupplychain.nhs.uk/frameworks/PHARMA-089", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "SAM-HHS-24-R-0155", source: "sam_gov",
+    id: uuid(), external_id: "SAM-HHS-26-R-0155", source: "sam_gov",
     title: "COVID-19 & Influenza Point-of-Care Testing Devices",
     description: "Blanket purchase agreement for rapid molecular diagnostic devices capable of simultaneous SARS-CoV-2 and influenza A/B detection",
     buyer_name: "Department of Health & Human Services", buyer_country: "US", buyer_region: "North America",
     category: "diagnostics", status: "closed",
-    published_at: "2024-05-01T14:00:00Z", deadline: "2024-07-15T23:59:00Z",
+    published_at: "2026-02-01T14:00:00Z", deadline: "2026-04-15T23:59:00Z",
     original_currency: "USD", original_value: 18500000, value_usd: 18500000,
     compliance_criteria: ["FDA EUA", "CLIA waived", "HIPAA"], cpv_codes: ["33124100-6"],
     url: "https://sam.gov/opp/HHS-24-R-0155", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "TED-2024-011345", source: "ted_europa",
+    id: uuid(), external_id: "TED-2026-011345", source: "ted_europa",
     title: "Robotic Surgery Systems — Italian National Health Service",
     description: "Acquisition of da Vinci-class robotic surgical systems for 8 major teaching hospitals across Italy",
     buyer_name: "Servizio Sanitario Nazionale", buyer_country: "IT", buyer_region: "Europe",
     category: "surgical_instruments", status: "open",
-    published_at: "2024-10-20T08:00:00Z", deadline: "2025-01-31T17:00:00Z",
+    published_at: "2026-06-20T08:00:00Z", deadline: "2026-10-31T17:00:00Z",
     original_currency: "EUR", original_value: 52000000, value_usd: 56680000,
     compliance_criteria: ["CE marking", "ISO 13485", "EU MDR 2017/745", "Italian tender law D.Lgs 50/2016"], cpv_codes: ["33162200-5"],
-    url: "https://ted.europa.eu/notice/2024-011345", raw_data: {},
+    url: "https://ted.europa.eu/notice/2026-011345", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
   {
-    id: uuid(), external_id: "TED-2024-007890", source: "ted_europa",
+    id: uuid(), external_id: "TED-2026-007890", source: "ted_europa",
     title: "Modular Hospital Construction — Polish Ministry of Health",
     description: "Design-build contract for 3 modular hospital facilities with 200-bed capacity each in underserved regions of eastern Poland",
     buyer_name: "Ministerstwo Zdrowia", buyer_country: "PL", buyer_region: "Europe",
     category: "hospital_infrastructure", status: "open",
-    published_at: "2024-08-01T07:00:00Z", deadline: "2024-12-15T16:00:00Z",
+    published_at: "2026-05-01T07:00:00Z", deadline: "2026-09-15T16:00:00Z",
     original_currency: "EUR", original_value: 180000000, value_usd: 196200000,
     compliance_criteria: ["EU structural funds requirements", "Polish building code", "Environmental impact assessment"], cpv_codes: ["45215100-8"],
-    url: "https://ted.europa.eu/notice/2024-007890", raw_data: {},
+    url: "https://ted.europa.eu/notice/2026-007890", raw_data: {},
     scraped_at: new Date().toISOString(), updated_at: new Date().toISOString(),
   },
 ];
 
 const SEED_AWARDS: AwardRow[] = [
   {
-    id: uuid(), tender_id: SEED_TENDERS[3].id,
-    award_date: "2024-08-20T00:00:00Z",
+    id: uuid(), external_id: null, tender_id: SEED_TENDERS[3].id, tender_title: SEED_TENDERS[3].title, category: SEED_TENDERS[3].category,
+    award_date: "2026-05-20T00:00:00Z",
     supplier_name: "Becton Dickinson", supplier_country: "US",
     original_currency: "USD", award_value: 8700000, award_value_usd: 8700000,
     framework_type: "Single supplier", duration: "36 months",
     source: "who_procurement", scraped_at: new Date().toISOString(),
   },
   {
-    id: uuid(), tender_id: SEED_TENDERS[9].id,
-    award_date: "2024-07-25T00:00:00Z",
+    id: uuid(), external_id: null, tender_id: SEED_TENDERS[9].id, tender_title: SEED_TENDERS[9].title, category: SEED_TENDERS[9].category,
+    award_date: "2026-04-25T00:00:00Z",
     supplier_name: "Abbott Laboratories", supplier_country: "US",
     original_currency: "USD", award_value: 18500000, award_value_usd: 18500000,
     framework_type: "Blanket Purchase Agreement", duration: "24 months",
     source: "sam_gov", scraped_at: new Date().toISOString(),
   },
   {
-    id: uuid(), tender_id: null,
-    award_date: "2024-09-10T00:00:00Z",
+    id: uuid(), external_id: null, tender_id: null, tender_title: null, category: null,
+    award_date: "2026-06-10T00:00:00Z",
     supplier_name: "Siemens Healthineers", supplier_country: "DE",
     original_currency: "EUR", award_value: 14200000, award_value_usd: 15478000,
     framework_type: "Framework agreement", duration: "48 months",
     source: "ted_europa", scraped_at: new Date().toISOString(),
   },
   {
-    id: uuid(), tender_id: null,
-    award_date: "2024-06-15T00:00:00Z",
+    id: uuid(), external_id: null, tender_id: null, tender_title: null, category: null,
+    award_date: "2026-03-15T00:00:00Z",
     supplier_name: "Medline Industries", supplier_country: "US",
     original_currency: "GBP", award_value: 8900000, award_value_usd: 11303000,
     framework_type: "Multi-lot framework", duration: "36 months",
@@ -257,12 +274,12 @@ const SEED_AWARDS: AwardRow[] = [
 ];
 
 const SEED_BENCHMARKS: BenchmarkRow[] = [
-  { id: uuid(), region: "Europe", category: "medical_devices", avg_lead_time_days: 42, avg_contract_value_usd: 28500000, tender_count: 156, award_count: 98, compliance_rate: 0.94, period: "2024-Q3", calculated_at: new Date().toISOString() },
-  { id: uuid(), region: "North America", category: "telemedicine", avg_lead_time_days: 35, avg_contract_value_usd: 15000000, tender_count: 89, award_count: 52, compliance_rate: 0.91, period: "2024-Q3", calculated_at: new Date().toISOString() },
-  { id: uuid(), region: "Africa", category: "diagnostics", avg_lead_time_days: 60, avg_contract_value_usd: 5200000, tender_count: 43, award_count: 28, compliance_rate: 0.87, period: "2024-Q3", calculated_at: new Date().toISOString() },
-  { id: uuid(), region: "Europe", category: "pharmaceuticals", avg_lead_time_days: 55, avg_contract_value_usd: 95000000, tender_count: 210, award_count: 145, compliance_rate: 0.96, period: "2024-Q3", calculated_at: new Date().toISOString() },
-  { id: uuid(), region: "Global", category: "surgical_instruments", avg_lead_time_days: 48, avg_contract_value_usd: 3800000, tender_count: 67, award_count: 41, compliance_rate: 0.89, period: "2024-Q3", calculated_at: new Date().toISOString() },
-  { id: uuid(), region: "Europe", category: "health_it", avg_lead_time_days: 38, avg_contract_value_usd: 45000000, tender_count: 112, award_count: 73, compliance_rate: 0.92, period: "2024-Q3", calculated_at: new Date().toISOString() },
+  { id: uuid(), region: "Europe", category: "medical_devices", avg_lead_time_days: 42, avg_contract_value_usd: 28500000, tender_count: 156, award_count: 98, compliance_rate: 0.94, period: "2026-Q2", calculated_at: new Date().toISOString() },
+  { id: uuid(), region: "North America", category: "telemedicine", avg_lead_time_days: 35, avg_contract_value_usd: 15000000, tender_count: 89, award_count: 52, compliance_rate: 0.91, period: "2026-Q2", calculated_at: new Date().toISOString() },
+  { id: uuid(), region: "Africa", category: "diagnostics", avg_lead_time_days: 60, avg_contract_value_usd: 5200000, tender_count: 43, award_count: 28, compliance_rate: 0.87, period: "2026-Q2", calculated_at: new Date().toISOString() },
+  { id: uuid(), region: "Europe", category: "pharmaceuticals", avg_lead_time_days: 55, avg_contract_value_usd: 95000000, tender_count: 210, award_count: 145, compliance_rate: 0.96, period: "2026-Q2", calculated_at: new Date().toISOString() },
+  { id: uuid(), region: "Global", category: "surgical_instruments", avg_lead_time_days: 48, avg_contract_value_usd: 3800000, tender_count: 67, award_count: 41, compliance_rate: 0.89, period: "2026-Q2", calculated_at: new Date().toISOString() },
+  { id: uuid(), region: "Europe", category: "health_it", avg_lead_time_days: 38, avg_contract_value_usd: 45000000, tender_count: 112, award_count: 73, compliance_rate: 0.92, period: "2026-Q2", calculated_at: new Date().toISOString() },
 ];
 
 const SEED_API_KEYS: ApiKeyRow[] = [
@@ -279,9 +296,33 @@ class LocalStore {
   awards: AwardRow[] = [...SEED_AWARDS];
   benchmarks: BenchmarkRow[] = [...SEED_BENCHMARKS];
   apiKeys: ApiKeyRow[] = [...SEED_API_KEYS];
+  alerts: AlertRow[] = [];
 
   findApiKey(key: string): ApiKeyRow | undefined {
     return this.apiKeys.find((k) => k.key === key && k.is_active);
+  }
+
+  findApiKeyByEmail(email: string): ApiKeyRow | undefined {
+    return this.apiKeys.find((k) => k.email === email && k.is_active);
+  }
+
+  createApiKey(params: { key: string; email: string; tier: ApiTier }): ApiKeyRow {
+    const row: ApiKeyRow = {
+      id: uuid(),
+      key: params.key,
+      user_id: params.email,
+      email: params.email,
+      tier: params.tier,
+      is_active: true,
+      request_count: 0,
+      last_used_at: null,
+      created_at: new Date().toISOString(),
+      expires_at: null,
+      stripe_customer_id: null,
+      stripe_subscription_id: null,
+    };
+    this.apiKeys.push(row);
+    return row;
   }
 
   incrementKeyUsage(id: string): void {
@@ -321,7 +362,7 @@ class LocalStore {
   }
 
   queryAwards(filters: {
-    tenderId?: string; supplierCountry?: string; source?: string;
+    tenderId?: string; supplierCountry?: string; supplierName?: string; category?: string; source?: string;
     minValue?: number; maxValue?: number;
     awardedAfter?: string; awardedBefore?: string;
     page: number; pageSize: number;
@@ -330,6 +371,11 @@ class LocalStore {
 
     if (filters.tenderId) result = result.filter((a) => a.tender_id === filters.tenderId);
     if (filters.supplierCountry) result = result.filter((a) => a.supplier_country === filters.supplierCountry);
+    if (filters.supplierName) {
+      const needle = filters.supplierName.toLowerCase();
+      result = result.filter((a) => a.supplier_name.toLowerCase().includes(needle));
+    }
+    if (filters.category) result = result.filter((a) => a.category === filters.category);
     if (filters.source) result = result.filter((a) => a.source === filters.source);
     if (filters.minValue) result = result.filter((a) => a.award_value_usd >= filters.minValue!);
     if (filters.maxValue) result = result.filter((a) => a.award_value_usd <= filters.maxValue!);
@@ -392,6 +438,30 @@ class LocalStore {
     if (filters.region) result = result.filter((b) => b.region === filters.region);
     if (filters.category) result = result.filter((b) => b.category === filters.category);
     return result.sort((a, b) => b.calculated_at.localeCompare(a.calculated_at));
+  }
+
+  createAlert(alert: Omit<AlertRow, "id" | "is_active" | "last_notified_at" | "created_at">): AlertRow {
+    const row: AlertRow = {
+      ...alert,
+      id: uuid(),
+      is_active: true,
+      last_notified_at: null,
+      created_at: new Date().toISOString(),
+    };
+    this.alerts.push(row);
+    return row;
+  }
+
+  listAlerts(apiKeyId: string): AlertRow[] {
+    return this.alerts
+      .filter((a) => a.api_key_id === apiKeyId)
+      .sort((a, b) => b.created_at.localeCompare(a.created_at));
+  }
+
+  deleteAlert(id: string, apiKeyId: string): boolean {
+    const before = this.alerts.length;
+    this.alerts = this.alerts.filter((a) => !(a.id === id && a.api_key_id === apiKeyId));
+    return this.alerts.length < before;
   }
 }
 
