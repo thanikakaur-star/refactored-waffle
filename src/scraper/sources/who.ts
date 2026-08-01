@@ -24,6 +24,13 @@ interface UngmRow {
   rowText: string;
 }
 
+// UNGM row text is prefixed with a save/subscribe call-to-action; the real
+// notice title/description follows it. Strip everything up to and including
+// "... save procurement opportunities." to recover the content.
+function cleanUngmText(rowText: string): string {
+  return rowText.replace(/^.*?save procurement opportunities\.\s*/i, "").trim();
+}
+
 export class WHOProcurementScraper extends BaseScraper {
   readonly source = "who_procurement" as const;
   readonly baseUrl = "https://www.ungm.org";
@@ -86,20 +93,28 @@ export class WHOProcurementScraper extends BaseScraper {
     const out: Partial<Tender>[] = [];
     for (const row of rows) {
       if (!row.id || seen.has(row.id)) continue;
-      if (!row.title) continue;
+
+      // The anchor text is a generic "Open in a new window" icon label — the
+      // real notice title lives in rowText, behind UNGM's boilerplate ("Unsave
+      // this procurement opportunity. Subscribe to UNGM Pro … save procurement
+      // opportunities."). Strip that prefix, then take the lead of what remains
+      // as the title and classify on it.
+      const cleanText = cleanUngmText(row.rowText);
+      if (!cleanText) continue;
+      const title = cleanText.slice(0, 160);
 
       // Keep WHO notices, or clearly health-related notices from any UN agency
-      // (UNGM hosts many health buyers — WHO, UNICEF, UNFPA, etc.). The row
-      // text is the only agency signal we have without the detail page.
-      const isWho = /who\b|world health/i.test(row.rowText);
-      const category = classifyUkTender(row.title, row.rowText);
-      const healthText = /health|medical|pharma|vaccine|hospital|clinic|diagnostic|surgical|laborator/i.test(
-        `${row.title} ${row.rowText}`,
-      );
+      // (UNGM hosts many health buyers — WHO, UNICEF, UNFPA, etc.).
+      const isWho = /who\b|world health/i.test(cleanText);
+      const category = classifyUkTender(title, cleanText);
+      const healthText =
+        /health|medical|pharma|vaccine|hospital|clinic|diagnostic|surgical|laborator|menstru|sanitary|hygiene|\bwash\b|sanitation|dignity kit|reproductive|nutrition/i.test(
+          cleanText,
+        );
       if (!isWho && !healthText && category === "other") continue;
 
       seen.add(row.id);
-      out.push(this.mapRow(row, category));
+      out.push(this.mapRow(row, category, title, cleanText));
     }
 
     logger.info("WHO/UNGM: notices scraped", { anchors: rows.length, kept: out.length });
@@ -110,18 +125,18 @@ export class WHOProcurementScraper extends BaseScraper {
     return [];
   }
 
-  private mapRow(row: UngmRow, category: ProcurementCategory): Partial<Tender> {
+  private mapRow(row: UngmRow, category: ProcurementCategory, title: string, cleanText: string): Partial<Tender> {
     const url = row.href.startsWith("http") ? row.href : `${this.baseUrl}${row.href}`;
     // Best-effort deadline: look for a dd-Mon-yyyy or ISO-ish date in the row.
-    const dateMatch = row.rowText.match(/\d{1,2}[-/\s][A-Za-z]{3,}[-/\s]\d{4}|\d{4}-\d{2}-\d{2}/);
+    const dateMatch = cleanText.match(/\d{1,2}[-/\s][A-Za-z]{3,}[-/\s]\d{4}|\d{4}-\d{2}-\d{2}/);
     const deadline = dateMatch ? new Date(dateMatch[0]) : null;
 
     return {
       externalId: row.id,
       source: "who_procurement",
-      title: row.title,
-      description: row.rowText.slice(0, 500),
-      buyerName: /who\b|world health/i.test(row.rowText) ? "World Health Organization" : "UN Agency (UNGM)",
+      title,
+      description: cleanText.slice(0, 500),
+      buyerName: /who\b|world health/i.test(cleanText) ? "World Health Organization" : "UN Agency (UNGM)",
       buyerCountry: "CH",
       buyerRegion: "Global",
       category,
