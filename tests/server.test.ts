@@ -216,4 +216,29 @@ describe("Static serving", () => {
     const html = await res.text();
     expect(html).toContain("HealthProcure Intel");
   });
+
+  it("serves the tenders hub at /tenders", async () => {
+    const res = await fetch(`${BASE}/tenders`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain("Healthcare tenders by category");
+  });
+
+  it("serves a programmatic SEO tender page with a canonical URL", async () => {
+    const res = await fetch(`${BASE}/tenders/medical-devices-tenders-uk`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain("Medical Device Tenders");
+    expect(html).toContain('rel="canonical"');
+    expect(html).toContain("/tenders/medical-devices-tenders-uk");
+  });
+});
+
+describe("Public tenders feed (SEO pages data source)", () => {
+  it("returns a JSON data array without auth and accepts filters", async () => {
+    const res = await fetch(`${BASE}/api/v1/public-tenders?category=medical_devices&region=United%20Kingdom`);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(Array.isArray(body.data)).toBe(true);
+  });
 });

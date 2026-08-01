@@ -860,6 +860,61 @@ app.get("/api/v1/feed", async (_req, res) => {
   }
 });
 
+// Public, filtered teaser feed powering the programmatic SEO landing pages
+// (/tenders/<slug>). Same marketing surface as /api/v1/feed — display-safe
+// fields only, capped, and cached per filter-combo for 5 minutes so crawler
+// and organic traffic can't hammer the database. NOT the authenticated API.
+const publicTendersCache = new Map<string, { at: number; data: unknown[] }>();
+const PUBLIC_TENDERS_TTL_MS = 5 * 60_000;
+const PUBLIC_TENDERS_MAX = 12;
+
+app.get("/api/v1/public-tenders", async (req, res) => {
+  const category = typeof req.query.category === "string" ? req.query.category : undefined;
+  const region = typeof req.query.region === "string" ? req.query.region : undefined;
+  const country = typeof req.query.country === "string" ? req.query.country : undefined;
+  const cacheKey = `${category ?? ""}|${region ?? ""}|${country ?? ""}`;
+
+  const now = Date.now();
+  const hit = publicTendersCache.get(cacheKey);
+  if (hit && now - hit.at < PUBLIC_TENDERS_TTL_MS) {
+    res.json({ data: hit.data, cached: true });
+    return;
+  }
+
+  try {
+    let rows: Array<Record<string, unknown>> = [];
+    if (USE_SUPABASE && supabase) {
+      let q = supabase
+        .from("tenders")
+        .select("source, category, title, value_usd, deadline, buyer_country, buyer_region, status, url")
+        .eq("status", "open")
+        .order("published_at", { ascending: false })
+        .limit(PUBLIC_TENDERS_MAX);
+      if (category) q = q.eq("category", category);
+      if (region) q = q.eq("buyer_region", region);
+      if (country) q = q.eq("buyer_country", country);
+      const { data } = await q;
+      rows = data ?? [];
+    } else {
+      const { data } = localStore.queryTenders({ page: 1, pageSize: 50, category } as never);
+      rows = (data ?? [])
+        .map((t: any) => ({
+          source: t.source, category: t.category, title: t.title,
+          value_usd: t.valueUsd ?? t.value_usd, deadline: t.deadline,
+          buyer_country: t.buyerCountry ?? t.buyer_country,
+          buyer_region: t.buyerRegion ?? t.buyer_region, status: t.status, url: t.url,
+        }))
+        .filter((t: any) => (!region || t.buyer_region === region) && (!country || t.buyer_country === country))
+        .slice(0, PUBLIC_TENDERS_MAX);
+    }
+    publicTendersCache.set(cacheKey, { at: now, data: rows });
+    res.json({ data: rows, cached: false });
+  } catch (err) {
+    logger.warn("Public tenders query failed", { error: String(err), cacheKey });
+    res.json({ data: hit?.data ?? [], cached: true });
+  }
+});
+
 // --- Admin (private) ---
 
 // Gate admin endpoints behind a single secret token (set ADMIN_TOKEN on the
@@ -1163,6 +1218,20 @@ for (const page of staticPages) {
     res.sendFile(path.join(publicDir, `${page}.html`));
   });
 }
+
+// Programmatic SEO landing pages: /tenders (hub) and /tenders/<slug>
+app.get("/tenders", (_req, res) => {
+  res.sendFile(path.join(publicDir, "tenders", "index.html"));
+});
+app.get("/tenders/:slug", (req, res) => {
+  const slug = path.basename(req.params.slug, ".html");
+  const filePath = path.join(publicDir, "tenders", `${slug}.html`);
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).sendFile(path.join(publicDir, "index.html"));
+  }
+});
 
 // Serve individual blog posts with clean URLs: /blog/<slug>
 app.get("/blog/:slug", (req, res) => {
