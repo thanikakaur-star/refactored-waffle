@@ -256,6 +256,11 @@ describe("Admin leads endpoint", () => {
     const res = await fetch(`${BASE}/api/admin/leads`);
     expect([401, 403, 503]).toContain(res.status);
   });
+
+  it("gates the email-enrich endpoint too", async () => {
+    const res = await fetch(`${BASE}/api/admin/leads/enrich?company=Acme`);
+    expect([401, 403, 503]).toContain(res.status);
+  });
 });
 
 describe("Public tenders feed (SEO pages data source)", () => {
