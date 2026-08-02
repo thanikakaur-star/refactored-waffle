@@ -111,6 +111,29 @@
         </table></div>
       </div>
 
+      <!-- Outreach leads -->
+      <div class="card rounded-2xl p-5 mb-10">
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-3">
+          <div>
+            <h3 class="font-display font-semibold text-white">Outreach leads</h3>
+            <p class="text-xs text-gray-500 mt-1">Suppliers who recently won healthcare contracts. Your warmest prospects, ranked by recency and value, each with a built-in icebreaker.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="leads-days" class="text-sm rounded-lg px-3 py-2 bg-dark-400 border border-white/10 text-white">
+              <option value="90">Won in 90 days</option>
+              <option value="180" selected>Won in 180 days</option>
+              <option value="365">Won in 1 year</option>
+            </select>
+            <button id="leads-refresh" class="text-sm px-4 py-2 rounded-lg font-semibold" style="background: linear-gradient(135deg,#c9a96e,#a8883f); color:#0a0a0f;">Refresh</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto"><table class="w-full" id="leads-table">
+          <thead><tr><th>Supplier</th><th>Country</th><th class="num">Wins</th><th class="num">Total (USD)</th><th class="num">Latest win</th><th>Latest contract</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+        <p id="leads-note" class="text-xs text-gray-500 mt-3 hidden"></p>
+      </div>
+
       <div class="h-px mb-8" style="background: rgba(255,255,255,0.06);"></div>
 
       <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
@@ -177,7 +200,7 @@
       return res.json();
     }
 
-    function showDash() { $('login').classList.add('hidden'); $('dash').classList.remove('hidden'); $('logout-btn').classList.remove('hidden'); loadOverview(); loadSeo(); }
+    function showDash() { $('login').classList.add('hidden'); $('dash').classList.remove('hidden'); $('logout-btn').classList.remove('hidden'); loadOverview(); loadLeads(); loadSeo(); }
 
     function money(n) { return '$' + Number(n || 0).toLocaleString(); }
 
@@ -227,6 +250,42 @@
       }
     }
 
+    function outreachLine(supplier, contract) {
+      return 'Hi [Name], congrats on ' + supplier + "'s recent win" + (contract ? ' on ' + contract : '') +
+        '. I track new NHS and EU healthcare tenders in your category so you can line up the next one early. I pulled a few that are open right now, want me to send them?';
+    }
+
+    async function loadLeads() {
+      const days = $('leads-days').value;
+      try {
+        const res = await adminFetch('/api/admin/leads?days=' + days + '&limit=50');
+        const rows = (res.data && res.data.leads) || [];
+        window._leads = rows;
+        document.querySelector('#leads-table tbody').innerHTML = rows.map((l, i) =>
+          '<tr>' +
+            '<td>' + escapeHtml(l.supplier) + '</td>' +
+            '<td>' + escapeHtml(l.country || '') + '</td>' +
+            '<td class="num">' + fmt(l.wins) + '</td>' +
+            '<td class="num">' + money(l.totalUsd) + '</td>' +
+            '<td class="num">' + (l.latestWin ? new Date(l.latestWin).toLocaleDateString() : '') + '</td>' +
+            '<td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escapeHtml(l.latestContract || '') + '</td>' +
+            '<td><button data-i="' + i + '" class="leads-copy text-xs px-2 py-1 rounded" style="border:1px solid rgba(201,169,110,0.4); color:#c9a96e;">Copy</button></td>' +
+          '</tr>'
+        ).join('') || '<tr><td colspan="7" style="color:#64748b">No recent award-winners found yet. Run a scrape to populate award data.</td></tr>';
+        if (res.data && res.data.note) { $('leads-note').textContent = res.data.note; $('leads-note').classList.remove('hidden'); }
+        else { $('leads-note').classList.add('hidden'); }
+        document.querySelectorAll('.leads-copy').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const l = window._leads[Number(btn.getAttribute('data-i'))];
+            navigator.clipboard.writeText(outreachLine(l.supplier, l.latestContract)).catch(() => {});
+            btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+          });
+        });
+      } catch (e) {
+        if (e.status === 401) { sessionStorage.removeItem('hp_admin_token'); showLogin('Session expired. Enter your token again.'); }
+      }
+    }
+
     async function loadSeo() {
       const days = $('range').value;
       $('dash-error').classList.add('hidden');
@@ -261,6 +320,8 @@
     $('login-btn').addEventListener('click', tryLogin);
     $('token-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
     $('range').addEventListener('change', loadSeo);
+    $('leads-refresh').addEventListener('click', loadLeads);
+    $('leads-days').addEventListener('change', loadLeads);
     $('logout-btn').addEventListener('click', () => { sessionStorage.removeItem('hp_admin_token'); adminToken = ''; showLogin(); });
 
     // Auto-login if a token is already stored

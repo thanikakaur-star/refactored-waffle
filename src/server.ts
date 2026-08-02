@@ -1177,6 +1177,67 @@ app.get("/api/admin/sources", requireAdmin, async (_req, res) => {
   res.json({ data: { sources, lastRuns, mode: USE_SUPABASE ? "production" : "local" } });
 });
 
+// Automated outreach leads: suppliers who recently won healthcare contracts,
+// ranked by recency and value. These are the warmest possible prospects (real,
+// verifiable high intent), each with a built-in icebreaker (their latest win).
+// Replaces running the leads SQL by hand.
+app.get("/api/admin/leads", requireAdmin, async (req, res) => {
+  const days = Math.min(Math.max(Number(req.query.days) || 180, 7), 730);
+  const limit = Math.min(Math.max(Number(req.query.limit) || 50, 1), 200);
+  const since = new Date(Date.now() - days * 86_400_000).toISOString();
+
+  if (!(USE_SUPABASE && supabase)) {
+    res.json({ data: { leads: [], mode: "local", note: "Leads require Supabase (production)." } });
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("contract_awards")
+      .select("supplier_name, supplier_country, award_value_usd, award_date, tender_title, category, source")
+      .not("supplier_name", "is", null)
+      .gte("award_date", since)
+      .order("award_date", { ascending: false })
+      .limit(3000);
+    if (error) throw error;
+
+    const bySupplier = new Map<string, any>();
+    for (const a of data ?? []) {
+      const name = ((a as any).supplier_name || "").trim();
+      if (!name) continue;
+      let e = bySupplier.get(name);
+      if (!e) {
+        e = { supplier: name, country: (a as any).supplier_country || "", wins: 0, totalUsd: 0, latest: a, categories: new Set<string>() };
+        bySupplier.set(name, e);
+      }
+      e.wins += 1;
+      e.totalUsd += Number((a as any).award_value_usd) || 0;
+      if ((a as any).category) e.categories.add((a as any).category);
+      if ((a as any).award_date > e.latest.award_date) e.latest = a;
+    }
+
+    const leads = [...bySupplier.values()]
+      .map((e) => ({
+        supplier: e.supplier,
+        country: e.country,
+        wins: e.wins,
+        totalUsd: Math.round(e.totalUsd),
+        latestWin: (e.latest as any).award_date,
+        latestContract: (e.latest as any).tender_title || "",
+        latestValueUsd: Math.round(Number((e.latest as any).award_value_usd) || 0),
+        source: (e.latest as any).source,
+        categories: [...e.categories],
+      }))
+      .sort((a, b) => (a.latestWin < b.latestWin ? 1 : a.latestWin > b.latestWin ? -1 : b.totalUsd - a.totalUsd))
+      .slice(0, limit);
+
+    res.json({ data: { leads, days, mode: "production", generatedAt: new Date().toISOString() } });
+  } catch (err) {
+    logger.warn("Admin leads query failed", { error: String(err) });
+    res.status(500).json({ error: "Failed to build leads." });
+  }
+});
+
 // Resolve static asset directories — bulletproof for any CWD or __dirname
 const publicDir = [
   path.resolve(__dirname, "..", "public"),

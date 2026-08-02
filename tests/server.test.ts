@@ -251,6 +251,13 @@ describe("Static serving", () => {
   });
 });
 
+describe("Admin leads endpoint", () => {
+  it("is gated behind admin auth (no token => not 200)", async () => {
+    const res = await fetch(`${BASE}/api/admin/leads`);
+    expect([401, 403, 503]).toContain(res.status);
+  });
+});
+
 describe("Public tenders feed (SEO pages data source)", () => {
   it("returns a JSON data array without auth and accepts filters", async () => {
     const res = await fetch(`${BASE}/api/v1/public-tenders?category=medical_devices&region=United%20Kingdom`);
