@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Documentation — HealthProcure Intel</title>
+  <title>API Documentation, HealthProcure Intel</title>
   <meta name="description" content="HealthProcure Intel API documentation. Access global healthcare procurement data from TED Europa, SAM.gov, WHO, and NHS Supply Chain." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -986,7 +986,7 @@
 console.<span class="fn">log</span>(<span class="str">`Found ${pagination.total} tenders`</span>);
 
 <span class="kw">for</span> (<span class="kw">const</span> tender <span class="kw">of</span> data) {
-  console.<span class="fn">log</span>(<span class="str">`${tender.title} — $${tender.value_usd?.toLocaleString()}`</span>);
+  console.<span class="fn">log</span>(<span class="str">`${tender.title}, $${tender.value_usd?.toLocaleString()}`</span>);
 }</code>
             </div>
 
@@ -1031,7 +1031,7 @@ data <span class="op">=</span> response.<span class="fn">json</span>()
 <span class="fn">print</span>(<span class="str">f"Found {data['pagination']['total']} tenders"</span>)
 
 <span class="kw">for</span> tender <span class="kw">in</span> data[<span class="str">"data"</span>]:
-    <span class="fn">print</span>(<span class="str">f"{tender['title']} — ${tender['value_usd']:,.0f}"</span>)</code>
+    <span class="fn">print</span>(<span class="str">f"{tender['title']}, ${tender['value_usd']:,.0f}"</span>)</code>
             </div>
 
             <h4 class="text-sm text-gray-300 font-medium mb-3">Paginate through all awards</h4>
