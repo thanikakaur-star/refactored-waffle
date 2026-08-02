@@ -978,6 +978,227 @@ const posts = [
         ["How do I choose a tender tool?", "Match its source coverage to your markets, check its classification accuracy, and make sure its alerts and award data fit how you bid."],
       ]),
   },
+  {
+    slug: "nhs-procurement-explained",
+    tag: "Guide", read: 8, crumb: "NHS Procurement",
+    title: "NHS Procurement Explained: How the NHS Buys (2026)",
+    h1: "NHS Procurement Explained: How the NHS Buys",
+    desc: "How NHS procurement works: who buys, the routes to market (frameworks, DPS, direct award), where tenders are published, and how suppliers win NHS contracts.",
+    keywords: "NHS procurement, how the NHS buys, NHS tenders and contracts, NHS procurement process, NHS supplier, NHS framework, NHS Supply Chain",
+    ctaTitle: "Track every NHS tender in one feed",
+    ctaText: "NHS tenders from Find a Tender, Contracts Finder and NHS Supply Chain, aggregated and alerted. Free tier, no credit card.",
+    body:
+      p("<strong>The NHS is one of the largest buyers in the world, spending tens of billions a year on everything from medicines and devices to clinical staffing and IT.</strong> For suppliers, understanding how the NHS buys is the difference between winning work and watching contracts go to competitors who understood the system.") +
+      h2("Who actually does the buying") +
+      ul([
+        "<strong>NHS trusts</strong> and foundation trusts, which run their own procurement for many goods and services",
+        "<strong>Integrated care boards (ICBs)</strong>, which commission services at population scale, see <a href=\"/blog/integrated-care-boards-procurement\">selling to ICBs</a>",
+        "<strong>NHS Supply Chain (SCCL)</strong>, which runs national framework agreements for common products",
+        "<strong>Local authorities</strong>, for social-care-adjacent and community services",
+      ]) +
+      h2("The routes to market") +
+      p("The NHS almost never buys by simply picking a supplier. Instead it uses recognised procurement routes:") +
+      ul([
+        "<strong>Frameworks</strong>, pre-approved supplier lists that trusts call off from, see <a href=\"/blog/framework-agreements-healthcare-procurement\">frameworks explained</a>",
+        "<strong>Dynamic Purchasing Systems (DPS)</strong>, open lists you can join at any time, see <a href=\"/blog/framework-vs-dps\">framework vs DPS</a>",
+        "<strong>Open tenders</strong> for one-off or higher-value requirements",
+        "<strong>Direct award</strong> below certain thresholds, see <a href=\"/blog/procurement-thresholds-explained\">procurement thresholds</a>",
+      ]) +
+      h2("Where NHS tenders are published") +
+      p("Above-threshold contracts appear on <strong>Find a Tender</strong>, below-threshold ones on <strong>Contracts Finder</strong>, and framework notices via <strong>NHS Supply Chain</strong>. Because opportunities are spread across all three (plus dozens of trust portals), suppliers increasingly monitor them in one place rather than checking each by hand, see <a href=\"/blog/how-to-find-nhs-tenders\">how to find NHS tenders</a> and browse live ones on our <a href=\"/tenders\">tenders hub</a>.") +
+      h2("How suppliers win NHS work") +
+      ul([
+        "Register on the right frameworks and DPS for your category early",
+        "Lead bids with quality, workforce and social value, not just price, see <a href=\"/blog/bid-writing-tips-healthcare\">bid-writing tips</a>",
+        "Use <a href=\"/blog/reading-contract-award-notices\">award data</a> to benchmark price and see who is winning",
+        "Get in early, see <a href=\"/blog/how-to-become-an-nhs-supplier\">becoming an NHS supplier</a>",
+      ]) +
+      faq([
+        ["How does NHS procurement work?", "The NHS buys through formal routes, frameworks, Dynamic Purchasing Systems, open tenders and (below thresholds) direct award, publishing opportunities on Find a Tender, Contracts Finder and NHS Supply Chain."],
+        ["How do I find NHS tenders and contracts?", "Monitor Find a Tender and Contracts Finder plus NHS Supply Chain notices. Aggregators pull all of these into one searchable feed with alerts."],
+        ["Do I have to be on a framework to sell to the NHS?", "Not always, but many purchases go through frameworks or DPS, so being listed on the right ones significantly widens your access."],
+      ]),
+  },
+  {
+    slug: "best-healthcare-tender-tools",
+    tag: "Guide", read: 8, crumb: "Tender Tools",
+    title: "Best Tender Tracking Tools for Healthcare Suppliers (2026)",
+    h1: "Best Tender Tracking Tools for Healthcare Suppliers",
+    desc: "How to choose a tender tracking tool for healthcare: the types available, the features that matter (coverage, classification, alerts, award data), and what to compare.",
+    keywords: "tender tracking tools, tender alert software, healthcare tender software, best tender tools, tender intelligence platform, tender monitoring service",
+    ctaTitle: "Try healthcare tender tracking free",
+    ctaText: "Aggregated healthcare tenders and award data from eight global sources, searchable and alerted. Free tier, no credit card.",
+    body:
+      p("<strong>If you supply into healthcare, a good tender tracking tool pays for itself the first time it catches a contract you would have missed.</strong> But tools vary widely, and the right one depends on where you sell and what you need. Here is how to compare them.") +
+      h2("The types of tool") +
+      ul([
+        "<strong>Single-portal alerts</strong>, free but cover only one source (e.g. Contracts Finder's own email alerts)",
+        "<strong>National aggregators</strong>, cover one country's portals in one place",
+        "<strong>Global tender intelligence</strong>, aggregate many countries and add award/pricing data, see <a href=\"/blog/what-is-tender-intelligence\">what is tender intelligence</a>",
+      ]) +
+      h2("The features that actually matter") +
+      ul([
+        "<strong>Source coverage</strong>, does it include the portals and countries you sell into? (NHS, EU, US, World Bank, UN)",
+        "<strong>Classification quality</strong>, accurate categories and <a href=\"/blog/understanding-cpv-codes\">CPV/NAICS codes</a> so you find the right tenders and miss fewer",
+        "<strong>Alerts</strong>, timely and filterable, see <a href=\"/blog/healthcare-tender-alerts-guide\">tender alerts</a>",
+        "<strong>Award data</strong>, so you can benchmark price and see <a href=\"/blog/who-is-winning-healthcare-contracts-award-data\">who is winning</a>",
+        "<strong>Price</strong>, and whether there is a free tier to trial it",
+      ]) +
+      h2("Why coverage is the deciding factor") +
+      p("A tool that watches one portal just recreates the problem you are trying to solve. The whole value is breadth, one feed instead of a dozen logins, see <a href=\"/blog/manual-tender-tracking-vs-platform\">manual tracking vs a platform</a>. If you sell across borders, global coverage (including World Bank and UN channels) is what separates a genuine intelligence platform from a basic alert service.") +
+      h2("How to trial one") +
+      ul([
+        "Start with a free tier so you can test real coverage in your category",
+        "Search your last few won or lost tenders, did the tool have them?",
+        "Set an alert and see how fast and relevant it is",
+        "Browse live opportunities by category on our <a href=\"/tenders\">tenders hub</a>",
+      ]) +
+      faq([
+        ["What is the best tender tracking tool for healthcare?", "The best one is the one that covers your markets, classifies accurately, alerts you fast and includes award data. Match coverage to where you sell, and trial a free tier before paying."],
+        ["Are free tender alerts enough?", "Free single-portal alerts help, but they only cover one source. Suppliers who sell across multiple portals or countries usually need an aggregator so nothing slips through."],
+        ["What is tender intelligence software?", "A supplier-side tool that aggregates tenders from many portals, alerts you to relevant ones, and adds award data for benchmarking."],
+      ]),
+  },
+  {
+    slug: "how-to-sell-to-hospitals",
+    tag: "Guide", read: 8, crumb: "Selling to Hospitals",
+    title: "How to Sell to Hospitals: A Supplier's Guide (2026)",
+    h1: "How to Sell to Hospitals: A Supplier's Guide",
+    desc: "A practical guide to selling medical products and services to hospitals: how hospital buying works, who decides, and how to find and win hospital contracts.",
+    keywords: "how to sell to hospitals, selling to hospitals, hospital sales, hospital procurement, medical sales, hospital supplier, hospital contracts",
+    ctaTitle: "Find hospital tenders in one place",
+    ctaText: "Hospital and health-system tenders from the NHS, EU, US and beyond, in one feed. Free tier, no credit card.",
+    body:
+      p("<strong>Selling to hospitals is different from almost any other kind of sales, because hospitals rarely buy on a sales call.</strong> They buy through structured procurement, influenced by clinicians, procurement teams and finance. Understanding that system is how you win.") +
+      h2("How hospital buying really works") +
+      p("A single hospital purchase can involve clinical evaluation, procurement compliance and budget sign-off. Public hospitals must also follow procurement law, which means published tenders and scored bids rather than a handshake. Private hospital groups have more freedom but still run formal processes for anything significant.") +
+      h2("Who influences the decision") +
+      ul([
+        "<strong>Clinicians and department heads</strong>, who specify what is needed and evaluate quality",
+        "<strong>Procurement and supply-chain teams</strong>, who run the process and enforce the rules",
+        "<strong>Finance</strong>, which controls budgets and value-for-money criteria",
+      ]) +
+      h2("How to find hospital contracts") +
+      p("Public hospital opportunities are published as tenders, in the UK on Find a Tender and Contracts Finder, in the EU on TED, in the US on SAM.gov, and globally via the World Bank and UN. Monitoring them in one feed means you see them the day they open, see <a href=\"/blog/how-to-find-nhs-tenders\">how to find NHS tenders</a> and our <a href=\"/tenders\">tenders hub</a>.") +
+      h2("How to win") +
+      ul([
+        "Get clinical buy-in early, clinicians drive specifications",
+        "Evidence outcomes, safety and total cost of ownership, not just price",
+        "Understand the buying route (framework, DPS, tender), see <a href=\"/blog/framework-agreements-healthcare-procurement\">frameworks</a>",
+        "Price against real <a href=\"/blog/reading-contract-award-notices\">award data</a>",
+      ]) +
+      faq([
+        ["How do you sell medical products to hospitals?", "Through their procurement process, not a cold sales call. Get clinical support, respond to published tenders or get onto the relevant frameworks, and evidence quality and value."],
+        ["Who makes purchasing decisions in a hospital?", "Usually a combination: clinicians specify and evaluate, procurement runs the process, and finance signs off the budget."],
+        ["Where are hospital tenders published?", "On public procurement portals, Find a Tender and Contracts Finder in the UK, TED in the EU, SAM.gov in the US, and World Bank and UN channels globally."],
+      ]),
+  },
+  {
+    slug: "what-is-tender-intelligence",
+    tag: "Guide", read: 7, crumb: "Tender Intelligence",
+    title: "What Is Tender Intelligence? (And Why Suppliers Use It)",
+    h1: "What Is Tender Intelligence?",
+    desc: "Tender intelligence explained: what it is, how it differs from basic tender alerts, and how suppliers use it to find opportunities earlier and win more contracts.",
+    keywords: "tender intelligence, what is tender intelligence, procurement intelligence, tender intelligence platform, market intelligence tenders, bid intelligence",
+    ctaTitle: "See tender intelligence in action",
+    ctaText: "Aggregated tenders and award data across eight global sources, with alerts and benchmarks. Free tier, no credit card.",
+    body:
+      p("<strong>Tender intelligence is the practice of turning scattered public procurement data into a clear, actionable picture of opportunities, competitors and prices.</strong> It goes beyond simply being told a tender exists, it helps you decide which to pursue and how to win.") +
+      h2("Tender alerts vs tender intelligence") +
+      p("A basic tender alert tells you a matching opportunity was published. Tender intelligence adds context: who else is likely bidding, what similar contracts were awarded for, which buyers are active in your category, and when existing contracts expire. It is the difference between a notification and a strategy.") +
+      h2("What tender intelligence includes") +
+      ul([
+        "<strong>Aggregated tenders</strong> from many portals and countries in one feed",
+        "<strong>Award and pricing data</strong> for benchmarking, see <a href=\"/blog/who-is-winning-healthcare-contracts-award-data\">who is winning</a>",
+        "<strong>Classification</strong> by category and <a href=\"/blog/understanding-cpv-codes\">CPV/NAICS codes</a>",
+        "<strong>Alerts</strong> so nothing is missed, see <a href=\"/blog/healthcare-tender-alerts-guide\">tender alerts</a>",
+      ]) +
+      h2("How suppliers use it") +
+      ul([
+        "To find opportunities earlier, more time means better bids",
+        "To be selective, pursuing only the tenders they can win",
+        "To price competitively using real award data",
+        "To spot when a rival's contract is up for renewal",
+      ]) +
+      h2("Who benefits most") +
+      p("Any supplier or sales team that bids for public healthcare contracts, from medtech and pharma to clinical and <a href=\"/blog/allied-health-procurement-guide\">allied health</a> service providers, and the bid consultancies who serve them. See <a href=\"/blog/market-intelligence-for-medtech-sales-teams\">market intelligence for medtech sales teams</a> and browse live opportunities on our <a href=\"/tenders\">tenders hub</a>.") +
+      faq([
+        ["What is tender intelligence?", "It is the practice of aggregating and analysing public procurement data, tenders, awards and prices, so suppliers can find opportunities earlier and bid smarter."],
+        ["How is it different from tender alerts?", "Alerts tell you an opportunity exists. Intelligence adds award data, competitor and pricing context, and helps you decide what to bid on and how."],
+        ["Who uses tender intelligence?", "Suppliers, sales and business-development teams, and bid consultancies that pursue public-sector healthcare contracts."],
+      ]),
+  },
+  {
+    slug: "public-sector-healthcare-sales",
+    tag: "Guide", read: 7, crumb: "Public Sector Sales",
+    title: "Public Sector Healthcare Sales: A Beginner's Guide (2026)",
+    h1: "Public Sector Healthcare Sales: A Beginner's Guide",
+    desc: "New to selling healthcare products or services to the public sector? How government and health-system buying works, and how to find and win your first contracts.",
+    keywords: "public sector healthcare sales, public sector sales, government healthcare sales, selling to government, public sector procurement, health sector sales",
+    ctaTitle: "Start finding public sector tenders",
+    ctaText: "Public healthcare tenders from the NHS, EU, US, World Bank and UN in one feed. Free tier, no credit card.",
+    body:
+      p("<strong>Selling to the public sector is a huge opportunity, but it runs on rules that catch out newcomers.</strong> The good news: those rules make it a level playing field, so a well-prepared small supplier can beat a bigger, complacent one.") +
+      h2("Why public sector sales is different") +
+      p("Because it spends public money, the public sector must buy transparently and competitively. That means published tenders, set evaluation criteria and scored bids, rather than relationship-led selling. Your job is to be visible when the tender opens and compelling when it is scored.") +
+      h2("The essentials to get right") +
+      ul([
+        "<strong>Registrations and accreditations</strong> buyers expect in your sector",
+        "<strong>Frameworks and DPS</strong> that give you access, see <a href=\"/blog/framework-vs-dps\">framework vs DPS</a>",
+        "<strong>A bid library</strong> of reusable answers, see <a href=\"/blog/how-to-build-a-winning-bid-team\">building a bid team</a>",
+        "<strong>Awareness of thresholds</strong>, see <a href=\"/blog/procurement-thresholds-explained\">procurement thresholds</a>",
+      ]) +
+      h2("Finding your first opportunities") +
+      p("Public healthcare tenders are published on government portals, Find a Tender and Contracts Finder in the UK, TED across the EU, SAM.gov in the US, and the World Bank and UN globally. Monitoring them in one feed is the fastest way in, see <a href=\"/blog/how-to-win-government-healthcare-contracts\">winning government healthcare contracts</a> and our <a href=\"/tenders\">tenders hub</a>.") +
+      h2("Winning your first contract") +
+      ul([
+        "Bid selectively, quality over quantity",
+        "Answer the question that was asked, and address every criterion",
+        "Evidence outcomes and social value, not just price",
+        "Learn from every result, see <a href=\"/blog/common-mistakes-losing-healthcare-tenders\">common mistakes</a>",
+      ]) +
+      faq([
+        ["How do I start selling to the public sector?", "Get the registrations buyers expect, join relevant frameworks or DPS, monitor published tenders, and respond selectively with strong, criteria-led bids."],
+        ["Is public sector selling worth it for a small supplier?", "Yes. The rules create a level playing field, so a well-prepared small supplier can win against larger competitors, especially on quality and social value."],
+        ["Where do I find public sector healthcare tenders?", "On government portals such as Find a Tender, Contracts Finder, TED and SAM.gov, plus World Bank and UN channels. Aggregators combine these into one feed."],
+      ]),
+  },
+  {
+    slug: "find-government-medical-tenders-worldwide",
+    tag: "Guide", read: 8, crumb: "Global Medical Tenders",
+    title: "How to Find Government Medical Tenders Worldwide (2026)",
+    h1: "How to Find Government Medical Tenders Worldwide",
+    desc: "Where governments and international agencies publish medical and healthcare tenders around the world, and how to monitor them all in one place.",
+    keywords: "government medical tenders, global healthcare tenders, international medical tenders, worldwide tenders healthcare, World Bank health tenders, UN medical procurement",
+    ctaTitle: "Track global medical tenders in one feed",
+    ctaText: "Healthcare tenders from 85+ countries, the NHS, EU, US, World Bank and UN, in one place. Free tier, no credit card.",
+    body:
+      p("<strong>Medical and healthcare tenders are published by hundreds of governments and international agencies, each on its own portal, in its own format.</strong> For a supplier selling internationally, the hard part is not the lack of opportunities, it is finding them across so many fragmented sources.") +
+      h2("The major sources by region") +
+      ul([
+        "<strong>UK</strong>, Find a Tender and Contracts Finder, plus NHS Supply Chain",
+        "<strong>EU</strong>, TED (Tenders Electronic Daily) across 27 member states",
+        "<strong>US</strong>, SAM.gov for federal contracts",
+        "<strong>Global development</strong>, the <a href=\"/blog/world-bank-health-procurement\">World Bank</a> and the UN Global Marketplace (UNGM)",
+        "<strong>National portals</strong>, most countries run their own e-procurement systems",
+      ]) +
+      h2("The two hard problems") +
+      p("First, coverage: no single government portal shows you the world. Second, format: each portal classifies and publishes differently, so a search that works on one misses opportunities on another. This is why suppliers selling across borders move to an aggregated feed, see <a href=\"/blog/manual-tender-tracking-vs-platform\">manual tracking vs a platform</a>.") +
+      h2("The overlooked opportunity") +
+      p("Development-funded procurement, through the World Bank and UN agencies like UNICEF and UNFPA, buys enormous volumes of medical, diagnostic and hygiene supplies with often thinner competition. Many suppliers never look there simply because it is hard to monitor. See <a href=\"/blog/who-procurement-vs-unicef-supply-division\">WHO vs UNICEF procurement</a>.") +
+      h2("How to monitor it all") +
+      ul([
+        "Aggregate the portals into one searchable, filterable feed",
+        "Classify by category and <a href=\"/blog/cpv-codes-vs-naics-codes\">codes</a> so you catch the right tenders across systems",
+        "Set alerts by category and region, see <a href=\"/blog/healthcare-tender-alerts-guide\">tender alerts</a>",
+        "Browse live opportunities on our <a href=\"/tenders\">tenders hub</a>",
+      ]) +
+      faq([
+        ["Where are government medical tenders published?", "Across many portals: Find a Tender and Contracts Finder (UK), TED (EU), SAM.gov (US), the World Bank and UN Global Marketplace globally, plus national e-procurement systems."],
+        ["How can I track international healthcare tenders?", "Monitoring each portal by hand is impractical. Aggregators pull tenders from many countries into one feed with classification and alerts."],
+        ["What is the most overlooked source of medical tenders?", "Development-funded procurement via the World Bank and UN agencies, which buy large volumes of medical and hygiene supplies with often less competition."],
+      ]),
+  },
 ];
 
 // ---- write files + emit index cards / sitemap lines --------------------------
