@@ -83,24 +83,42 @@ export async function sendLeadsDigest(): Promise<{ sent: boolean; count: number;
  *   LEADS_DIGEST_TIMEZONE IANA timezone (default SCRAPER_TIMEZONE or Europe/London)
  *   LEADS_DIGEST_EMAIL    recipient address (required for anything to send)
  */
+function isValidTimeZone(tz: string): boolean {
+  try {
+    Intl.DateTimeFormat(undefined, { timeZone: tz });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function startLeadsDigestSchedule(): CronJob | null {
   if (process.env.ENABLE_LEADS_DIGEST !== "true") {
     logger.info("Leads digest cron disabled (set ENABLE_LEADS_DIGEST=true to enable)");
     return null;
   }
   const cronExpression = process.env.LEADS_DIGEST_CRON || "0 8 * * 1";
-  const timeZone = process.env.LEADS_DIGEST_TIMEZONE || process.env.SCRAPER_TIMEZONE || "Europe/London";
+  let timeZone = process.env.LEADS_DIGEST_TIMEZONE || process.env.SCRAPER_TIMEZONE || "Europe/London";
+  if (!isValidTimeZone(timeZone)) {
+    logger.warn("Leads digest: invalid timezone, falling back to UTC", { timeZone });
+    timeZone = "UTC";
+  }
 
-  const job = new CronJob(
-    cronExpression,
-    () => {
-      void sendLeadsDigest();
-    },
-    null,
-    true,
-    timeZone,
-  );
-
-  logger.info("Leads digest cron scheduled", { cronExpression, timeZone, nextRun: job.nextDate().toISO() });
-  return job;
+  // A bad cron expression or timezone must never crash the server at boot.
+  try {
+    const job = new CronJob(
+      cronExpression,
+      () => {
+        void sendLeadsDigest();
+      },
+      null,
+      true,
+      timeZone,
+    );
+    logger.info("Leads digest cron scheduled", { cronExpression, timeZone, nextRun: job.nextDate().toISO() });
+    return job;
+  } catch (err) {
+    logger.error("Leads digest: failed to schedule, continuing without it", { error: String(err), cronExpression, timeZone });
+    return null;
+  }
 }

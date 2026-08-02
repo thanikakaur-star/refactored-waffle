@@ -1310,11 +1310,18 @@ const server = app.listen(port, () => {
     logger.info(`Try: curl -H "X-API-Key: ${DEV_API_KEY}" http://localhost:${port}/api/v1/tenders`);
   }
 
-  // Start the monthly scraper schedule (no-op unless ENABLE_SCRAPER_CRON=true)
-  startScraperSchedule();
-
-  // Start the weekly outreach-leads email (no-op unless ENABLE_LEADS_DIGEST=true)
-  startLeadsDigestSchedule();
+  // Start the schedules. Guard each so a bad cron/timezone env var logs and is
+  // skipped rather than crashing the whole server at boot.
+  try {
+    startScraperSchedule();
+  } catch (err) {
+    logger.error("Failed to start scraper schedule (continuing)", { error: String(err) });
+  }
+  try {
+    startLeadsDigestSchedule();
+  } catch (err) {
+    logger.error("Failed to start leads digest schedule (continuing)", { error: String(err) });
+  }
 });
 
 export { app, server };
