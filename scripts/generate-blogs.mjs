@@ -782,6 +782,202 @@ const posts = [
         ["How much do social value and sustainability count?", "A minimum weighting is applied in NHS and central-government evaluations, and it is often enough to decide close bids."],
       ]),
   },
+  {
+    slug: "what-is-healthcare-procurement",
+    tag: "Guide", read: 9, crumb: "What Is Healthcare Procurement",
+    title: "What Is Healthcare Procurement? A Complete Guide (2026)",
+    h1: "What Is Healthcare Procurement?",
+    desc: "A complete guide to healthcare procurement: what it is, who runs it, what gets bought, how the tendering process works, and where healthcare tenders are published.",
+    keywords: "healthcare procurement, health procurement, what is healthcare procurement, healthcare procurement guide, medical procurement, healthcare purchasing, healthcare sourcing",
+    ctaTitle: "See healthcare procurement in action",
+    ctaText: "Track live healthcare tenders from the NHS, EU, US, World Bank and UN in one place. Free tier, no credit card.",
+    body:
+      p("<strong>Healthcare procurement is the process by which health systems, hospitals, governments and international agencies buy the goods and services they need to deliver care</strong> — from medicines and medical devices to clinical staffing, IT systems and facilities management. It is one of the largest areas of public spending in the world, and it runs almost entirely through formal, published tenders.") +
+      h2("What healthcare procurement means") +
+      p("At its simplest, procurement is structured buying. In healthcare that structure exists because the buyers are usually spending public money and must show they got fair value and followed the rules. Instead of quietly picking a supplier, a hospital or health authority publishes a <strong>tender</strong> — a public notice describing what it wants to buy — and invites suppliers to bid. The bids are scored against set criteria, and a contract is awarded.") +
+      h2("Who runs healthcare procurement") +
+      ul([
+        "<strong>National health systems</strong> — e.g. NHS trusts, integrated care boards and NHS Supply Chain in the UK",
+        "<strong>Government agencies</strong> — health ministries and federal buyers such as the US Department of Veterans Affairs",
+        "<strong>International organisations</strong> — the World Bank, WHO, UNICEF and UNFPA, which fund and procure health supplies globally",
+        "<strong>Private hospital groups and insurers</strong>, which run their own (often less public) procurement",
+      ]) +
+      h2("What gets procured") +
+      p("Healthcare procurement spans an enormous range of categories, each with its own market and rules:") +
+      ul([
+        "<a href=\"/tenders/medical-devices-tenders-uk\">Medical devices</a> and equipment",
+        "<a href=\"/tenders/pharmaceuticals-tenders-uk\">Pharmaceuticals</a> and vaccines",
+        "<a href=\"/tenders/diagnostics-tenders-uk\">Diagnostics</a> and laboratory services",
+        "<a href=\"/tenders/health-it-tenders-uk\">Health IT</a> and digital systems",
+        "Clinical and <a href=\"/tenders/allied-health-tenders-uk\">allied health</a> services",
+      ]) +
+      h2("How the healthcare procurement process works") +
+      p("Most public healthcare procurement follows a recognisable path: identify the need, publish the tender, receive and evaluate bids, award the contract, and manage delivery. We break this down in <a href=\"/blog/healthcare-procurement-process\">the healthcare procurement process, step by step</a>.") +
+      h2("Key terms you'll meet") +
+      ul([
+        "<strong>Tender</strong> — the published opportunity to bid",
+        "<strong>Framework agreement</strong> — a pre-approved list of suppliers, see <a href=\"/blog/framework-agreements-healthcare-procurement\">frameworks explained</a>",
+        "<strong>Dynamic Purchasing System (DPS)</strong> — an open, ongoing supplier list, see <a href=\"/blog/framework-vs-dps\">framework vs DPS</a>",
+        "<strong>CPV codes</strong> — the codes used to categorise tenders, see <a href=\"/blog/understanding-cpv-codes\">CPV codes explained</a>",
+      ]) +
+      h2("Where healthcare tenders are published") +
+      p("Opportunities are scattered across many national and international portals — TED (EU), Contracts Finder and Find a Tender (UK), SAM.gov (US), the World Bank and the UN Global Marketplace. Monitoring them all is the hard part, which is why suppliers increasingly use <a href=\"/blog/manual-tender-tracking-vs-platform\">a single aggregated feed</a> rather than checking each portal by hand. Browse live opportunities by category on our <a href=\"/tenders\">tenders hub</a>.") +
+      h2("Healthcare procurement vs e-procurement") +
+      p("Increasingly this all happens through online systems — <strong>e-procurement</strong>. If you've searched for \"health e-procurement,\" see our dedicated guide to <a href=\"/blog/healthcare-e-procurement\">healthcare e-procurement</a>.") +
+      faq([
+        ["What is healthcare procurement in simple terms?", "It's the formal process health systems use to buy goods and services — publishing tenders, evaluating bids, and awarding contracts — usually with public money and strict rules."],
+        ["Why is healthcare procurement so regulated?", "Because it mostly spends public money. Rules on transparency, fair competition and value for money exist to prevent waste and favouritism."],
+        ["How do suppliers find healthcare procurement opportunities?", "Tenders are published on government and international portals. Suppliers monitor these directly or use an aggregator that pulls them into one searchable feed."],
+      ]),
+  },
+  {
+    slug: "healthcare-e-procurement",
+    tag: "Guide", read: 7, crumb: "Healthcare E-Procurement",
+    title: "Healthcare E-Procurement Explained (2026)",
+    h1: "Healthcare E-Procurement Explained",
+    desc: "What healthcare e-procurement is, how electronic tendering systems work, the main platforms, and what it means for suppliers bidding for health contracts.",
+    keywords: "healthcare e-procurement, health eprocurement, e-procurement healthcare, electronic procurement health, e-tendering healthcare, digital procurement health",
+    ctaTitle: "Track e-procurement opportunities in one feed",
+    ctaText: "Live healthcare tenders from electronic procurement portals worldwide, aggregated and searchable. Free tier, no credit card.",
+    body:
+      p("<strong>Healthcare e-procurement is the use of electronic systems to run the buying process</strong> — publishing tenders, receiving bids, awarding contracts and managing suppliers online rather than on paper. Almost all public healthcare procurement is now electronic, which is both an opportunity and a challenge for suppliers.") +
+      h2("What e-procurement covers") +
+      p("\"E-procurement\" is an umbrella term for the digital tools that run each stage of buying:") +
+      ul([
+        "<strong>E-tendering</strong> — publishing opportunities and collecting bids online",
+        "<strong>E-sourcing</strong> — finding and evaluating suppliers digitally",
+        "<strong>E-catalogues</strong> — standing online catalogues buyers order from (e.g. NHS Supply Chain)",
+        "<strong>E-auctions</strong> — live online competitive bidding",
+      ]) +
+      h2("Why healthcare went electronic") +
+      p("Electronic systems make procurement faster, more auditable and more transparent — which matters when you're spending public money. For buyers they cut administration and create a clear audit trail. For suppliers they mean opportunities are published in a structured, searchable form, increasingly following open standards like <a href=\"/blog/understanding-ocds\">OCDS</a>.") +
+      h2("The main e-procurement systems in healthcare") +
+      ul([
+        "<strong>TED</strong> — the EU's electronic tendering journal",
+        "<strong>Find a Tender</strong> and <strong>Contracts Finder</strong> — the UK's e-procurement portals",
+        "<strong>SAM.gov</strong> — the US federal e-procurement system",
+        "<strong>The UN Global Marketplace (UNGM)</strong> — the UN system's shared e-procurement portal",
+      ]) +
+      h2("The challenge for suppliers") +
+      p("Here's the catch: every country (and often every agency) runs its <em>own</em> e-procurement system, each with its own login, format and quirks. A supplier selling across borders can end up monitoring a dozen portals. That fragmentation is exactly why aggregated tender feeds exist — see <a href=\"/blog/manual-tender-tracking-vs-platform\">manual tracking vs a platform</a>.") +
+      h2("Getting started with health e-procurement") +
+      ul([
+        "Register on the relevant portals for your markets",
+        "Learn the <a href=\"/blog/understanding-cpv-codes\">CPV codes</a> that classify your products",
+        "Set up alerts so you don't miss deadlines — see <a href=\"/blog/healthcare-tender-alerts-guide\">tender alerts</a>",
+        "Browse live opportunities by category on our <a href=\"/tenders\">tenders hub</a>",
+      ]) +
+      faq([
+        ["What is e-procurement in healthcare?", "It's running the healthcare buying process — tendering, bidding, awarding and ordering — through electronic systems instead of on paper."],
+        ["What is the difference between procurement and e-procurement?", "Procurement is the buying process itself; e-procurement is that same process carried out through digital platforms."],
+        ["Which e-procurement portals should health suppliers watch?", "It depends on your markets — TED for the EU, Find a Tender and Contracts Finder for the UK, SAM.gov for the US, and UNGM for UN agencies. Aggregators pull these into one feed."],
+      ]),
+  },
+  {
+    slug: "healthcare-procurement-process",
+    tag: "How-to", read: 8, crumb: "Procurement Process",
+    title: "The Healthcare Procurement Process, Step by Step (2026)",
+    h1: "The Healthcare Procurement Process, Step by Step",
+    desc: "A step-by-step breakdown of the healthcare procurement process — from identifying a need to awarding and managing the contract — and where suppliers fit in.",
+    keywords: "healthcare procurement process, procurement process steps, health procurement process, tender process healthcare, procurement cycle healthcare, digital health procurement process",
+    ctaTitle: "Catch tenders at the right stage",
+    ctaText: "See healthcare opportunities the moment they're published, so you have time to bid well. Free tier, no credit card.",
+    body:
+      p("<strong>The healthcare procurement process is the sequence of steps a health buyer follows to purchase goods or services</strong> — from first identifying a need to managing the delivered contract. Understanding it helps suppliers know <em>when</em> to act and <em>where</em> they can influence the outcome.") +
+      h2("Step 1: Identify the need") +
+      p("A trust, ministry or agency identifies something it needs to buy and secures the budget. Suppliers rarely see this stage, but engaging early — through market engagement events or prior information notices — can shape the eventual specification.") +
+      h2("Step 2: Plan and specify") +
+      p("The buyer decides how to buy: a one-off tender, a call-off from a <a href=\"/blog/framework-agreements-healthcare-procurement\">framework</a>, or a <a href=\"/blog/framework-vs-dps\">Dynamic Purchasing System</a>. They write the specification and evaluation criteria — the rules you'll be scored against.") +
+      h2("Step 3: Publish the tender") +
+      p("The opportunity is published on an e-procurement portal (TED, Find a Tender, SAM.gov, UNGM and others). This is the moment suppliers need to catch it — miss it and you may have only days to respond. See <a href=\"/blog/how-to-find-nhs-tenders\">how to find NHS tenders</a>.") +
+      h2("Step 4: Bid") +
+      p("Suppliers submit their responses against the specification. Strong bids evidence quality, capacity and value — not just the lowest price. See <a href=\"/blog/bid-writing-tips-healthcare\">bid-writing tips</a> and <a href=\"/blog/how-to-price-a-healthcare-tender-bid\">how to price a bid</a>.") +
+      h2("Step 5: Evaluate and award") +
+      p("The buyer scores each bid against the published criteria and awards the contract, publishing an <a href=\"/blog/reading-contract-award-notices\">award notice</a> naming the winner and (often) the value — valuable intelligence for your next bid.") +
+      h2("Step 6: Manage the contract") +
+      p("Delivery, performance management and eventual re-tender. Knowing when a contract expires tells you when the next opportunity will appear — which is why tracking award data matters.") +
+      h2("Where suppliers gain or lose") +
+      p("Most suppliers engage far too late — at Step 3, with little time left. The winners engage early and monitor continuously, which is the core problem <a href=\"/blog/manual-tender-tracking-vs-platform\">an aggregated feed</a> solves.") +
+      faq([
+        ["What are the stages of the healthcare procurement process?", "Broadly: identify the need, plan and specify, publish the tender, receive bids, evaluate and award, then manage the contract."],
+        ["When should suppliers get involved?", "As early as possible — ideally before the tender is published, through market engagement. At minimum, catch the tender the day it's published to leave time for a strong bid."],
+        ["What is the difference between a framework and a one-off tender?", "A one-off tender buys a specific requirement once; a framework pre-approves suppliers to be called off repeatedly over time."],
+      ]),
+  },
+  {
+    slug: "healthcare-bid-management",
+    tag: "Guide", read: 7, crumb: "Bid Management",
+    title: "Healthcare Bid Management: A Practical Guide (2026)",
+    h1: "Healthcare Bid Management: A Practical Guide",
+    desc: "What healthcare bid management involves, how to build a repeatable bid process, and how to decide which health tenders are worth pursuing.",
+    keywords: "healthcare bid management, bid management healthcare, tender management, bid process healthcare, bid team, health contract bidding",
+    ctaTitle: "Feed your bid pipeline automatically",
+    ctaText: "Surface the right healthcare tenders early so your bid team can focus on winning. Free tier, no credit card.",
+    body:
+      p("<strong>Bid management is the discipline of running tender responses as a repeatable process</strong> rather than a last-minute scramble. In healthcare — where tenders are frequent, complex and heavily scored on quality — good bid management is often the difference between growth and stagnation.") +
+      h2("What bid management involves") +
+      ul([
+        "<strong>Opportunity identification</strong> — finding the right tenders early",
+        "<strong>Bid/no-bid decisions</strong> — choosing which to pursue",
+        "<strong>Response writing</strong> — assembling a compelling, compliant bid",
+        "<strong>Review and submission</strong> — quality control before the deadline",
+        "<strong>Post-bid review</strong> — learning from wins and losses",
+      ]) +
+      h2("The bid/no-bid decision") +
+      p("The most important skill in bid management is saying no. Chasing every tender spreads a team thin and lowers win rates. Strong teams qualify hard — pursuing only opportunities they're genuinely well placed to win. That requires seeing enough opportunities to be selective, which is where a broad, filtered <a href=\"/tenders\">tender feed</a> helps.") +
+      h2("Building a repeatable process") +
+      ul([
+        "Maintain a <strong>library</strong> of reusable answers (accreditations, case studies, policies)",
+        "Use <a href=\"/blog/reading-contract-award-notices\">award data</a> to benchmark price and understand what buyers value",
+        "Assign clear roles — see <a href=\"/blog/how-to-build-a-winning-bid-team\">building a bid team</a>",
+        "Track deadlines rigorously — see <a href=\"/blog/tender-deadline-management\">deadline management</a>",
+      ]) +
+      h2("Why early identification matters most") +
+      p("Bid quality is largely decided by how much <em>time</em> you have. A tender found the day it publishes gives you weeks to craft a considered response; one found with 48 hours left forces a rushed bid that reads rushed. This is why the front of the bid process — finding opportunities early — is the highest-leverage part to fix.") +
+      faq([
+        ["What does a bid manager do?", "They run the end-to-end tender response process — finding opportunities, deciding what to bid on, coordinating the response, and reviewing before submission."],
+        ["How do you decide which tenders to bid for?", "Qualify against your strengths: relevant experience, capacity, the evaluation weighting, and realistic win probability. Bidding on everything lowers your overall win rate."],
+        ["How can I improve my healthcare win rate?", "Find opportunities earlier (more time = better bids), be more selective, and use award data to price and position competitively."],
+      ]),
+  },
+  {
+    slug: "healthcare-procurement-software",
+    tag: "Guide", read: 7, crumb: "Procurement Software",
+    title: "Healthcare Procurement Software & Tender Intelligence Tools (2026)",
+    h1: "Healthcare Procurement Software & Tender Intelligence Tools",
+    desc: "The types of healthcare procurement software — from tender intelligence to e-sourcing — what each does, and how to choose the right tools for finding and winning health contracts.",
+    keywords: "healthcare procurement software, tender intelligence software, procurement software health, tender tracking software, healthcare sourcing software, tender alert software",
+    ctaTitle: "Try tender intelligence free",
+    ctaText: "Aggregated healthcare tenders and award data from eight global sources, searchable and filterable. Free tier, no credit card.",
+    body:
+      p("<strong>\"Healthcare procurement software\" covers several very different tools</strong> — some used by buyers to run tenders, others used by suppliers to find and win them. Knowing which is which helps you choose the right tool for your role.") +
+      h2("Software for buyers vs suppliers") +
+      p("It's the first thing to get straight, because the two rarely overlap:") +
+      ul([
+        "<strong>Buyer-side (e-sourcing / e-procurement)</strong> — helps health organisations publish tenders, evaluate bids and manage suppliers",
+        "<strong>Supplier-side (tender intelligence)</strong> — helps suppliers discover relevant tenders, track deadlines and analyse award data",
+      ]) +
+      h2("Types of supplier-side tools") +
+      ul([
+        "<strong>Tender aggregators</strong> — pull opportunities from many portals into one searchable feed",
+        "<strong>Alerting tools</strong> — email you when matching tenders appear, see <a href=\"/blog/healthcare-tender-alerts-guide\">tender alerts</a>",
+        "<strong>Market/award intelligence</strong> — analyse who's winning what, at what price, see <a href=\"/blog/who-is-winning-healthcare-contracts-award-data\">award data</a>",
+      ]) +
+      h2("What to look for") +
+      ul([
+        "<strong>Source coverage</strong> — does it include the portals and countries you sell into? (NHS, EU, US, World Bank, UN)",
+        "<strong>Classification quality</strong> — accurate categories and <a href=\"/blog/understanding-cpv-codes\">CPV/NAICS codes</a> so you find the right tenders",
+        "<strong>Alerting</strong> — timely, filterable notifications",
+        "<strong>Award data</strong> — historical intelligence for pricing and benchmarking",
+      ]) +
+      h2("Why coverage is the deciding factor") +
+      p("A tool that only watches one portal recreates the very problem you're trying to solve. The value of tender intelligence software is breadth — one feed instead of a dozen logins. See <a href=\"/blog/manual-tender-tracking-vs-platform\">manual tracking vs a platform</a>, and browse live opportunities on our <a href=\"/tenders\">tenders hub</a>.") +
+      faq([
+        ["What is healthcare procurement software?", "Software that supports the buying process — either for buyers (running tenders) or for suppliers (finding and winning them, known as tender intelligence)."],
+        ["What is tender intelligence software?", "A supplier-side tool that aggregates tenders from many portals, alerts you to relevant ones, and provides award data for benchmarking."],
+        ["How do I choose a tender tool?", "Match its source coverage to your markets, check its classification accuracy, and make sure its alerts and award data fit how you bid."],
+      ]),
+  },
 ];
 
 // ---- write files + emit index cards / sitemap lines --------------------------
