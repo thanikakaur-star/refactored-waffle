@@ -27,7 +27,13 @@ export function startScraperSchedule(): CronJob | null {
   }
 
   const cronExpression = process.env.SCRAPER_CRON || "0 3 * * *";
-  const timeZone = process.env.SCRAPER_TIMEZONE || "Europe/London";
+  let timeZone = process.env.SCRAPER_TIMEZONE || "Europe/London";
+  try {
+    Intl.DateTimeFormat(undefined, { timeZone });
+  } catch {
+    logger.warn("Scraper cron: invalid timezone, falling back to UTC", { timeZone });
+    timeZone = "UTC";
+  }
 
   let isRunning = false;
 
