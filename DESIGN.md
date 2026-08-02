@@ -93,6 +93,12 @@ The system uses **alternating full-bleed sections** (white ↔ black) with a sin
 - **Line-height is context-specific.** Display uses 1.07–1.19 (tight). Body uses 1.47. Data tables use 1.5.
 - **Monospace for numeric data.** Tender IDs, contract values, dates use `body-mono` with `font-variant-numeric: tabular-nums` for vertical alignment in tables.
 
+### Copy & Punctuation
+
+- **No em dashes.** Never use em dashes (—) or en dashes (–) in headlines, UI copy, body content, blog posts, or marketing pages. Use commas, colons, periods, or parentheses instead. Em dashes read as AI-generated and are off-brand.
+- **Write plainly and human.** Prefer short declarative sentences over long clauses stitched together with dashes. If a sentence needs a dash to work, rewrite it.
+- **Punctuation set:** comma, period, colon, semicolon, parentheses. That is the full toolkit for copy.
+
 ---
 
 ## Layout
@@ -291,6 +297,7 @@ Every section begins with at least 48px of air above its headline and 32–48px 
 - Don't mix radii grammars — use `sm` (6px) for compact utility, `md` (8px) for cards, `pill` for pills.
 - Don't use inline SVG decorations or animated backgrounds — let data and photography speak.
 - Don't fabricate stats. Ever. If mockup, label it visibly.
+- Don't use em dashes (—) or en dashes (–) anywhere in copy, headlines, or content. Use commas, colons, periods, or parentheses. Em dashes read as AI-generated and are off-brand.
 
 ---
 
