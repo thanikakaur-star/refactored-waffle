@@ -8,6 +8,8 @@ import { fileURLToPath } from "node:url";
 import { localStore, DEV_API_KEY } from "./db/local-store.js";
 import { logger } from "./utils/logger.js";
 import { startScraperSchedule } from "./scraper/schedule.js";
+import { buildLeads } from "./leads/leads.js";
+import { sendLeadsDigest, startLeadsDigestSchedule } from "./leads/digest.js";
 import { getSeoOverviewSafe, isSearchConsoleConfigured } from "./admin/searchConsole.js";
 import type { ApiTier } from "./types/index.js";
 import type { Request, Response, NextFunction } from "express";
@@ -1184,7 +1186,6 @@ app.get("/api/admin/sources", requireAdmin, async (_req, res) => {
 app.get("/api/admin/leads", requireAdmin, async (req, res) => {
   const days = Math.min(Math.max(Number(req.query.days) || 180, 7), 730);
   const limit = Math.min(Math.max(Number(req.query.limit) || 50, 1), 200);
-  const since = new Date(Date.now() - days * 86_400_000).toISOString();
 
   if (!(USE_SUPABASE && supabase)) {
     res.json({ data: { leads: [], mode: "local", note: "Leads require Supabase (production)." } });
@@ -1192,49 +1193,22 @@ app.get("/api/admin/leads", requireAdmin, async (req, res) => {
   }
 
   try {
-    const { data, error } = await supabase
-      .from("contract_awards")
-      .select("supplier_name, supplier_country, award_value_usd, award_date, tender_title, category, source")
-      .not("supplier_name", "is", null)
-      .gte("award_date", since)
-      .order("award_date", { ascending: false })
-      .limit(3000);
-    if (error) throw error;
-
-    const bySupplier = new Map<string, any>();
-    for (const a of data ?? []) {
-      const name = ((a as any).supplier_name || "").trim();
-      if (!name) continue;
-      let e = bySupplier.get(name);
-      if (!e) {
-        e = { supplier: name, country: (a as any).supplier_country || "", wins: 0, totalUsd: 0, latest: a, categories: new Set<string>() };
-        bySupplier.set(name, e);
-      }
-      e.wins += 1;
-      e.totalUsd += Number((a as any).award_value_usd) || 0;
-      if ((a as any).category) e.categories.add((a as any).category);
-      if ((a as any).award_date > e.latest.award_date) e.latest = a;
-    }
-
-    const leads = [...bySupplier.values()]
-      .map((e) => ({
-        supplier: e.supplier,
-        country: e.country,
-        wins: e.wins,
-        totalUsd: Math.round(e.totalUsd),
-        latestWin: (e.latest as any).award_date,
-        latestContract: (e.latest as any).tender_title || "",
-        latestValueUsd: Math.round(Number((e.latest as any).award_value_usd) || 0),
-        source: (e.latest as any).source,
-        categories: [...e.categories],
-      }))
-      .sort((a, b) => (a.latestWin < b.latestWin ? 1 : a.latestWin > b.latestWin ? -1 : b.totalUsd - a.totalUsd))
-      .slice(0, limit);
-
+    const leads = await buildLeads(days, limit);
     res.json({ data: { leads, days, mode: "production", generatedAt: new Date().toISOString() } });
   } catch (err) {
     logger.warn("Admin leads query failed", { error: String(err) });
     res.status(500).json({ error: "Failed to build leads." });
+  }
+});
+
+// Send the weekly leads digest on demand (to test the email before the cron runs).
+app.post("/api/admin/leads/send-test", requireAdmin, async (_req, res) => {
+  try {
+    const result = await sendLeadsDigest();
+    res.json({ data: result });
+  } catch (err) {
+    logger.warn("Admin leads test-send failed", { error: String(err) });
+    res.status(500).json({ error: "Failed to send test digest." });
   }
 });
 
@@ -1338,6 +1312,9 @@ const server = app.listen(port, () => {
 
   // Start the monthly scraper schedule (no-op unless ENABLE_SCRAPER_CRON=true)
   startScraperSchedule();
+
+  // Start the weekly outreach-leads email (no-op unless ENABLE_LEADS_DIGEST=true)
+  startLeadsDigestSchedule();
 });
 
 export { app, server };

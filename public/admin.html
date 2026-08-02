@@ -124,6 +124,7 @@
               <option value="180" selected>Won in 180 days</option>
               <option value="365">Won in 1 year</option>
             </select>
+            <button id="leads-email" class="text-sm px-4 py-2 rounded-lg font-semibold border border-gold/40 text-gold">Email me these</button>
             <button id="leads-refresh" class="text-sm px-4 py-2 rounded-lg font-semibold" style="background: linear-gradient(135deg,#c9a96e,#a8883f); color:#0a0a0f;">Refresh</button>
           </div>
         </div>
@@ -347,6 +348,19 @@
     $('range').addEventListener('change', loadSeo);
     $('leads-refresh').addEventListener('click', loadLeads);
     $('leads-days').addEventListener('change', loadLeads);
+    $('leads-email').addEventListener('click', async () => {
+      const btn = $('leads-email');
+      btn.textContent = 'Sending...';
+      try {
+        const res = await fetch('/api/admin/leads/send-test', { method: 'POST', headers: { 'X-Admin-Token': adminToken } });
+        const b = await res.json().catch(() => ({}));
+        const r = b.data || {};
+        btn.textContent = r.sent ? ('Sent (' + r.count + ')') : ('Not sent: ' + (r.reason || 'error'));
+      } catch (e) {
+        btn.textContent = 'Failed';
+      }
+      setTimeout(() => { btn.textContent = 'Email me these'; }, 4000);
+    });
     $('logout-btn').addEventListener('click', () => { sessionStorage.removeItem('hp_admin_token'); adminToken = ''; showLogin(); });
 
     // Auto-login if a token is already stored
