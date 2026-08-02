@@ -250,9 +250,34 @@
       }
     }
 
-    function outreachLine(supplier, contract) {
-      return 'Hi [Name], congrats on ' + supplier + "'s recent win" + (contract ? ' on ' + contract : '') +
-        '. I track new NHS and EU healthcare tenders in your category so you can line up the next one early. I pulled a few that are open right now, want me to send them?';
+    function humanizeCat(cat) {
+      if (!cat) return 'healthcare';
+      return String(cat).replace(/_/g, ' ');
+    }
+    // Stable pick: same supplier always gets the same variant, but different
+    // suppliers get different openers so a batch does not read like a mail-merge.
+    function pickVariant(arr, seed) {
+      let h = 0; for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+      return arr[h % arr.length];
+    }
+    // Builds a unique opener per lead, filled with supplier, their category, and
+    // their specific contract win. [Name] stays a placeholder (award data gives
+    // the company, not the individual, so you fill the person after LinkedIn).
+    function outreachLine(l) {
+      const S = l.supplier;
+      const C = humanizeCat(l.categories && l.categories[0]);
+      let K = (l.latestContract || '').trim();
+      if (K.length > 70) K = K.slice(0, 67).trim() + '...';
+      const onK = K ? (' on ' + K) : '';
+      const winK = K || 'a healthcare contract';
+      const variants = [
+        "Hi [Name], congrats on " + S + "'s recent win" + onK + ". I track new NHS and EU " + C + " tenders so you can line up the next one early. I pulled a few that are open right now, want me to send them?",
+        "Hi [Name], I noticed " + S + " won " + winK + " recently, nice one. I aggregate " + C + " tenders from the NHS, EU and global sources into one feed. Happy to send the open ones in your space, genuinely no pitch. Want them?",
+        "Hi [Name], saw " + S + " is active in " + C + " procurement (congrats on the recent win). I built a tool that surfaces new " + C + " tenders across the NHS and EU the day they publish. Would a quick look be useful?",
+        "Hi [Name], " + S + "'s recent win" + onK + " caught my eye. Most suppliers miss the next tender because it sits on a portal they don't check. I pull every new " + C + " tender into one feed. Want the open ones for your category?",
+        "Hi [Name], congrats to " + S + " on the recent " + C + " win. I help suppliers catch the next opportunity early by aggregating NHS, EU and global " + C + " tenders in one place. I found a few open now, shall I send them?"
+      ];
+      return pickVariant(variants, S);
     }
 
     async function loadLeads() {
@@ -277,7 +302,7 @@
         document.querySelectorAll('.leads-copy').forEach((btn) => {
           btn.addEventListener('click', () => {
             const l = window._leads[Number(btn.getAttribute('data-i'))];
-            navigator.clipboard.writeText(outreachLine(l.supplier, l.latestContract)).catch(() => {});
+            navigator.clipboard.writeText(outreachLine(l)).catch(() => {});
             btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
           });
         });
