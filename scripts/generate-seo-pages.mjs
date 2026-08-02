@@ -1,5 +1,5 @@
 // Programmatic SEO page generator. Produces self-contained landing pages in
-// public/tenders/ — one per curated category × region combination — that target
+// public/tenders/, one per curated category × region combination, that target
 // high-intent search queries ("NHS pharmaceutical tenders", "medical device
 // contracts in Kenya"), carry unique crawlable content, and hydrate a live
 // tenders widget from /api/v1/public-tenders. Also (re)writes the /tenders hub
@@ -20,7 +20,7 @@ const SITE = "https://healthprocureintel.com";
 const YEAR = 2026;
 
 // ---------------------------------------------------------------------------
-// Category metadata — the "what/who/codes/how" that makes each page unique.
+// Category metadata, the "what/who/codes/how" that makes each page unique.
 // ---------------------------------------------------------------------------
 const CATEGORIES = {
   medical_devices: {
@@ -117,7 +117,7 @@ const CATEGORIES = {
 };
 
 // ---------------------------------------------------------------------------
-// Region metadata — where tenders are published and who buys.
+// Region metadata, where tenders are published and who buys.
 // ---------------------------------------------------------------------------
 const REGIONS = {
   uk: {
@@ -153,11 +153,11 @@ const REGIONS = {
 };
 
 // ---------------------------------------------------------------------------
-// Curated combos — chosen for real search intent, not every permutation
+// Curated combos, chosen for real search intent, not every permutation
 // (thin/duplicate pages hurt SEO). { category, region }.
 // ---------------------------------------------------------------------------
 const COMBOS = [
-  // UK / NHS — highest domestic intent
+  // UK / NHS, highest domestic intent
   ["medical_devices", "uk"], ["pharmaceuticals", "uk"], ["personal_protective_equipment", "uk"],
   ["diagnostics", "uk"], ["surgical_instruments", "uk"], ["laboratory_equipment", "uk"],
   ["health_it", "uk"], ["allied_health", "uk"], ["occupational_therapy", "uk"],
@@ -168,7 +168,7 @@ const COMBOS = [
   ["medical_devices", "us"], ["pharmaceuticals", "us"],
   // Global development
   ["medical_devices", "global"], ["pharmaceuticals", "global"],
-  // Menstrual health / WASH — the differentiated donor-data angle
+  // Menstrual health / WASH, the differentiated donor-data angle
   ["menstrual_health", "global"], ["wash_hygiene", "global"],
   ["menstrual_health", "east_africa"], ["menstrual_health", "south_asia"],
 ];
@@ -296,7 +296,7 @@ function page(c, r) {
       <span class="text-xs text-gray-500">Updated live</span>
     </div>
     <h1 class="font-display text-3xl md:text-4xl font-bold text-white leading-tight mb-6">${h1}</h1>
-    <p class="text-lg text-gray-300 leading-relaxed mb-8">Track live <strong class="text-white">${cat.plural} tenders</strong> ${reg.in}, aggregated from ${reg.sources.replace(/<\/?strong>/g, "")} into one searchable feed. Below is a live sample &mdash; the full, filterable set is in your dashboard.</p>
+    <p class="text-lg text-gray-300 leading-relaxed mb-8">Track live <strong class="text-white">${cat.plural} tenders</strong> ${reg.in}, aggregated from ${reg.sources.replace(/<\/?strong>/g, "")} into one searchable feed. Below is a live sample, the full, filterable set is in your dashboard.</p>
 
     <!-- Live tenders widget -->
     <section class="bg-gradient-to-b from-dark-100 to-dark-200 border border-gold/10 rounded-2xl p-6 md:p-8 mb-12">
@@ -319,7 +319,7 @@ function page(c, r) {
       <ul>${cat.covers.map((x) => `<li>${x}</li>`).join("")}</ul>
 
       <h2>Who buys ${cat.plural} ${reg.in}</h2>
-      <p>The main buyers are ${reg.buyers}. Understanding which body owns the budget &mdash; and whether they buy through a framework, a Dynamic Purchasing System or open tender &mdash; is often the difference between a bid that lands and one that never gets seen.</p>
+      <p>The main buyers are ${reg.buyers}. Understanding which body owns the budget, and whether they buy through a framework, a Dynamic Purchasing System or open tender, is often the difference between a bid that lands and one that never gets seen.</p>
 
       <h2>Where ${cat.plural} tenders are published</h2>
       <p>${reg.adj.charAt(0).toUpperCase() + reg.adj.slice(1)} ${cat.plural} opportunities are published across ${reg.sources}. HealthProcure Intel aggregates these into a single feed so you don't have to monitor each portal separately. The <strong>${codeLabel}</strong> codes to watch for this category are <strong>${codes}</strong>.</p>
@@ -330,7 +330,7 @@ function page(c, r) {
       <h2>Frequently asked questions</h2>
       <p><strong>What codes cover ${cat.plural} tenders ${reg.in}?</strong><br/>They typically sit under ${codeLabel} ${codes}. Codes vary by buyer, so keyword tracking alongside code filtering catches the most.</p>
       <p><strong>Where do most ${reg.adj} ${cat.plural} tenders appear?</strong><br/>Across ${reg.sources.replace(/<\/?strong>/g, "")}. HealthProcure Intel monitors all of them in one place.</p>
-      <p><strong>How do I get alerted to new ${cat.plural} tenders?</strong><br/>Create a free account, filter to ${cat.plural} ${reg.in}, and save an alert &mdash; you'll be emailed when a new matching tender is published.</p>
+      <p><strong>How do I get alerted to new ${cat.plural} tenders?</strong><br/>Create a free account, filter to ${cat.plural} ${reg.in}, and save an alert, you'll be emailed when a new matching tender is published.</p>
 
       <p class="text-sm text-gray-500 mt-8">Related reading: ${related}</p>
     </div>
@@ -403,7 +403,7 @@ function hubPage(cards) {
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Healthcare Tenders by Category &amp; Region (${YEAR}) | HealthProcure Intel</title>
-  <meta name="description" content="Browse live healthcare procurement tenders by category and region — medical devices, pharmaceuticals, diagnostics, allied health and more across the UK, EU, US and globally." />
+  <meta name="description" content="Browse live healthcare procurement tenders by category and region, medical devices, pharmaceuticals, diagnostics, allied health and more across the UK, EU, US and globally." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="${url}" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -434,7 +434,7 @@ function hubPage(cards) {
   </nav>
   <main class="max-w-5xl mx-auto px-6 lg:px-8 pt-32 pb-24">
     <h1 class="font-display text-4xl font-bold text-white mb-4">Healthcare tenders by category &amp; region</h1>
-    <p class="text-lg text-gray-400 mb-12 max-w-2xl">Live procurement opportunities aggregated from TED, the UK feeds, SAM.gov, the World Bank and UNGM &mdash; browse by what you supply and where you sell.</p>
+    <p class="text-lg text-gray-400 mb-12 max-w-2xl">Live procurement opportunities aggregated from TED, the UK feeds, SAM.gov, the World Bank and UNGM, browse by what you supply and where you sell.</p>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${items}
     </div>
   </main>

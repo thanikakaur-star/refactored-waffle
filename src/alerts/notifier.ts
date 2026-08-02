@@ -36,7 +36,7 @@ function buildDigestHtml(tenders: TenderRow[], alert: AlertRow): string {
       <tr>
         <td style="padding:8px 12px;border-bottom:1px solid #eee;">
           <a href="${t.url}" style="color:#a8883f;text-decoration:none;font-weight:600;">${t.title}</a><br/>
-          <span style="color:#666;font-size:13px;">${t.buyer_name} &mdash; ${t.buyer_country} &middot; ${formatCategory(t.category)}</span>
+          <span style="color:#666;font-size:13px;">${t.buyer_name}, ${t.buyer_country} &middot; ${formatCategory(t.category)}</span>
         </td>
       </tr>`
     )
