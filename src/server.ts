@@ -10,6 +10,7 @@ import { logger } from "./utils/logger.js";
 import { startScraperSchedule } from "./scraper/schedule.js";
 import { buildLeads } from "./leads/leads.js";
 import { sendLeadsDigest, startLeadsDigestSchedule } from "./leads/digest.js";
+import { enrichCompanyEmails } from "./leads/enrich.js";
 import { getSeoOverviewSafe, isSearchConsoleConfigured } from "./admin/searchConsole.js";
 import type { ApiTier } from "./types/index.js";
 import type { Request, Response, NextFunction } from "express";
@@ -1198,6 +1199,23 @@ app.get("/api/admin/leads", requireAdmin, async (req, res) => {
   } catch (err) {
     logger.warn("Admin leads query failed", { error: String(err) });
     res.status(500).json({ error: "Failed to build leads." });
+  }
+});
+
+// Find verified contact emails for a lead's company (Hunter.io). On-demand per
+// lead so it doesn't burn enrichment credits on every leads load.
+app.get("/api/admin/leads/enrich", requireAdmin, async (req, res) => {
+  const company = typeof req.query.company === "string" ? req.query.company : "";
+  if (!company) {
+    res.status(400).json({ error: "company is required" });
+    return;
+  }
+  try {
+    const result = await enrichCompanyEmails(company);
+    res.json({ data: result });
+  } catch (err) {
+    logger.warn("Admin enrich failed", { error: String(err) });
+    res.status(500).json({ error: "Enrichment failed." });
   }
 });
 

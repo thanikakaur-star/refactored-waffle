@@ -283,19 +283,51 @@
       return pickVariant(variants, S);
     }
 
-    // Full email (subject + body) for a lead, ready to paste into your mail app.
-    function outreachEmail(l) {
+    // Email subject + body for a lead. If a contact name is known (from email
+    // enrichment) it greets them by first name; otherwise leaves [Name].
+    function outreachEmailParts(l, name) {
       const C = humanizeCat(l.categories && l.categories[0]);
       const K = (l.latestContract || '').trim();
+      const greet = name ? ('Hi ' + String(name).split(' ')[0] + ',') : 'Hi [Name],';
       const subject = 'A few open ' + C + ' tenders for ' + l.supplier;
       const body =
-        'Hi [Name],\n\n' +
+        greet + '\n\n' +
         'I aggregate healthcare tenders from the NHS, EU, US, World Bank and UN into one feed. I checked ' + C + ' and there are a few open right now that looked relevant to ' + l.supplier +
         (K ? ' (congrats on the recent win on ' + K + ')' : '') + '.\n\n' +
         'I built HealthProcure Intel after watching suppliers miss tenders buried across a dozen portals. If it is useful, I will set you up with a free filtered feed and alerts, no card needed.\n\n' +
         'Worth a quick look?\n\n' +
         'Thanika\nHealthProcure Intel, healthprocureintel.com';
-      return 'Subject: ' + subject + '\n\n' + body;
+      return { subject: subject, body: body };
+    }
+    function outreachEmail(l) {
+      const p = outreachEmailParts(l);
+      return 'Subject: ' + p.subject + '\n\n' + p.body;
+    }
+    // Render enrichment results (found emails) as a detail row under the lead.
+    function showEnrich(btn, l, d) {
+      const row = btn.closest('tr');
+      const next = row.nextElementSibling;
+      if (next && next.classList.contains('enrich-row')) { next.remove(); return; }
+      let html;
+      if (!d || !d.configured) {
+        html = 'Set <strong>HUNTER_API_KEY</strong> in Railway to enable verified email lookup (free tier at hunter.io).';
+      } else if (d.error) {
+        html = 'Lookup: ' + escapeHtml(d.error);
+      } else if (!d.contacts || !d.contacts.length) {
+        html = 'No public emails found for ' + escapeHtml(l.supplier) + (d.domain ? ' (' + escapeHtml(d.domain) + ')' : '') + '. Use the Find button to reach them on LinkedIn.';
+      } else {
+        html = '<div style="font-size:12px;color:#94a3b8;margin-bottom:4px">Verified contacts for ' + escapeHtml(l.supplier) + (d.domain ? ' (' + escapeHtml(d.domain) + ')' : '') + ':</div>' +
+          d.contacts.map(function (c) {
+            const parts = outreachEmailParts(l, c.name);
+            const mail = 'mailto:' + c.email + '?subject=' + encodeURIComponent(parts.subject) + '&body=' + encodeURIComponent(parts.body);
+            const meta = escapeHtml((c.name || '') + (c.position ? ' - ' + c.position : '') + ' (' + c.confidence + '%)');
+            return '<div style="margin:3px 0"><a href="' + mail + '" style="color:#c9a96e;text-decoration:none">' + escapeHtml(c.email) + '</a> <span style="color:#64748b;font-size:11px">' + meta + '</span></div>';
+          }).join('');
+      }
+      const tr = document.createElement('tr');
+      tr.className = 'enrich-row';
+      tr.innerHTML = '<td colspan="5" style="background:rgba(201,169,110,0.05);padding:8px 12px">' + html + '</td>';
+      row.after(tr);
     }
     // LinkedIn people search for a company, to find the person to contact.
     function linkedinSearchUrl(supplier) {
@@ -327,6 +359,7 @@
             '<td class="num">' + fmt(l.wins) + '</td>' +
             '<td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escapeHtml(l.latestContract || '') + '</td>' +
             '<td><div style="display:flex;gap:6px;flex-wrap:wrap">' +
+              btn('leads-en', i, 'Emails') +
               btn('leads-li', i, 'LinkedIn msg') +
               btn('leads-em', i, 'Email') +
               '<a href="' + linkedinSearchUrl(l.supplier) + '" target="_blank" rel="noopener" class="text-xs px-2 py-1 rounded" style="border:1px solid rgba(13,148,136,0.5); color:#0d9488; text-decoration:none;">Find</a>' +
@@ -342,6 +375,16 @@
         }));
         wire('leads-li', outreachLine);
         wire('leads-em', outreachEmail);
+        document.querySelectorAll('.leads-en').forEach((b) => b.addEventListener('click', async () => {
+          const l = window._leads[Number(b.getAttribute('data-i'))];
+          const orig = b.textContent; b.textContent = 'Looking...';
+          try {
+            const r = await fetch('/api/admin/leads/enrich?company=' + encodeURIComponent(l.supplier), { headers: { 'X-Admin-Token': adminToken } });
+            const j = await r.json().catch(() => ({}));
+            showEnrich(b, l, j.data);
+          } catch (e) { showEnrich(b, l, { configured: true, error: 'Request failed' }); }
+          b.textContent = orig;
+        }));
       } catch (e) {
         if (e.status === 401) { sessionStorage.removeItem('hp_admin_token'); showLogin('Session expired. Enter your token again.'); }
       }
