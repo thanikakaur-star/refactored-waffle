@@ -106,9 +106,10 @@
       <div class="card rounded-2xl p-5 mb-10">
         <h3 class="font-display font-semibold text-white mb-3">Recent signups</h3>
         <div class="overflow-x-auto"><table class="w-full" id="recent-table">
-          <thead><tr><th>Email</th><th>Tier</th><th class="num">When</th></tr></thead>
+          <thead><tr><th>Email</th><th>Tier</th><th class="num">When</th><th>Outreach</th></tr></thead>
           <tbody></tbody>
         </table></div>
+        <p class="text-xs text-gray-500 mt-3">These are real signups with real emails. "Email" opens a pre-filled check-in in your mail app.</p>
       </div>
 
       <!-- Outreach leads -->
@@ -129,10 +130,11 @@
           </div>
         </div>
         <div class="overflow-x-auto"><table class="w-full" id="leads-table">
-          <thead><tr><th>Supplier</th><th>Country</th><th class="num">Wins</th><th class="num">Total (USD)</th><th class="num">Latest win</th><th>Latest contract</th><th></th></tr></thead>
+          <thead><tr><th>Supplier</th><th>Country</th><th class="num">Wins</th><th class="num">Latest contract</th><th>Outreach</th></tr></thead>
           <tbody></tbody>
         </table></div>
-        <p id="leads-note" class="text-xs text-gray-500 mt-3 hidden"></p>
+        <p class="text-xs text-gray-500 mt-3">Award data gives the company, not a contact. "Find" opens a LinkedIn people search for that company so you can find the person, then paste the LinkedIn or email message.</p>
+        <p id="leads-note" class="text-xs text-gray-500 mt-2 hidden"></p>
       </div>
 
       <div class="h-px mb-8" style="background: rgba(255,255,255,0.06);"></div>
@@ -224,8 +226,8 @@
         $('c-awards').textContent = fmt(d.content.awards);
         $('c-benchmarks').textContent = fmt(d.content.benchmarks);
         document.querySelector('#recent-table tbody').innerHTML = (d.recentSignups || []).map(s =>
-          `<tr><td>${escapeHtml(s.email || ', ')}</td><td><span style="color: var(--gold)">${escapeHtml(s.tier || 'free')}</span></td><td class="num">${s.created_at ? new Date(s.created_at).toLocaleDateString() : ', '}</td></tr>`
-        ).join('') || '<tr><td colspan="3" style="color:#64748b">No signups yet</td></tr>';
+          `<tr><td>${escapeHtml(s.email || '')}</td><td><span style="color: var(--gold)">${escapeHtml(s.tier || 'free')}</span></td><td class="num">${s.created_at ? new Date(s.created_at).toLocaleDateString() : ''}</td><td>${s.email ? `<a href="${signupMailto(s.email)}" class="text-xs px-2 py-1 rounded" style="border:1px solid rgba(201,169,110,0.4); color:#c9a96e; text-decoration:none;">Email</a>` : ''}</td></tr>`
+        ).join('') || '<tr><td colspan="4" style="color:#64748b">No signups yet</td></tr>';
       } catch (e) {
         if (e.status === 401) { sessionStorage.removeItem('hp_admin_token'); showLogin('Session expired. Enter your token again.'); }
       }
@@ -281,32 +283,65 @@
       return pickVariant(variants, S);
     }
 
+    // Full email (subject + body) for a lead, ready to paste into your mail app.
+    function outreachEmail(l) {
+      const C = humanizeCat(l.categories && l.categories[0]);
+      const K = (l.latestContract || '').trim();
+      const subject = 'A few open ' + C + ' tenders for ' + l.supplier;
+      const body =
+        'Hi [Name],\n\n' +
+        'I aggregate healthcare tenders from the NHS, EU, US, World Bank and UN into one feed. I checked ' + C + ' and there are a few open right now that looked relevant to ' + l.supplier +
+        (K ? ' (congrats on the recent win on ' + K + ')' : '') + '.\n\n' +
+        'I built HealthProcure Intel after watching suppliers miss tenders buried across a dozen portals. If it is useful, I will set you up with a free filtered feed and alerts, no card needed.\n\n' +
+        'Worth a quick look?\n\n' +
+        'Thanika\nHealthProcure Intel, healthprocureintel.com';
+      return 'Subject: ' + subject + '\n\n' + body;
+    }
+    // LinkedIn people search for a company, to find the person to contact.
+    function linkedinSearchUrl(supplier) {
+      return 'https://www.linkedin.com/search/results/people/?keywords=' + encodeURIComponent(supplier + ' business development OR bid OR sales');
+    }
+    // Pre-filled onboarding/check-in mailto for a signed-up user (real email).
+    function signupMailto(email) {
+      const subject = 'How are you finding HealthProcure Intel?';
+      const body =
+        "Hi,\n\n" +
+        "Thanks for signing up to HealthProcure Intel. I'm Thanika, I built it, so I check in with early users personally.\n\n" +
+        "Is it surfacing the right tenders for you? Tell me the categories and regions you care about and I'll make sure your feed and alerts catch them.\n\n" +
+        "Anything I can help with?\n\n" +
+        "Best,\nThanika\nHealthProcure Intel";
+      return 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    }
+
     async function loadLeads() {
       const days = $('leads-days').value;
       try {
         const res = await adminFetch('/api/admin/leads?days=' + days + '&limit=50');
         const rows = (res.data && res.data.leads) || [];
         window._leads = rows;
+        const btn = (cls, i, label) => '<button data-i="' + i + '" class="' + cls + ' text-xs px-2 py-1 rounded" style="border:1px solid rgba(201,169,110,0.4); color:#c9a96e;">' + label + '</button>';
         document.querySelector('#leads-table tbody').innerHTML = rows.map((l, i) =>
           '<tr>' +
-            '<td>' + escapeHtml(l.supplier) + '</td>' +
+            '<td>' + escapeHtml(l.supplier) + '<div style="color:#64748b;font-size:11px">' + escapeHtml((l.categories || []).map((c) => c.replace(/_/g, ' ')).join(', ') || 'healthcare') + ' &middot; ' + money(l.totalUsd) + '</div></td>' +
             '<td>' + escapeHtml(l.country || '') + '</td>' +
             '<td class="num">' + fmt(l.wins) + '</td>' +
-            '<td class="num">' + money(l.totalUsd) + '</td>' +
-            '<td class="num">' + (l.latestWin ? new Date(l.latestWin).toLocaleDateString() : '') + '</td>' +
-            '<td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escapeHtml(l.latestContract || '') + '</td>' +
-            '<td><button data-i="' + i + '" class="leads-copy text-xs px-2 py-1 rounded" style="border:1px solid rgba(201,169,110,0.4); color:#c9a96e;">Copy</button></td>' +
+            '<td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escapeHtml(l.latestContract || '') + '</td>' +
+            '<td><div style="display:flex;gap:6px;flex-wrap:wrap">' +
+              btn('leads-li', i, 'LinkedIn msg') +
+              btn('leads-em', i, 'Email') +
+              '<a href="' + linkedinSearchUrl(l.supplier) + '" target="_blank" rel="noopener" class="text-xs px-2 py-1 rounded" style="border:1px solid rgba(13,148,136,0.5); color:#0d9488; text-decoration:none;">Find</a>' +
+            '</div></td>' +
           '</tr>'
-        ).join('') || '<tr><td colspan="7" style="color:#64748b">No recent award-winners found yet. Run a scrape to populate award data.</td></tr>';
+        ).join('') || '<tr><td colspan="5" style="color:#64748b">No recent award-winners found yet. Run a scrape to populate award data.</td></tr>';
         if (res.data && res.data.note) { $('leads-note').textContent = res.data.note; $('leads-note').classList.remove('hidden'); }
         else { $('leads-note').classList.add('hidden'); }
-        document.querySelectorAll('.leads-copy').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const l = window._leads[Number(btn.getAttribute('data-i'))];
-            navigator.clipboard.writeText(outreachLine(l)).catch(() => {});
-            btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
-          });
-        });
+        const wire = (cls, fn) => document.querySelectorAll('.' + cls).forEach((b) => b.addEventListener('click', () => {
+          const l = window._leads[Number(b.getAttribute('data-i'))];
+          navigator.clipboard.writeText(fn(l)).catch(() => {});
+          const t = b.textContent; b.textContent = 'Copied'; setTimeout(() => { b.textContent = t; }, 1500);
+        }));
+        wire('leads-li', outreachLine);
+        wire('leads-em', outreachEmail);
       } catch (e) {
         if (e.status === 401) { sessionStorage.removeItem('hp_admin_token'); showLogin('Session expired. Enter your token again.'); }
       }
