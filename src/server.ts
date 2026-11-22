@@ -1520,7 +1520,7 @@ app.get("/", (_req, res) => {
 });
 // Kaur Care consumer "pages": each nav item has its own URL, all served by the
 // single-page app, which renders the matching section from the path.
-const kaurPages = ["how-it-works", "whats-covered", "health", "babies-pregnancy-menopause", "eczema-skin", "prep-playbook", "wellness", "prep-tools", "partners", "faqs"];
+const kaurPages = ["how-it-works", "whats-covered", "health-topics", "babies-pregnancy-menopause", "eczema-skin", "prep-playbook", "wellness", "prep-tools", "partners", "faqs"];
 for (const page of kaurPages) {
   app.get(`/${page}`, (_req, res) => {
     res.sendFile(path.join(publicDir, "fast-track.html"));
