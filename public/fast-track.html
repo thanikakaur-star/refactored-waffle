@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/icons/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>(function(){var p=(location.pathname||'/').replace(/\/+$/,'')||'/';var m={'/':'home','/how-it-works':'how-it-works','/whats-covered':'whats-covered','/babies-pregnancy-menopause':'babies-pregnancy-menopause','/eczema-skin':'eczema-skin','/prep-playbook':'prep-playbook','/wellness':'wellness','/prep-tools':'prep-tools','/partners':'partners','/faqs':'faqs'};document.documentElement.setAttribute('data-kc',m[p]||'home');})();</script>
+  <script>(function(){var p=(location.pathname||'/').replace(/\/+$/,'')||'/';var m={'/':'home','/how-it-works':'how-it-works','/whats-covered':'whats-covered','/health':'health','/babies-pregnancy-menopause':'health','/eczema-skin':'health','/prep-playbook':'prep-playbook','/wellness':'wellness','/prep-tools':'prep-tools','/partners':'partners','/faqs':'faqs'};document.documentElement.setAttribute('data-kc',m[p]||'home');})();</script>
   <!-- PWA / Save to Home Screen -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#2D5A47" />
@@ -99,8 +99,7 @@
     html[data-kc="home"] #results.kc-shown { display: block; }
     html[data-kc="how-it-works"] .kc-page[data-page="how-it-works"],
     html[data-kc="whats-covered"] .kc-page[data-page="whats-covered"],
-    html[data-kc="babies-pregnancy-menopause"] .kc-page[data-page="babies-pregnancy-menopause"],
-    html[data-kc="eczema-skin"] .kc-page[data-page="eczema-skin"],
+    html[data-kc="health"] .kc-page[data-page="health"],
     html[data-kc="prep-playbook"] .kc-page[data-page="prep-playbook"],
     html[data-kc="wellness"] .kc-page[data-page="wellness"],
     html[data-kc="prep-tools"] .kc-page[data-page="prep-tools"],
@@ -130,8 +129,7 @@
       <div class="hidden lg:flex items-center gap-6">
         <a href="/how-it-works" data-nav="how-it-works" class="nav-link">How it works</a>
         <a href="/whats-covered" data-nav="whats-covered" class="nav-link">What's covered</a>
-        <a href="/babies-pregnancy-menopause" data-nav="babies-pregnancy-menopause" class="nav-link">Babies &amp; menopause</a>
-        <a href="/eczema-skin" data-nav="eczema-skin" class="nav-link">Eczema &amp; skin</a>
+        <a href="/health" data-nav="health" class="nav-link">Health topics</a>
         <a href="/prep-playbook" data-nav="prep-playbook" class="nav-link">Prep playbook</a>
         <a href="/wellness" data-nav="wellness" class="nav-link">Wellness</a>
         <a href="/journal" class="nav-link">Journal</a>
@@ -145,8 +143,7 @@
       <div class="max-w-6xl mx-auto px-5 py-2 flex flex-col">
         <a href="/how-it-works" data-nav="how-it-works" class="py-3 border-b border-sand/60 nav-link">How it works</a>
         <a href="/whats-covered" data-nav="whats-covered" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
-        <a href="/babies-pregnancy-menopause" data-nav="babies-pregnancy-menopause" class="py-3 border-b border-sand/60 nav-link">Babies, pregnancy &amp; menopause</a>
-        <a href="/eczema-skin" data-nav="eczema-skin" class="py-3 border-b border-sand/60 nav-link">Eczema &amp; skin</a>
+        <a href="/health" data-nav="health" class="py-3 border-b border-sand/60 nav-link">Health topics</a>
         <a href="/prep-playbook" data-nav="prep-playbook" class="py-3 border-b border-sand/60 nav-link">Prep playbook</a>
         <a href="/wellness" data-nav="wellness" class="py-3 border-b border-sand/60 nav-link">Wellness</a>
         <a href="/prep-tools" data-nav="prep-tools" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
@@ -390,14 +387,69 @@
   </section>
 
   <!-- Babies, pregnancy & maternal equity, menopause education -->
-  <section id="maternal-health" data-page="babies-pregnancy-menopause" class="kc-page site-section border-t border-sand">
+  <section id="health" data-page="health" class="kc-page site-section border-t border-sand">
     <div class="max-w-5xl mx-auto px-5 py-14">
-      <p class="eyebrow mb-2 text-center">Babies, pregnancy &amp; menopause</p>
-      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Care and knowledge for every stage</h2>
-      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-9">Clear, calm guidance for new babies, pregnancy and the menopause years — with honest information about where care can fall short, so you can advocate early.</p>
+      <p class="eyebrow mb-2 text-center">Health topics</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Your health, by topic</h2>
+      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-7">Clear, calm guidance across the conditions that matter most — with honest information about where care can fall short, so you can advocate early. Tap a topic to jump straight to it.</p>
+      <div class="flex flex-wrap justify-center gap-2 mb-10">
+        <a href="#h-periods" class="quick-pill">Periods &amp; cycle</a>
+        <a href="#h-womens" class="quick-pill">Women's health</a>
+        <a href="#h-pregnancy" class="quick-pill">Pregnancy</a>
+        <a href="#h-babies" class="quick-pill">Babies &amp; newborns</a>
+        <a href="#h-menopause" class="quick-pill">Menopause</a>
+        <a href="#h-eczema" class="quick-pill">Eczema &amp; skin</a>
+      </div>
+
+      <!-- Periods & cycle -->
+      <div id="h-periods" class="card p-6 md:p-8 mb-6 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🩸</span><h3 class="font-display text-2xl font-semibold text-sage">Periods &amp; cycle</h3></div>
+        <p class="text-slate-soft text-sm mb-4">"Normal" varies a lot — most cycles run 21–40 days with 2–7 days of bleeding. What matters is a change from <em>your</em> normal, and whether it's affecting your life. Painful or heavy periods are common, but they are not something you simply have to put up with.</p>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><p class="font-semibold text-sm mb-1">Worth getting checked</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1">
+            <li>Flooding, clots, or soaking through pads/tampons every hour or two</li>
+            <li>Pain that stops you working, sleeping or going to school</li>
+            <li>Bleeding between periods or after sex</li>
+            <li>Periods that stop, or become very irregular</li>
+            <li>Feeling exhausted or breathless — ask for an iron/anaemia check</li>
+          </ul></div>
+          <div class="rounded-2xl border border-[#e7eee9] bg-[#f6faf7] p-4"><p class="font-semibold text-sm mb-1 text-sage">You deserve answers</p><p class="text-sm text-slate-soft">Heavy bleeding, endometriosis and PCOS are often brushed off or take years to diagnose. Track your cycle, pain and bleeding, and ask clearly for investigation or referral if you're not being heard.</p></div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-3">
+          <a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/conditions/periods/">NHS periods</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/conditions/heavy-periods/">NHS heavy periods</a>
+          <a class="pill" href="/journal/periods-what-is-normal-when-to-see-gp">What's normal?</a>
+          <a class="pill" href="/journal/heavy-periods-iron-anaemia-check">Heavy periods &amp; iron</a>
+        </div>
+        <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="Periods / menstrual cycle" data-brief-triggers="Cycle length, bleeding heaviness, pain score and any bleeding between periods" onclick="prefillFromEl(this)">Build a GP brief for this</button>
+      </div>
+
+      <!-- Women's health -->
+      <div id="h-womens" class="card p-6 md:p-8 mb-6 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🌷</span><h3 class="font-display text-2xl font-semibold text-sage">Women's health</h3></div>
+        <p class="text-slate-soft text-sm mb-4">Conditions that are common, treatable, and too often dismissed. Knowing the name of what you might be dealing with helps you ask for the right assessment.</p>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><p class="font-semibold text-sm mb-1">What this covers</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1">
+            <li>Endometriosis &amp; chronic pelvic pain</li>
+            <li>PCOS &amp; cycle irregularities</li>
+            <li>Fibroids &amp; heavy menstrual bleeding</li>
+            <li>Recurrent UTIs &amp; bladder comfort</li>
+            <li>Gynaecology / fertility pathways</li>
+          </ul></div>
+          <div class="rounded-2xl border border-[#efd9cc] bg-[#FBF3EE] p-4"><p class="font-semibold text-sm mb-1 text-[#8a4b32]">Getting taken seriously</p><p class="text-sm text-slate-soft">Bring a few months of symptom notes and a clear "this is how it affects my life." If you're declined, it's reasonable to ask for the reason to be recorded, and to use <strong>Right to Choose</strong> for a gynaecology referral.</p></div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-3">
+          <a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/womens-health/">NHS women's health</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.endometriosis-uk.org/">Endometriosis UK</a>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="Women's health concern" data-brief-triggers="Main symptoms, cycle pattern, pain and impact over the last few months" onclick="prefillFromEl(this)">Build a GP brief for this</button>
+          <button type="button" class="px-4 py-2.5 rounded-xl border border-sage text-sage text-sm font-semibold hover:bg-sage/5" data-letter="Gynaecology" onclick="prefillFromEl(this)">Start a Right to Choose letter</button>
+        </div>
+      </div>
 
       <!-- Babies & newborns -->
-      <div class="card p-6 md:p-8 mb-6">
+      <div id="h-babies" class="card p-6 md:p-8 mb-6 scroll-mt-24">
         <div class="flex items-center gap-3 mb-3"><span class="text-2xl">👶</span><h3 class="font-display text-2xl font-semibold text-sage">Babies &amp; newborns</h3></div>
         <p class="text-slate-soft text-sm mb-4">Your health visitor and your baby's red book (personal child health record) are there for you between GP visits. Trust your instincts — you know your baby best.</p>
         <div class="grid sm:grid-cols-2 gap-4 mb-4">
@@ -418,7 +470,7 @@
       </div>
 
       <!-- Pregnancy & maternal health equity -->
-      <div class="card p-6 md:p-8 mb-6">
+      <div id="h-pregnancy" class="card p-6 md:p-8 mb-6 scroll-mt-24">
         <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🤰</span><h3 class="font-display text-2xl font-semibold text-sage">Pregnancy &amp; maternal health equity</h3></div>
         <p class="text-slate-soft text-sm mb-4">You can usually <strong>self-refer to maternity services</strong> as soon as you know you're pregnant — you don't have to wait for a GP. Booking by 10 weeks means earlier checks and support.</p>
         <div class="grid sm:grid-cols-2 gap-4 mb-4">
@@ -441,7 +493,7 @@
       </div>
 
       <!-- Perimenopause & menopause education -->
-      <div class="card p-6 md:p-8">
+      <div id="h-menopause" class="card p-6 md:p-8 mb-6 scroll-mt-24">
         <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🌸</span><h3 class="font-display text-2xl font-semibold text-sage">Perimenopause &amp; menopause education</h3></div>
         <p class="text-slate-soft text-sm mb-4">Perimenopause can start in your 40s (sometimes late 30s) and symptoms can begin years before periods stop. You deserve a proper conversation about your options — including HRT — not to be dismissed or told to just cope.</p>
         <div class="grid sm:grid-cols-2 gap-4 mb-4">
@@ -468,20 +520,9 @@
         <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="Perimenopause / menopause symptoms" data-brief-triggers="Main symptoms, how long, impact on sleep/mood/work, and questions about HRT" onclick="prefillFromEl(this)">Build a GP brief for menopause</button>
       </div>
 
-      <p class="text-xs text-slate-muted text-center mt-6 max-w-2xl mx-auto">This is education and navigation, not medical advice or diagnosis. Always confirm with your GP, midwife, health visitor or NHS 111, and for an emergency call 999.</p>
-    </div>
-  </section>
-
-  <!-- Eczema & skin -->
-  <section id="eczema-skin" data-page="eczema-skin" class="kc-page site-section border-t border-sand">
-    <div class="max-w-5xl mx-auto px-5 py-14">
-      <p class="eyebrow mb-2 text-center">Eczema &amp; skin</p>
-      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Eczema care that actually fits your skin</h2>
-      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-9">Eczema is common and manageable — but it looks different on different skin tones, and too many people get stuck on repeat steroid creams without a real plan. Here's how to get seen properly and care for your skin day to day, affordably.</p>
-
-      <!-- Skin tone -->
-      <div class="card p-6 md:p-8 mb-6">
-        <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🧑🏽‍🤝‍🧑🏿</span><h3 class="font-display text-2xl font-semibold text-sage">How eczema looks on different skin tones</h3></div>
+      <!-- Eczema: skin tone -->
+      <div id="h-eczema" class="card p-6 md:p-8 mb-6 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🧑🏽‍🤝‍🧑🏿</span><h3 class="font-display text-2xl font-semibold text-sage">Eczema — how it looks on different skin tones</h3></div>
         <p class="text-slate-soft text-sm mb-4">On brown and black skin, eczema often looks <strong>purple, grey, brown or ashen</strong> rather than the classic "red" — so it's frequently missed or judged less severe than it really is. The pattern can differ too (often the front of the knees and the outside of the elbows).</p>
         <div class="grid sm:grid-cols-2 gap-4 mb-4">
           <div><p class="font-semibold text-sm mb-1">Good to know</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1">
@@ -497,7 +538,7 @@
         </div>
       </div>
 
-      <!-- Steroid loop -->
+      <!-- Eczema: steroid loop -->
       <div class="card p-6 md:p-8 mb-6">
         <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🔁</span><h3 class="font-display text-2xl font-semibold text-sage">The steroid-cream loop — get a proper plan</h3></div>
         <p class="text-slate-soft text-sm mb-4">Topical steroids are a normal, effective part of treating a flare — used at the right strength for a short burst (the mildest ones on the face). The problem is being left on <strong>repeat steroid prescriptions for months with no review</strong>. That's not a plan.</p>
@@ -513,7 +554,7 @@
         <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-letter="Dermatology (eczema)" onclick="prefillFromEl(this)">Start a Right to Choose dermatology letter</button>
       </div>
 
-      <!-- Everyday care + affordable -->
+      <!-- Eczema: everyday care + affordable -->
       <div class="card p-6 md:p-8 mb-6">
         <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🧴</span><h3 class="font-display text-2xl font-semibold text-sage">Everyday care: fragrance-free, without overspending</h3></div>
         <p class="text-slate-soft text-sm mb-4">Moisturisers (emollients) are the foundation — the single most important thing. Use them <strong>generously and often, at least twice a day</strong>, even when skin looks clear, and within a few minutes of bathing to lock moisture in.</p>
@@ -534,7 +575,7 @@
         <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="Eczema" data-brief-triggers="Where it is, how it looks on my skin tone, flare triggers, and what I've tried" onclick="prefillFromEl(this)">Build a GP brief for eczema</button>
       </div>
 
-      <!-- Light therapy honest -->
+      <!-- Eczema: light therapy honest -->
       <div class="card p-6 md:p-8">
         <div class="flex items-center gap-3 mb-3"><span class="text-2xl">💡</span><h3 class="font-display text-2xl font-semibold text-sage">Light therapy — the honest version</h3></div>
         <div class="grid sm:grid-cols-2 gap-4">
@@ -543,9 +584,11 @@
         </div>
       </div>
 
-      <p class="text-xs text-slate-muted text-center mt-6 max-w-2xl mx-auto">This is education and navigation, not medical advice or diagnosis. Confirm anything about treatments with your GP, pharmacist or dermatologist, and for a severe skin infection (hot, spreading, you feel unwell) seek urgent care.</p>
+      <p class="text-xs text-slate-muted text-center mt-8 max-w-2xl mx-auto">This is education and navigation, not medical advice or diagnosis. Always confirm with your GP, pharmacist, midwife, health visitor or NHS 111, and for an emergency call 999.</p>
     </div>
   </section>
+
+  <!-- (removed) old standalone Eczema & skin -->
 
   <!-- Appointment Prep Playbook + SBAR -->
   <section id="prep-playbook" data-page="prep-playbook" class="kc-page site-section border-t border-sand">
@@ -1448,9 +1491,9 @@
     function downloadText(name, id){ var blob=new Blob([$(id).dataset.text||''],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click(); }
 
     // ---- Multi-page router: each nav item is its own page with a real URL ----
-    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/babies-pregnancy-menopause':'babies-pregnancy-menopause', '/eczema-skin':'eczema-skin', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
-    var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'babies-pregnancy-menopause':'Babies, pregnancy & menopause | Kaur Care', 'eczema-skin':'Eczema & skin | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
-    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'maternal-health':'babies-pregnancy-menopause', 'eczema-skin':'eczema-skin', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
+    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/health':'health', '/babies-pregnancy-menopause':'health', '/eczema-skin':'health', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
+    var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'health':'Health topics | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
+    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'health':'health', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
     function kcPathFor(slug){ for (var k in KC_PATHS){ if (KC_PATHS[k] === slug) return k; } return '/'; }
     function kcCurrent(){ var p = (location.pathname || '/').replace(/\/+$/,'') || '/'; return KC_PATHS[p] || 'home'; }
     function showPage(slug, push){
