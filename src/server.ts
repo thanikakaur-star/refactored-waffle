@@ -19,7 +19,7 @@ import {
   SELF_CARE,
   conditionToCategory,
 } from "./data/fastTrackPathways.js";
-import { findCommissionedServices, cqcSearch, officialDirectoryLinks } from "./fast-track/providers.js";
+import { findCommissionedServices, cqcSearch, officialDirectoryLinks, getActivePartner } from "./fast-track/providers.js";
 import { getSeoOverviewSafe, isSearchConsoleConfigured } from "./admin/searchConsole.js";
 import type { ApiTier } from "./types/index.js";
 import type { Request, Response, NextFunction } from "express";
@@ -107,6 +107,7 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
               postcode: session.metadata?.postcode ?? null,
               condition: session.metadata?.condition ?? null,
               plan_type: session.metadata?.plan_type ?? null,
+              partner_slug: session.metadata?.partner_slug || null,
               unlocked: true,
             });
           }
@@ -894,6 +895,19 @@ app.post("/api/fast-track/search", async (req, res) => {
   });
 });
 
+// White-label partner lookup for /fast-track. Returns safe public branding for
+// an active partner so the page can theme itself and (for sponsored_free
+// partners) unlock the generators. Returns { partner: null } when not found.
+app.get("/api/fast-track/partner", async (req, res) => {
+  const slug = typeof req.query.slug === "string" ? req.query.slug : "";
+  if (!slug) {
+    res.json({ partner: null });
+    return;
+  }
+  const partner = await getActivePartner(slug);
+  res.json({ partner });
+});
+
 // Fast-Track consumer checkout: £4.99 one-off document unlock or £7.99/mo family
 // pass. Core NHS info stays free; this only unlocks the convenience generators.
 app.post("/api/fast-track/checkout", async (req, res) => {
@@ -905,6 +919,11 @@ app.post("/api/fast-track/checkout", async (req, res) => {
   const email = ftStr(req.body?.email, 254);
   const postcode = ftStr(req.body?.postcode, 12);
   const condition = ftStr(req.body?.condition, 120);
+  const partnerSlug = (ftStr(req.body?.partner_slug, 64) || "").toLowerCase();
+  const partner = partnerSlug ? await getActivePartner(partnerSlug) : null;
+  // Only revenue-share partners route through paid checkout; sponsored_free
+  // partners unlock without payment, so we never tag their slug onto a payout.
+  const payoutSlug = partner && partner.accessMode === "revenue_share" ? partner.slug : "";
   let priceId: string | undefined;
   let mode: "payment" | "subscription";
   let planType: string;
@@ -929,9 +948,9 @@ app.post("/api/fast-track/checkout", async (req, res) => {
       payment_method_types: ["card"],
       customer_email: email || undefined,
       line_items: [{ price: priceId, quantity: 1 }],
-      metadata: { fast_track: "true", plan_type: planType, email: email || "", postcode: postcode || "", condition: condition || "" },
-      success_url: `${origin}/fast-track?session_id={CHECKOUT_SESSION_ID}&unlocked=true`,
-      cancel_url: `${origin}/fast-track`,
+      metadata: { fast_track: "true", plan_type: planType, email: email || "", postcode: postcode || "", condition: condition || "", partner_slug: payoutSlug },
+      success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}&unlocked=true${payoutSlug ? `&partner=${encodeURIComponent(payoutSlug)}` : ""}`,
+      cancel_url: `${origin}/${payoutSlug ? `?partner=${encodeURIComponent(payoutSlug)}` : ""}`,
     });
     res.json({ url: session.url });
   } catch (err) {
@@ -1473,9 +1492,16 @@ app.get("/robots.txt", (_req, res) => {
   res.type("text/plain").sendFile(path.join(publicDir, "robots.txt"));
 });
 
-// Serve marketing site
-app.use(express.static(publicDir));
+// Serve marketing site. index:false so the explicit "/" route below wins and the
+// consumer homepage (Kaur Care) is served at the root, not the B2B index.html.
+app.use(express.static(publicDir, { index: false }));
+// Kaur Care (by HealthProcure Intel) is the primary consumer homepage.
 app.get("/", (_req, res) => {
+  res.sendFile(path.join(publicDir, "fast-track.html"));
+});
+// The B2B landing page now lives at /b2b (dashboard, tenders, api and B2B Stripe
+// routes are unchanged).
+app.get("/b2b", (_req, res) => {
   res.sendFile(path.join(publicDir, "index.html"));
 });
 
@@ -1492,9 +1518,11 @@ app.get("/tenders", (_req, res) => {
   res.sendFile(path.join(publicDir, "tenders", "index.html"));
 });
 
-// Consumer vertical: CarePath Fast-Track navigator
-app.get("/fast-track", (_req, res) => {
-  res.sendFile(path.join(publicDir, "fast-track.html"));
+// Kaur Care moved to the homepage: redirect the old /fast-track path to "/",
+// preserving query params (?session_id=, ?partner=, etc).
+app.get("/fast-track", (req, res) => {
+  const qs = req.originalUrl.includes("?") ? req.originalUrl.slice(req.originalUrl.indexOf("?")) : "";
+  res.redirect(301, `/${qs}`);
 });
 app.get("/tenders/:slug", (req, res) => {
   const slug = path.basename(req.params.slug, ".html");

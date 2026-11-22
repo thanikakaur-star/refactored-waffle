@@ -4,31 +4,41 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CarePath Fast-Track | Skip the Queue for NHS & Private Care</title>
-  <meta name="description" content="Match your condition and postcode to same-day NHS Pharmacy First, NHS Right to Choose options, women's health pathways and local wellness support. Appointment navigation, not medical advice." />
+  <title>Kaur Care by HealthProcure Intel | Skip the Queue for NHS &amp; Private Care</title>
+  <meta name="description" content="Kaur Care matches your condition and postcode to same-day NHS Pharmacy First, NHS Right to Choose options, women's health pathways and local wellness support. Appointment navigation, not medical advice." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://healthprocureintel.com/fast-track" />
+  <link rel="canonical" href="https://healthprocureintel.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Kaur Care by HealthProcure Intel" />
+  <meta property="og:title" content="Kaur Care by HealthProcure Intel | Skip the Queue for NHS &amp; Private Care" />
+  <meta property="og:description" content="Find your fastest route to care: same-day NHS Pharmacy First, Right to Choose options and women's health pathways, matched to your postcode. Navigation, not medical advice." />
+  <meta property="og:url" content="https://healthprocureintel.com/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Kaur Care by HealthProcure Intel" />
+  <meta name="twitter:description" content="Find your fastest route to NHS and private care in 10 seconds." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { theme: { extend: {
-      colors: { sage: { DEFAULT: '#2E5A44', dark: '#244736', light: '#4a7a60' }, cream: '#FAF8F5', slate: { DEFAULT: '#1E293B', soft: '#475569', muted: '#64748b' } },
+      colors: { sage: { DEFAULT: 'var(--brand-primary)', dark: 'var(--brand-dark)', light: 'var(--brand-light)' }, cream: '#FAF8F5', slate: { DEFAULT: '#1E293B', soft: '#475569', muted: '#64748b' } },
       fontFamily: { display: ['Fraunces', 'Georgia', 'serif'], body: ['Inter', 'system-ui', 'sans-serif'] },
     } } };
   </script>
   <style>
+    :root { --brand-primary: #2E5A44; --brand-dark: #244736; --brand-light: #4a7a60; }
     body { font-family: 'Inter', system-ui, sans-serif; background: #FAF8F5; color: #1E293B; }
     .card { background: #fff; border: 1px solid #ece7df; border-radius: 16px; }
     .pill { border: 1px solid #d8d0c4; background: #fff; border-radius: 9999px; padding: 8px 14px; font-size: 14px; cursor: pointer; transition: all .15s; }
-    .pill:hover { border-color: #2E5A44; }
-    .pill.active { background: #2E5A44; color: #fff; border-color: #2E5A44; }
+    .pill:hover { border-color: var(--brand-primary); }
+    .pill.active { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
     .tab-btn { padding: 12px 16px; font-weight: 600; font-size: 14px; color: #64748b; border-bottom: 2px solid transparent; cursor: pointer; }
-    .tab-btn.active { color: #2E5A44; border-bottom-color: #2E5A44; }
-    .badge-verified { background: #e7f0ea; color: #2E5A44; }
+    .tab-btn.active { color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
+    .badge-verified { background: #e7f0ea; color: var(--brand-primary); }
     .badge-check { background: #fdf3e7; color: #b26a16; }
     input, select, textarea { font-family: inherit; }
+    body.embed nav { display: none; }
     @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } }
   </style>
 </head>
@@ -41,11 +51,15 @@
 
   <nav class="bg-cream/90 backdrop-blur border-b border-[#ece7df] sticky top-0 z-40">
     <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
-      <a href="/fast-track" class="flex items-center gap-2">
-        <span class="w-9 h-9 rounded-xl bg-sage flex items-center justify-center text-white font-display font-bold">C</span>
-        <span class="font-display font-semibold text-lg text-sage">CarePath</span>
+      <a href="/" class="flex items-center gap-2.5">
+        <img id="brand-logo" alt="" class="h-9 hidden" />
+        <span id="brand-mark" class="w-9 h-9 rounded-xl bg-sage flex items-center justify-center text-white font-display font-bold">K</span>
+        <span class="leading-tight">
+          <span id="brand-name" class="block font-display font-semibold text-lg text-sage">Kaur Care</span>
+          <span id="brand-sub" class="block text-[11px] text-slate-muted -mt-0.5">by HealthProcure Intel</span>
+        </span>
       </a>
-      <a href="/" class="text-sm text-slate-muted hover:text-sage">HealthProcure Intel</a>
+      <a href="/b2b" class="text-sm text-slate-muted hover:text-sage">B2B &amp; NHS Suppliers</a>
     </div>
   </nav>
 
@@ -98,6 +112,20 @@
           <button data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass, £7.99/mo</button>
         </div>
         <p id="unlock-msg" class="text-xs text-slate-muted mt-3"></p>
+        <div class="mt-4 pt-4 border-t border-[#ece7df]">
+          <p class="text-xs text-slate-muted mb-2">Have an employer or partner access code?</p>
+          <div class="flex flex-col sm:flex-row gap-2 justify-center max-w-sm mx-auto">
+            <input id="access-code" type="text" placeholder="Enter your code" class="flex-1 px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm focus:outline-none focus:border-sage" />
+            <button onclick="redeemAccessCode()" class="px-4 py-2.5 rounded-xl border border-sage text-sage font-semibold text-sm">Apply code</button>
+          </div>
+          <p id="code-msg" class="text-xs text-slate-muted mt-2"></p>
+        </div>
+      </div>
+
+      <div id="tools-partner" class="hidden card p-6 text-center bg-[#f4f8f5] border-[#d9e6de]">
+        <div class="text-2xl mb-1">✓</div>
+        <p id="partner-unlock-msg" class="font-semibold text-sage"></p>
+        <p class="text-sm text-slate-soft mt-1">The prep tools below are ready to use.</p>
       </div>
 
       <div id="tools-unlocked" class="hidden space-y-6">
@@ -137,7 +165,7 @@
   <footer class="bg-sage text-white/90 py-8">
     <div class="max-w-4xl mx-auto px-5 text-sm">
       <p class="mb-2"><strong>This is a navigation and directory tool, not medical advice.</strong> It does not diagnose, prescribe or replace a consultation. Always confirm eligibility with your pharmacy, GP or NHS 111, and seek urgent help for serious symptoms.</p>
-      <p class="text-white/70 text-xs">Powered by HealthProcure Intel, NHS commissioning &amp; procurement data. <a href="/" class="underline">Back to HealthProcure Intel</a></p>
+      <p class="text-white/70 text-xs">Kaur Care, powered by HealthProcure Intel, NHS commissioning &amp; procurement data. <a href="/b2b" class="underline">B2B &amp; NHS Suppliers &rarr;</a></p>
     </div>
   </footer>
 
@@ -147,7 +175,7 @@
       "Women's Health": ["Endometriosis", "PCOS", "Heavy bleeding / fibroids", "Perimenopause / menopause", "Recurrent UTI", "Gynaecology / fertility"],
       "Adult 16+": ["UTI", "Sore throat", "Sinusitis", "Shingles", "Acne", "Migraine", "Dermatology", "ENT", "Physio / MSK", "MRI / ultrasound", "ADHD / Autism assessment"]
     };
-    var state = { who: '', condition: '', postcode: '', data: null, unlocked: false, demo: false };
+    var state = { who: '', condition: '', postcode: '', data: null, unlocked: false, demo: false, partner: null, partnerSlug: '', embed: false };
     function $(id){ return document.getElementById(id); }
     function esc(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
 
@@ -249,7 +277,7 @@
       // Tab 3
       var sc = d.selfCare.map(function(s){ return '<details class="card p-4 mb-2"><summary class="cursor-pointer font-semibold">'+esc(s.name)+'</summary><ul class="list-disc pl-5 text-sm text-slate-soft mt-2">'+s.tips.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul></details>'; }).join('');
       var cfg = window.FAST_TRACK_CONFIG || {};
-      var essentials = (cfg.AFFILIATE_ESSENTIALS || []).map(function(e){
+      var essentials = (cfg.AFFILIATE_ESSENTIALS || []).filter(function(e){ return e && e.url && String(e.url).trim() && String(e.url).indexOf('REPLACE') < 0; }).map(function(e){
         return '<div class="card p-4"><div class="font-semibold mb-1">'+esc(e.name)+'</div><p class="text-sm text-slate-soft mb-3">'+esc(e.blurb)+'</p><a href="'+esc(e.url)+'" target="_blank" rel="noopener sponsored nofollow" class="pill inline-block">'+esc(e.cta || 'View product')+'</a></div>';
       }).join('');
       var listUrl = cfg.LIST_PRACTICE_STRIPE_URL || '#';
@@ -266,17 +294,18 @@
         var email = $('unlock-email').value;
         $('unlock-msg').textContent = 'Opening secure checkout...';
         try {
-          var res = await fetch('/api/fast-track/checkout', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan: plan, email: email, postcode: state.postcode, condition: state.condition }) });
+          var res = await fetch('/api/fast-track/checkout', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan: plan, email: email, postcode: state.postcode, condition: state.condition, partner_slug: state.partnerSlug }) });
           var j = await res.json();
           if (j.url){ window.location = j.url; }
           else { $('unlock-msg').textContent = j.error || 'Checkout is not available yet.'; }
         } catch(e){ $('unlock-msg').textContent = 'Checkout is not available yet.'; }
       });
     });
-    function setUnlocked(on){
+    function setUnlocked(on, viaPartner){
       state.unlocked = on;
-      $('tools-locked').classList.toggle('hidden', on);
       $('tools-unlocked').classList.toggle('hidden', !on);
+      $('tools-locked').classList.toggle('hidden', on);
+      $('tools-partner').classList.toggle('hidden', !(on && viaPartner));
     }
     async function checkUnlock(){
       var params = new URLSearchParams(location.search);
@@ -285,9 +314,67 @@
         var res = await fetch('/api/fast-track/verify' + (sid ? ('?session_id=' + encodeURIComponent(sid)) : ''));
         var j = await res.json();
         state.demo = !!j.demo;
-        setUnlocked(!!j.unlocked);
+        if (j.unlocked) setUnlocked(true, false);
         if (j.unlocked && sid){ $('unlock-msg').textContent = 'Unlocked. Thank you.'; }
       } catch(e){ /* stay locked */ }
+    }
+
+    // White-label branding helpers
+    function hexToRgb(h){ h=String(h||'').replace('#',''); if(h.length===3){ h=h.split('').map(function(c){return c+c;}).join(''); } var n=parseInt(h.slice(0,6),16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+    function rgbToHex(r,g,b){ return '#'+[r,g,b].map(function(x){ return ('0'+Math.max(0,Math.min(255,Math.round(x))).toString(16)).slice(-2); }).join(''); }
+    function applyBrand(opts){
+      // opts: { slug, brandName, primaryColor, logoUrl, accessMode }
+      state.partner = opts; state.partnerSlug = opts.slug || '';
+      if (opts.primaryColor && /^#[0-9a-fA-F]{3,8}$/.test(opts.primaryColor)){
+        var c = hexToRgb(opts.primaryColor);
+        var root = document.documentElement;
+        root.style.setProperty('--brand-primary', opts.primaryColor);
+        root.style.setProperty('--brand-dark', rgbToHex(c[0]*0.8, c[1]*0.8, c[2]*0.8));
+        root.style.setProperty('--brand-light', rgbToHex(c[0]+(255-c[0])*0.4, c[1]+(255-c[1])*0.4, c[2]+(255-c[2])*0.4));
+      }
+      if (opts.brandName){
+        $('brand-name').textContent = opts.brandName;
+        $('brand-sub').textContent = 'by HealthProcure Intel';
+        $('brand-mark').textContent = (opts.brandName.trim()[0] || 'K').toUpperCase();
+        document.title = opts.brandName + ' | Care Navigator by HealthProcure Intel';
+      }
+      if (opts.logoUrl){ var img=$('brand-logo'); img.src=opts.logoUrl; img.alt=opts.brandName||''; img.classList.remove('hidden'); $('brand-mark').classList.add('hidden'); }
+      if (opts.accessMode === 'sponsored_free'){
+        setUnlocked(true, true);
+        $('partner-unlock-msg').textContent = 'Unlocked via ' + (opts.brandName || 'your partner');
+      }
+    }
+    async function redeemAccessCode(){
+      var code = ($('access-code').value || '').trim().toLowerCase();
+      if (!code){ $('code-msg').textContent = 'Please enter your code.'; return; }
+      $('code-msg').textContent = 'Checking...';
+      try {
+        var res = await fetch('/api/fast-track/partner?slug=' + encodeURIComponent(code));
+        var j = await res.json();
+        if (j.partner && j.partner.accessMode === 'sponsored_free'){ applyBrand(j.partner); $('code-msg').textContent = ''; }
+        else if (j.partner){ applyBrand(j.partner); $('code-msg').textContent = 'Partner applied. This code still needs the pass above to unlock the tools.'; }
+        else { $('code-msg').textContent = 'Code not recognised. Please check with your employer or partner.'; }
+      } catch(e){ $('code-msg').textContent = 'Could not check the code. Please try again.'; }
+    }
+    async function initPartner(){
+      var params = new URLSearchParams(location.search);
+      if (params.get('embed') === 'true'){ state.embed = true; document.body.classList.add('embed'); }
+      var slug = (params.get('partner') || '').trim().toLowerCase();
+      if (!slug) return;
+      // Lightweight param-based white-label (no DB row needed):
+      // ?partner=<slug>&name=<BrandName>&color=<HexColor>&unlock=sponsored
+      var nameParam = params.get('name');
+      var colorParam = params.get('color');
+      var unlockParam = params.get('unlock');
+      try {
+        var res = await fetch('/api/fast-track/partner?slug=' + encodeURIComponent(slug));
+        var j = await res.json();
+        if (j.partner){ applyBrand(j.partner); return; }
+      } catch(e){ /* fall through to params */ }
+      if (nameParam || colorParam || unlockParam){
+        var color = colorParam ? ('#' + String(colorParam).replace(/^#/, '')) : '';
+        applyBrand({ slug: slug, brandName: nameParam || '', primaryColor: color, logoUrl: null, accessMode: unlockParam === 'sponsored' ? 'sponsored_free' : 'revenue_share' });
+      }
     }
 
     // Generators (client-side, nothing sent to the server)
@@ -306,25 +393,27 @@
         + 'I would like to request a referral for ' + ($('l-condition').value || '[condition / service]') + ' to the following provider:\n'
         + ($('l-clinic').value || '[Chosen clinic / provider]') + '\n\n'
         + 'I understand this provider holds an NHS standard contract for this service. I would be grateful if you could process this referral, and please let me know if any further information is needed.\n\n'
-        + 'Yours sincerely,\n' + ($('l-name').value || '[Full name]');
-      outBox('l-out', 'right-to-choose-letter', t);
+        + 'Yours sincerely,\n' + ($('l-name').value || '[Full name]')
+        + '\n\n---\nPrepared with Kaur Care (by HealthProcure Intel). Appointment navigation, not medical advice.';
+      outBox('l-out', 'kaur-care-right-to-choose-letter', t);
     }
     function genBrief(){
       var qs = ($('b-questions').value || '').split('\n').filter(Boolean).map(function(q){ return '  - ' + q; }).join('\n');
-      var t = 'GP APPOINTMENT BRIEF (1 page)\n\n'
+      var t = 'GP & WOMEN\'S HEALTH APPOINTMENT BRIEF (1 page)\nKaur Care (by HealthProcure Intel)\n\n'
         + 'Main concern: ' + ($('b-condition').value || state.condition || '[condition]') + '\n'
         + 'Duration: ' + ($('b-duration').value || '[how long]') + '\n'
         + 'Pattern / triggers: ' + ($('b-triggers').value || '[cycle / pain triggers]') + '\n\n'
         + 'Impact on daily life:\n' + ($('b-impact').value || '[impact on work, sleep, daily activities]') + '\n\n'
         + 'My questions for the GP:\n' + (qs || '  - [your questions]') + '\n\n'
         + 'Note: this is my own summary to help the appointment. It is not a diagnosis.';
-      outBox('b-out', 'gp-symptom-brief', t);
+      outBox('b-out', 'kaur-care-symptom-brief', t);
     }
     function copyText(id){ navigator.clipboard.writeText($(id).dataset.text || '').catch(function(){}); }
     function printText(id){ var pa=$('print-area'); pa.innerHTML='<pre style="white-space:pre-wrap;font-family:serif;padding:24px">'+esc($(id).dataset.text||'')+'</pre>'; pa.classList.remove('hidden'); window.print(); setTimeout(function(){ pa.classList.add('hidden'); }, 500); }
     function downloadText(name, id){ var blob=new Blob([$(id).dataset.text||''],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click(); }
 
-    checkUnlock();
+    // Paid/demo unlock first (never relocks), then partner branding/unlock on top.
+    checkUnlock().then(initPartner);
   </script>
 
 </body>

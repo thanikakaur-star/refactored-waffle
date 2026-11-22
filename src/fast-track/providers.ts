@@ -77,6 +77,46 @@ export async function cqcSearch(limit = 8): Promise<CqcLocation[]> {
   }
 }
 
+export interface FastTrackPartner {
+  slug: string;
+  brandName: string;
+  primaryColor: string;
+  logoUrl: string | null;
+  accessMode: "sponsored_free" | "revenue_share";
+}
+
+// Look up an active white-label partner by slug. Returns null if not found,
+// inactive, or if the partner table is unavailable. Only safe, public fields
+// are returned (no ids or internal columns).
+export async function getActivePartner(slug: string): Promise<FastTrackPartner | null> {
+  const clean = (slug || "").trim().toLowerCase();
+  if (!clean || !/^[a-z0-9-]{1,64}$/.test(clean)) return null;
+  try {
+    const client = getSupabaseClient();
+    const { data, error } = await client
+      .from("fast_track_partners")
+      .select("slug, brand_name, primary_color, logo_url, access_mode, active")
+      .eq("slug", clean)
+      .eq("active", true)
+      .limit(1);
+    if (error) throw new Error(error.message);
+    const row = Array.isArray(data) ? (data[0] as any) : null;
+    if (!row) return null;
+    const color = typeof row.primary_color === "string" && /^#[0-9a-fA-F]{3,8}$/.test(row.primary_color) ? row.primary_color : "#2E5A44";
+    const accessMode = row.access_mode === "sponsored_free" ? "sponsored_free" : "revenue_share";
+    return {
+      slug: row.slug,
+      brandName: row.brand_name || "",
+      primaryColor: color,
+      logoUrl: row.logo_url ?? null,
+      accessMode,
+    };
+  } catch (err) {
+    logger.warn("Fast-track partner lookup failed", { error: String(err), slug: clean });
+    return null;
+  }
+}
+
 export function officialDirectoryLinks(postcode: string) {
   const pc = (postcode || "").trim();
   const q = pc ? `?location=${encodeURIComponent(pc)}` : "";
