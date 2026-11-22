@@ -940,22 +940,33 @@ app.post("/api/fast-track/checkout", async (req, res) => {
     res.status(503).json({ error: "This plan is not configured yet (missing Stripe price id)." });
     return;
   }
+  // Forgiving email handling: empty is fine (Stripe collects it on its hosted page);
+  // a non-empty value must look like an email, else we reject with a clear message
+  // rather than letting Stripe throw a generic "Invalid email address" error.
+  const trimmedEmail = (email || "").trim();
+  const emailLooksValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
+  if (trimmedEmail && !emailLooksValid) {
+    res.status(400).json({ error: "Please enter a valid email address.", code: "invalid_email" });
+    return;
+  }
+
   try {
     const stripe = new Stripe(STRIPE_SECRET);
     const origin = req.headers.origin || `${req.protocol}://${req.get("host")}`;
     const session = await stripe.checkout.sessions.create({
       mode,
       payment_method_types: ["card"],
-      customer_email: email || undefined,
+      customer_email: emailLooksValid ? trimmedEmail : undefined,
       line_items: [{ price: priceId, quantity: 1 }],
-      metadata: { fast_track: "true", plan_type: planType, email: email || "", postcode: postcode || "", condition: condition || "", partner_slug: payoutSlug },
-      success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}&unlocked=true${payoutSlug ? `&partner=${encodeURIComponent(payoutSlug)}` : ""}`,
-      cancel_url: `${origin}/${payoutSlug ? `?partner=${encodeURIComponent(payoutSlug)}` : ""}`,
+      metadata: { fast_track: "true", plan_type: planType, email: emailLooksValid ? trimmedEmail : "", postcode: postcode || "", condition: condition || "", partner_slug: payoutSlug },
+      success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}&unlocked=1${payoutSlug ? `&partner=${encodeURIComponent(payoutSlug)}` : ""}#pricing`,
+      cancel_url: `${origin}/${payoutSlug ? `?partner=${encodeURIComponent(payoutSlug)}` : ""}#pricing`,
     });
     res.json({ url: session.url });
   } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
     logger.error("Fast-track checkout failed", { error: String(err) });
-    res.status(500).json({ error: "Could not start checkout. Please try again." });
+    res.status(500).json({ error: "Could not start checkout. Please try again.", detail });
   }
 });
 
