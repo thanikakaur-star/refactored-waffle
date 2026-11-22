@@ -334,3 +334,41 @@ Every section begins with at least 48px of air above its headline and 32–48px 
 - **Teal is secondary.** Teal used for status/secondary actions on dark, inline links on dark, progress indicators — not primary accent.
 - **No gradients, no animations.** System is static-by-default for clarity. Animations (if added) are micro-interactions only (button press scale, fade-ins on load) — never background motion.
 - **Photography is honest.** Imagery is photographic and data-contextual (real dashboards, real data) — never stock or decorative.
+
+---
+
+## Kaur Care — Social: Introductory Carousel
+
+The approved Instagram intro carousel (8 slides, 1080×1350, 4:5). Posted and well received.
+
+### Palette
+- Cream `#FAF7F2` (default bg), Linen `#F4ECDE` (alternate bg), Sand `#E8E0D5` (slide numbers)
+- Sage `#2D5A47` (headings, CTA bg), Terracotta `#C87A5A` (eyebrows, accents)
+- Decorative leaf blobs at ~6% opacity, one or two per slide, alternating sage/terracotta
+
+### Typography
+- Headlines: **Fraunces** 600 (stand-in for the logo font; Canva name is "The Seasons", a paid font, to be swapped in when licensed file is available)
+- Body: **Plus Jakarta Sans** 400–800
+- Eyebrow: 27px, 800, uppercase, 0.15em tracking, terracotta
+- Headline 72–88px, line-height 1.05; body 39px, line-height 1.45
+
+### Layout
+- 90–100px padding; eyebrow → headline → body, left aligned (cover and CTA centred)
+- Slide number top right (sand), `kaurcare.com` bottom left, terracotta `→` bottom right (`swipe →` on cover)
+- Backgrounds alternate cream / linen; slide 6 (comfort) and 8 (CTA) are solid sage with white type
+
+### Slide sequence
+1. Cover: "Introducing", emblem + wordmark, "Care navigation that puts you back in control."
+2. Why: "So many people feel unheard."
+3. Story: "I built this for them — and for you." (clinical experience, Master's, both sides; no family references)
+4. What we do: tell us, see options, walk in prepared
+5. Everything we offer: two-column list
+6. Comfort: "Appointments don't have to be scary." (sage)
+7. Both sides: "Easier for patients AND providers."
+8. CTA: "Free. No sign-up. Private." + kaurcare.com pill (sage)
+
+### Rules
+- Use the real emblem and wordmark art; never retype the wordmark
+- Do not mention HealthProcure Intel; Kaur Care is standalone
+- Copy stays warm, calm, plain English; navigation, not medical advice
+- Source script: render pipeline embeds fonts as base64 so output is reproducible offline
