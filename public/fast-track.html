@@ -43,6 +43,18 @@
         "url": "https://kaurcare.com/",
         "name": "Kaur Care",
         "publisher": { "@id": "https://kaurcare.com/#organization" }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://kaurcare.com/#faq",
+        "mainEntity": [
+          { "@type": "Question", "name": "Is Kaur Care free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Checking your NHS Pharmacy First eligibility, your Right to Choose rights and the official NHS and CQC directories is completely free, with no sign-up. Only the optional document generators are paid." } },
+          { "@type": "Question", "name": "Is this an official NHS service?", "acceptedAnswer": { "@type": "Answer", "text": "No. Kaur Care is an independent navigation tool that helps you reach real NHS services faster. We point you to official NHS and CQC pages; we are not the NHS and do not provide treatment." } },
+          { "@type": "Question", "name": "Is this medical advice?", "acceptedAnswer": { "@type": "Answer", "text": "No. Kaur Care helps you navigate to the right care but does not diagnose, prescribe or replace a consultation. Confirm eligibility with your pharmacy, GP or NHS 111, and call 999 or 111 for anything serious." } },
+          { "@type": "Question", "name": "What happens to my health information?", "acceptedAnswer": { "@type": "Answer", "text": "The referral letter and symptom brief are generated entirely in your browser. The details you type never reach our servers and are never stored by us." } },
+          { "@type": "Question", "name": "Do I need to create an account?", "acceptedAnswer": { "@type": "Answer", "text": "No. You can search and see all your NHS options without signing up. You only enter an email if you choose to buy the optional document pass." } },
+          { "@type": "Question", "name": "Does it work across the UK?", "acceptedAnswer": { "@type": "Answer", "text": "The NHS Pharmacy First and Right to Choose pathways apply in England. The self-care guidance and appointment-prep tools are useful across the UK. Always confirm local availability with your pharmacy or GP." } }
+        ]
       }
     ]
   }
@@ -106,7 +118,7 @@
         <a href="#covered" class="nav-link">What's covered</a>
         <a href="#pricing" class="nav-link">Prep tools</a>
         <a href="/journal" class="nav-link">Journal</a>
-        <a href="#free" class="nav-link">Is it free?</a>
+        <a href="#faq" class="nav-link">FAQs</a>
       </div>
       <div class="flex items-center gap-2">
         <a href="#find" class="shrink-0 px-4 py-2 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark">Find care</a>
@@ -119,6 +131,7 @@
         <a href="#covered" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
         <a href="#pricing" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
         <a href="#free" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Is it free?</a>
+        <a href="#faq" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">FAQs</a>
         <a href="/journal" class="py-3 border-b border-sand/60 nav-link">Journal</a>
         <a href="/privacy" class="py-3 nav-link">Privacy</a>
       </div>
@@ -345,6 +358,22 @@
         <p class="eyebrow mb-2">Is it free?</p>
         <h2 class="font-display text-2xl md:text-3xl font-semibold text-sage mb-3">The NHS parts are always free</h2>
         <p class="text-slate-soft max-w-2xl mx-auto">Pharmacy First eligibility, your Right to Choose rights and the NHS and CQC directories cost nothing and never ask you to sign up. Only the optional prep-document generators are paid. This is a navigation tool, not medical advice.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="site-section border-t border-sand">
+    <div class="max-w-3xl mx-auto px-5 py-14">
+      <p class="eyebrow mb-2 text-center">Good to know</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-8">Your questions, answered</h2>
+      <div class="space-y-3">
+        <details class="card p-5"><summary class="cursor-pointer font-semibold text-sage">Is Kaur Care free?</summary><p class="text-sm text-slate-soft mt-2">Yes. Checking your NHS Pharmacy First eligibility, your Right to Choose rights and the official NHS and CQC directories is completely free, with no sign-up. The only paid extra is the optional document generators (the referral letter and GP brief), which save you the writing.</p></details>
+        <details class="card p-5"><summary class="cursor-pointer font-semibold text-sage">Is this an official NHS service?</summary><p class="text-sm text-slate-soft mt-2">No. Kaur Care is an independent navigation tool that helps you understand and reach real NHS services faster. We point you to official NHS and CQC pages; we are not the NHS and we do not provide treatment.</p></details>
+        <details class="card p-5"><summary class="cursor-pointer font-semibold text-sage">Is this medical advice?</summary><p class="text-sm text-slate-soft mt-2">No. Kaur Care helps you navigate to the right care, but it does not diagnose, prescribe or replace a consultation. Always confirm eligibility with your pharmacy, GP or NHS 111, and for anything serious call 999 or 111.</p></details>
+        <details class="card p-5"><summary class="cursor-pointer font-semibold text-sage">What happens to my health information?</summary><p class="text-sm text-slate-soft mt-2">The referral letter and symptom brief are generated entirely in your browser. The details you type never reach our servers and are never stored by us. See our <a href="/privacy" class="text-sage underline">privacy note</a> for the full picture.</p></details>
+        <details class="card p-5"><summary class="cursor-pointer font-semibold text-sage">Do I need to create an account?</summary><p class="text-sm text-slate-soft mt-2">No. You can search and see all your NHS options without signing up. You only enter an email if you choose to buy the optional document pass.</p></details>
+        <details class="card p-5"><summary class="cursor-pointer font-semibold text-sage">Does it work across the UK?</summary><p class="text-sm text-slate-soft mt-2">The NHS Pharmacy First and Right to Choose pathways apply in England. The self-care guidance and the appointment-prep tools are useful wherever you are in the UK. Always confirm local availability with your pharmacy or GP.</p></details>
       </div>
     </div>
   </section>
