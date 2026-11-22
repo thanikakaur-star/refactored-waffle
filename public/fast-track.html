@@ -18,70 +18,85 @@
   <meta name="twitter:description" content="Find your fastest route to NHS and private care in 10 seconds." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { theme: { extend: {
-      colors: { sage: { DEFAULT: 'var(--brand-primary)', dark: 'var(--brand-dark)', light: 'var(--brand-light)' }, cream: '#FAF8F5', slate: { DEFAULT: '#1E293B', soft: '#475569', muted: '#64748b' } },
-      fontFamily: { display: ['Fraunces', 'Georgia', 'serif'], body: ['Inter', 'system-ui', 'sans-serif'] },
+      colors: { sage: { DEFAULT: 'var(--brand-primary)', dark: 'var(--brand-dark)', light: 'var(--brand-light)' }, terracotta: '#C87A5A', cream: '#FAF7F2', sand: '#E8E0D5', slate: { DEFAULT: '#1E293B', soft: '#475569', muted: '#6b6256' } },
+      fontFamily: { display: ['Fraunces', 'Georgia', 'serif'], body: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] },
+      borderRadius: { '2xl': '1rem', '3xl': '1.5rem' },
     } } };
   </script>
   <style>
-    :root { --brand-primary: #2E5A44; --brand-dark: #244736; --brand-light: #4a7a60; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: #FAF8F5; color: #1E293B; }
-    .card { background: #fff; border: 1px solid #ece7df; border-radius: 16px; }
-    .pill { border: 1px solid #d8d0c4; background: #fff; border-radius: 9999px; padding: 8px 14px; font-size: 14px; cursor: pointer; transition: all .15s; }
+    :root { --brand-primary: #2D5A47; --brand-dark: #234738; --brand-light: #4a7a60; --accent: #C87A5A; }
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: #FAF7F2; color: #1E293B; }
+    .card { background: #FFFFFF; border: 1px solid #E8E0D5; border-radius: 24px; }
+    .pill { border: 1px solid #E8E0D5; background: #fff; border-radius: 9999px; padding: 9px 16px; font-size: 14px; cursor: pointer; transition: all .15s; }
     .pill:hover { border-color: var(--brand-primary); }
     .pill.active { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
-    .tab-btn { padding: 12px 16px; font-weight: 600; font-size: 14px; color: #64748b; border-bottom: 2px solid transparent; cursor: pointer; }
+    .tab-btn { padding: 12px 16px; font-weight: 600; font-size: 14px; color: #6b6256; border-bottom: 2px solid transparent; cursor: pointer; }
     .tab-btn.active { color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
     .badge-verified { background: #e7f0ea; color: var(--brand-primary); }
     .badge-check { background: #fdf3e7; color: #b26a16; }
-    input, select, textarea { font-family: inherit; }
+    input, select, textarea { font-family: inherit; border-radius: 1rem; }
+    .quick-pill { border: 1px solid #E8E0D5; background: #fff; border-radius: 1rem; padding: 10px 16px; font-size: 14px; font-weight: 600; color: var(--brand-primary); cursor: pointer; transition: all .15s; }
+    .quick-pill:hover { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
     body.embed nav { display: none; }
     @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } }
   </style>
 </head>
 <body class="antialiased">
 
-  <!-- Safety banner (always visible) -->
-  <div class="bg-red-700 text-white text-sm px-4 py-2 text-center">
-    Medical emergency or severe symptoms (chest pain, breathing difficulty, stiff neck, high fever, severe bleeding)? Call <strong>999</strong> or <strong>NHS 111</strong> immediately.
+  <!-- Safety banner (always visible, calm and reassuring) -->
+  <div class="bg-[#FBEEE7] text-[#8a4b32] border-b border-[#eeccba] text-sm px-4 py-2.5 text-center">
+    <span class="inline-block mr-1">♥</span> Your safety comes first. For a medical emergency or severe symptoms (chest pain, trouble breathing, a stiff neck with high fever, or heavy bleeding), please call <strong>999</strong> or <strong>NHS 111</strong> straight away.
   </div>
 
-  <nav class="bg-cream/90 backdrop-blur border-b border-[#ece7df] sticky top-0 z-40">
+  <nav class="bg-cream/90 backdrop-blur border-b border-sand sticky top-0 z-40">
     <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2.5">
         <img id="brand-logo" alt="" class="h-9 hidden" />
-        <span id="brand-mark" class="w-9 h-9 rounded-xl bg-sage flex items-center justify-center text-white font-display font-bold">K</span>
+        <span id="brand-mark" class="w-10 h-10 rounded-2xl bg-sage flex items-center justify-center text-white font-display font-bold text-lg">K</span>
         <span class="leading-tight">
-          <span id="brand-name" class="block font-display font-semibold text-lg text-sage">Kaur Care</span>
-          <span id="brand-sub" class="block text-[11px] text-slate-muted -mt-0.5">by HealthProcure Intel</span>
+          <span id="brand-name" class="block font-display font-semibold text-xl text-sage">Kaur Care</span>
+          <span id="brand-sub" class="block text-[11px] text-slate-muted -mt-0.5"></span>
         </span>
       </a>
-      <a href="/b2b" class="text-sm text-slate-muted hover:text-sage">B2B &amp; NHS Suppliers</a>
+      <span class="text-sm text-slate-muted hidden sm:block">Everyday care, made simple</span>
     </div>
   </nav>
 
   <!-- Hero + triage -->
-  <header class="max-w-3xl mx-auto px-5 pt-10 pb-6 text-center">
-    <h1 class="font-display text-3xl md:text-4xl font-bold text-sage leading-tight mb-3">Find your fastest route to care in 10 seconds</h1>
-    <p class="text-slate-soft mb-8">Match your situation to same-day NHS Pharmacy First, your NHS Right to Choose options, women's health pathways and local support. Free NHS guidance, no sign-up.</p>
+  <header class="max-w-3xl mx-auto px-5 pt-12 pb-6 text-center">
+    <h1 class="font-display text-3xl md:text-5xl font-bold text-sage leading-tight mb-4">Skip the 8 AM GP phone queue &amp; long waiting lists.</h1>
+    <p class="text-slate-soft text-lg mb-8 max-w-2xl mx-auto">Check same-day NHS pharmacy care, clinic &amp; screening options, and build a clear 1-page GP brief in seconds, made simple for parents, women, men, and adults.</p>
 
-    <div class="card p-5 text-left">
+    <div class="mb-6">
+      <p class="text-xs font-semibold text-slate-muted uppercase tracking-wide mb-3">Popular right now</p>
+      <div id="quick" class="flex flex-wrap gap-2 justify-center">
+        <button class="quick-pill" data-who="Child Under 16" data-c="Earache">Kid's Earache</button>
+        <button class="quick-pill" data-who="Adult 16+" data-c="Sore throat">Sore Throat</button>
+        <button class="quick-pill" data-who="Adult 16+" data-c="ADHD / Autism assessment">ADHD &amp; Autism</button>
+        <button class="quick-pill" data-who="Women's Health" data-c="Endometriosis">Endo &amp; PCOS</button>
+        <button class="quick-pill" data-who="Adult 16+" data-c="Dermatology">Skin &amp; Rash</button>
+        <button class="quick-pill" data-who="Adult 16+" data-c="MRI / ultrasound">Scan &amp; Specialist</button>
+      </div>
+    </div>
+
+    <div class="card p-6 text-left shadow-sm">
       <label class="block text-sm font-semibold mb-2">1. Who is this for?</label>
       <div id="who" class="flex flex-wrap gap-2 mb-4">
-        <button class="pill" data-who="Child Under 16">Child under 16</button>
+        <button class="pill" data-who="Child Under 16">A child</button>
         <button class="pill" data-who="Women's Health">Women's health</button>
-        <button class="pill" data-who="Adult 16+">Adult 16+</button>
+        <button class="pill" data-who="Adult 16+">An adult</button>
       </div>
       <label class="block text-sm font-semibold mb-2">2. What is the concern?</label>
       <div id="pills" class="flex flex-wrap gap-2 mb-3"></div>
-      <input id="condition" type="text" placeholder="Or type a condition (e.g. earache, endometriosis, MRI scan)" class="w-full px-4 py-3 rounded-xl border border-[#d8d0c4] text-sm mb-4 focus:outline-none focus:border-sage" />
-      <label class="block text-sm font-semibold mb-2">3. Your UK postcode</label>
+      <input id="condition" type="text" placeholder="Or type anything (e.g. earache, endometriosis, ADHD, MRI scan)" class="w-full px-4 py-3 border border-sand text-sm mb-4 focus:outline-none focus:border-sage" />
+      <label class="block text-sm font-semibold mb-2">3. Your UK postcode <span class="font-normal text-slate-muted">(optional)</span></label>
       <div class="flex flex-col sm:flex-row gap-3">
-        <input id="postcode" type="text" placeholder="e.g. SW1A 1AA" maxlength="10" class="flex-1 px-4 py-3 rounded-xl border border-[#d8d0c4] text-sm focus:outline-none focus:border-sage" />
-        <button id="search-btn" class="px-6 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Find my care options</button>
+        <input id="postcode" type="text" placeholder="e.g. SW1A 1AA" maxlength="10" class="flex-1 px-4 py-3 border border-sand text-sm focus:outline-none focus:border-sage" />
+        <button id="search-btn" class="px-6 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Find my care options</button>
       </div>
     </div>
   </header>
@@ -143,15 +158,16 @@
         </div>
 
         <div class="card p-6">
-          <h3 class="font-display text-xl font-semibold mb-3">Tool B: 1-page GP &amp; women's health symptom brief</h3>
+          <h3 class="font-display text-xl font-semibold mb-1">Tool B: 1-page GP / appointment brief</h3>
+          <p class="text-sm text-slate-soft mb-3">Works for anyone: a child, a woman, a man or any adult, including ADHD and autism screening notes.</p>
           <div class="grid sm:grid-cols-2 gap-3 mb-3">
-            <input id="b-condition" placeholder="Condition / main concern" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
-            <input id="b-duration" placeholder="How long (e.g. 6 months)" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+            <input id="b-condition" placeholder="Main concern (e.g. ADHD traits, pelvic pain, earache)" class="px-4 py-2.5 border border-sand text-sm" />
+            <input id="b-duration" placeholder="How long (e.g. 6 months)" class="px-4 py-2.5 border border-sand text-sm" />
           </div>
-          <input id="b-triggers" placeholder="Cycle / pain triggers or pattern" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3" />
-          <textarea id="b-impact" placeholder="Impact on daily life, work, sleep" rows="2" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3"></textarea>
-          <textarea id="b-questions" placeholder="Questions you want to ask the GP (one per line)" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3"></textarea>
-          <button onclick="genBrief()" class="px-5 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm">Generate brief</button>
+          <input id="b-triggers" placeholder="Pattern, triggers or examples (e.g. pain pattern, cycle, ADHD/autism traits)" class="w-full px-4 py-2.5 border border-sand text-sm mb-3" />
+          <textarea id="b-impact" placeholder="Impact on daily life: work, school, sleep, relationships" rows="2" class="w-full px-4 py-2.5 border border-sand text-sm mb-3"></textarea>
+          <textarea id="b-questions" placeholder="Questions you want to ask the GP (one per line)" rows="3" class="w-full px-4 py-2.5 border border-sand text-sm mb-3"></textarea>
+          <button onclick="genBrief()" class="px-5 py-2.5 rounded-2xl bg-sage text-white font-semibold text-sm">Generate brief</button>
           <div id="b-out" class="hidden mt-4"></div>
         </div>
       </div>
@@ -165,7 +181,7 @@
   <footer class="bg-sage text-white/90 py-8">
     <div class="max-w-4xl mx-auto px-5 text-sm">
       <p class="mb-2"><strong>This is a navigation and directory tool, not medical advice.</strong> It does not diagnose, prescribe or replace a consultation. Always confirm eligibility with your pharmacy, GP or NHS 111, and seek urgent help for serious symptoms.</p>
-      <p class="text-white/70 text-xs">Kaur Care, powered by HealthProcure Intel, NHS commissioning &amp; procurement data. <a href="/b2b" class="underline">B2B &amp; NHS Suppliers &rarr;</a></p>
+      <p class="text-white/70 text-xs">Kaur Care, operated by HealthProcure Intel. Built on NHS commissioning &amp; procurement data.</p>
     </div>
   </footer>
 
@@ -197,6 +213,17 @@
         });
       });
     }
+
+    // Universal quick-tap pills (hero): set who + condition and search right away.
+    document.querySelectorAll('#quick .quick-pill').forEach(function(b){
+      b.addEventListener('click', function(){
+        state.who = b.getAttribute('data-who');
+        document.querySelectorAll('#who .pill').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-who') === state.who); });
+        renderPills();
+        $('condition').value = b.getAttribute('data-c');
+        doSearch();
+      });
+    });
 
     $('search-btn').addEventListener('click', doSearch);
     async function doSearch(){
@@ -394,12 +421,12 @@
         + ($('l-clinic').value || '[Chosen clinic / provider]') + '\n\n'
         + 'I understand this provider holds an NHS standard contract for this service. I would be grateful if you could process this referral, and please let me know if any further information is needed.\n\n'
         + 'Yours sincerely,\n' + ($('l-name').value || '[Full name]')
-        + '\n\n---\nPrepared with Kaur Care (by HealthProcure Intel). Appointment navigation, not medical advice.';
+        + '\n\n---\nPrepared with Kaur Care. Appointment navigation, not medical advice.';
       outBox('l-out', 'kaur-care-right-to-choose-letter', t);
     }
     function genBrief(){
       var qs = ($('b-questions').value || '').split('\n').filter(Boolean).map(function(q){ return '  - ' + q; }).join('\n');
-      var t = 'GP & WOMEN\'S HEALTH APPOINTMENT BRIEF (1 page)\nKaur Care (by HealthProcure Intel)\n\n'
+      var t = '1-PAGE GP / APPOINTMENT BRIEF\nKaur Care\n\n'
         + 'Main concern: ' + ($('b-condition').value || state.condition || '[condition]') + '\n'
         + 'Duration: ' + ($('b-duration').value || '[how long]') + '\n'
         + 'Pattern / triggers: ' + ($('b-triggers').value || '[cycle / pain triggers]') + '\n\n'
