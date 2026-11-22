@@ -111,6 +111,29 @@ const catSlug = (c) => c.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-
 
 const articles = [
   {
+    slug: "nhs-referral-loop-how-to-get-seen-faster",
+    category: "NHS Shortcuts",
+    title: "Stuck in the NHS Referral Loop? How to Get Seen and Diagnosed Faster",
+    desc: "GP to physio to scan to GP to specialist, months between each step. Here is how the referral loop works, where the real delays are, and the legitimate ways to move faster.",
+    read: 6,
+    body: `<p class="lead">You know the pattern. You see your GP, who refers you to a physio, who sends you for a scan, whose results go back to your GP, who then refers you to a specialist, with weeks or months between each step. It can take a year or more to get an answer to something that feels like it should take days. Here is why it happens, and the legitimate ways to move faster.</p>
+<h2>Why the loop exists</h2>
+<p>The NHS triages by clinical urgency. If something is not immediately dangerous, it joins a queue, and there are queues at every stage: for the GP, for physiotherapy, for imaging, and for the specialist who can interpret it. Each handover adds a wait. Add in staff shortages and the backlog, and a straightforward problem can crawl through the system. None of this means you are powerless, it means knowing where the shortcuts are.</p>
+<h2>Step 1: Skip the GP entirely where you can</h2>
+<p>For a surprising number of everyday problems you do not need the GP at all. NHS Pharmacy First lets a pharmacist assess and treat seven common conditions the same day, free. For many practices you can also now refer yourself directly to physiotherapy without a GP gatekeeping the first appointment. See <a href="/journal/pharmacy-first-12-conditions-uk">what a pharmacist can sort today</a> and ask your surgery whether they offer self-referral for physio.</p>
+<h2>Step 2: Use the online front door, and write it well</h2>
+<p>Most practices take online requests through the NHS App, eConsult or Patchs, and a clear, complete request is often triaged the same day, no 8 AM phone queue. The quality of what you write genuinely changes how fast you are seen. We break down exactly what to include in <a href="/journal/how-to-write-econsult-nhs-app-message">how to write an online GP form that gets actioned</a>.</p>
+${MIDCTA}
+<h2>Step 3: Use your Right to Choose to jump the specialist queue</h2>
+<p>This is the big one. In England, when your GP refers you for a routine assessment, you have a legal right under the NHS Choice Framework to pick any provider that holds an NHS contract for that service, not just your local hospital. Many have far shorter waits. It is still NHS care and still free. It is especially powerful for the long queues, dermatology, ENT, MSK, scans, and ADHD or autism assessments (see <a href="/journal/nhs-right-to-choose-adhd-autism-guide">how Right to Choose works</a>). Kaur Care points you to the official NHS and CQC directories so you can find a provider and name it to your GP.</p>
+<h2>Step 4: Ask for your own results</h2>
+<p>A common frustration is waiting weeks for a scan result, then being told you must book another appointment just to hear it. You are entitled to access your own health records, including test and imaging results, through the NHS App or by asking your practice. Having your results in hand means you can prepare properly for the next conversation rather than losing another appointment to simply being told what they say.</p>
+<h2>Step 5: Walk into every appointment prepared</h2>
+<p>Every stage of the loop is a chance to lose time to a vague conversation. A clear one-page summary of your symptoms, timeline, what you have tried and your questions makes each appointment count. Our guide to <a href="/journal/how-to-prepare-10-minute-gp-appointment">preparing for a 10-minute GP appointment</a> walks through it, and Kaur Care can generate that brief for you.</p>
+<h2>A word on urgency</h2>
+<p>These shortcuts are for routine, non-urgent problems. If your symptoms are severe or fast-moving, chest pain, trouble breathing, a stiff neck with a high fever, heavy bleeding, sudden weakness or confusion, do not navigate the system, call NHS 111 or 999. And a problem that is not an emergency can still be worth pushing on: if it affects your ability to work, sleep or care for your family, say so clearly, because it helps the system understand the real impact.</p>` + cta,
+  },
+  {
     slug: "pharmacy-first-12-conditions-uk",
     category: "NHS Shortcuts",
     title: "12 Things You Can Get Sorted at a UK Pharmacy Today (Without the 8 AM GP Queue)",
