@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- PWA / Save to Home Screen -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2D5A47" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Kaur Care" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <title>Kaur Care by HealthProcure Intel | Skip the Queue for NHS &amp; Private Care</title>
   <meta name="description" content="Kaur Care matches your condition and postcode to same-day NHS Pharmacy First, NHS Right to Choose options, women's health pathways and local wellness support. Appointment navigation, not medical advice." />
   <meta name="robots" content="index, follow" />
@@ -214,7 +222,19 @@
           </div>
           <input id="b-triggers" placeholder="Pattern, triggers or examples (e.g. pain pattern, cycle, ADHD/autism traits)" class="w-full px-4 py-2.5 border border-sand text-sm mb-3" />
           <textarea id="b-impact" placeholder="Impact on daily life: work, school, sleep, relationships" rows="2" class="w-full px-4 py-2.5 border border-sand text-sm mb-3"></textarea>
-          <textarea id="b-questions" placeholder="Questions you want to ask the GP (one per line)" rows="3" class="w-full px-4 py-2.5 border border-sand text-sm mb-3"></textarea>
+          <textarea id="b-questions" placeholder="Questions you want to ask the GP (one per line)" rows="3" class="w-full px-4 py-2.5 border border-sand text-sm mb-4"></textarea>
+
+          <div class="rounded-2xl border border-sand bg-[#faf8f5] p-4 mb-4">
+            <p class="font-semibold text-sm mb-1">5-day symptom &amp; flare log <span class="font-normal text-slate-muted">(saved on this device only)</span></p>
+            <p class="text-xs text-slate-muted mb-3">Jot a quick note each day. Up to 5 entries are added to your brief automatically.</p>
+            <div class="flex flex-col sm:flex-row gap-2 mb-3">
+              <input id="log-date" type="date" class="px-3 py-2 border border-sand text-sm sm:w-40" />
+              <input id="log-note" placeholder="e.g. cramping 7/10, missed work" class="flex-1 px-3 py-2 border border-sand text-sm" />
+              <button type="button" onclick="addLogEntry()" class="px-4 py-2 rounded-xl border border-sage text-sage font-semibold text-sm whitespace-nowrap">Add to log</button>
+            </div>
+            <div id="log-list" class="space-y-1"></div>
+          </div>
+
           <button onclick="genBrief()" class="px-5 py-2.5 rounded-2xl bg-sage text-white font-semibold text-sm">Generate brief</button>
           <div id="b-out" class="hidden mt-4"></div>
         </div>
@@ -314,25 +334,38 @@
         <a href="/journal" class="nav-link whitespace-nowrap hidden sm:block">View all &rarr;</a>
       </div>
       <div class="grid md:grid-cols-3 gap-6">
-        <a href="/journal/pharmacy-first-conditions-uk" class="card p-6 block hover:shadow-md transition">
-          <p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--accent)] mb-2">6 min read</p>
+        <a href="/journal/pharmacy-first-12-conditions-uk" class="card p-6 block hover:shadow-md transition">
+          <p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--accent)] mb-2">NHS Shortcuts &middot; 4 min</p>
           <h3 class="font-display text-lg font-semibold text-sage mb-1.5">12 things you can sort at a UK pharmacy today</h3>
           <p class="text-sm text-slate-soft">The seven NHS Pharmacy First pathways, plus five newer ones, no GP queue needed.</p>
         </a>
-        <a href="/journal/how-to-use-right-to-choose-adhd-autism" class="card p-6 block hover:shadow-md transition">
-          <p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--accent)] mb-2">7 min read</p>
+        <a href="/journal/nhs-right-to-choose-adhd-autism-guide" class="card p-6 block hover:shadow-md transition">
+          <p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--accent)] mb-2">ADHD &amp; Autism &middot; 4 min</p>
           <h3 class="font-display text-lg font-semibold text-sage mb-1.5">Right to Choose for ADHD &amp; autism</h3>
           <p class="text-sm text-slate-soft">How to use your legal right to a shorter NHS assessment wait in England.</p>
         </a>
-        <a href="/journal/prepare-10-minute-gp-appointment-womens-family-health" class="card p-6 block hover:shadow-md transition">
-          <p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--accent)] mb-2">6 min read</p>
-          <h3 class="font-display text-lg font-semibold text-sage mb-1.5">Make a 10-minute GP appointment count</h3>
-          <p class="text-sm text-slate-soft">Practical prep for women's health, parents and any adult.</p>
+        <a href="/journal/kids-earache-sore-throat-calm-parent-guide" class="card p-6 block hover:shadow-md transition">
+          <p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--accent)] mb-2">Parents &amp; Kids &middot; 4 min</p>
+          <h3 class="font-display text-lg font-semibold text-sage mb-1.5">Kids' earache, sore throat or rash</h3>
+          <p class="text-sm text-slate-soft">Calm next steps for UK parents, and the red flags that mean 111 or 999.</p>
         </a>
       </div>
       <a href="/journal" class="nav-link inline-block mt-6 sm:hidden">View all articles &rarr;</a>
     </div>
   </section>
+
+  <!-- PWA install banner (mobile, dismissible) -->
+  <div id="install-banner" class="hidden fixed bottom-0 inset-x-0 z-50 md:hidden">
+    <div class="mx-3 mb-3 card p-3 flex items-center gap-3 shadow-lg">
+      <span class="w-9 h-9 rounded-xl bg-sage text-white flex items-center justify-center font-display font-bold shrink-0">K</span>
+      <div class="flex-1 min-w-0">
+        <p class="font-semibold text-sm leading-tight">Add Kaur Care to your home screen</p>
+        <p id="install-hint" class="text-xs text-slate-muted"></p>
+      </div>
+      <button id="install-action" class="hidden px-3 py-1.5 rounded-lg bg-sage text-white text-sm font-semibold shrink-0">Install</button>
+      <button onclick="dismissInstall()" class="text-slate-muted text-xl leading-none px-1 shrink-0" aria-label="Dismiss">&times;</button>
+    </div>
+  </div>
 
   <div id="print-area" class="hidden"></div>
 
@@ -351,7 +384,7 @@
       "Women's Health": ["Endometriosis", "PCOS", "Heavy bleeding / fibroids", "Perimenopause / menopause", "Recurrent UTI", "Gynaecology / fertility"],
       "Adult 16+": ["UTI", "Sore throat", "Sinusitis", "Shingles", "Acne", "Migraine", "Dermatology", "ENT", "Physio / MSK", "MRI / ultrasound", "ADHD / Autism assessment"]
     };
-    var state = { who: '', condition: '', postcode: '', data: null, unlocked: false, demo: false, partner: null, partnerSlug: '', embed: false };
+    var state = { who: '', condition: '', postcode: '', data: null, unlocked: false, demo: false, partner: null, partnerSlug: '', embed: false, postcodeInfo: null };
     function $(id){ return document.getElementById(id); }
     function esc(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
 
@@ -391,6 +424,7 @@
       state.postcode = $('postcode').value.trim();
       if (!state.condition){ alert('Please pick or type a concern.'); return; }
       $('search-btn').textContent = 'Finding...';
+      lookupPostcode(state.postcode); // resolves region + NHS ICB in the background
       try {
         var res = await fetch('/api/fast-track/search', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ patientType: state.who, condition: state.condition, postcode: state.postcode }) });
         var j = await res.json();
@@ -400,6 +434,35 @@
         $('results').scrollIntoView({ behavior:'smooth' });
       } catch(e){ alert('Something went wrong. Please try again.'); }
       $('search-btn').textContent = 'Find my care options';
+    }
+
+    // Resolve a UK postcode to town/region + NHS Integrated Care Board via the
+    // free, CORS-enabled postcodes.io API (runs in the visitor's browser).
+    async function lookupPostcode(pc){
+      var clean = (pc || '').trim();
+      if (!clean || clean.length < 5){ state.postcodeInfo = null; return; }
+      try {
+        var res = await fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(clean));
+        if (!res.ok){ state.postcodeInfo = null; return; }
+        var j = await res.json();
+        var r = j && j.result;
+        if (!r){ state.postcodeInfo = null; return; }
+        state.postcodeInfo = {
+          town: r.admin_district || r.parish || '',
+          region: r.region || r.country || '',
+          icb: r.ccg || r.nhs_ha || '',
+          postcode: r.postcode || clean
+        };
+        var el = document.getElementById('icb-line');
+        if (el) el.textContent = icbSummary();
+      } catch(e){ state.postcodeInfo = null; }
+    }
+    function icbSummary(){
+      var p = state.postcodeInfo; if (!p) return '';
+      var bits = [];
+      if (p.town) bits.push(p.town);
+      if (p.icb) bits.push(p.icb);
+      return bits.join(' · ');
     }
 
     // Tabs
@@ -442,6 +505,45 @@
       return out;
     }
 
+    // ADHD & Autism Right to Choose filter. Refines the search terms used against
+    // the official NHS and CQC directories. We never show fabricated wait times.
+    function isAdhdAutism(){ return /adhd|autism|asd\b|neurodiv/i.test(state.condition || ''); }
+    function adhdPanel(){
+      if (!isAdhdAutism()) return '';
+      return '<div class="card p-5 mb-5 border-[#d9e6de]">'
+        + '<h4 class="font-semibold mb-1">Filter ADHD &amp; autism assessment providers</h4>'
+        + '<p class="text-xs text-slate-muted mb-3">We refine your search of the official NHS and CQC directories. Waiting times change constantly, so we link you to the live source rather than quote numbers.</p>'
+        + '<label class="block text-xs font-semibold mb-1">Who is the assessment for?</label>'
+        + '<div id="adhd-age" class="seg mb-3" style="grid-template-columns:repeat(2,1fr);max-width:340px">'
+        + '<button type="button" class="seg-btn active" data-age="adult" onclick="pickAdhdAge(this)">Adult (18+)</button>'
+        + '<button type="button" class="seg-btn" data-age="child" onclick="pickAdhdAge(this)">Child / young person</button></div>'
+        + '<div class="flex flex-col gap-2 mb-3">'
+        + '<label class="flex items-center gap-2 text-sm"><input id="adhd-remote" type="checkbox" onchange="updateAdhdLinks()" /> Remote / video assessment</label>'
+        + '<label class="flex items-center gap-2 text-sm"><input id="adhd-titration" type="checkbox" onchange="updateAdhdLinks()" /> Includes medication titration</label></div>'
+        + '<div id="adhd-links"></div></div>';
+    }
+    function pickAdhdAge(btn){
+      document.querySelectorAll('#adhd-age .seg-btn').forEach(function(x){ x.classList.remove('active'); });
+      btn.classList.add('active'); updateAdhdLinks();
+    }
+    function updateAdhdLinks(){
+      var el = document.getElementById('adhd-links'); if (!el) return;
+      var ageBtn = document.querySelector('#adhd-age .seg-btn.active');
+      var age = ageBtn ? ageBtn.getAttribute('data-age') : 'adult';
+      var remote = (document.getElementById('adhd-remote') || {}).checked;
+      var titration = (document.getElementById('adhd-titration') || {}).checked;
+      var cond = /autism/i.test(state.condition || '') ? 'autism' : 'ADHD';
+      var terms = (age === 'child' ? 'child ' : 'adult ') + cond + ' assessment'
+        + (remote ? ' remote video' : '') + (titration ? ' medication titration' : '');
+      var cqc = 'https://www.cqc.org.uk/search/services?query=' + encodeURIComponent(terms);
+      var pcNote = state.postcode ? (' Add your postcode on the CQC page to sort by distance.') : '';
+      el.innerHTML = '<div class="mt-1 flex flex-wrap gap-2">'
+        + '<a class="pill" target="_blank" rel="noopener" href="' + cqc + '">Search CQC: ' + esc(terms) + '</a>'
+        + '<a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/nhs-services/hospitals/choosing-a-hospital/your-legal-right-to-choose/">NHS Right to Choose</a>'
+        + '<a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/nhs-services/mental-health-services/">NHS mental health services</a></div>'
+        + '<p class="text-xs text-slate-muted mt-2">These are official directories.' + pcNote + ' Always confirm the provider accepts NHS Right to Choose referrals for your area before asking your GP to refer.</p>';
+    }
+
     function renderResults(){
       var d = state.data;
       // Tab 1
@@ -457,6 +559,7 @@
       var wh = d.womensHealth.map(function(w){ return '<details class="card p-4 mb-2"><summary class="cursor-pointer font-semibold">'+esc(w.name)+'</summary><p class="text-xs text-slate-muted mt-2 mb-1">Bring to your appointment:</p><ul class="list-disc pl-5 text-sm text-slate-soft">'+w.prepPrompts.map(function(p){return '<li>'+esc(p)+'</li>';}).join('')+'</ul></details>'; }).join('');
       $('t2').innerHTML = '<div class="card p-5 mb-5"><h3 class="font-display text-xl font-semibold mb-2">Your legal right to choose</h3><p class="text-sm text-slate-soft">In England you have a statutory right under the NHS Choice Framework to ask your GP to refer you to a clinically appropriate NHS-funded provider, including many independent clinics, which can mean a shorter wait. Local ICB policies can vary, so confirm current acceptance with your GP and chosen clinic.</p></div>'
         + '<h4 class="font-semibold mb-2">Common Right to Choose routes</h4><div class="flex flex-wrap gap-2 mb-5">'+rtc+'</div>'
+        + adhdPanel()
         + '<h4 class="font-semibold mb-2">Women\'s health appointment prep</h4>'+wh
         + '<div class="card p-5 mt-5">'+providerBlock(d)+'</div>'
         + '<div class="card p-5 mt-5 bg-[#f4f8f5] border-[#d9e6de]"><h4 class="font-semibold mb-1">Long or capped NHS wait?</h4><p class="text-sm text-slate-soft mb-3">Use the appointment prep tools below to generate your Right to Choose referral letter, then take it to your GP. The provider links above are the authoritative NHS and CQC directories.</p></div>';
@@ -472,6 +575,7 @@
         + '<h3 class="font-display text-xl font-semibold mb-3">General comfort &amp; self-care</h3>'+sc
         + (essentials ? ('<h3 class="font-display text-xl font-semibold mt-6 mb-1">Recommended comfort essentials</h3><p class="text-xs text-slate-muted mb-3">'+esc(cfg.AFFILIATE_DISCLOSURE || '')+'</p><div class="grid sm:grid-cols-2 gap-3">'+essentials+'</div>') : '')
         + '<div class="card p-5 mt-6"><h4 class="font-semibold mb-1">Are you a wellbeing practitioner?</h4><p class="text-sm text-slate-soft mb-3">List your practice in the local directory for £39/mo. Self-serve sign-up, you are listed as soon as your subscription starts.</p><a href="'+esc(listUrl)+'" target="_blank" rel="noopener" class="inline-block px-5 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm">List your practice, £39/mo</a></div>';
+      if (isAdhdAutism()) updateAdhdLinks();
     }
 
     // Unlock / checkout
@@ -568,13 +672,16 @@
     function outBox(id, title, text){
       var el = $(id);
       el.innerHTML = '<pre style="white-space:pre-wrap;font-family:inherit" class="text-sm bg-[#faf8f5] border border-[#ece7df] rounded-xl p-4">'+esc(text)+'</pre>'
-        + '<div class="flex gap-2 mt-2"><button class="pill" onclick="copyText(\''+id+'\')">Copy</button><button class="pill" onclick="printText(\''+id+'\')">Print / save as PDF</button><button class="pill" onclick="downloadText(\''+title+'\',\''+id+'\')">Download</button></div>';
+        + '<div class="flex flex-wrap gap-2 mt-2"><button class="pill" onclick="copyText(\''+id+'\')">Copy</button><button class="pill" onclick="printText(\''+id+'\')">Print / save as PDF</button><button class="pill" onclick="downloadText(\''+title+'\',\''+id+'\')">Download</button><button class="pill" onclick="shareWhatsApp(\''+id+'\')">Send via WhatsApp</button></div>'
+        + '<p class="text-xs text-slate-muted mt-2">Tip: paste the copied text straight into your NHS App, eConsult or Patchs online form.</p>';
       el.classList.remove('hidden');
       el.dataset.text = text;
     }
     function genLetter(){
       var today = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
-      var t = today + '\n\nDear ' + ($('l-gp').value || '[GP Surgery]') + ',\n\n'
+      var p = state.postcodeInfo;
+      var areaLine = (p && (p.town || p.icb)) ? ('NHS area: ' + [p.town, p.icb].filter(Boolean).join(', ') + '\n') : '';
+      var t = today + '\n' + areaLine + '\nDear ' + ($('l-gp').value || '[GP Surgery]') + ',\n\n'
         + 'Re: Patient ' + ($('l-name').value || '[Full name]') + ', DOB ' + ($('l-dob').value || '[Date of birth]') + '\n\n'
         + 'I am writing to exercise my legal right under the NHS Choice Framework to be referred to a clinically appropriate NHS-funded provider of my choice.\n\n'
         + 'I would like to request a referral for ' + ($('l-condition').value || '[condition / service]') + ' to the following provider:\n'
@@ -586,21 +693,76 @@
     }
     function genBrief(){
       var qs = ($('b-questions').value || '').split('\n').filter(Boolean).map(function(q){ return '  - ' + q; }).join('\n');
+      var log = logText();
       var t = '1-PAGE GP / APPOINTMENT BRIEF\nKaur Care\n\n'
         + 'Main concern: ' + ($('b-condition').value || state.condition || '[condition]') + '\n'
         + 'Duration: ' + ($('b-duration').value || '[how long]') + '\n'
         + 'Pattern / triggers: ' + ($('b-triggers').value || '[cycle / pain triggers]') + '\n\n'
         + 'Impact on daily life:\n' + ($('b-impact').value || '[impact on work, sleep, daily activities]') + '\n\n'
+        + (log ? ('Recent symptom log:\n' + log + '\n\n') : '')
         + 'My questions for the GP:\n' + (qs || '  - [your questions]') + '\n\n'
         + 'Note: this is my own summary to help the appointment. It is not a diagnosis.';
       outBox('b-out', 'kaur-care-symptom-brief', t);
     }
     function copyText(id){ navigator.clipboard.writeText($(id).dataset.text || '').catch(function(){}); }
+    function shareWhatsApp(id){ var t = ($(id).dataset.text || ''); window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank', 'noopener'); }
+
+    // 5-day symptom log (local to this device)
+    var LOG_KEY = 'kaurcare_symptomlog';
+    function loadLog(){ try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); } catch(e){ return []; } }
+    function saveLog(a){ try { localStorage.setItem(LOG_KEY, JSON.stringify(a)); } catch(e){} }
+    function renderLog(){
+      var list = document.getElementById('log-list'); if (!list) return;
+      var a = loadLog();
+      if (!a.length){ list.innerHTML = '<p class="text-xs text-slate-muted">No entries yet.</p>'; return; }
+      list.innerHTML = a.map(function(e, i){
+        return '<div class="flex items-start justify-between gap-2 text-sm bg-white border border-sand rounded-lg px-3 py-1.5"><span><strong>' + esc(e.date) + ':</strong> ' + esc(e.note) + '</span><button type="button" onclick="removeLogEntry(' + i + ')" class="text-slate-muted hover:text-sage" aria-label="Remove">&times;</button></div>';
+      }).join('');
+    }
+    function addLogEntry(){
+      var dEl = document.getElementById('log-date'), nEl = document.getElementById('log-note');
+      var date = (dEl && dEl.value) || new Date().toISOString().slice(0,10);
+      var note = (nEl && nEl.value || '').trim();
+      if (!note){ return; }
+      var a = loadLog();
+      a.push({ date: date, note: note.slice(0, 160) });
+      while (a.length > 5) a.shift();
+      saveLog(a);
+      if (nEl) nEl.value = '';
+      renderLog();
+    }
+    function removeLogEntry(i){ var a = loadLog(); a.splice(i, 1); saveLog(a); renderLog(); }
+    function logText(){ return loadLog().map(function(e){ return '  - ' + e.date + ': ' + e.note; }).join('\n'); }
     function printText(id){ var pa=$('print-area'); pa.innerHTML='<pre style="white-space:pre-wrap;font-family:serif;padding:24px">'+esc($(id).dataset.text||'')+'</pre>'; pa.classList.remove('hidden'); window.print(); setTimeout(function(){ pa.classList.add('hidden'); }, 500); }
     function downloadText(name, id){ var blob=new Blob([$(id).dataset.text||''],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click(); }
 
     // Paid/demo unlock first (never relocks), then partner branding/unlock on top.
     checkUnlock().then(initPartner);
+    renderLog();
+    initInstallBanner();
+
+    // PWA "Save to Home Screen" banner
+    var deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredPrompt = e; showInstall('android'); });
+    function isStandalone(){ return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true; }
+    function installDismissed(){ try { return localStorage.getItem('kaurcare_install_dismissed') === '1'; } catch(e){ return false; } }
+    function dismissInstall(){ try { localStorage.setItem('kaurcare_install_dismissed', '1'); } catch(e){} var b = document.getElementById('install-banner'); if (b) b.classList.add('hidden'); }
+    function showInstall(kind){
+      if (isStandalone() || installDismissed() || state.embed) return;
+      var b = document.getElementById('install-banner'); if (!b) return;
+      var hint = document.getElementById('install-hint'), action = document.getElementById('install-action');
+      if (kind === 'android'){ hint.textContent = 'Open it like an app, one tap from your home screen.'; action.classList.remove('hidden'); action.onclick = doInstall; }
+      else { hint.textContent = 'Tap the Share icon, then "Add to Home Screen".'; action.classList.add('hidden'); }
+      b.classList.remove('hidden');
+    }
+    function doInstall(){ if (!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt.userChoice.finally(function(){ deferredPrompt = null; dismissInstall(); }); }
+    function initInstallBanner(){
+      if (isStandalone() || installDismissed()) return;
+      var ua = navigator.userAgent || '';
+      var isIOS = /iphone|ipad|ipod/i.test(ua);
+      var isSafari = isIOS && /safari/i.test(ua) && !/crios|fxios/i.test(ua);
+      if (isIOS && isSafari){ setTimeout(function(){ showInstall('ios'); }, 2500); }
+    }
   </script>
 
 </body>

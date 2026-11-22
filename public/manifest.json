@@ -1,0 +1,16 @@
+{
+  "name": "Kaur Care",
+  "short_name": "Kaur Care",
+  "description": "Skip the 8 AM GP queue. Check same-day NHS pharmacy care, Right to Choose options and build a 1-page GP brief.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF7F2",
+  "theme_color": "#2D5A47",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
