@@ -291,6 +291,142 @@ ${MIDCTA}
 <h2>The emergency exception</h2>
 <p>Hay fever is not dangerous, but a sudden severe allergic reaction is. If a child has swelling of the lips or tongue, difficulty breathing, or becomes floppy or very distressed, call 999 immediately.</p>` + cta,
   },
+  {
+    slug: "periods-what-is-normal-when-to-see-gp",
+    category: "Women's Health",
+    title: "Period Problems: What's Normal, and When to See a GP",
+    desc: "Cycles vary a lot, so what actually counts as a problem? A calm guide to what is usually normal and the changes worth getting checked.",
+    read: 4,
+    body: `<p class="lead">Periods are different for everyone, which makes it hard to know when something is worth raising. Here is a calm steer on what is usually within the normal range, and the changes that deserve a GP conversation.</p>
+<h2>What is usually normal</h2>
+<p>A typical cycle runs anywhere from about 21 to 35 days, with bleeding of two to seven days. Some cramping, mood changes and tiredness around your period are common. Cycles can also shift with stress, travel, weight changes and age.</p>
+<h2>Changes worth getting checked</h2>
+<p>It is reasonable to see your GP if your periods become much heavier, longer or more painful than usual, if they stop or become very irregular when that is not normal for you, or if pain is interfering with daily life. Bleeding between periods, after sex, or after the menopause should always be checked.</p>
+${MIDCTA}
+<h2>How to prepare</h2>
+<p>Track a couple of cycles: dates, how heavy, pain score at its worst, and the impact on work and sleep. That short summary helps your GP far more than trying to remember on the spot.</p>
+<h2>When to seek help sooner</h2>
+<p>Soaking through pads or tampons every hour for several hours, feeling faint or very breathless, or severe sudden pelvic pain need prompt help, contact your GP or NHS 111, and call 999 for severe symptoms.</p>` + cta,
+  },
+  {
+    slug: "heavy-periods-menorrhagia-nhs-help",
+    category: "Women's Health",
+    title: "Heavy Periods (Menorrhagia): NHS Help and What to Track",
+    desc: "Heavy menstrual bleeding is common and treatable, and you do not have to just put up with it. What to track and how to get NHS help.",
+    read: 4,
+    body: `<p class="lead">Heavy periods are more common than most people realise, and they are not something you simply have to endure. There are effective options, and a clear picture of your bleeding makes the conversation quicker.</p>
+<h2>What counts as heavy</h2>
+<p>It is less about a precise measurement and more about impact: changing protection every hour or two, flooding, passing large clots, needing double protection, or planning your life around your period. Heavy bleeding can also leave you tired, which is worth mentioning.</p>
+<h2>What to track before your appointment</h2>
+<p>Note how many days you bleed, how often you change protection on the heaviest days, any clots or flooding, your energy levels, and how it affects work and daily life. Two cycles of notes is plenty.</p>
+${MIDCTA}
+<h2>Getting NHS help</h2>
+<p>Your GP can discuss options and whether any checks are useful. Because heavy periods can cause low iron, it is reasonable to ask whether an iron or blood check is appropriate, especially if you feel tired or breathless.</p>
+<h2>When to seek help sooner</h2>
+<p>Soaking through protection every hour for several hours, feeling faint, or a racing heart need prompt attention, contact your GP or NHS 111 the same day, and 999 for severe symptoms.</p>` + cta,
+  },
+  {
+    slug: "painful-periods-dysmenorrhea-comfort-and-care",
+    category: "Women's Health",
+    title: "Painful Periods: Comfort Measures and When It's More Than Cramps",
+    desc: "Period pain is common, but pain that stops your life is worth checking. Gentle comfort measures and the signs that deserve a GP visit.",
+    read: 4,
+    body: `<p class="lead">Cramps are a normal part of periods for many people, but pain that regularly keeps you off work, school or your feet is a different matter, and worth raising rather than powering through.</p>
+<h2>Everyday comfort</h2>
+<p>Many people find relief from a heat pad on the lower tummy or back, gentle movement, staying hydrated and rest. A pharmacist can advise on suitable over-the-counter pain relief and how to take it effectively.</p>
+<h2>When it is more than ordinary cramps</h2>
+<p>See your GP if period pain is severe, getting worse over time, not helped by the usual measures, or comes with very heavy bleeding, pain during sex, or pain when going to the toilet. Persistent severe pain can be linked to conditions like endometriosis, which are worth investigating.</p>
+${MIDCTA}
+<h2>How to be heard</h2>
+<p>Describe where the pain is, a 0 to 10 score at its worst, how it tracks with your cycle, what you have tried, and the impact on daily life. Being specific helps your GP take it seriously and act.</p>
+<h2>When to seek help sooner</h2>
+<p>Sudden severe pelvic pain, pain with fever, or feeling faint need prompt help, contact your GP or NHS 111, and call 999 for severe symptoms.</p>` + cta,
+  },
+  {
+    slug: "pcos-symptoms-nhs-diagnosis-guide",
+    category: "Women's Health",
+    title: "PCOS: Spotting the Signs and Getting an NHS Diagnosis",
+    desc: "Polycystic ovary syndrome is common but often missed. The signs to look for and how to approach getting an NHS diagnosis.",
+    read: 4,
+    body: `<p class="lead">PCOS (polycystic ovary syndrome) is one of the most common hormonal conditions, yet it often takes far too long to name. Knowing the signs helps you have a focused conversation with your GP.</p>
+<h2>Common signs</h2>
+<p>PCOS can show up as irregular or missing periods, along with things like acne, excess hair growth, weight changes, or difficulty conceiving. It varies a lot from person to person, and not everyone has every symptom.</p>
+<h2>Getting a diagnosis</h2>
+<p>Diagnosis usually involves your GP reviewing your symptoms and history and arranging some checks, which may include blood tests and sometimes a scan. It is reasonable to ask directly whether PCOS could explain your symptoms.</p>
+${MIDCTA}
+<h2>What to bring</h2>
+<p>Track your cycle length and how irregular it is, any skin, hair or weight changes, family history, and any fertility plans or concerns. A clear summary speeds things up.</p>
+<h2>Looking after yourself</h2>
+<p>PCOS is manageable, and support exists for the symptoms that bother you most. If periods stop for a long time, or you have concerns about fertility or mood, raise these specifically so they can be addressed. For anything severe or sudden, use NHS 111 or 999.</p>` + cta,
+  },
+  {
+    slug: "endometriosis-getting-diagnosed-faster-uk",
+    category: "Women's Health",
+    title: "Endometriosis: How to Get Taken Seriously and Diagnosed Faster",
+    desc: "Endometriosis diagnosis in the UK can take years. Practical steps to be heard sooner and move towards the right care.",
+    read: 5,
+    body: `<p class="lead">Endometriosis affects around one in ten women and those assigned female at birth, yet getting a diagnosis can take years. Preparation and persistence genuinely help shorten that journey.</p>
+<h2>What it can feel like</h2>
+<p>Common experiences include painful periods that disrupt daily life, chronic pelvic pain, pain during or after sex, pain when going to the toilet during your period, and sometimes difficulty conceiving. Pain that is dismissed as "just bad periods" can be worth a closer look.</p>
+<h2>Being heard at the GP</h2>
+<p>Go in with specifics: where the pain is, how long you have had it, how it tracks with your cycle, a pain score, what you have tried, and the impact on work, study and relationships. Ask clearly whether endometriosis could be the cause and what the next step is.</p>
+${MIDCTA}
+<h2>If progress stalls</h2>
+<p>It is reasonable to return if symptoms continue, to ask about referral to a gynaecologist, and in England to ask about your Right to Choose, which can shorten waits for a specialist assessment. Keeping a symptom diary across a few cycles strengthens your case.</p>
+<h2>When to seek help sooner</h2>
+<p>Sudden severe pelvic pain, pain with fever or feeling faint need urgent help, contact your GP or NHS 111, and call 999 for severe symptoms.</p>` + cta,
+  },
+  {
+    slug: "pms-pmdd-getting-support",
+    category: "Women's Health",
+    title: "PMS and PMDD: Getting Support, Not Just 'It's Hormonal'",
+    desc: "When the days before your period affect your mood and life, it deserves real support. Understanding PMS, PMDD and how to get help.",
+    read: 4,
+    body: `<p class="lead">Feeling low, irritable or anxious in the days before your period is common, but when it seriously affects your mood, relationships or ability to function, it deserves proper support rather than a shrug.</p>
+<h2>PMS and PMDD</h2>
+<p>Premenstrual syndrome (PMS) covers the physical and emotional symptoms many people get before a period. Premenstrual dysphoric disorder (PMDD) is a more severe form, where mood symptoms are intense and disruptive, and it is recognised and treatable.</p>
+<h2>Tracking the pattern</h2>
+<p>The key clue is timing: symptoms that reliably appear in the run-up to your period and ease once it starts. Tracking your mood and symptoms against your cycle for two or three months gives your GP a clear picture.</p>
+${MIDCTA}
+<h2>Getting help</h2>
+<p>Take your symptom diary to your GP and describe the impact honestly, including on work and relationships. There are approaches that can help, and you are entitled to have the conversation taken seriously.</p>
+<h2>An important note</h2>
+<p>If you ever have thoughts of harming yourself, please reach out now: call NHS 111 and select the mental health option, contact the Samaritans on 116 123, or call 999 in an emergency. You deserve support straight away.</p>` + cta,
+  },
+  {
+    slug: "irregular-periods-causes-when-to-check",
+    category: "Women's Health",
+    title: "Irregular Periods: Common Causes and When to Get Checked",
+    desc: "Cycles that are all over the place can have many causes, from stress to perimenopause. What is usually behind it and when to see a GP.",
+    read: 4,
+    body: `<p class="lead">Periods that arrive early, late, or skip a month can be unsettling. Often there is a straightforward explanation, but some changes are worth checking so nothing is missed.</p>
+<h2>Common reasons cycles shift</h2>
+<p>Stress, significant weight change, intense exercise, travel, some contraception, thyroid issues and approaching perimenopause can all affect regularity. In your 40s, more variable cycles are often an early sign of perimenopause.</p>
+<h2>When to see your GP</h2>
+<p>Book an appointment if your periods suddenly become very irregular when that is not normal for you, stop for several months (and you are not pregnant or using contraception that does this), or come with other symptoms like significant weight or mood changes. Always get bleeding after the menopause checked.</p>
+${MIDCTA}
+<h2>What helps the conversation</h2>
+<p>Track your cycle dates over a few months, note any other changes, and mention any family history. This helps your GP decide whether checks, such as blood tests, would be useful.</p>
+<h2>When to seek help sooner</h2>
+<p>Very heavy bleeding, feeling faint, or severe pelvic pain need prompt attention, contact your GP or NHS 111, and 999 for severe symptoms.</p>` + cta,
+  },
+  {
+    slug: "heavy-periods-iron-anaemia-check",
+    category: "Women's Health",
+    title: "Heavy Periods and Tiredness: The Iron Link Worth Checking",
+    desc: "Constant exhaustion with heavy periods is not just 'being busy'. Why heavy bleeding can lower your iron, and what to ask your GP.",
+    read: 4,
+    body: `<p class="lead">If heavy periods leave you wiped out, breathless on the stairs or struggling to concentrate, it is worth knowing that heavy menstrual bleeding is a common cause of low iron, and that is something your GP can check.</p>
+<h2>Why the link matters</h2>
+<p>Losing a lot of blood each month can gradually lower your iron stores and lead to iron-deficiency anaemia. Symptoms can creep up slowly: tiredness, looking pale, feeling breathless, headaches, or brittle nails.</p>
+<h2>What to ask</h2>
+<p>If you have heavy periods and these symptoms, it is reasonable to ask your GP whether a blood test to check your iron levels would be appropriate. Mention how heavy your periods are and how tired you feel, so the two are considered together.</p>
+${MIDCTA}
+<h2>Helping yourself in the meantime</h2>
+<p>A balanced diet with iron-rich foods supports your levels, and a pharmacist can advise on whether an over-the-counter supplement is suitable for you. Do not start high-dose supplements long term without advice, as more is not always better.</p>
+<h2>When to seek help sooner</h2>
+<p>Severe breathlessness, chest pain, a racing heart or feeling faint need urgent help, contact NHS 111 or call 999 for severe symptoms.</p>` + cta,
+  },
 ];
 
 for (const a of articles) {
