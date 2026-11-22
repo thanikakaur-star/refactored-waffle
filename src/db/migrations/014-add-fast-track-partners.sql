@@ -21,7 +21,6 @@ CREATE INDEX IF NOT EXISTS idx_fast_track_partners_slug ON fast_track_partners (
 ALTER TABLE fast_track_unlocks ADD COLUMN IF NOT EXISTS partner_slug TEXT;
 CREATE INDEX IF NOT EXISTS idx_fast_track_unlocks_partner ON fast_track_unlocks (partner_slug);
 
--- Sample active partner (sponsored-free employer license).
-INSERT INTO fast_track_partners (slug, brand_name, access_mode, active)
-VALUES ('demo-employer', 'Partner Care Navigator', 'sponsored_free', true)
-ON CONFLICT (slug) DO NOTHING;
+-- No seed data. Partners are created per real licensing agreement; production
+-- must not show a placeholder/test partner. (An earlier version of this
+-- migration seeded a 'demo-employer' row; it has been removed.)

@@ -74,6 +74,7 @@
         <a href="#how" class="nav-link">How it works</a>
         <a href="#covered" class="nav-link">What's covered</a>
         <a href="#pricing" class="nav-link">Prep tools</a>
+        <a href="/journal" class="nav-link">Journal</a>
         <a href="#free" class="nav-link">Is it free?</a>
       </div>
       <div class="flex items-center gap-2">
@@ -86,7 +87,9 @@
         <a href="#how" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">How it works</a>
         <a href="#covered" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
         <a href="#pricing" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
-        <a href="#free" onclick="closeMenu()" class="py-3 nav-link">Is it free?</a>
+        <a href="#free" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Is it free?</a>
+        <a href="/journal" class="py-3 border-b border-sand/60 nav-link">Journal</a>
+        <a href="/privacy" class="py-3 nav-link">Privacy</a>
       </div>
     </div>
   </nav>
@@ -300,6 +303,37 @@
     </div>
   </section>
 
+  <!-- From the Kaur Care Journal -->
+  <section class="site-section border-t border-sand bg-white/50">
+    <div class="max-w-6xl mx-auto px-5 py-14">
+      <div class="flex items-end justify-between mb-8 gap-4">
+        <div>
+          <p class="eyebrow mb-2">From the Kaur Care Journal</p>
+          <h2 class="font-display text-3xl font-semibold text-sage">Getting care faster, explained</h2>
+        </div>
+        <a href="/journal" class="nav-link whitespace-nowrap hidden sm:block">View all &rarr;</a>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <a href="/journal/pharmacy-first-conditions-uk" class="card p-6 block hover:shadow-md transition">
+          <p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--accent)] mb-2">6 min read</p>
+          <h3 class="font-display text-lg font-semibold text-sage mb-1.5">12 things you can sort at a UK pharmacy today</h3>
+          <p class="text-sm text-slate-soft">The seven NHS Pharmacy First pathways, plus five newer ones, no GP queue needed.</p>
+        </a>
+        <a href="/journal/how-to-use-right-to-choose-adhd-autism" class="card p-6 block hover:shadow-md transition">
+          <p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--accent)] mb-2">7 min read</p>
+          <h3 class="font-display text-lg font-semibold text-sage mb-1.5">Right to Choose for ADHD &amp; autism</h3>
+          <p class="text-sm text-slate-soft">How to use your legal right to a shorter NHS assessment wait in England.</p>
+        </a>
+        <a href="/journal/prepare-10-minute-gp-appointment-womens-family-health" class="card p-6 block hover:shadow-md transition">
+          <p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--accent)] mb-2">6 min read</p>
+          <h3 class="font-display text-lg font-semibold text-sage mb-1.5">Make a 10-minute GP appointment count</h3>
+          <p class="text-sm text-slate-soft">Practical prep for women's health, parents and any adult.</p>
+        </a>
+      </div>
+      <a href="/journal" class="nav-link inline-block mt-6 sm:hidden">View all articles &rarr;</a>
+    </div>
+  </section>
+
   <div id="print-area" class="hidden"></div>
 
   <script src="/fast-track-config.js"></script>
@@ -307,7 +341,7 @@
   <footer class="bg-sage text-white/90 py-8">
     <div class="max-w-4xl mx-auto px-5 text-sm">
       <p class="mb-2"><strong>This is a navigation and directory tool, not medical advice.</strong> It does not diagnose, prescribe or replace a consultation. Always confirm eligibility with your pharmacy, GP or NHS 111, and seek urgent help for serious symptoms.</p>
-      <p class="text-white/70 text-xs">Kaur Care, operated by HealthProcure Intel. Built on NHS commissioning &amp; procurement data.</p>
+      <p class="text-white/70 text-xs">Kaur Care, operated by HealthProcure Intel. Built on NHS commissioning &amp; procurement data. <a href="/journal" class="underline">Journal</a> &middot; <a href="/privacy" class="underline">Privacy</a></p>
     </div>
   </footer>
 
