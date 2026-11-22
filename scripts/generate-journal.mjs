@@ -90,7 +90,7 @@ const head = (title, desc, url) => `<!DOCTYPE html>
 </div></nav>`;
 
 const footer = `<footer><div class="wrap">
-Kaur Care, operated by HealthProcure Intel. A navigation tool, not medical advice. <a href="/">Home</a> &middot; <a href="/journal">Journal</a> &middot; <a href="/privacy">Privacy</a>
+Kaur Care is a service by <strong>HealthProcure Intel</strong>. A navigation tool, not medical advice. <a href="/">Home</a> &middot; <a href="/journal">Journal</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/b2b">HealthProcure Intel (B2B)</a>
 </div></footer>
 </body></html>`;
 
@@ -222,6 +222,74 @@ ${MIDCTA}
 <p>If you have three separate problems, submit them separately or flag which can wait. Triage handles one clear issue far better than a mixed bag.</p>
 <h2>When not to use online triage</h2>
 <p>Online forms are for non-urgent problems. If symptoms are severe or fast-moving, chest pain, trouble breathing, a stiff neck with high fever, heavy bleeding or confusion, use NHS 111 or call 999.</p>` + cta,
+  },
+  {
+    slug: "cant-get-a-gp-appointment-what-to-do-uk",
+    category: "NHS Shortcuts",
+    title: "Can't Get a GP Appointment? Your Faster NHS Options in England",
+    desc: "When the GP line is always engaged, there are quicker NHS routes you may not have tried. A practical rundown for England.",
+    read: 4,
+    body: `<p class="lead">If you can never seem to get through, you are not out of options. Several NHS routes are designed exactly for the moments when a GP appointment is hard to come by.</p>
+<h2>Start with the pharmacy</h2>
+<p>NHS Pharmacy First lets a pharmacist assess and, where appropriate, treat seven common conditions, free and often same-day, with no GP appointment or referral: UTIs (women 16 to 64), sore throat, childhood earache, sinusitis, impetigo, infected insect bites and shingles.</p>
+<h2>Use your practice's online front door</h2>
+<p>Most practices accept online requests through the NHS App, eConsult or Patchs. A clear written request is often triaged the same day, no phone queue. Say what you need, what is happening and since when, what you have tried, and how it is affecting you.</p>
+${MIDCTA}
+<h2>NHS 111 for the in-between</h2>
+<p>If you are not sure how urgent something is, NHS 111 (online or by phone) assesses symptoms day and night and directs you to the right service, which can include an urgent GP slot, a pharmacy, or an urgent treatment centre.</p>
+<h2>Know your Right to Choose</h2>
+<p>For routine referrals in England you can ask to be seen by an NHS-funded provider of your choice, which can shorten long waits. And for emergencies, chest pain, trouble breathing, signs of a stroke, always call 999.</p>` + cta,
+  },
+  {
+    slug: "nhs-menopause-perimenopause-help-faster",
+    category: "Women's Health",
+    title: "Perimenopause & Menopause: How to Get NHS Help Faster",
+    desc: "Perimenopause symptoms are often missed or minimised. Here is how to prepare, what to track, and how to get the right NHS conversation sooner.",
+    read: 4,
+    body: `<p class="lead">Perimenopause can start years before periods stop, and its symptoms, sleep, mood, brain fog, cycle changes, are easy to put down to stress. Preparing well is how you get taken seriously and get help sooner.</p>
+<h2>Track before you talk</h2>
+<p>Note your main symptoms and how long you have had them, how they affect sleep, mood and work, and any changes to your cycle. A couple of weeks of notes gives the clearest picture.</p>
+<h2>Know the options exist</h2>
+<p>There are effective approaches, including HRT for many people, as well as lifestyle and non-hormonal options. You do not need to have every answer; you need to open the conversation and ask what is suitable for you.</p>
+${MIDCTA}
+<h2>Make the appointment count</h2>
+<p>Lead with your most troubling symptom. Ask directly about treatment options, including HRT, and what the next steps are. If you do not feel heard, it is reasonable to ask for another appointment or a review.</p>
+<h2>When to seek help sooner</h2>
+<p>Any unexpected bleeding, bleeding after your periods have stopped, or bleeding between periods should be checked promptly by your GP, as should any symptom that worries you.</p>` + cta,
+  },
+  {
+    slug: "recurrent-uti-women-nhs-routes",
+    category: "Women's Health",
+    title: "Recurrent UTIs in Women: Faster NHS Routes and What to Track",
+    desc: "If UTIs keep coming back, there are quicker NHS routes and useful things to track. A calm, practical guide, not medical advice.",
+    read: 4,
+    body: `<p class="lead">A one-off UTI is miserable; recurrent ones are exhausting. The good news is there are fast NHS routes, and a few things worth tracking that make appointments more productive.</p>
+<h2>For a single, uncomplicated UTI</h2>
+<p>Women aged 16 to 64 can often be assessed and treated the same day under NHS Pharmacy First, with no GP appointment. It is not suitable in pregnancy, for men, or if you feel very unwell or have back or flank pain, in which case you will be directed to a GP or NHS 111.</p>
+<h2>When they keep coming back</h2>
+<p>Recurrent UTIs (several in a year) are worth a longer GP conversation rather than repeat same-day fixes. Your GP can look at prevention and whether any further checks are needed.</p>
+${MIDCTA}
+<h2>What to track</h2>
+<p>Note how many infections you have had in the last 6 to 12 months, any triggers you have spotted, what has helped or not, and how it affects daily life. Bring that summary to your appointment.</p>
+<h2>When to seek help sooner</h2>
+<p>A high temperature, shivering, back or side pain, or feeling very unwell can signal a more serious kidney infection, contact your GP urgently or call NHS 111. For severe symptoms, call 999.</p>` + cta,
+  },
+  {
+    slug: "childrens-hay-fever-allergy-pharmacy-first",
+    category: "Parents & Kids",
+    title: "Children's Hay Fever & Allergies: Calm Options for UK Parents",
+    desc: "Itchy eyes, sneezing and a streaming nose can wreck a child's summer. A calm guide to the comfort measures and NHS pharmacy routes for parents.",
+    read: 4,
+    body: `<p class="lead">Hay fever can make a child thoroughly miserable through spring and summer. Most of it can be managed well, and you rarely need to start with the GP.</p>
+<h2>Everyday comfort measures</h2>
+<p>Simple steps help a lot: keeping windows shut on high-pollen days, a wipe-down and change of clothes after playing outside, and keeping bedding fresh. A pharmacist can advise on suitable options for your child's age.</p>
+<h2>Ask the pharmacy first</h2>
+<p>Your pharmacist is the ideal first stop for seasonal allergy symptoms and can recommend what is appropriate. NHS pharmacy services for children's hay fever are also being expanded in many areas through 2026, so it is worth asking what is available locally, rather than assuming you need a GP.</p>
+${MIDCTA}
+<h2>When to see the GP</h2>
+<p>Book a GP appointment if symptoms are severe, not controlled by the usual measures, or if your child also has asthma that seems to be flaring. Bring a note of what you have tried.</p>
+<h2>The emergency exception</h2>
+<p>Hay fever is not dangerous, but a sudden severe allergic reaction is. If a child has swelling of the lips or tongue, difficulty breathing, or becomes floppy or very distressed, call 999 immediately.</p>` + cta,
   },
 ];
 
