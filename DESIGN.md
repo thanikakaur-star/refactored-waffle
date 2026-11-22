@@ -372,3 +372,6 @@ The approved Instagram intro carousel (8 slides, 1080×1350, 4:5). Posted and we
 - Do not mention HealthProcure Intel; Kaur Care is standalone
 - Copy stays warm, calm, plain English; navigation, not medical advice
 - Source script: render pipeline embeds fonts as base64 so output is reproducible offline
+
+### Default template
+This carousel is the **default template for every Kaur Care carousel post**. New carousels reuse the same palette, fonts, layout, footer, alternating backgrounds and sage CTA closer; only the slide copy changes. Render script: `scripts/social/carousel-template.cjs`.
