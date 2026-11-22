@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/icons/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- PWA / Save to Home Screen -->
   <link rel="manifest" href="/manifest.json" />
@@ -107,7 +107,7 @@
     <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between gap-6">
       <a href="/" class="flex items-center gap-2.5 shrink-0">
         <img id="brand-logo" alt="" class="h-9 hidden" />
-        <span id="brand-mark" class="w-10 h-10 rounded-2xl bg-sage flex items-center justify-center text-white font-display font-bold text-lg">K</span>
+        <span id="brand-mark" class="w-10 h-10 rounded-2xl bg-[#FBEEE7] border border-[#f0ddd0] flex items-center justify-center overflow-hidden"><img src="/logo-emblem.png" alt="Kaur Care" class="w-8 h-8 object-contain" /></span>
         <span class="leading-tight">
           <span id="brand-name" class="block font-display font-semibold text-xl text-sage">Kaur Care</span>
           <span id="brand-sub" class="block text-[11px] text-slate-muted -mt-0.5 empty:hidden"></span>
@@ -446,9 +446,9 @@
   </section>
 
   <!-- PWA install banner (mobile, dismissible) -->
-  <div id="install-banner" class="hidden fixed bottom-0 inset-x-0 z-50 md:hidden">
+  <div id="install-banner" class="hidden fixed bottom-0 inset-x-0 z-50 md:hidden" style="padding-bottom:env(safe-area-inset-bottom)">
     <div class="mx-3 mb-3 card p-3 flex items-center gap-3 shadow-lg">
-      <span class="w-9 h-9 rounded-xl bg-sage text-white flex items-center justify-center font-display font-bold shrink-0">K</span>
+      <span class="w-9 h-9 rounded-xl bg-[#FBEEE7] border border-[#f0ddd0] flex items-center justify-center overflow-hidden shrink-0"><img src="/logo-emblem.png" alt="" class="w-7 h-7 object-contain" /></span>
       <div class="flex-1 min-w-0">
         <p class="font-semibold text-sm leading-tight">Add Kaur Care to your home screen</p>
         <p id="install-hint" class="text-xs text-slate-muted"></p>
@@ -495,6 +495,7 @@
         b.addEventListener('click', function(){
           document.querySelectorAll('#pills .pill').forEach(function(x){ x.classList.remove('active'); });
           b.classList.add('active'); $('condition').value = b.getAttribute('data-c');
+          doSearch();
         });
       });
     }
@@ -515,6 +516,7 @@
       state.condition = $('condition').value.trim();
       state.postcode = $('postcode').value.trim();
       if (!state.condition){ alert('Please pick or type a concern.'); return; }
+      if (typeof openInstallGate === 'function') openInstallGate();
       $('search-btn').textContent = 'Finding...';
       lookupPostcode(state.postcode); // resolves region + NHS ICB in the background
       try {
@@ -582,12 +584,25 @@
         : '<span class="text-xs px-2 py-0.5 rounded-full badge-check">Confirm with your pharmacy / current NHS guidance</span>';
     }
     function pathwayCard(p){
-      return '<div class="card p-4 mb-3">'
+      var links = (state.data && state.data.links) || {};
+      var pharmaHref = links.findPharmacy || 'https://www.nhs.uk/nhs-services/pharmacies/find-a-pharmacy/';
+      return '<div class="card p-4 mb-3 pathway-card" id="pw-'+esc(p.id)+'" data-pwid="'+esc(p.id)+'" data-pwname="'+esc(p.name)+'">'
         + '<div class="flex items-start justify-between gap-3 mb-1"><div class="font-semibold">'+esc(p.name)+'</div>'+badge(p.status)+'</div>'
-        + '<div class="text-sm text-slate-soft mb-2">Eligibility: '+esc(p.ageRule)+'</div>'
-        + '<details class="text-sm"><summary class="cursor-pointer text-sage font-medium">When this is not suitable</summary><ul class="list-disc pl-5 mt-2 text-slate-soft">'
+        + '<div class="pw-match hidden text-xs font-semibold text-terracotta mb-1">★ Matches your search</div>'
+        + '<div class="text-sm text-slate-soft mb-2">Who it\'s for: '+esc(p.ageRule)+'</div>'
+        + '<details class="text-sm mb-3"><summary class="cursor-pointer text-sage font-medium">When this is not suitable</summary><ul class="list-disc pl-5 mt-2 text-slate-soft">'
         + (p.exclusions||[]).map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')
-        + '</ul>'+(p.note?'<p class="mt-2 text-slate-soft">'+esc(p.note)+'</p>':'')+'</details></div>';
+        + '</ul>'+(p.note?'<p class="mt-2 text-slate-soft">'+esc(p.note)+'</p>':'')+'</details>'
+        + '<div class="flex flex-wrap gap-2">'
+        + '<a class="pill" target="_blank" rel="noopener" href="'+esc(pharmaHref)+'">Find nearest NHS pharmacy</a>'
+        + '<button type="button" class="pill" onclick="briefForPathwayEl(this)">Build a GP brief for this</button>'
+        + '</div></div>';
+    }
+    // Pre-fill the GP brief with this pathway and scroll to the prep tools.
+    function briefForPathwayEl(btn){
+      var card = btn.closest('.pathway-card');
+      var name = card ? card.getAttribute('data-pwname') : '';
+      queuePrefill({ condition: name }, 'b-condition');
     }
     function providerBlock(d){
       var out = '';
@@ -646,6 +661,128 @@
         + '<p class="text-xs text-slate-muted mt-2">These are official directories.' + pcNote + ' Always confirm the provider accepts NHS Right to Choose referrals for your area before asking your GP to refer.</p>';
     }
 
+    // ---- Interactivity: Right to Choose, women's health, prefill, highlight ----
+    var RTC_META = {
+      dermatology: { blurb: 'Skin conditions, suspected skin-cancer referrals, chronic acne, eczema or psoriasis.', terms: 'dermatology' },
+      ent: { blurb: 'Ear, nose and throat problems: hearing, sinuses, tonsils, balance or voice.', terms: 'ENT ear nose throat' },
+      physio_msk: { blurb: 'Muscle, joint, back and mobility problems that often carry a long community wait.', terms: 'physiotherapy MSK musculoskeletal' },
+      imaging: { blurb: 'Diagnostic scans (MRI, CT or ultrasound) where the local NHS wait is long.', terms: 'MRI ultrasound diagnostic imaging' },
+      adhd_autism: { blurb: 'Adult or child ADHD and autism assessments, where NHS waits are often measured in years.', terms: 'ADHD autism assessment' }
+    };
+    function pickRtc(btn){
+      document.querySelectorAll('.rtc-pill').forEach(function(x){ x.classList.remove('active'); x.setAttribute('aria-pressed','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
+      renderRtcPanel(btn.getAttribute('data-rtc'), btn.getAttribute('data-name'));
+      var p = document.getElementById('rtc-panel'); if (p) p.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+    function renderRtcPanel(id, name){
+      var el = document.getElementById('rtc-panel'); if (!el) return;
+      var meta = RTC_META[id] || { blurb: '', terms: name };
+      var cqc = 'https://www.cqc.org.uk/search/services?query=' + encodeURIComponent(meta.terms);
+      var pcNote = state.postcode ? ' Enter your postcode on the CQC page to sort by distance.' : '';
+      el.innerHTML = '<div class="card p-5 border-[#d9e6de] bg-[#f6faf7]">'
+        + '<h5 class="font-semibold text-sage mb-1">' + esc(name) + ' — your Right to Choose</h5>'
+        + (meta.blurb ? '<p class="text-sm text-slate-soft mb-2">' + esc(meta.blurb) + '</p>' : '')
+        + '<p class="text-sm text-slate-soft mb-3">Ask your GP to refer you to an NHS-funded provider of your choice. Before you ask it helps to: (1) check the provider holds an NHS Standard Contract for this service, (2) confirm they accept Right to Choose referrals in your ICB area, and (3) have the clinic name ready for your GP.</p>'
+        + '<div class="flex flex-wrap gap-2">'
+        + '<button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-name="' + esc(name) + '" onclick="letterForRtcEl(this)">Generate Right to Choose referral letter</button>'
+        + '<a class="pill" target="_blank" rel="noopener" href="' + cqc + '">Find ' + esc(name) + ' providers (CQC)</a>'
+        + '<a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/nhs-services/hospitals/choosing-a-hospital/your-legal-right-to-choose/">Your legal right to choose (NHS)</a>'
+        + '</div>'
+        + '<p class="text-xs text-slate-muted mt-2">These link to official NHS and CQC directories.' + pcNote + '</p>'
+        + '</div>';
+    }
+    function letterForRtcEl(btn){ queuePrefill({ letterCondition: btn.getAttribute('data-name') }, 'l-condition'); }
+
+    function toggleWh(btn){
+      var id = btn.getAttribute('data-wh');
+      var panel = document.querySelector('.wh-panel[data-whpanel="' + id + '"]');
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      if (panel) panel.classList.toggle('hidden', open);
+      var chev = btn.querySelector('.wh-chev'); if (chev) chev.textContent = open ? '+' : '–';
+    }
+    function startWhBrief(i){
+      var w = (state.data && state.data.womensHealth && state.data.womensHealth[i]) || null;
+      if (!w) return;
+      queuePrefill({ condition: w.name, triggers: (w.prepPrompts && w.prepPrompts[0]) || '' }, 'b-condition');
+    }
+
+    function scrollToTools(focusId){
+      var anchor = (state.unlocked ? document.getElementById('tools-unlocked') : document.getElementById('tools-locked')) || document.getElementById('results');
+      if (anchor) anchor.scrollIntoView({ behavior:'smooth', block:'start' });
+      if (state.unlocked && focusId){ var f = document.getElementById(focusId); if (f){ setTimeout(function(){ try { f.focus({ preventScroll:true }); } catch(e){ f.focus(); } }, 450); } }
+    }
+
+    // Pending prefill survives the search + unlock flow (even a Stripe redirect) via sessionStorage.
+    var PENDING_KEY = 'kaurcare_pending_prefill';
+    function loadPending(){ try { return JSON.parse(sessionStorage.getItem(PENDING_KEY) || 'null'); } catch(e){ return null; } }
+    function savePending(o){ try { if (o) sessionStorage.setItem(PENDING_KEY, JSON.stringify(o)); else sessionStorage.removeItem(PENDING_KEY); } catch(e){} }
+    function queuePrefill(obj, focusId){
+      var p = Object.assign(loadPending() || {}, obj || {});
+      savePending(p);
+      var results = document.getElementById('results');
+      var resultsVisible = results && !results.classList.contains('hidden');
+      if (resultsVisible){ applyPending(); scrollToTools(focusId); }
+      else {
+        if (obj && obj.condition){ var c = $('condition'); if (c) c.value = obj.condition; state.condition = obj.condition; }
+        document.getElementById('find').scrollIntoView({ behavior:'smooth' });
+        flash('Added to your search. Tap “Find care”, then your prep tools open just below the results.');
+      }
+    }
+    function applyPending(){
+      var p = loadPending(); if (!p) return;
+      if (!state.unlocked) return; // fields exist only once unlocked; keep for later
+      if (p.condition && $('b-condition')) $('b-condition').value = p.condition;
+      if (p.triggers && $('b-triggers')) $('b-triggers').value = p.triggers;
+      if (p.impact && $('b-impact')) $('b-impact').value = p.impact;
+      if (p.questions && $('b-questions')) $('b-questions').value = p.questions;
+      if (p.letterCondition && $('l-condition')) $('l-condition').value = p.letterCondition;
+      savePending(null);
+    }
+    function flash(text){
+      var t = document.getElementById('toast');
+      if (!t){ t = document.createElement('div'); t.id = 'toast'; t.setAttribute('role','status'); t.className = 'fixed left-1/2 -translate-x-1/2 bottom-6 z-[60] max-w-[90%] text-center px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-medium shadow-lg transition-opacity duration-300'; document.body.appendChild(t); }
+      t.textContent = text; t.style.opacity = '1';
+      clearTimeout(t._timer); t._timer = setTimeout(function(){ t.style.opacity = '0'; }, 3600);
+    }
+
+    function activateTab(id){
+      document.querySelectorAll('.tab-btn').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-tab') === id); });
+      document.querySelectorAll('.tab-panel').forEach(function(x){ x.classList.toggle('hidden', x.id !== id); });
+    }
+    function norm(s){ return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
+    function textMatch(a, b){ if (!a || !b) return false; return a.indexOf(b) >= 0 || b.indexOf(a) >= 0; }
+    function rtcKeyword(c, id){
+      var map = { dermatology:['skin','rash','derma','acne','eczema','psoriasis','mole'], ent:['ent','ear','nose','throat','sinus','hearing','tonsil'], physio_msk:['physio','msk','muscul','joint','back','knee','shoulder'], imaging:['mri','ultrasound','scan','ct','imaging','x ray','xray'], adhd_autism:['adhd','autism','asd','neurodiv'] };
+      var ks = map[id] || []; for (var i = 0; i < ks.length; i++){ if (c.indexOf(ks[i]) >= 0) return true; } return false;
+    }
+    // After a search, route to the matching condition: highlight a Pharmacy First
+    // card and lift it to the top, or open the matching RTC / women's-health panel.
+    function focusCondition(){
+      var c = norm(state.condition); if (!c) return;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.pathway-card'));
+      var pwMatch = null;
+      cards.forEach(function(card){ if (!pwMatch){ if (textMatch(norm(card.getAttribute('data-pwname')), c)) pwMatch = card; } });
+      if (pwMatch){
+        activateTab('t1');
+        pwMatch.classList.add('ring-2','ring-terracotta');
+        var chip = pwMatch.querySelector('.pw-match'); if (chip) chip.classList.remove('hidden');
+        var t1 = document.getElementById('t1');
+        if (t1 && t1.children.length > 1){ try { t1.insertBefore(pwMatch, t1.children[1]); } catch(e){} }
+        setTimeout(function(){ pwMatch.scrollIntoView({ behavior:'smooth', block:'center' }); }, 150);
+        return;
+      }
+      var rtcBtns = Array.prototype.slice.call(document.querySelectorAll('.rtc-pill'));
+      var rtcMatch = null;
+      rtcBtns.forEach(function(b){ if (!rtcMatch){ if (textMatch(norm(b.getAttribute('data-name')), c) || rtcKeyword(c, b.getAttribute('data-rtc'))) rtcMatch = b; } });
+      if (rtcMatch){ activateTab('t2'); pickRtc(rtcMatch); return; }
+      var whBtns = Array.prototype.slice.call(document.querySelectorAll('.wh-row'));
+      var whMatch = null;
+      whBtns.forEach(function(b){ if (!whMatch){ var n = norm(b.getAttribute('data-wh')) + ' ' + norm(b.textContent); if (textMatch(n, c)) whMatch = b; } });
+      if (whMatch){ activateTab('t2'); if (whMatch.getAttribute('aria-expanded') !== 'true') toggleWh(whMatch); setTimeout(function(){ whMatch.scrollIntoView({ behavior:'smooth', block:'center' }); }, 150); }
+    }
+
     function renderResults(){
       var d = state.data;
       // Tab 1
@@ -657,12 +794,22 @@
         + '<div class="card p-5 mt-5">'+providerBlock(d)+'</div>';
 
       // Tab 2
-      var rtc = d.rightToChoose.map(function(r){ return '<span class="pill">'+esc(r.name)+'</span>'; }).join('');
-      var wh = d.womensHealth.map(function(w){ return '<details class="card p-4 mb-2"><summary class="cursor-pointer font-semibold">'+esc(w.name)+'</summary><p class="text-xs text-slate-muted mt-2 mb-1">Bring to your appointment:</p><ul class="list-disc pl-5 text-sm text-slate-soft">'+w.prepPrompts.map(function(p){return '<li>'+esc(p)+'</li>';}).join('')+'</ul></details>'; }).join('');
+      var rtc = d.rightToChoose.map(function(r){ return '<button type="button" class="pill rtc-pill" aria-pressed="false" data-rtc="'+esc(r.id)+'" data-name="'+esc(r.name)+'" onclick="pickRtc(this)">'+esc(r.name)+'</button>'; }).join('');
+      var wh = d.womensHealth.map(function(w, i){
+        return '<div class="card p-0 mb-2 overflow-hidden">'
+          + '<button type="button" class="wh-row w-full text-left px-4 py-3.5 font-semibold flex items-center justify-between gap-3" aria-expanded="false" data-wh="'+esc(w.id)+'" onclick="toggleWh(this)">'
+          + '<span>'+esc(w.name)+'</span><span class="wh-chev text-sage text-xl leading-none shrink-0">+</span></button>'
+          + '<div class="wh-panel hidden px-4 pb-4" data-whpanel="'+esc(w.id)+'">'
+          + '<p class="text-xs font-semibold text-slate-muted mb-1">A few things to track and bring:</p>'
+          + '<ul class="list-disc pl-5 text-sm text-slate-soft mb-3">'+w.prepPrompts.map(function(p){return '<li>'+esc(p)+'</li>';}).join('')+'</ul>'
+          + '<button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" onclick="startWhBrief('+i+')">Start a 1-page GP brief for this</button>'
+          + '</div></div>';
+      }).join('');
       $('t2').innerHTML = '<div class="card p-5 mb-5"><h3 class="font-display text-xl font-semibold mb-2">Your legal right to choose</h3><p class="text-sm text-slate-soft">In England you have a statutory right under the NHS Choice Framework to ask your GP to refer you to a clinically appropriate NHS-funded provider, including many independent clinics, which can mean a shorter wait. Local ICB policies can vary, so confirm current acceptance with your GP and chosen clinic.</p></div>'
-        + '<h4 class="font-semibold mb-2">Common Right to Choose routes</h4><div class="flex flex-wrap gap-2 mb-5">'+rtc+'</div>'
+        + '<h4 class="font-semibold mb-2">Common Right to Choose routes <span class="font-normal text-slate-muted text-sm">— tap one for next steps</span></h4><div class="flex flex-wrap gap-2 mb-3">'+rtc+'</div>'
+        + '<div id="rtc-panel" class="mb-5"></div>'
         + adhdPanel()
-        + '<h4 class="font-semibold mb-2">Women\'s health appointment prep</h4>'+wh
+        + '<h4 class="font-semibold mb-2">Women\'s health appointment prep <span class="font-normal text-slate-muted text-sm">— tap to expand</span></h4>'+wh
         + '<div class="card p-5 mt-5">'+providerBlock(d)+'</div>'
         + '<div class="card p-5 mt-5 bg-[#f4f8f5] border-[#d9e6de]"><h4 class="font-semibold mb-1">Long or capped NHS wait?</h4><p class="text-sm text-slate-soft mb-3">Use the appointment prep tools below to generate your Right to Choose referral letter, then take it to your GP. The provider links above are the authoritative NHS and CQC directories.</p></div>';
 
@@ -678,6 +825,8 @@
         + (essentials ? ('<h3 class="font-display text-xl font-semibold mt-6 mb-1">Recommended comfort essentials</h3><p class="text-xs text-slate-muted mb-3">'+esc(cfg.AFFILIATE_DISCLOSURE || '')+'</p><div class="grid sm:grid-cols-2 gap-3">'+essentials+'</div>') : '')
         + '<div class="card p-5 mt-6"><h4 class="font-semibold mb-1">Are you a wellbeing practitioner?</h4><p class="text-sm text-slate-soft mb-3">List your practice in the local directory for £39/mo. Self-serve sign-up, you are listed as soon as your subscription starts.</p><a href="'+esc(listUrl)+'" target="_blank" rel="noopener" class="inline-block px-5 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm">List your practice, £39/mo</a></div>';
       if (isAdhdAutism()) updateAdhdLinks();
+      applyPending();
+      focusCondition();
     }
 
     // Unlock / checkout
@@ -715,6 +864,7 @@
       $('tools-unlocked').classList.toggle('hidden', !on);
       $('tools-locked').classList.toggle('hidden', on);
       $('tools-partner').classList.toggle('hidden', !(on && viaPartner));
+      if (on) applyPending();
     }
     async function checkUnlock(){
       var params = new URLSearchParams(location.search);
@@ -744,7 +894,10 @@
       if (opts.brandName){
         $('brand-name').textContent = opts.brandName;
         $('brand-sub').textContent = 'by HealthProcure Intel';
-        $('brand-mark').textContent = (opts.brandName.trim()[0] || 'K').toUpperCase();
+        var bm = $('brand-mark');
+        bm.textContent = (opts.brandName.trim()[0] || 'K').toUpperCase();
+        bm.classList.remove('bg-[#FBEEE7]', 'border', 'border-[#f0ddd0]', 'overflow-hidden');
+        bm.classList.add('bg-sage', 'text-white', 'font-display', 'font-bold', 'text-lg');
         document.title = opts.brandName + ' | Care Navigator by HealthProcure Intel';
       }
       if (opts.logoUrl){ var img=$('brand-logo'); img.src=opts.logoUrl; img.alt=opts.brandName||''; img.classList.remove('hidden'); $('brand-mark').classList.add('hidden'); }
@@ -859,12 +1012,25 @@
     renderLog();
     initInstallBanner();
 
-    // PWA "Save to Home Screen" banner
+    // PWA "Save to Home Screen" banner.
+    // It must NOT appear on first load (it overlapped the bottom cards on iOS
+    // Safari). It only shows once the visitor has engaged: interacted with the
+    // #find form, run a search, or scrolled past the halfway point.
     var deferredPrompt = null;
-    window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredPrompt = e; showInstall('android'); });
+    var installGateOpen = false;
+    window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredPrompt = e; maybeShowInstall(); });
     function isStandalone(){ return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true; }
     function installDismissed(){ try { return localStorage.getItem('kaurcare_install_dismissed') === '1'; } catch(e){ return false; } }
     function dismissInstall(){ try { localStorage.setItem('kaurcare_install_dismissed', '1'); } catch(e){} var b = document.getElementById('install-banner'); if (b) b.classList.add('hidden'); }
+    function openInstallGate(){ if (installGateOpen) return; installGateOpen = true; maybeShowInstall(); }
+    function maybeShowInstall(){
+      if (!installGateOpen || isStandalone() || installDismissed() || state.embed) return;
+      var ua = navigator.userAgent || '';
+      var isIOS = /iphone|ipad|ipod/i.test(ua);
+      var isSafari = isIOS && /safari/i.test(ua) && !/crios|fxios/i.test(ua);
+      if (deferredPrompt) showInstall('android');
+      else if (isIOS && isSafari) showInstall('ios');
+    }
     function showInstall(kind){
       if (isStandalone() || installDismissed() || state.embed) return;
       var b = document.getElementById('install-banner'); if (!b) return;
@@ -876,10 +1042,22 @@
     function doInstall(){ if (!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt.userChoice.finally(function(){ deferredPrompt = null; dismissInstall(); }); }
     function initInstallBanner(){
       if (isStandalone() || installDismissed()) return;
-      var ua = navigator.userAgent || '';
-      var isIOS = /iphone|ipad|ipod/i.test(ua);
-      var isSafari = isIOS && /safari/i.test(ua) && !/crios|fxios/i.test(ua);
-      if (isIOS && isSafari){ setTimeout(function(){ showInstall('ios'); }, 2500); }
+      // Open the gate when the visitor scrolls past 50% of the page...
+      var onScroll = function(){
+        var h = document.documentElement;
+        var scrolled = (h.scrollTop || document.body.scrollTop) + window.innerHeight;
+        if (scrolled >= (h.scrollHeight || document.body.scrollHeight) * 0.5){
+          openInstallGate();
+          window.removeEventListener('scroll', onScroll);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      // ...or when they first interact with the find form.
+      var find = document.getElementById('find');
+      if (find){
+        var onInteract = function(){ openInstallGate(); };
+        ['click', 'input', 'focusin'].forEach(function(ev){ find.addEventListener(ev, onInteract, { once: true }); });
+      }
     }
   </script>
 

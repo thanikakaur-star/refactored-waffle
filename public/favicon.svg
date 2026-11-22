@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#2D5A47"/>
-  <text x="16" y="23" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="20" fill="#ffffff">K</text>
+  <rect width="32" height="32" rx="7" fill="#FBEEE7"/>
+  <!-- Terracotta leaf-and-heart emblem -->
+  <path fill="#C87A5A" d="M16 26.5c-.5 0-1-.2-1.4-.5C11 23.1 7.2 20 7.2 15.6c0-2.3 1.8-4.1 4-4.1 1.6 0 3 .9 3.7 2.3h2.2c.7-1.4 2.1-2.3 3.7-2.3 2.2 0 4 1.8 4 4.1 0 4.4-3.8 7.5-7.4 10.4-.4.3-.9.5-1.4.5z"/>
+  <!-- Leaf rising from the heart -->
+  <path fill="#2D5A47" d="M16 13.2c0-3 1.6-5.6 4.3-7.2.3-.2.7 0 .7.4 0 3-1.6 5.6-4.3 7.2-.3.2-.7 0-.7-.4z"/>
+  <path fill="#2D5A47" d="M15.5 13.6c-.2-.2-.3-.5-.3-.8 0-1.6-.9-3-2.3-3.8-.3-.2-.7 0-.6.4.2 1.5 1 2.8 2.3 3.6.3.2.6.4.9.6z" opacity=".85"/>
 </svg>
