@@ -762,6 +762,87 @@ app.post("/api/v1/billing/portal", async (req, res) => {
   }
 });
 
+// Fast-Track (CarePath) consumer vertical: lead capture. Public endpoints for the
+// /fast-track navigator. No clinical decisions are made here; these only record a
+// patient's request to be contacted (private clinic) or a practitioner's directory
+// application. Writes to Supabase when configured, else logs (local mode).
+function ftStr(v: unknown, max = 500): string | null {
+  if (typeof v !== "string") return null;
+  const t = v.trim();
+  return t ? t.slice(0, max) : null;
+}
+
+app.post("/api/v1/fast-track/lead", async (req, res) => {
+  const email = ftStr(req.body?.email, 254);
+  const leadType = ftStr(req.body?.lead_type, 40);
+  if (!email || !email.includes("@")) {
+    res.status(400).json({ error: "A valid email is required." });
+    return;
+  }
+  if (leadType !== "private_clinic" && leadType !== "holistic_practitioner_inquiry") {
+    res.status(400).json({ error: "lead_type must be private_clinic or holistic_practitioner_inquiry." });
+    return;
+  }
+  const format = ftStr(req.body?.preferred_format, 20);
+  const row = {
+    lead_type: leadType,
+    patient_name: ftStr(req.body?.patient_name, 120),
+    email,
+    phone: ftStr(req.body?.phone, 40),
+    postcode: ftStr(req.body?.postcode, 12),
+    condition: ftStr(req.body?.condition, 120),
+    patient_type: ftStr(req.body?.patient_type, 60),
+    preferred_format: format === "in_person" || format === "remote" ? format : null,
+    notes: ftStr(req.body?.notes, 1000),
+    status: "new",
+  };
+  try {
+    if (USE_SUPABASE && supabase) {
+      const { error } = await supabase.from("fast_track_leads").insert(row);
+      if (error) throw new Error(error.message);
+    } else {
+      logger.info("Fast-track lead (local mode, not persisted)", { leadType, postcode: row.postcode });
+    }
+    res.status(201).json({ ok: true });
+  } catch (err) {
+    logger.error("Fast-track lead insert failed", { error: String(err) });
+    res.status(500).json({ error: "Could not record your request. Please try again." });
+  }
+});
+
+app.post("/api/v1/fast-track/practitioner-application", async (req, res) => {
+  const email = ftStr(req.body?.email, 254);
+  const specialtyIn = ftStr(req.body?.specialty, 40);
+  const allowed = ["Homeopathy", "Acupuncture", "Osteopathy", "Nutritional Therapy", "Pelvic Health", "Other"];
+  if (!email || !email.includes("@")) {
+    res.status(400).json({ error: "A valid email is required." });
+    return;
+  }
+  const row = {
+    practice_name: ftStr(req.body?.practice_name, 160),
+    practitioner_name: ftStr(req.body?.practitioner_name, 120),
+    specialty: specialtyIn && allowed.includes(specialtyIn) ? specialtyIn : "Other",
+    accreditation_body: ftStr(req.body?.accreditation_body, 160),
+    postcode: ftStr(req.body?.postcode, 12),
+    email,
+    phone: ftStr(req.body?.phone, 40),
+    website: ftStr(req.body?.website, 200),
+    status: "pending_review",
+  };
+  try {
+    if (USE_SUPABASE && supabase) {
+      const { error } = await supabase.from("practitioner_applications").insert(row);
+      if (error) throw new Error(error.message);
+    } else {
+      logger.info("Practitioner application (local mode, not persisted)", { specialty: row.specialty });
+    }
+    res.status(201).json({ ok: true });
+  } catch (err) {
+    logger.error("Practitioner application insert failed", { error: String(err) });
+    res.status(500).json({ error: "Could not submit your application. Please try again." });
+  }
+});
+
 app.post("/api/v1/signup/free", async (req, res) => {
   const { email } = req.body;
   if (!email || typeof email !== "string" || !email.includes("@")) {
