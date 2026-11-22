@@ -76,9 +76,24 @@
         <a href="#pricing" class="nav-link">Prep tools</a>
         <a href="#free" class="nav-link">Is it free?</a>
       </div>
-      <a href="#find" class="shrink-0 px-4 py-2 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark">Find care</a>
+      <div class="flex items-center gap-2">
+        <a href="#find" class="shrink-0 px-4 py-2 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark">Find care</a>
+        <button id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()" class="md:hidden w-10 h-10 rounded-xl border border-sand flex items-center justify-center text-sage text-xl leading-none">☰</button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="md:hidden hidden border-t border-sand bg-cream">
+      <div class="max-w-6xl mx-auto px-5 py-2 flex flex-col">
+        <a href="#how" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">How it works</a>
+        <a href="#covered" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
+        <a href="#pricing" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
+        <a href="#free" onclick="closeMenu()" class="py-3 nav-link">Is it free?</a>
+      </div>
     </div>
   </nav>
+  <script>
+    function toggleMenu(){ var m=document.getElementById('mobile-menu'); var b=document.getElementById('menu-btn'); var open=m.classList.toggle('hidden')===false; if(b) b.setAttribute('aria-expanded', open?'true':'false'); }
+    function closeMenu(){ var m=document.getElementById('mobile-menu'); var b=document.getElementById('menu-btn'); if(m) m.classList.add('hidden'); if(b) b.setAttribute('aria-expanded','false'); }
+  </script>
 
   <!-- Hero + triage -->
   <header id="find" class="max-w-6xl mx-auto px-5 pt-12 md:pt-16 pb-8">
