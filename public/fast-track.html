@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/icons/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>(function(){var p=(location.pathname||'/').replace(/\/+$/,'')||'/';var m={'/':'home','/how-it-works':'how-it-works','/whats-covered':'whats-covered','/babies-pregnancy-menopause':'babies-pregnancy-menopause','/prep-playbook':'prep-playbook','/wellness':'wellness','/prep-tools':'prep-tools','/partners':'partners','/faqs':'faqs'};document.documentElement.setAttribute('data-kc',m[p]||'home');})();</script>
   <!-- PWA / Save to Home Screen -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#2D5A47" />
@@ -93,6 +94,19 @@
     .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
     .feature-ico { width: 44px; height: 44px; border-radius: 12px; background: #EDF3EF; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; }
     body.embed nav, body.embed .site-section, body.embed footer { display: none; }
+    /* Multi-page router: each top-level block is a "page"; show only the current one. */
+    .kc-page { display: none; }
+    html[data-kc="home"] .kc-page[data-page="home"]:not(#results) { display: block; }
+    html[data-kc="home"] #results.kc-shown { display: block; }
+    html[data-kc="how-it-works"] .kc-page[data-page="how-it-works"],
+    html[data-kc="whats-covered"] .kc-page[data-page="whats-covered"],
+    html[data-kc="babies-pregnancy-menopause"] .kc-page[data-page="babies-pregnancy-menopause"],
+    html[data-kc="prep-playbook"] .kc-page[data-page="prep-playbook"],
+    html[data-kc="wellness"] .kc-page[data-page="wellness"],
+    html[data-kc="prep-tools"] .kc-page[data-page="prep-tools"],
+    html[data-kc="partners"] .kc-page[data-page="partners"],
+    html[data-kc="faqs"] .kc-page[data-page="faqs"] { display: block; }
+    .nav-active { color: var(--brand-primary) !important; font-weight: 700; }
     @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } }
   </style>
 </head>
@@ -113,29 +127,30 @@
           <span id="brand-sub" class="block text-[11px] text-slate-muted -mt-0.5 empty:hidden"></span>
         </span>
       </a>
-      <div class="hidden md:flex items-center gap-7">
-        <a href="#how" class="nav-link">How it works</a>
-        <a href="#covered" class="nav-link">What's covered</a>
-        <a href="#maternal-health" class="nav-link">Babies &amp; menopause</a>
-        <a href="#prep-playbook" class="nav-link">Prep playbook</a>
+      <div class="hidden lg:flex items-center gap-6">
+        <a href="/how-it-works" data-nav="how-it-works" class="nav-link">How it works</a>
+        <a href="/whats-covered" data-nav="whats-covered" class="nav-link">What's covered</a>
+        <a href="/babies-pregnancy-menopause" data-nav="babies-pregnancy-menopause" class="nav-link">Babies &amp; menopause</a>
+        <a href="/prep-playbook" data-nav="prep-playbook" class="nav-link">Prep playbook</a>
+        <a href="/wellness" data-nav="wellness" class="nav-link">Wellness</a>
+        <a href="/partners" data-nav="partners" class="nav-link">Partners</a>
         <a href="/journal" class="nav-link">Journal</a>
-        <a href="#white-label" class="nav-link">Partners</a>
       </div>
       <div class="flex items-center gap-2">
         <a href="#find" class="shrink-0 px-4 py-2 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark">Find care</a>
-        <button id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()" class="md:hidden w-10 h-10 rounded-xl border border-sand flex items-center justify-center text-sage text-xl leading-none">☰</button>
+        <button id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()" class="lg:hidden w-10 h-10 rounded-xl border border-sand flex items-center justify-center text-sage text-xl leading-none">☰</button>
       </div>
     </div>
-    <div id="mobile-menu" class="md:hidden hidden border-t border-sand bg-cream">
+    <div id="mobile-menu" class="lg:hidden hidden border-t border-sand bg-cream">
       <div class="max-w-6xl mx-auto px-5 py-2 flex flex-col">
-        <a href="#how" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">How it works</a>
-        <a href="#covered" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
-        <a href="#maternal-health" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Babies, pregnancy &amp; menopause</a>
-        <a href="#prep-playbook" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Prep playbook</a>
-        <a href="#holistic" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Wellness</a>
-        <a href="#pricing" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
-        <a href="#white-label" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">For partners</a>
-        <a href="#faq" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">FAQs</a>
+        <a href="/how-it-works" data-nav="how-it-works" class="py-3 border-b border-sand/60 nav-link">How it works</a>
+        <a href="/whats-covered" data-nav="whats-covered" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
+        <a href="/babies-pregnancy-menopause" data-nav="babies-pregnancy-menopause" class="py-3 border-b border-sand/60 nav-link">Babies, pregnancy &amp; menopause</a>
+        <a href="/prep-playbook" data-nav="prep-playbook" class="py-3 border-b border-sand/60 nav-link">Prep playbook</a>
+        <a href="/wellness" data-nav="wellness" class="py-3 border-b border-sand/60 nav-link">Wellness</a>
+        <a href="/prep-tools" data-nav="prep-tools" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
+        <a href="/partners" data-nav="partners" class="py-3 border-b border-sand/60 nav-link">For partners</a>
+        <a href="/faqs" data-nav="faqs" class="py-3 border-b border-sand/60 nav-link">FAQs</a>
         <a href="/journal" class="py-3 border-b border-sand/60 nav-link">Journal</a>
         <a href="/privacy" class="py-3 nav-link">Privacy</a>
       </div>
@@ -147,7 +162,7 @@
   </script>
 
   <!-- Hero + triage -->
-  <header id="find" class="relative overflow-hidden max-w-6xl mx-auto px-5 pt-12 md:pt-16 pb-8">
+  <header id="find" data-page="home" class="kc-page relative overflow-hidden max-w-6xl mx-auto px-5 pt-12 md:pt-16 pb-8">
     <svg aria-hidden="true" class="pointer-events-none absolute -top-24 -right-24 w-[440px] h-[440px] opacity-[0.07]" viewBox="-100 -100 200 200"><path fill="#2D5A47" d="M45,-75C58,-67,68,-58,76,-45C84,-32,89,-16,88,-1C87,15,80,29,72,42C63,54,53,65,40,73C27,80,13,84,-1,86C-16,87,-32,85,-44,77C-57,69,-67,56,-74,42C-82,28,-87,14,-88,-1C-89,-17,-85,-33,-77,-45C-69,-58,-57,-67,-44,-74C-30,-81,-15,-85,0,-85C15,-85,30,-83,45,-75Z"/></svg>
     <svg aria-hidden="true" class="pointer-events-none absolute -bottom-28 -left-28 w-[380px] h-[380px] opacity-[0.06]" viewBox="-100 -100 200 200"><path fill="#C87A5A" d="M45,-75C58,-67,68,-58,76,-45C84,-32,89,-16,88,-1C87,15,80,29,72,42C63,54,53,65,40,73C27,80,13,84,-1,86C-16,87,-32,85,-44,77C-57,69,-67,56,-74,42C-82,28,-87,14,-88,-1C-89,-17,-85,-33,-77,-45C-69,-58,-57,-67,-44,-74C-30,-81,-15,-85,0,-85C15,-85,30,-83,45,-75Z"/></svg>
     <div class="relative z-10 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
@@ -200,7 +215,7 @@
   </header>
 
   <!-- Trust strip -->
-  <div class="site-section border-y border-sand bg-white/60">
+  <div data-page="home" class="kc-page site-section border-y border-sand bg-white/60">
     <div class="max-w-6xl mx-auto px-5 py-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-sm text-slate-soft">
       <span class="flex items-center gap-1.5"><span class="text-sage">✓</span> Built on real NHS commissioning data</span>
       <span class="hidden sm:inline" style="color:#cdbfad">·</span>
@@ -213,7 +228,7 @@
   </div>
 
   <!-- Sound familiar? (self-advocacy hook) -->
-  <section class="site-section">
+  <section data-page="home" class="kc-page site-section">
     <div class="max-w-4xl mx-auto px-5 py-14">
       <div class="card p-8 md:p-10 bg-[#FBF3EE] border-[#efd9cc]">
         <p class="eyebrow mb-2">Sound familiar?</p>
@@ -228,7 +243,7 @@
   </section>
 
   <!-- Results -->
-  <main id="results" class="max-w-4xl mx-auto px-5 pb-16 hidden">
+  <main id="results" data-page="home" class="kc-page max-w-4xl mx-auto px-5 pb-16">
     <div id="icb-banner" class="hidden card p-4 mb-5 bg-[#EDF3EF] border-[#d9e6de]">
       <p class="text-sm"><span class="font-semibold text-sage">Your NHS area:</span> <span id="icb-line" class="text-slate-soft">Finding your local NHS area...</span></p>
       <div id="icb-links" class="hidden flex flex-wrap gap-2 mt-3"></div>
@@ -319,7 +334,7 @@
   </main>
 
   <!-- How it works -->
-  <section id="how" class="site-section border-t border-sand bg-white/50">
+  <section id="how" data-page="how-it-works" class="kc-page site-section border-t border-sand bg-white/50">
     <div class="max-w-6xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">How it works</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-10">Advocate for yourself, in three steps</h2>
@@ -344,7 +359,7 @@
   </section>
 
   <!-- What's covered -->
-  <section id="covered" class="site-section">
+  <section id="covered" data-page="whats-covered" class="kc-page site-section">
     <div class="max-w-6xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">What's covered</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-10">Everyday care for the whole family</h2>
@@ -374,7 +389,7 @@
   </section>
 
   <!-- Babies, pregnancy & maternal equity, menopause education -->
-  <section id="maternal-health" class="site-section border-t border-sand">
+  <section id="maternal-health" data-page="babies-pregnancy-menopause" class="kc-page site-section border-t border-sand">
     <div class="max-w-5xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">Babies, pregnancy &amp; menopause</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Care and knowledge for every stage</h2>
@@ -457,7 +472,7 @@
   </section>
 
   <!-- Appointment Prep Playbook + SBAR -->
-  <section id="prep-playbook" class="site-section border-t border-sand">
+  <section id="prep-playbook" data-page="prep-playbook" class="kc-page site-section border-t border-sand">
     <div class="max-w-5xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">Appointment prep playbook</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Make every minute of your appointment count</h2>
@@ -579,7 +594,7 @@
   </section>
 
   <!-- Prep tools / pricing -->
-  <section id="pricing" class="site-section border-t border-sand bg-white/50">
+  <section id="pricing" data-page="prep-tools" class="kc-page site-section border-t border-sand bg-white/50">
     <div class="max-w-4xl mx-auto px-5 py-14 text-center">
       <p class="eyebrow mb-2">Prep tools</p>
       <h2 class="font-display text-3xl font-semibold text-sage mb-3">Turn up to your appointment ready</h2>
@@ -610,7 +625,7 @@
   </section>
 
   <!-- Is it free -->
-  <section id="free" class="site-section">
+  <section id="free" data-page="prep-tools" class="kc-page site-section">
     <div class="max-w-4xl mx-auto px-5 py-14">
       <div class="card p-8 md:p-10 bg-[#EDF3EF] border-[#d9e6de] text-center">
         <p class="eyebrow mb-2">Is it free?</p>
@@ -621,7 +636,7 @@
   </section>
 
   <!-- Holistic wellness -->
-  <section id="holistic" class="site-section border-t border-sand">
+  <section id="holistic" data-page="wellness" class="kc-page site-section border-t border-sand">
     <div class="max-w-5xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">Holistic wellness</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Gentle habits that support you alongside care</h2>
@@ -641,7 +656,7 @@
   </section>
 
   <!-- FAQ -->
-  <section id="faq" class="site-section border-t border-sand">
+  <section id="faq" data-page="faqs" class="kc-page site-section border-t border-sand">
     <div class="max-w-3xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">Good to know</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-8">Your questions, answered</h2>
@@ -657,7 +672,7 @@
   </section>
 
   <!-- White labelling / partners -->
-  <section id="white-label" class="site-section border-t border-sand bg-white/50">
+  <section id="white-label" data-page="partners" class="kc-page site-section border-t border-sand bg-white/50">
     <div class="max-w-5xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">For clinics, practitioners &amp; partners</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">White-label Kaur Care for the people you support</h2>
@@ -679,7 +694,7 @@
   </section>
 
   <!-- From the Kaur Care Journal -->
-  <section class="site-section border-t border-sand bg-white/50">
+  <section data-page="home" class="kc-page site-section border-t border-sand bg-white/50">
     <div class="max-w-6xl mx-auto px-5 py-14">
       <div class="flex items-end justify-between mb-8 gap-4">
         <div>
@@ -788,7 +803,8 @@
         var j = await res.json();
         state.data = j.data;
         renderResults();
-        $('results').classList.remove('hidden');
+        if (typeof showPage === 'function') showPage('home', false);
+        $('results').classList.add('kc-shown');
         $('results').scrollIntoView({ behavior:'smooth' });
       } catch(e){ alert('Something went wrong. Please try again.'); }
       $('search-btn').textContent = 'Find my care options';
@@ -1034,12 +1050,14 @@
     function queuePrefill(obj, focusId){
       var p = Object.assign(loadPending() || {}, obj || {});
       savePending(p);
+      // The prefill targets (search + prep tools) live on the home page.
+      if (typeof showPage === 'function') showPage('home', true);
       var results = document.getElementById('results');
-      var resultsVisible = results && !results.classList.contains('hidden');
+      var resultsVisible = results && results.classList.contains('kc-shown');
       if (resultsVisible){ applyPending(); scrollToTools(focusId); }
       else {
         if (obj && obj.condition){ var c = $('condition'); if (c) c.value = obj.condition; state.condition = obj.condition; }
-        document.getElementById('find').scrollIntoView({ behavior:'smooth' });
+        var f = document.getElementById('find'); if (f) setTimeout(function(){ f.scrollIntoView({ behavior:'smooth' }); }, 60);
         flash('Added to your search. Tap “Find care”, then your prep tools open just below the results.');
       }
     }
@@ -1352,6 +1370,40 @@
     function logText(){ return loadLog().map(function(e){ return '  - ' + e.date + ': ' + e.note; }).join('\n'); }
     function printText(id){ var pa=$('print-area'); pa.innerHTML='<pre style="white-space:pre-wrap;font-family:serif;padding:24px">'+esc($(id).dataset.text||'')+'</pre>'; pa.classList.remove('hidden'); window.print(); setTimeout(function(){ pa.classList.add('hidden'); }, 500); }
     function downloadText(name, id){ var blob=new Blob([$(id).dataset.text||''],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click(); }
+
+    // ---- Multi-page router: each nav item is its own page with a real URL ----
+    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/babies-pregnancy-menopause':'babies-pregnancy-menopause', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
+    var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'babies-pregnancy-menopause':'Babies, pregnancy & menopause | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
+    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'maternal-health':'babies-pregnancy-menopause', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
+    function kcPathFor(slug){ for (var k in KC_PATHS){ if (KC_PATHS[k] === slug) return k; } return '/'; }
+    function kcCurrent(){ var p = (location.pathname || '/').replace(/\/+$/,'') || '/'; return KC_PATHS[p] || 'home'; }
+    function showPage(slug, push){
+      if (!KC_TITLES[slug]) slug = 'home';
+      document.documentElement.setAttribute('data-kc', slug);
+      document.querySelectorAll('[data-nav]').forEach(function(a){ a.classList.toggle('nav-active', a.getAttribute('data-nav') === slug); });
+      document.title = KC_TITLES[slug];
+      if (push){ try { history.pushState({ kc: slug }, '', kcPathFor(slug)); } catch(e){} }
+      window.scrollTo(0, 0);
+      if (typeof closeMenu === 'function') closeMenu();
+    }
+    document.addEventListener('click', function(e){
+      var a = e.target.closest && e.target.closest('a'); if (!a) return;
+      if (a.hasAttribute('download')) return;
+      var href = a.getAttribute('href') || '';
+      if (!href) return;
+      // In-page hash links → navigate to the owning page (scroll to #find for the search).
+      if (href.charAt(0) === '#' || href.slice(0,2) === '/#'){
+        var id = href.replace(/^\/?#/, '');
+        var slugA = KC_ANCHOR[id];
+        if (slugA){ e.preventDefault(); showPage(slugA, true); if (id === 'find'){ var f = document.getElementById('find'); if (f) setTimeout(function(){ f.scrollIntoView({ behavior:'smooth' }); }, 60); } }
+        return;
+      }
+      // Internal page links (leave /journal, /privacy and external links alone).
+      var norm = href.replace(/\/+$/,'') || '/';
+      if (href.charAt(0) === '/' && KC_PATHS[norm] !== undefined){ e.preventDefault(); showPage(KC_PATHS[norm], true); }
+    }, false);
+    window.addEventListener('popstate', function(){ showPage(kcCurrent(), false); });
+    showPage(kcCurrent(), false);
 
     // Paid/demo unlock first (never relocks), then partner branding/unlock on top.
     checkUnlock().then(initPartner);
