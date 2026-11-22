@@ -106,7 +106,7 @@ const cta = `<div class="cta">
 <a class="btn alt" href="/#pricing">Build a GP brief</a>
 </div>`;
 
-const CATS = ["All", "NHS Shortcuts", "ADHD & Autism", "Women's Health", "Parents & Kids", "Adult Health"];
+const CATS = ["All", "NHS Shortcuts", "ADHD & Autism", "Women's Health", "Chronic Illness", "Parents & Kids", "Adult Health"];
 const catSlug = (c) => c.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 const articles = [
@@ -449,6 +449,44 @@ ${MIDCTA}
 <p>A balanced diet with iron-rich foods supports your levels, and a pharmacist can advise on whether an over-the-counter supplement is suitable for you. Do not start high-dose supplements long term without advice, as more is not always better.</p>
 <h2>When to seek help sooner</h2>
 <p>Severe breathlessness, chest pain, a racing heart or feeling faint need urgent help, contact NHS 111 or call 999 for severe symptoms.</p>` + cta,
+  },
+  {
+    slug: "chronic-illness-advocate-for-yourself-nhs",
+    category: "Chronic Illness",
+    title: "Living With a Chronic Illness: How to Advocate for Yourself in the NHS",
+    desc: "A long-term condition means a long-term relationship with the NHS. Practical, calm ways to stay in control, be heard, and keep your care joined up.",
+    read: 5,
+    body: `<p class="lead">When you live with a chronic or long-term condition, you are not a one-off appointment, you are in an ongoing relationship with a busy system that does not always join itself up. Advocating for yourself is not being difficult; it is how you get consistent, coordinated care. Here is how to do it with the least stress.</p>
+<h2>Keep your own record</h2>
+<p>The single most powerful thing you can do is keep a simple personal record: your diagnoses, medicines and doses, key dates, test results and which clinician said what. The NHS App gives you access to much of this, and your own notes fill the gaps. When departments do not talk to each other, your record is the thread that connects them.</p>
+<h2>One clear ask per appointment</h2>
+<p>Appointments are short. Decide your top one or two priorities beforehand and lead with them. Bring a written summary of your symptoms since last time, what has changed, and your questions. It keeps a rushed appointment focused on what matters to you.</p>
+${MIDCTA}
+<h2>Ask for coordination</h2>
+<p>If several teams are involved, it is reasonable to ask who is overseeing your care overall, whether there is a named contact or care coordinator, and how results and letters will be shared between them and your GP. Ask for copies of clinic letters so nothing falls through the cracks.</p>
+<h2>Know your rights</h2>
+<p>You are entitled to ask questions, to understand your options, to a second opinion, and in England to use your Right to Choose for a clinically appropriate NHS provider. If you do not understand something, it is always fair to ask the clinician to explain it again.</p>
+<h2>Look after the whole of you</h2>
+<p>Living with a long-term condition is tiring, and low mood or anxiety are common and valid. Mention them to your GP, they are part of your health, not a distraction from it. If you ever feel unable to cope or have thoughts of harming yourself, reach out now: NHS 111 (mental health option), the Samaritans on 116 123, or 999 in an emergency. For a sudden change in your condition or severe new symptoms, use NHS 111 or 999.</p>` + cta,
+  },
+  {
+    slug: "not-being-believed-long-term-symptoms-gp",
+    category: "Chronic Illness",
+    title: "When You Feel Dismissed: Getting Taken Seriously About Long-Term Symptoms",
+    desc: "Being told it's 'nothing' or 'just stress' when you know something is wrong is exhausting. Calm, practical ways to be heard and move toward answers.",
+    read: 5,
+    body: `<p class="lead">Few things are more wearing than knowing something is wrong and feeling brushed off. If you have been told it is probably stress, or sent away without a plan more than once, this is not about being pushy, it is about giving the system what it needs to take you seriously.</p>
+<h2>Bring evidence, not just a description</h2>
+<p>Track your symptoms over a few weeks: when they happen, how severe (a 0 to 10 scale helps), what triggers or eases them, and crucially the impact on your work, sleep and daily life. Patterns on paper are harder to dismiss than a description in a rushed appointment.</p>
+<h2>Ask specific, answerable questions</h2>
+<p>Questions that move things forward include: "What else could this be?", "What would need to be true for you to investigate further?", "What are we ruling out, and how?", and "What is the plan if this does not improve by a set date?" These invite a next step rather than reassurance.</p>
+${MIDCTA}
+<h2>Ask for it to be documented</h2>
+<p>It is reasonable to ask that your symptoms and your concern are recorded in your notes, including that you asked about further investigation. A clear record helps continuity and makes the next appointment build on this one.</p>
+<h2>Use your right to a second opinion</h2>
+<p>You can ask for a second opinion, and in England you can use your Right to Choose to be referred to a clinically appropriate NHS provider. A fresh set of eyes is a normal part of medicine, not a criticism of anyone.</p>
+<h2>Be kind to yourself, and know the red lines</h2>
+<p>Persisting is tiring, and it is not your fault that it is hard. Keep going, bring someone with you if it helps, and do not downplay how it affects you. If symptoms are severe or rapidly worsening, chest pain, trouble breathing, sudden weakness, heavy bleeding, do not wait to be believed, call NHS 111 or 999. And if things feel hopeless, the Samaritans (116 123) are there any time.</p>` + cta,
   },
 ];
 
