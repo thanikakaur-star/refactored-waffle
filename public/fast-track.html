@@ -159,6 +159,9 @@
 
   <!-- Results -->
   <main id="results" class="max-w-4xl mx-auto px-5 pb-16 hidden">
+    <div id="icb-banner" class="hidden card p-4 mb-5 bg-[#EDF3EF] border-[#d9e6de]">
+      <p class="text-sm"><span class="font-semibold text-sage">Your NHS area:</span> <span id="icb-line" class="text-slate-soft">Finding your local NHS area...</span></p>
+    </div>
     <div class="flex gap-1 border-b border-sand mb-6 overflow-x-auto">
       <div class="tab-btn active" data-tab="t1">Pharmacy First &amp; same-day NHS</div>
       <div class="tab-btn" data-tab="t2">Right to Choose &amp; waiting lists</div>
@@ -440,29 +443,39 @@
     // free, CORS-enabled postcodes.io API (runs in the visitor's browser).
     async function lookupPostcode(pc){
       var clean = (pc || '').trim();
-      if (!clean || clean.length < 5){ state.postcodeInfo = null; return; }
+      if (!clean || clean.replace(/\s/g, '').length < 5){ state.postcodeInfo = null; renderIcbBanner('none'); return; }
+      renderIcbBanner('loading');
       try {
         var res = await fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(clean));
-        if (!res.ok){ state.postcodeInfo = null; return; }
+        if (!res.ok){ state.postcodeInfo = null; renderIcbBanner('fail'); return; }
         var j = await res.json();
         var r = j && j.result;
-        if (!r){ state.postcodeInfo = null; return; }
+        if (!r){ state.postcodeInfo = null; renderIcbBanner('fail'); return; }
         state.postcodeInfo = {
           town: r.admin_district || r.parish || '',
           region: r.region || r.country || '',
-          icb: r.ccg || r.nhs_ha || '',
+          icb: r.ccg || r.nhs_ha || r.primary_care_trust || '',
           postcode: r.postcode || clean
         };
-        var el = document.getElementById('icb-line');
-        if (el) el.textContent = icbSummary();
-      } catch(e){ state.postcodeInfo = null; }
+        renderIcbBanner('done');
+      } catch(e){ state.postcodeInfo = null; renderIcbBanner('fail'); }
     }
     function icbSummary(){
       var p = state.postcodeInfo; if (!p) return '';
       var bits = [];
       if (p.town) bits.push(p.town);
+      if (p.region && p.region !== p.town) bits.push(p.region);
       if (p.icb) bits.push(p.icb);
       return bits.join(' · ');
+    }
+    function renderIcbBanner(status){
+      var banner = document.getElementById('icb-banner'), line = document.getElementById('icb-line');
+      if (!banner || !line) return;
+      if (status === 'none'){ banner.classList.add('hidden'); return; }
+      banner.classList.remove('hidden');
+      if (status === 'loading'){ line.textContent = 'Finding your local NHS area...'; }
+      else if (status === 'fail'){ line.textContent = 'We could not match that postcode. Your options below still apply; double-check the postcode for local provider links.'; }
+      else { line.textContent = icbSummary() || 'Area found.'; }
     }
 
     // Tabs
