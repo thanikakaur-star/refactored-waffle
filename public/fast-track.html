@@ -116,9 +116,10 @@
       <div class="hidden md:flex items-center gap-7">
         <a href="#how" class="nav-link">How it works</a>
         <a href="#covered" class="nav-link">What's covered</a>
-        <a href="#pricing" class="nav-link">Prep tools</a>
+        <a href="#prep-playbook" class="nav-link">Prep playbook</a>
+        <a href="#holistic" class="nav-link">Wellness</a>
         <a href="/journal" class="nav-link">Journal</a>
-        <a href="#faq" class="nav-link">FAQs</a>
+        <a href="#white-label" class="nav-link">Partners</a>
       </div>
       <div class="flex items-center gap-2">
         <a href="#find" class="shrink-0 px-4 py-2 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark">Find care</a>
@@ -129,8 +130,10 @@
       <div class="max-w-6xl mx-auto px-5 py-2 flex flex-col">
         <a href="#how" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">How it works</a>
         <a href="#covered" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
+        <a href="#prep-playbook" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Prep playbook</a>
+        <a href="#holistic" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Wellness</a>
         <a href="#pricing" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
-        <a href="#free" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Is it free?</a>
+        <a href="#white-label" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">For partners</a>
         <a href="#faq" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">FAQs</a>
         <a href="/journal" class="py-3 border-b border-sand/60 nav-link">Journal</a>
         <a href="/privacy" class="py-3 nav-link">Privacy</a>
@@ -367,6 +370,128 @@
     </div>
   </section>
 
+  <!-- Appointment Prep Playbook + SBAR -->
+  <section id="prep-playbook" class="site-section border-t border-sand">
+    <div class="max-w-5xl mx-auto px-5 py-14">
+      <p class="eyebrow mb-2 text-center">Appointment prep playbook</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Make every minute of your appointment count</h2>
+      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-9">A short, calm plan for before, during and after. You deserve to be heard the first time.</p>
+
+      <!-- Tabbed playbook -->
+      <div class="card p-6 md:p-8">
+        <div class="flex gap-1 border-b border-sand mb-6 overflow-x-auto">
+          <button type="button" class="pb-tab tab-btn active" data-pb="pb1" onclick="pbTab('pb1')">Before your appointment</button>
+          <button type="button" class="pb-tab tab-btn" data-pb="pb2" onclick="pbTab('pb2')">In a 10-minute slot</button>
+          <button type="button" class="pb-tab tab-btn" data-pb="pb3" onclick="pbTab('pb3')">Advocacy &amp; next steps</button>
+        </div>
+        <div id="pb1" class="pb-panel">
+          <ul class="space-y-2.5 text-sm text-slate-soft">
+            <li class="flex gap-2"><span class="text-sage">1.</span> Write your <strong>top three concerns</strong> in priority order, so the most important one is never missed.</li>
+            <li class="flex gap-2"><span class="text-sage">2.</span> Note <strong>when it started</strong>, how often it happens, and what makes it better or worse.</li>
+            <li class="flex gap-2"><span class="text-sage">3.</span> List <strong>what you've already tried</strong> — medicines, doses and whether they helped.</li>
+            <li class="flex gap-2"><span class="text-sage">4.</span> Bring a few days of notes. The free <strong>5-day symptom &amp; flare log</strong> in the prep tools does this for you.</li>
+            <li class="flex gap-2"><span class="text-sage">5.</span> Decide the <strong>one question</strong> you most need answered before you leave.</li>
+          </ul>
+        </div>
+        <div id="pb2" class="pb-panel hidden">
+          <ul class="space-y-2.5 text-sm text-slate-soft">
+            <li class="flex gap-2"><span class="text-sage">•</span> Lead with your headline: <em>"I'm here about X, and it's affecting Y."</em></li>
+            <li class="flex gap-2"><span class="text-sage">•</span> Give your <strong>top concern first</strong>, in case the time runs out.</li>
+            <li class="flex gap-2"><span class="text-sage">•</span> Hand over your <strong>1-page brief or log</strong> so nothing is forgotten under pressure.</li>
+            <li class="flex gap-2"><span class="text-sage">•</span> Ask plainly: <em>"What might be causing this, and what's the plan?"</em></li>
+            <li class="flex gap-2"><span class="text-sage">•</span> Before you leave, confirm <strong>next steps</strong> and what should prompt you to come back sooner.</li>
+          </ul>
+        </div>
+        <div id="pb3" class="pb-panel hidden">
+          <ul class="space-y-2.5 text-sm text-slate-soft">
+            <li class="flex gap-2"><span class="text-sage">•</span> Ask for your concerns and decisions to be <strong>written in your notes</strong>.</li>
+            <li class="flex gap-2"><span class="text-sage">•</span> It is okay to ask for a <strong>second opinion</strong> if something doesn't feel resolved.</li>
+            <li class="flex gap-2"><span class="text-sage">•</span> Request <strong>copies of results</strong> and any referral letters for your own records.</li>
+            <li class="flex gap-2"><span class="text-sage">•</span> For a long wait, use your <strong>Right to Choose</strong> (see the results above) to ask for a quicker NHS-funded provider.</li>
+            <li class="flex gap-2"><span class="text-sage">•</span> Book a <strong>follow-up</strong> and ask what change in symptoms should trigger an earlier review.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SBAR guide -->
+      <div class="card p-6 md:p-8 mt-6 bg-[#f6faf7] border-[#d9e6de]">
+        <p class="eyebrow mb-1">A simple way to be heard</p>
+        <h3 class="font-display text-2xl font-semibold text-sage mb-2">Tell your story with SBAR</h3>
+        <p class="text-slate-soft text-sm mb-5 max-w-2xl">Clinicians hand over information to each other using four steps called SBAR. You can borrow the same shape so your story lands clearly and quickly, even in a short slot.</p>
+        <div class="grid sm:grid-cols-2 gap-4 mb-6">
+          <div class="bg-white rounded-2xl border border-sand p-4"><p class="font-semibold text-sage mb-1">S — Situation</p><p class="text-sm text-slate-soft">In one line, what you're here about today.</p></div>
+          <div class="bg-white rounded-2xl border border-sand p-4"><p class="font-semibold text-sage mb-1">B — Background</p><p class="text-sm text-slate-soft">When it started, what led up to it, and what you've already tried.</p></div>
+          <div class="bg-white rounded-2xl border border-sand p-4"><p class="font-semibold text-sage mb-1">A — Assessment</p><p class="text-sm text-slate-soft">How it affects your daily life — work, school, sleep, mood.</p></div>
+          <div class="bg-white rounded-2xl border border-sand p-4"><p class="font-semibold text-sage mb-1">R — Request</p><p class="text-sm text-slate-soft">What you're hoping for: a test, a referral, a treatment, or a clear plan.</p></div>
+        </div>
+        <div class="rounded-2xl border border-[#efe6d4] bg-[#fdf9f2] p-4 mb-5">
+          <p class="text-xs font-semibold text-slate-muted uppercase tracking-wide mb-1">For example</p>
+          <p class="text-sm text-slate-soft"><strong>S:</strong> "I've had headaches most days for two months." <strong>B:</strong> "They started after a bad bout of stress; paracetamol barely touches them." <strong>A:</strong> "I'm missing work and can't focus by the afternoon." <strong>R:</strong> "I'd like to understand what's causing them and whether I need a scan or a referral."</p>
+        </div>
+        <button type="button" class="px-5 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark" onclick="sbarPrefill()">Pre-fill these four prompts into my GP brief</button>
+      </div>
+
+      <!-- Condition-specific prep checklists -->
+      <h3 class="font-display text-2xl font-semibold text-sage text-center mt-12 mb-6">Prep checklists by situation</h3>
+      <div class="grid md:grid-cols-2 gap-5">
+        <div class="card p-6">
+          <h4 class="font-display text-lg font-semibold text-sage mb-2">Women's health</h4>
+          <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1 mb-4">
+            <li>Cycle dates and length over the last few months</li>
+            <li>Pain score (0–10), where it is and how it tracks with your cycle</li>
+            <li>Bleeding heaviness (flooding, clots, products per hour)</li>
+            <li>Impact on work, sleep, energy and mood</li>
+          </ul>
+          <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="Women's health concern" data-brief-triggers="Cycle pattern, pain and bleeding over the last 3 months" onclick="prefillFromEl(this)">Build a GP brief for this</button>
+        </div>
+        <div class="card p-6">
+          <h4 class="font-display text-lg font-semibold text-sage mb-2">Chronic illness &amp; flares</h4>
+          <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1 mb-4">
+            <li>How often flares happen and what seems to trigger them</li>
+            <li>Fatigue and pain scores on a typical and a bad day</li>
+            <li>Current medicines, doses and any side effects</li>
+            <li>What helps, and what you've had to stop doing</li>
+          </ul>
+          <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="Chronic condition flare review" data-brief-triggers="Flare frequency, triggers and what helps" data-brief-impact="Fatigue and pain on typical vs bad days, and what I've had to stop doing" onclick="prefillFromEl(this)">Build a GP brief for this</button>
+        </div>
+        <div class="card p-6">
+          <h4 class="font-display text-lg font-semibold text-sage mb-2">ADHD &amp; autism</h4>
+          <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1 mb-4">
+            <li>Specific examples at home, work or school</li>
+            <li>Traits noticed since childhood</li>
+            <li>How it affects focus, relationships and daily function</li>
+            <li>Any screening questionnaires you've completed</li>
+          </ul>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="ADHD / autism traits" data-brief-triggers="Examples at home, work or school; traits noticed since childhood" onclick="prefillFromEl(this)">Build a GP brief</button>
+            <button type="button" class="px-4 py-2.5 rounded-xl border border-sage text-sage text-sm font-semibold hover:bg-sage/5" data-letter="ADHD / autism assessment" onclick="prefillFromEl(this)">Start a Right to Choose letter</button>
+          </div>
+        </div>
+        <div class="card p-6">
+          <h4 class="font-display text-lg font-semibold text-sage mb-2">Parents &amp; children</h4>
+          <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1 mb-4">
+            <li>Temperature, feeding and wet/dirty nappies</li>
+            <li>How long symptoms have lasted and whether they're improving</li>
+            <li>A clear photo of any rash (press a glass against it to check)</li>
+            <li>Any red flags: drowsiness, breathing trouble, a stiff neck</li>
+          </ul>
+          <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="My child's symptoms" data-brief-triggers="How long, whether improving, feeding and temperature" onclick="prefillFromEl(this)">Build a GP brief for this</button>
+        </div>
+      </div>
+
+      <!-- Unlock + privacy note (kept visible here) -->
+      <div class="card p-6 mt-8 bg-[#EDF3EF] border-[#d9e6de]">
+        <div class="md:flex items-center justify-between gap-6">
+          <div class="mb-4 md:mb-0">
+            <p class="font-semibold text-sage mb-1">Ready to write it up?</p>
+            <p class="text-sm text-slate-soft max-w-xl">Unlock both generators for <strong>£4.99</strong> one-off, or the <strong>Family &amp; Women's Health Pass</strong> at <strong>£7.99/mo</strong>. Everything you type stays in your browser and is never sent to us. The tools open right after a free search.</p>
+          </div>
+          <a href="#find" class="shrink-0 inline-block px-5 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Run a free search to open the tools</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Prep tools / pricing -->
   <section id="pricing" class="site-section border-t border-sand bg-white/50">
     <div class="max-w-4xl mx-auto px-5 py-14 text-center">
@@ -398,6 +523,26 @@
     </div>
   </section>
 
+  <!-- Holistic wellness -->
+  <section id="holistic" class="site-section border-t border-sand">
+    <div class="max-w-5xl mx-auto px-5 py-14">
+      <p class="eyebrow mb-2 text-center">Holistic wellness</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Gentle habits that support you alongside care</h2>
+      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-9">Small, kind routines can help you feel steadier while you wait for or recover from NHS care. None of this is a treatment — think of it as support around the edges.</p>
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="card p-6"><div class="text-2xl mb-2">🌙</div><h3 class="font-semibold mb-1.5">Sleep &amp; rest</h3><p class="text-sm text-slate-soft">A consistent wind-down and regular sleep and wake times. Protecting rest is not indulgent; it's part of healing.</p></div>
+        <div class="card p-6"><div class="text-2xl mb-2">⚖️</div><h3 class="font-semibold mb-1.5">Pacing &amp; energy</h3><p class="text-sm text-slate-soft">Break the day into gentler chunks and plan rest before you need it. Pacing helps with fatigue and flares.</p></div>
+        <div class="card p-6"><div class="text-2xl mb-2">🚶‍♀️</div><h3 class="font-semibold mb-1.5">Gentle movement</h3><p class="text-sm text-slate-soft">Short walks, stretching or mobility work within your limits, and daylight when you can get it.</p></div>
+        <div class="card p-6"><div class="text-2xl mb-2">🥗</div><h3 class="font-semibold mb-1.5">Nourishment</h3><p class="text-sm text-slate-soft">Regular meals, fibre and hydration. Notice foods that seem to settle or unsettle you, without strict rules.</p></div>
+        <div class="card p-6"><div class="text-2xl mb-2">🫶</div><h3 class="font-semibold mb-1.5">Stress routines</h3><p class="text-sm text-slate-soft">A few minutes of breathing, journalling or time outdoors. Lowering the background hum helps your body cope.</p></div>
+        <div class="card p-6"><div class="text-2xl mb-2">📓</div><h3 class="font-semibold mb-1.5">Track what helps</h3><p class="text-sm text-slate-soft">Jot supplements, routines and how you feel in the free 5-day log, so you can share patterns with your GP.</p></div>
+      </div>
+      <div class="card p-6 mt-7 bg-[#FBF3EE] border-[#efd9cc]">
+        <p class="text-sm text-slate-soft"><strong>A calm boundary.</strong> These habits support wellbeing but do not replace NHS care, diagnosis or treatment, and nothing here cures a condition. If symptoms are new, worsening or worrying, speak to your pharmacist or GP — and for anything serious, call <strong>999</strong> or <strong>NHS 111</strong>.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <section id="faq" class="site-section border-t border-sand">
     <div class="max-w-3xl mx-auto px-5 py-14">
@@ -410,6 +555,28 @@
         <details class="card p-5"><summary class="cursor-pointer font-semibold text-sage">What happens to my health information?</summary><p class="text-sm text-slate-soft mt-2">The referral letter and symptom brief are generated entirely in your browser. The details you type never reach our servers and are never stored by us. See our <a href="/privacy" class="text-sage underline">privacy note</a> for the full picture.</p></details>
         <details class="card p-5"><summary class="cursor-pointer font-semibold text-sage">Do I need to create an account?</summary><p class="text-sm text-slate-soft mt-2">No. You can search and see all your NHS options without signing up. You only enter an email if you choose to buy the optional document pass.</p></details>
         <details class="card p-5"><summary class="cursor-pointer font-semibold text-sage">Does it work across the UK?</summary><p class="text-sm text-slate-soft mt-2">The NHS Pharmacy First and Right to Choose pathways apply in England. The self-care guidance and the appointment-prep tools are useful wherever you are in the UK. Always confirm local availability with your pharmacy or GP.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- White labelling / partners -->
+  <section id="white-label" class="site-section border-t border-sand bg-white/50">
+    <div class="max-w-5xl mx-auto px-5 py-14">
+      <p class="eyebrow mb-2 text-center">For clinics, practitioners &amp; partners</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">White-label Kaur Care for the people you support</h2>
+      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-9">Employers, insurers, clinics and wellbeing practitioners can offer these care-navigation and prep tools under their own brand, or connect them to HealthProcure Intel's procurement data.</p>
+      <div class="grid md:grid-cols-3 gap-5 mb-8">
+        <div class="card p-6"><h3 class="font-display text-lg font-semibold text-sage mb-1.5">Your branding</h3><p class="text-sm text-slate-soft">Your logo, name and colours on a hosted version your members or patients can use, with sponsored or revenue-share access.</p></div>
+        <div class="card p-6"><h3 class="font-display text-lg font-semibold text-sage mb-1.5">Tailored pathways &amp; prep</h3><p class="text-sm text-slate-soft">Pathway lists and prep templates tuned to your service — a women's-health clinic, an MSK provider, or a neurodiversity service.</p></div>
+        <div class="card p-6"><h3 class="font-display text-lg font-semibold text-sage mb-1.5">Procurement intelligence</h3><p class="text-sm text-slate-soft">Connect with HealthProcure Intel to map commissioned services, benchmarks and provider data behind the navigator.</p></div>
+      </div>
+      <div class="card p-6 md:p-8 bg-[#EDF3EF] border-[#d9e6de] text-center">
+        <h3 class="font-display text-xl font-semibold text-sage mb-2">Talk to us about a partnership</h3>
+        <p class="text-sm text-slate-soft max-w-xl mx-auto mb-5">Tell us who you support and what you'd like to offer. We'll share options for a branded deployment or a data integration.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="mailto:partners@kaurcare.com?subject=Kaur%20Care%20white-label%20enquiry" class="inline-block px-5 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Email the partnerships team</a>
+          <a href="https://www.healthprocureintel.com" target="_blank" rel="noopener" class="inline-block px-5 py-3 rounded-2xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">About HealthProcure Intel</a>
+        </div>
       </div>
     </div>
   </section>
@@ -745,6 +912,31 @@
       if (!t){ t = document.createElement('div'); t.id = 'toast'; t.setAttribute('role','status'); t.className = 'fixed left-1/2 -translate-x-1/2 bottom-6 z-[60] max-w-[90%] text-center px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-medium shadow-lg transition-opacity duration-300'; document.body.appendChild(t); }
       t.textContent = text; t.style.opacity = '1';
       clearTimeout(t._timer); t._timer = setTimeout(function(){ t.style.opacity = '0'; }, 3600);
+    }
+
+    // Prep playbook tabs
+    function pbTab(id){
+      document.querySelectorAll('.pb-tab').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-pb') === id); });
+      document.querySelectorAll('.pb-panel').forEach(function(x){ x.classList.toggle('hidden', x.id !== id); });
+    }
+    // SBAR: seed the four prompts into the GP brief builder.
+    function sbarPrefill(){
+      queuePrefill({
+        condition: 'S — Situation: in one line, what you are here about today',
+        triggers: 'B — Background: when it started, what led up to it, and what you have already tried',
+        impact: 'A — Assessment: how it affects your daily life — work, school, sleep, mood, relationships',
+        questions: 'R — Request: what you are hoping for (a test, a referral, a treatment, or a clear plan)'
+      }, 'b-condition');
+    }
+    // Generic data-attribute prefill used by the condition checklists.
+    function prefillFromEl(btn){
+      var o = {}; var d = btn.dataset || {};
+      if (d.briefCondition) o.condition = d.briefCondition;
+      if (d.briefTriggers) o.triggers = d.briefTriggers;
+      if (d.briefImpact) o.impact = d.briefImpact;
+      if (d.briefQuestions) o.questions = d.briefQuestions;
+      if (d.letter) o.letterCondition = d.letter;
+      queuePrefill(o, d.letter ? 'l-condition' : 'b-condition');
     }
 
     function activateTab(id){
