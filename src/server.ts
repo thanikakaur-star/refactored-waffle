@@ -1518,6 +1518,14 @@ app.use(express.static(publicDir, { index: false, redirect: false }));
 app.get("/", (_req, res) => {
   res.sendFile(path.join(publicDir, "fast-track.html"));
 });
+// Kaur Care consumer "pages": each nav item has its own URL, all served by the
+// single-page app, which renders the matching section from the path.
+const kaurPages = ["how-it-works", "whats-covered", "babies-pregnancy-menopause", "prep-playbook", "wellness", "prep-tools", "partners", "faqs"];
+for (const page of kaurPages) {
+  app.get(`/${page}`, (_req, res) => {
+    res.sendFile(path.join(publicDir, "fast-track.html"));
+  });
+}
 // The B2B landing page now lives at /b2b (dashboard, tenders, api and B2B Stripe
 // routes are unchanged).
 app.get("/b2b", (_req, res) => {
