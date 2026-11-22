@@ -20,7 +20,8 @@ img{max-width:100%}
 .nav{position:sticky;top:0;z-index:40;background:rgba(250,247,242,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--sand)}
 .nav .wrap{max-width:1100px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-.mark{width:40px;height:40px;border-radius:14px;background:var(--sage);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:700;font-size:20px}
+.mark{width:40px;height:40px;border-radius:14px;background:#FBEEE7;border:1px solid #f0ddd0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.mark img{width:32px;height:32px;object-fit:contain}
 .brand b{font-family:Fraunces,serif;color:var(--sage);font-size:20px;font-weight:600}
 .btn{display:inline-block;background:var(--sage);color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:11px 20px;border-radius:12px;border:0;cursor:pointer}
 .btn:hover{background:var(--sage-d)}
@@ -64,7 +65,7 @@ const head = (title, desc, url) => `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href="/icons/favicon.png" />
 <title>${title} | Kaur Care Journal</title>
 <meta name="description" content="${desc}" />
 <link rel="canonical" href="${url}" />
@@ -85,7 +86,7 @@ const head = (title, desc, url) => `<!DOCTYPE html>
 <body>
 <div class="safety">&#9829; Your safety comes first. For a medical emergency or severe symptoms, call <strong>999</strong> or <strong>NHS 111</strong> straight away.</div>
 <nav class="nav"><div class="wrap">
-<a class="brand" href="/"><span class="mark">K</span><b>Kaur Care</b></a>
+<a class="brand" href="/"><span class="mark"><img src="/logo-emblem.png" alt="Kaur Care" /></span><b>Kaur Care</b></a>
 <a class="btn" href="/#find">Find care</a>
 </div></nav>`;
 
