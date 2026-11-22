@@ -1545,6 +1545,20 @@ app.get("/blog/:slug", (req, res) => {
   }
 });
 
+// The Kaur Care Journal: consumer hub + articles
+app.get("/journal", (_req, res) => {
+  res.sendFile(path.join(publicDir, "journal", "index.html"));
+});
+app.get("/journal/:slug", (req, res) => {
+  const slug = path.basename(req.params.slug, ".html");
+  const filePath = path.join(publicDir, "journal", `${slug}.html`);
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).sendFile(path.join(publicDir, "fast-track.html"));
+  }
+});
+
 // Serve dashboard at /dashboard
 app.use("/dashboard", express.static(dashboardDir));
 app.get("/dashboard", (_req, res) => {

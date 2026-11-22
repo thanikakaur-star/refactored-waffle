@@ -13,6 +13,16 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://healthprocureintel.com/journal</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url><loc>https://healthprocureintel.com/journal/pharmacy-first-conditions-uk</loc><lastmod>2026-11-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://healthprocureintel.com/journal/how-to-use-right-to-choose-adhd-autism</loc><lastmod>2026-11-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://healthprocureintel.com/journal/skip-the-gp-queue-econsult-guide</loc><lastmod>2026-11-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://healthprocureintel.com/journal/prepare-10-minute-gp-appointment-womens-family-health</loc><lastmod>2026-11-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url>
     <loc>https://healthprocureintel.com/products</loc>
     <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
