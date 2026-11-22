@@ -33,7 +33,6 @@
         "@type": "Organization",
         "@id": "https://kaurcare.com/#organization",
         "name": "Kaur Care",
-        "legalName": "HealthProcure Intel",
         "url": "https://kaurcare.com/",
         "logo": "https://kaurcare.com/icons/icon-512.png",
         "description": "Kaur Care helps people in England navigate NHS care faster: same-day Pharmacy First, Right to Choose options and a 1-page GP brief. A navigation tool, not medical advice."
@@ -753,18 +752,18 @@
     <div class="max-w-5xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">For clinics, practitioners &amp; partners</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">White-label Kaur Care for the people you support</h2>
-      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-9">Employers, insurers, clinics and wellbeing practitioners can offer these care-navigation and prep tools under their own brand, or connect them to HealthProcure Intel's procurement data.</p>
+      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-9">Employers, insurers, clinics and wellbeing practitioners can offer Kaur Care's care-navigation and appointment-prep tools to the people they support, under their own brand.</p>
       <div class="grid md:grid-cols-3 gap-5 mb-8">
         <div class="card p-6"><h3 class="font-display text-lg font-semibold text-sage mb-1.5">Your branding</h3><p class="text-sm text-slate-soft">Your logo, name and colours on a hosted version your members or patients can use, with sponsored or revenue-share access.</p></div>
         <div class="card p-6"><h3 class="font-display text-lg font-semibold text-sage mb-1.5">Tailored pathways &amp; prep</h3><p class="text-sm text-slate-soft">Pathway lists and prep templates tuned to your service — a women's-health clinic, an MSK provider, or a neurodiversity service.</p></div>
-        <div class="card p-6"><h3 class="font-display text-lg font-semibold text-sage mb-1.5">Procurement intelligence</h3><p class="text-sm text-slate-soft">Connect with HealthProcure Intel to map commissioned services, benchmarks and provider data behind the navigator.</p></div>
+        <div class="card p-6"><h3 class="font-display text-lg font-semibold text-sage mb-1.5">Insight &amp; reporting</h3><p class="text-sm text-slate-soft">Anonymised, aggregate insight into what your community is searching for and where they get stuck — so you can meet real needs.</p></div>
       </div>
       <div class="card p-6 md:p-8 bg-[#EDF3EF] border-[#d9e6de] text-center">
         <h3 class="font-display text-xl font-semibold text-sage mb-2">Talk to us about a partnership</h3>
         <p class="text-sm text-slate-soft max-w-xl mx-auto mb-5">Tell us who you support and what you'd like to offer. We'll share options for a branded deployment or a data integration.</p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a href="mailto:partners@kaurcare.com?subject=Kaur%20Care%20white-label%20enquiry" class="inline-block px-5 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Email the partnerships team</a>
-          <a href="https://www.healthprocureintel.com" target="_blank" rel="noopener" class="inline-block px-5 py-3 rounded-2xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">About HealthProcure Intel</a>
+          <a href="/how-it-works" class="inline-block px-5 py-3 rounded-2xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">See how it works</a>
         </div>
       </div>
     </div>
@@ -821,7 +820,7 @@
   <footer class="bg-sage text-white/90 py-8">
     <div class="max-w-4xl mx-auto px-5 text-sm">
       <p class="mb-2"><strong>This is a navigation and directory tool, not medical advice.</strong> It does not diagnose, prescribe or replace a consultation. Always confirm eligibility with your pharmacy, GP or NHS 111, and seek urgent help for serious symptoms.</p>
-      <p class="text-white/80 text-xs mb-1">Kaur Care is a service by <strong class="font-semibold">HealthProcure Intel</strong>, the UK healthcare procurement intelligence platform. Built on NHS commissioning &amp; procurement data.</p>
+      <p class="text-white/80 text-xs mb-1">Kaur Care is an independent NHS care-navigation tool, built on real NHS data to help people in England get seen faster and advocate for themselves.</p>
       <p class="text-white/70 text-xs"><a href="/journal" class="underline">Journal</a> &middot; <a href="/privacy" class="underline">Privacy</a></p>
     </div>
   </footer>
@@ -1334,12 +1333,12 @@
       }
       if (opts.brandName){
         $('brand-name').textContent = opts.brandName;
-        $('brand-sub').textContent = 'by HealthProcure Intel';
+        $('brand-sub').textContent = 'powered by Kaur Care';
         var bm = $('brand-mark');
         bm.textContent = (opts.brandName.trim()[0] || 'K').toUpperCase();
         bm.classList.remove('bg-[#FBEEE7]', 'border', 'border-[#f0ddd0]', 'overflow-hidden');
         bm.classList.add('bg-sage', 'text-white', 'font-display', 'font-bold', 'text-lg');
-        document.title = opts.brandName + ' | Care Navigator by HealthProcure Intel';
+        document.title = opts.brandName + ' | Care Navigator, powered by Kaur Care';
       }
       if (opts.logoUrl){ var img=$('brand-logo'); img.src=opts.logoUrl; img.alt=opts.brandName||''; img.classList.remove('hidden'); $('brand-mark').classList.add('hidden'); }
       if (opts.accessMode === 'sponsored_free'){

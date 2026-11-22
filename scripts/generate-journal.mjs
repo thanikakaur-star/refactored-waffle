@@ -91,7 +91,7 @@ const head = (title, desc, url) => `<!DOCTYPE html>
 </div></nav>`;
 
 const footer = `<footer><div class="wrap">
-Kaur Care is a service by <strong>HealthProcure Intel</strong>. A navigation tool, not medical advice. <a href="/">Home</a> &middot; <a href="/journal">Journal</a> &middot; <a href="/privacy">Privacy</a>
+Kaur Care is an independent NHS care-navigation tool, not medical advice. <a href="/">Home</a> &middot; <a href="/journal">Journal</a> &middot; <a href="/privacy">Privacy</a>
 </div></footer>
 </body></html>`;
 
