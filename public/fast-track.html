@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/icons/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>(function(){var p=(location.pathname||'/').replace(/\/+$/,'')||'/';var m={'/':'home','/how-it-works':'how-it-works','/whats-covered':'whats-covered','/health':'health','/babies-pregnancy-menopause':'health','/eczema-skin':'health','/prep-playbook':'prep-playbook','/wellness':'wellness','/prep-tools':'prep-tools','/partners':'partners','/faqs':'faqs'};document.documentElement.setAttribute('data-kc',m[p]||'home');})();</script>
+  <script>(function(){var p=(location.pathname||'/').replace(/\/+$/,'')||'/';var m={'/':'home','/how-it-works':'how-it-works','/whats-covered':'whats-covered','/health-topics':'health-topics','/babies-pregnancy-menopause':'health-topics','/eczema-skin':'health-topics','/prep-playbook':'prep-playbook','/wellness':'wellness','/prep-tools':'prep-tools','/partners':'partners','/faqs':'faqs'};document.documentElement.setAttribute('data-kc',m[p]||'home');})();</script>
   <!-- PWA / Save to Home Screen -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#2D5A47" />
@@ -99,7 +99,7 @@
     html[data-kc="home"] #results.kc-shown { display: block; }
     html[data-kc="how-it-works"] .kc-page[data-page="how-it-works"],
     html[data-kc="whats-covered"] .kc-page[data-page="whats-covered"],
-    html[data-kc="health"] .kc-page[data-page="health"],
+    html[data-kc="health-topics"] .kc-page[data-page="health-topics"],
     html[data-kc="prep-playbook"] .kc-page[data-page="prep-playbook"],
     html[data-kc="wellness"] .kc-page[data-page="wellness"],
     html[data-kc="prep-tools"] .kc-page[data-page="prep-tools"],
@@ -129,7 +129,7 @@
       <div class="hidden lg:flex items-center gap-6">
         <a href="/how-it-works" data-nav="how-it-works" class="nav-link">How it works</a>
         <a href="/whats-covered" data-nav="whats-covered" class="nav-link">What's covered</a>
-        <a href="/health" data-nav="health" class="nav-link">Health topics</a>
+        <a href="/health-topics" data-nav="health-topics" class="nav-link">Health topics</a>
         <a href="/prep-playbook" data-nav="prep-playbook" class="nav-link">Prep playbook</a>
         <a href="/wellness" data-nav="wellness" class="nav-link">Wellness</a>
         <a href="/journal" class="nav-link">Journal</a>
@@ -143,7 +143,7 @@
       <div class="max-w-6xl mx-auto px-5 py-2 flex flex-col">
         <a href="/how-it-works" data-nav="how-it-works" class="py-3 border-b border-sand/60 nav-link">How it works</a>
         <a href="/whats-covered" data-nav="whats-covered" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
-        <a href="/health" data-nav="health" class="py-3 border-b border-sand/60 nav-link">Health topics</a>
+        <a href="/health-topics" data-nav="health-topics" class="py-3 border-b border-sand/60 nav-link">Health topics</a>
         <a href="/prep-playbook" data-nav="prep-playbook" class="py-3 border-b border-sand/60 nav-link">Prep playbook</a>
         <a href="/wellness" data-nav="wellness" class="py-3 border-b border-sand/60 nav-link">Wellness</a>
         <a href="/prep-tools" data-nav="prep-tools" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
@@ -387,7 +387,7 @@
   </section>
 
   <!-- Babies, pregnancy & maternal equity, menopause education -->
-  <section id="health" data-page="health" class="kc-page site-section border-t border-sand">
+  <section id="health-topics" data-page="health-topics" class="kc-page site-section border-t border-sand">
     <div class="max-w-5xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">Health topics</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Your health, by topic</h2>
@@ -1491,9 +1491,9 @@
     function downloadText(name, id){ var blob=new Blob([$(id).dataset.text||''],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click(); }
 
     // ---- Multi-page router: each nav item is its own page with a real URL ----
-    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/health':'health', '/babies-pregnancy-menopause':'health', '/eczema-skin':'health', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
-    var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'health':'Health topics | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
-    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'health':'health', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
+    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/health-topics':'health-topics', '/babies-pregnancy-menopause':'health-topics', '/eczema-skin':'health-topics', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
+    var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'health-topics':'Health topics | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
+    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'health-topics':'health-topics', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
     function kcPathFor(slug){ for (var k in KC_PATHS){ if (KC_PATHS[k] === slug) return k; } return '/'; }
     function kcCurrent(){ var p = (location.pathname || '/').replace(/\/+$/,'') || '/'; return KC_PATHS[p] || 'home'; }
     function showPage(slug, push){
