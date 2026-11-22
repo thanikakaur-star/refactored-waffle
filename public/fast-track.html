@@ -245,17 +245,17 @@
     <section class="mt-10">
       <h2 class="font-display text-2xl font-bold text-sage mb-1">Appointment prep tools</h2>
       <p class="text-slate-soft text-sm mb-4">Optional time-savers. The NHS information above is always free; these generators are a convenience. Your details stay in your browser and are never sent to us.</p>
-      <div id="tools-locked" class="card p-6 text-center">
+      <div id="tools-locked" class="card p-6 text-center" data-unlock-scope>
         <div class="text-3xl mb-2">🔒</div>
         <p class="font-semibold mb-1">Unlock the document generators</p>
         <p class="text-sm text-slate-soft mb-4">The Right to Choose referral letter and the 1-page GP symptom brief generators.</p>
-        <input id="unlock-email" type="email" placeholder="Your email (for your receipt)" class="w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
+        <input id="unlock-email" type="email" placeholder="Your email (for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
-          <button data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Fast-Track Pass, £4.99 one-off</button>
-          <button data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass, £7.99/mo</button>
+          <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock both generators — £4.99 one-off</button>
+          <button type="button" data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass — £7.99/mo</button>
         </div>
-        <p id="unlock-msg" class="text-xs text-slate-muted mt-3"></p>
-        <p id="unlock-detail" class="hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto"></p>
+        <p class="u-msg text-xs text-slate-muted mt-3" id="unlock-msg"></p>
+        <p class="u-detail hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto" id="unlock-detail"></p>
         <div class="mt-4 pt-4 border-t border-[#ece7df]">
           <p class="text-xs text-slate-muted mb-2">Have an employer or partner access code?</p>
           <div class="flex flex-col sm:flex-row gap-2 justify-center max-w-sm mx-auto">
@@ -508,7 +508,18 @@
           <p class="text-sm text-slate-soft">Your symptoms, pattern, daily impact and questions on a single clear page.</p>
         </div>
       </div>
-      <p class="text-sm text-slate-muted mt-6">Unlock both for <strong class="text-slate">£4.99</strong> one-off, or the Family &amp; Women's Health Pass at <strong class="text-slate">£7.99/mo</strong>. Run a search above to open them.</p>
+      <div class="card p-6 mt-8 max-w-xl mx-auto" data-unlock-scope>
+        <p class="font-semibold mb-1">Unlock the document generators</p>
+        <p class="text-sm text-slate-soft mb-4">One payment or subscription unlocks both the Right to Choose letter and the 1-page GP brief. Your details stay in your browser.</p>
+        <input type="email" placeholder="Your email (for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock both generators — £4.99 one-off</button>
+          <button type="button" data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass — £7.99/mo</button>
+        </div>
+        <p class="u-msg text-xs text-slate-muted mt-3"></p>
+        <p class="u-detail hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto"></p>
+        <p class="text-xs text-slate-muted mt-3">Secure checkout by Stripe. Nothing you type into the generators is ever sent to us.</p>
+      </div>
     </div>
   </section>
 
@@ -1021,36 +1032,43 @@
       focusCondition();
     }
 
-    // Unlock / checkout
+    // Unlock / checkout. The same flow powers the lock-box buttons and the
+    // #pricing buttons; each lives in a [data-unlock-scope] block with its own
+    // email input (.u-email), message (.u-msg) and debug caption (.u-detail).
     document.querySelectorAll('.unlock-btn').forEach(function(b){
-      b.addEventListener('click', async function(){
-        var plan = b.getAttribute('data-plan');
-        var emailEl = $('unlock-email');
-        var email = (emailEl && emailEl.value || '').trim();
-        var msg = $('unlock-msg');
-        // Forgiving email check: empty is fine (Stripe collects it); a typed value must look like an email.
-        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-          if (msg){ msg.textContent = 'Please enter a valid email address.'; }
-          if (emailEl){ emailEl.focus(); }
-          return;
-        }
-        if (msg){ msg.textContent = 'Opening secure checkout…'; }
-        try {
-          var res = await fetch('/api/fast-track/checkout', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan: plan, email: email, postcode: state.postcode, condition: state.condition, partner_slug: state.partnerSlug }) });
-          var j = await res.json().catch(function(){ return {}; });
-          if (j.url){ window.location = j.url; return; }
-          if (msg){
-            msg.textContent = j.error || 'Could not start checkout. Please try again.';
-            if (j.detail){
-              var cap = $('unlock-detail');
-              if (cap){ cap.textContent = j.detail; cap.classList.remove('hidden'); }
-            }
-          }
-        } catch(e){
-          if (msg){ msg.textContent = 'Could not start checkout. Please check your connection and try again.'; }
-        }
-      });
+      if (b._wired) return; b._wired = true;
+      b.addEventListener('click', function(){ startCheckout(b); });
     });
+    async function startCheckout(b){
+      var scope = (b.closest && b.closest('[data-unlock-scope]')) || document;
+      var emailEl = scope.querySelector('.u-email');
+      var msg = scope.querySelector('.u-msg');
+      var detail = scope.querySelector('.u-detail');
+      var plan = b.getAttribute('data-plan');
+      var email = (emailEl && emailEl.value || '').trim();
+      if (detail){ detail.classList.add('hidden'); detail.textContent = ''; }
+      // Forgiving email check: empty is fine (Stripe collects it); a typed value must look like an email.
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        if (msg){ msg.textContent = 'Please enter a valid email address.'; }
+        flash('Please enter a valid email address.');
+        if (emailEl){ emailEl.focus(); }
+        return;
+      }
+      if (msg){ msg.textContent = 'Opening secure checkout…'; }
+      try {
+        var res = await fetch('/api/fast-track/checkout', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan: plan, email: email, postcode: state.postcode, condition: state.condition, partner_slug: state.partnerSlug }) });
+        var j = await res.json().catch(function(){ return {}; });
+        if (j.url){ window.location = j.url; return; }
+        var errText = j.error || 'Could not start checkout. Please try again.';
+        if (msg){ msg.textContent = errText; }
+        if (j.detail && detail){ detail.textContent = j.detail; detail.classList.remove('hidden'); }
+        flash(errText);
+      } catch(e){
+        var netText = 'Could not start checkout. Please check your connection and try again.';
+        if (msg){ msg.textContent = netText; }
+        flash(netText);
+      }
+    }
     function setUnlocked(on, viaPartner){
       state.unlocked = on;
       $('tools-unlocked').classList.toggle('hidden', !on);
