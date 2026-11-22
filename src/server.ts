@@ -1494,7 +1494,7 @@ app.get("/robots.txt", (_req, res) => {
 
 // Serve marketing site. index:false so the explicit "/" route below wins and the
 // consumer homepage (Kaur Care) is served at the root, not the B2B index.html.
-app.use(express.static(publicDir, { index: false }));
+app.use(express.static(publicDir, { index: false, redirect: false }));
 // Kaur Care (by HealthProcure Intel) is the primary consumer homepage.
 app.get("/", (_req, res) => {
   res.sendFile(path.join(publicDir, "fast-track.html"));
@@ -1549,8 +1549,19 @@ app.get("/blog/:slug", (req, res) => {
 app.get("/journal", (_req, res) => {
   res.sendFile(path.join(publicDir, "journal", "index.html"));
 });
+// Redirect earlier article slugs to their current equivalents (301, SEO-safe).
+const JOURNAL_REDIRECTS: Record<string, string> = {
+  "pharmacy-first-conditions-uk": "pharmacy-first-12-conditions-uk",
+  "how-to-use-right-to-choose-adhd-autism": "nhs-right-to-choose-adhd-autism-guide",
+  "prepare-10-minute-gp-appointment-womens-family-health": "how-to-prepare-10-minute-gp-appointment",
+  "skip-the-gp-queue-econsult-guide": "how-to-write-econsult-nhs-app-message",
+};
 app.get("/journal/:slug", (req, res) => {
   const slug = path.basename(req.params.slug, ".html");
+  if (JOURNAL_REDIRECTS[slug]) {
+    res.redirect(301, `/journal/${JOURNAL_REDIRECTS[slug]}`);
+    return;
+  }
   const filePath = path.join(publicDir, "journal", `${slug}.html`);
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
