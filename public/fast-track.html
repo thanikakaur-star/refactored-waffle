@@ -39,9 +39,17 @@
     .badge-verified { background: #e7f0ea; color: var(--brand-primary); }
     .badge-check { background: #fdf3e7; color: #b26a16; }
     input, select, textarea { font-family: inherit; border-radius: 1rem; }
-    .quick-pill { border: 1px solid #E8E0D5; background: #fff; border-radius: 1rem; padding: 10px 16px; font-size: 14px; font-weight: 600; color: var(--brand-primary); cursor: pointer; transition: all .15s; }
+    .quick-pill { border: 1px solid #E8E0D5; background: #fff; border-radius: 9999px; padding: 7px 14px; font-size: 13.5px; font-weight: 500; color: #3f4a44; cursor: pointer; transition: all .15s; }
     .quick-pill:hover { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
-    body.embed nav { display: none; }
+    .nav-link { font-size: 14px; font-weight: 500; color: #5c564c; transition: color .15s; }
+    .nav-link:hover { color: var(--brand-primary); }
+    .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: #F3EEE6; border: 1px solid #E8E0D5; border-radius: 14px; padding: 4px; }
+    .seg-btn { border: 0; background: transparent; border-radius: 10px; padding: 9px 8px; font-size: 13.5px; font-weight: 600; color: #5c564c; cursor: pointer; transition: all .15s; }
+    .seg-btn:hover { color: var(--brand-primary); }
+    .seg-btn.active { background: #fff; color: var(--brand-primary); box-shadow: 0 1px 2px rgba(45,90,71,.12); }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+    .feature-ico { width: 44px; height: 44px; border-radius: 12px; background: #EDF3EF; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; }
+    body.embed nav, body.embed .site-section, body.embed footer { display: none; }
     @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } }
   </style>
 </head>
@@ -52,9 +60,9 @@
     <span class="inline-block mr-1">♥</span> Your safety comes first. For a medical emergency or severe symptoms (chest pain, trouble breathing, a stiff neck with high fever, or heavy bleeding), please call <strong>999</strong> or <strong>NHS 111</strong> straight away.
   </div>
 
-  <nav class="bg-cream/90 backdrop-blur border-b border-sand sticky top-0 z-40">
-    <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2.5">
+  <nav class="bg-cream/95 backdrop-blur border-b border-sand sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between gap-6">
+      <a href="/" class="flex items-center gap-2.5 shrink-0">
         <img id="brand-logo" alt="" class="h-9 hidden" />
         <span id="brand-mark" class="w-10 h-10 rounded-2xl bg-sage flex items-center justify-center text-white font-display font-bold text-lg">K</span>
         <span class="leading-tight">
@@ -62,48 +70,70 @@
           <span id="brand-sub" class="block text-[11px] text-slate-muted -mt-0.5"></span>
         </span>
       </a>
-      <span class="text-sm text-slate-muted hidden sm:block">Everyday care, made simple</span>
+      <div class="hidden md:flex items-center gap-7">
+        <a href="#how" class="nav-link">How it works</a>
+        <a href="#covered" class="nav-link">What's covered</a>
+        <a href="#pricing" class="nav-link">Prep tools</a>
+        <a href="#free" class="nav-link">Is it free?</a>
+      </div>
+      <a href="#find" class="shrink-0 px-4 py-2 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark">Find care</a>
     </div>
   </nav>
 
   <!-- Hero + triage -->
-  <header class="max-w-3xl mx-auto px-5 pt-12 pb-6 text-center">
-    <h1 class="font-display text-3xl md:text-5xl font-bold text-sage leading-tight mb-4">Skip the 8 AM GP phone queue &amp; long waiting lists.</h1>
-    <p class="text-slate-soft text-lg mb-8 max-w-2xl mx-auto">Check same-day NHS pharmacy care, clinic &amp; screening options, and build a clear 1-page GP brief in seconds, made simple for parents, women, men, and adults.</p>
-
-    <div class="mb-6">
-      <p class="text-xs font-semibold text-slate-muted uppercase tracking-wide mb-3">Popular right now</p>
-      <div id="quick" class="flex flex-wrap gap-2 justify-center">
-        <button class="quick-pill" data-who="Child Under 16" data-c="Earache">Kid's Earache</button>
-        <button class="quick-pill" data-who="Adult 16+" data-c="Sore throat">Sore Throat</button>
-        <button class="quick-pill" data-who="Adult 16+" data-c="ADHD / Autism assessment">ADHD &amp; Autism</button>
-        <button class="quick-pill" data-who="Women's Health" data-c="Endometriosis">Endo &amp; PCOS</button>
-        <button class="quick-pill" data-who="Adult 16+" data-c="Dermatology">Skin &amp; Rash</button>
-        <button class="quick-pill" data-who="Adult 16+" data-c="MRI / ultrasound">Scan &amp; Specialist</button>
+  <header id="find" class="max-w-6xl mx-auto px-5 pt-12 md:pt-16 pb-8">
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+      <!-- Left: copy -->
+      <div>
+        <p class="eyebrow mb-3">NHS care navigator</p>
+        <h1 class="font-display text-4xl md:text-5xl font-semibold text-sage leading-[1.05] mb-5">Skip the 8 AM GP phone queue and long waiting lists.</h1>
+        <p class="text-slate-soft text-lg mb-6 max-w-xl">Check same-day NHS pharmacy care, clinic and screening options, and build a clear 1-page GP brief in seconds. Made simple for parents, women, men and every adult.</p>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-muted mb-7">
+          <span class="flex items-center gap-1.5"><span class="text-sage">✓</span> Free NHS guidance</span>
+          <span class="flex items-center gap-1.5"><span class="text-sage">✓</span> No sign-up to search</span>
+          <span class="flex items-center gap-1.5"><span class="text-sage">✓</span> Built on NHS data</span>
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-slate-muted uppercase tracking-wider mb-2.5">Popular searches</p>
+          <div id="quick" class="flex flex-wrap gap-2">
+            <button class="quick-pill" data-who="Child Under 16" data-c="Earache">Kid's earache</button>
+            <button class="quick-pill" data-who="Adult 16+" data-c="Sore throat">Sore throat</button>
+            <button class="quick-pill" data-who="Adult 16+" data-c="ADHD / Autism assessment">ADHD &amp; autism</button>
+            <button class="quick-pill" data-who="Women's Health" data-c="Endometriosis">Endo &amp; PCOS</button>
+            <button class="quick-pill" data-who="Adult 16+" data-c="Dermatology">Skin &amp; rash</button>
+            <button class="quick-pill" data-who="Adult 16+" data-c="MRI / ultrasound">Scan &amp; specialist</button>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="card p-6 text-left shadow-sm">
-      <label class="block text-sm font-semibold mb-2">1. Who is this for?</label>
-      <div id="who" class="flex flex-wrap gap-2 mb-4">
-        <button class="pill" data-who="Child Under 16">A child</button>
-        <button class="pill" data-who="Women's Health">Women's health</button>
-        <button class="pill" data-who="Adult 16+">An adult</button>
-      </div>
-      <label class="block text-sm font-semibold mb-2">2. What is the concern?</label>
-      <div id="pills" class="flex flex-wrap gap-2 mb-3"></div>
-      <input id="condition" type="text" placeholder="Or type anything (e.g. earache, endometriosis, ADHD, MRI scan)" class="w-full px-4 py-3 border border-sand text-sm mb-4 focus:outline-none focus:border-sage" />
-      <label class="block text-sm font-semibold mb-2">3. Your UK postcode <span class="font-normal text-slate-muted">(optional)</span></label>
-      <div class="flex flex-col sm:flex-row gap-3">
-        <input id="postcode" type="text" placeholder="e.g. SW1A 1AA" maxlength="10" class="flex-1 px-4 py-3 border border-sand text-sm focus:outline-none focus:border-sage" />
-        <button id="search-btn" class="px-6 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Find my care options</button>
+      <!-- Right: find-care card -->
+      <div class="card p-6 md:p-7 shadow-sm">
+        <h2 class="font-display text-xl font-semibold mb-1">Find your care options</h2>
+        <p class="text-sm text-slate-soft mb-5">Three quick steps. It takes about ten seconds.</p>
+
+        <label class="block text-sm font-semibold mb-2">Who is this for?</label>
+        <div id="who" class="seg mb-5">
+          <button class="seg-btn" data-who="Child Under 16">A child</button>
+          <button class="seg-btn" data-who="Women's Health">Women's health</button>
+          <button class="seg-btn" data-who="Adult 16+">Any adult</button>
+        </div>
+
+        <label class="block text-sm font-semibold mb-2">What is the concern?</label>
+        <div id="pills" class="flex flex-wrap gap-2 mb-3"></div>
+        <input id="condition" type="text" placeholder="Type anything (e.g. earache, endometriosis, ADHD, MRI scan)" class="w-full px-4 py-3 border border-sand text-sm mb-5 focus:outline-none focus:border-sage" />
+
+        <label class="block text-sm font-semibold mb-2">Your UK postcode <span class="font-normal text-slate-muted">(optional)</span></label>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input id="postcode" type="text" placeholder="e.g. SW1A 1AA" maxlength="10" class="flex-1 px-4 py-3 border border-sand text-sm focus:outline-none focus:border-sage" />
+          <button id="search-btn" class="px-6 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark whitespace-nowrap">Find care</button>
+        </div>
       </div>
     </div>
   </header>
 
   <!-- Results -->
   <main id="results" class="max-w-4xl mx-auto px-5 pb-16 hidden">
-    <div class="flex gap-1 border-b border-[#ece7df] mb-6 overflow-x-auto">
+    <div class="flex gap-1 border-b border-sand mb-6 overflow-x-auto">
       <div class="tab-btn active" data-tab="t1">Pharmacy First &amp; same-day NHS</div>
       <div class="tab-btn" data-tab="t2">Right to Choose &amp; waiting lists</div>
       <div class="tab-btn" data-tab="t3">Self-care &amp; local support</div>
@@ -174,6 +204,87 @@
     </section>
   </main>
 
+  <!-- How it works -->
+  <section id="how" class="site-section border-t border-sand bg-white/50">
+    <div class="max-w-6xl mx-auto px-5 py-14">
+      <p class="eyebrow mb-2 text-center">How it works</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-10">Care, without the guesswork</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="card p-6">
+          <div class="feature-ico mb-4 font-semibold">1</div>
+          <h3 class="font-semibold mb-1.5">Tell us who and what</h3>
+          <p class="text-sm text-slate-soft">Pick who it's for and the concern. A child's earache, a persistent sore throat, endometriosis, an ADHD assessment or a scan.</p>
+        </div>
+        <div class="card p-6">
+          <div class="feature-ico mb-4 font-semibold">2</div>
+          <h3 class="font-semibold mb-1.5">See your real options</h3>
+          <p class="text-sm text-slate-soft">Same-day NHS Pharmacy First eligibility, your Right to Choose rights, and official NHS and CQC provider directories for your postcode.</p>
+        </div>
+        <div class="card p-6">
+          <div class="feature-ico mb-4 font-semibold">3</div>
+          <h3 class="font-semibold mb-1.5">Walk in prepared</h3>
+          <p class="text-sm text-slate-soft">Generate a clear 1-page GP brief or a Right to Choose referral letter, so your appointment counts the first time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's covered -->
+  <section id="covered" class="site-section">
+    <div class="max-w-6xl mx-auto px-5 py-14">
+      <p class="eyebrow mb-2 text-center">What's covered</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-10">Everyday care for the whole family</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="card p-6">
+          <h3 class="font-display text-lg font-semibold text-sage mb-2">Same-day NHS pharmacy</h3>
+          <p class="text-sm text-slate-soft mb-3">Pharmacy First lets a pharmacist treat seven common conditions without a GP appointment.</p>
+          <p class="text-xs text-slate-muted">UTIs, sore throat, earache, sinusitis, impetigo, infected bites, shingles.</p>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-display text-lg font-semibold text-sage mb-2">Right to Choose &amp; scans</h3>
+          <p class="text-sm text-slate-soft mb-3">Your legal right to a shorter NHS wait with a provider of your choice.</p>
+          <p class="text-xs text-slate-muted">Dermatology, ENT, physio and MSK, MRI and ultrasound, ADHD and autism assessment.</p>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-display text-lg font-semibold text-sage mb-2">Women's health</h3>
+          <p class="text-sm text-slate-soft mb-3">Preparation and pathways for the concerns that too often get rushed.</p>
+          <p class="text-xs text-slate-muted">Endometriosis, PCOS, heavy bleeding, perimenopause, recurrent UTIs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prep tools / pricing -->
+  <section id="pricing" class="site-section border-t border-sand bg-white/50">
+    <div class="max-w-4xl mx-auto px-5 py-14 text-center">
+      <p class="eyebrow mb-2">Prep tools</p>
+      <h2 class="font-display text-3xl font-semibold text-sage mb-3">Turn up to your appointment ready</h2>
+      <p class="text-slate-soft mb-8 max-w-2xl mx-auto">All the NHS guidance above is free. The optional document generators save you the writing. Everything you type stays in your browser and is never sent to us.</p>
+      <div class="grid sm:grid-cols-2 gap-5 text-left">
+        <div class="card p-6">
+          <p class="font-semibold mb-1">Right to Choose referral letter</p>
+          <p class="text-sm text-slate-soft">A formal letter citing the NHS Choice Framework, ready to hand your GP.</p>
+        </div>
+        <div class="card p-6">
+          <p class="font-semibold mb-1">1-page GP / appointment brief</p>
+          <p class="text-sm text-slate-soft">Your symptoms, pattern, daily impact and questions on a single clear page.</p>
+        </div>
+      </div>
+      <p class="text-sm text-slate-muted mt-6">Unlock both for <strong class="text-slate">£4.99</strong> one-off, or the Family &amp; Women's Health Pass at <strong class="text-slate">£7.99/mo</strong>. Run a search above to open them.</p>
+    </div>
+  </section>
+
+  <!-- Is it free -->
+  <section id="free" class="site-section">
+    <div class="max-w-4xl mx-auto px-5 py-14">
+      <div class="card p-8 md:p-10 bg-[#EDF3EF] border-[#d9e6de] text-center">
+        <p class="eyebrow mb-2">Is it free?</p>
+        <h2 class="font-display text-2xl md:text-3xl font-semibold text-sage mb-3">The NHS parts are always free</h2>
+        <p class="text-slate-soft max-w-2xl mx-auto">Pharmacy First eligibility, your Right to Choose rights and the NHS and CQC directories cost nothing and never ask you to sign up. Only the optional prep-document generators are paid. This is a navigation tool, not medical advice.</p>
+      </div>
+    </div>
+  </section>
+
   <div id="print-area" class="hidden"></div>
 
   <script src="/fast-track-config.js"></script>
@@ -196,9 +307,9 @@
     function esc(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
 
     // Who pills
-    document.querySelectorAll('#who .pill').forEach(function(b){
+    document.querySelectorAll('#who .seg-btn').forEach(function(b){
       b.addEventListener('click', function(){
-        document.querySelectorAll('#who .pill').forEach(function(x){ x.classList.remove('active'); });
+        document.querySelectorAll('#who .seg-btn').forEach(function(x){ x.classList.remove('active'); });
         b.classList.add('active'); state.who = b.getAttribute('data-who');
         renderPills();
       });
@@ -218,7 +329,7 @@
     document.querySelectorAll('#quick .quick-pill').forEach(function(b){
       b.addEventListener('click', function(){
         state.who = b.getAttribute('data-who');
-        document.querySelectorAll('#who .pill').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-who') === state.who); });
+        document.querySelectorAll('#who .seg-btn').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-who') === state.who); });
         renderPills();
         $('condition').value = b.getAttribute('data-c');
         doSearch();
