@@ -7,7 +7,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SITE = "https://healthprocureintel.com";
+const SITE = "https://kaurcare.com";
 const outDir = join(__dirname, "..", "public", "journal");
 mkdirSync(outDir, { recursive: true });
 
@@ -90,7 +90,7 @@ const head = (title, desc, url) => `<!DOCTYPE html>
 </div></nav>`;
 
 const footer = `<footer><div class="wrap">
-Kaur Care is a service by <strong>HealthProcure Intel</strong>. A navigation tool, not medical advice. <a href="/">Home</a> &middot; <a href="/journal">Journal</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/b2b">HealthProcure Intel (B2B)</a>
+Kaur Care is a service by <strong>HealthProcure Intel</strong>. A navigation tool, not medical advice. <a href="/">Home</a> &middot; <a href="/journal">Journal</a> &middot; <a href="/privacy">Privacy</a>
 </div></footer>
 </body></html>`;
 

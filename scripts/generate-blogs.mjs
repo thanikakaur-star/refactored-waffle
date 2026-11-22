@@ -13,7 +13,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const blogDir = join(root, "public", "blog");
 mkdirSync(blogDir, { recursive: true });
 
-const SITE = "https://healthprocureintel.com";
+const SITE = "https://kaurcare.com";
 
 // Small helpers to keep post bodies terse but real.
 const h2 = (t) => `      <h2>${t}</h2>\n`;
