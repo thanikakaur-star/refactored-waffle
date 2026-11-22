@@ -252,6 +252,7 @@
           <button data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass, £7.99/mo</button>
         </div>
         <p id="unlock-msg" class="text-xs text-slate-muted mt-3"></p>
+        <p id="unlock-detail" class="hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto"></p>
         <div class="mt-4 pt-4 border-t border-[#ece7df]">
           <p class="text-xs text-slate-muted mb-2">Have an employer or partner access code?</p>
           <div class="flex flex-col sm:flex-row gap-2 justify-center max-w-sm mx-auto">
@@ -683,14 +684,30 @@
     document.querySelectorAll('.unlock-btn').forEach(function(b){
       b.addEventListener('click', async function(){
         var plan = b.getAttribute('data-plan');
-        var email = $('unlock-email').value;
-        $('unlock-msg').textContent = 'Opening secure checkout...';
+        var emailEl = $('unlock-email');
+        var email = (emailEl && emailEl.value || '').trim();
+        var msg = $('unlock-msg');
+        // Forgiving email check: empty is fine (Stripe collects it); a typed value must look like an email.
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+          if (msg){ msg.textContent = 'Please enter a valid email address.'; }
+          if (emailEl){ emailEl.focus(); }
+          return;
+        }
+        if (msg){ msg.textContent = 'Opening secure checkout…'; }
         try {
           var res = await fetch('/api/fast-track/checkout', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan: plan, email: email, postcode: state.postcode, condition: state.condition, partner_slug: state.partnerSlug }) });
-          var j = await res.json();
-          if (j.url){ window.location = j.url; }
-          else { $('unlock-msg').textContent = j.error || 'Checkout is not available yet.'; }
-        } catch(e){ $('unlock-msg').textContent = 'Checkout is not available yet.'; }
+          var j = await res.json().catch(function(){ return {}; });
+          if (j.url){ window.location = j.url; return; }
+          if (msg){
+            msg.textContent = j.error || 'Could not start checkout. Please try again.';
+            if (j.detail){
+              var cap = $('unlock-detail');
+              if (cap){ cap.textContent = j.detail; cap.classList.remove('hidden'); }
+            }
+          }
+        } catch(e){
+          if (msg){ msg.textContent = 'Could not start checkout. Please check your connection and try again.'; }
+        }
       });
     });
     function setUnlocked(on, viaPartner){
