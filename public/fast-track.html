@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaur Care by HealthProcure Intel | Skip the Queue for NHS &amp; Private Care</title>
+  <meta name="description" content="Kaur Care matches your condition and postcode to same-day NHS Pharmacy First, NHS Right to Choose options, women's health pathways and local wellness support. Appointment navigation, not medical advice." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://healthprocureintel.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Kaur Care by HealthProcure Intel" />
+  <meta property="og:title" content="Kaur Care by HealthProcure Intel | Skip the Queue for NHS &amp; Private Care" />
+  <meta property="og:description" content="Find your fastest route to care: same-day NHS Pharmacy First, Right to Choose options and women's health pathways, matched to your postcode. Navigation, not medical advice." />
+  <meta property="og:url" content="https://healthprocureintel.com/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Kaur Care by HealthProcure Intel" />
+  <meta name="twitter:description" content="Find your fastest route to NHS and private care in 10 seconds." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      colors: { sage: { DEFAULT: 'var(--brand-primary)', dark: 'var(--brand-dark)', light: 'var(--brand-light)' }, terracotta: '#C87A5A', cream: '#FAF7F2', sand: '#E8E0D5', slate: { DEFAULT: '#1E293B', soft: '#475569', muted: '#6b6256' } },
+      fontFamily: { display: ['Fraunces', 'Georgia', 'serif'], body: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] },
+      borderRadius: { '2xl': '1rem', '3xl': '1.5rem' },
+    } } };
+  </script>
+  <style>
+    :root { --brand-primary: #2D5A47; --brand-dark: #234738; --brand-light: #4a7a60; --accent: #C87A5A; }
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: #FAF7F2; color: #1E293B; }
+    .card { background: #FFFFFF; border: 1px solid #E8E0D5; border-radius: 24px; }
+    .pill { border: 1px solid #E8E0D5; background: #fff; border-radius: 9999px; padding: 9px 16px; font-size: 14px; cursor: pointer; transition: all .15s; }
+    .pill:hover { border-color: var(--brand-primary); }
+    .pill.active { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
+    .tab-btn { padding: 12px 16px; font-weight: 600; font-size: 14px; color: #6b6256; border-bottom: 2px solid transparent; cursor: pointer; }
+    .tab-btn.active { color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
+    .badge-verified { background: #e7f0ea; color: var(--brand-primary); }
+    .badge-check { background: #fdf3e7; color: #b26a16; }
+    input, select, textarea { font-family: inherit; border-radius: 1rem; }
+    .quick-pill { border: 1px solid #E8E0D5; background: #fff; border-radius: 1rem; padding: 10px 16px; font-size: 14px; font-weight: 600; color: var(--brand-primary); cursor: pointer; transition: all .15s; }
+    .quick-pill:hover { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
+    body.embed nav { display: none; }
+    @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Safety banner (always visible, calm and reassuring) -->
+  <div class="bg-[#FBEEE7] text-[#8a4b32] border-b border-[#eeccba] text-sm px-4 py-2.5 text-center">
+    <span class="inline-block mr-1">♥</span> Your safety comes first. For a medical emergency or severe symptoms (chest pain, trouble breathing, a stiff neck with high fever, or heavy bleeding), please call <strong>999</strong> or <strong>NHS 111</strong> straight away.
+  </div>
+
+  <nav class="bg-cream/90 backdrop-blur border-b border-sand sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5">
+        <img id="brand-logo" alt="" class="h-9 hidden" />
+        <span id="brand-mark" class="w-10 h-10 rounded-2xl bg-sage flex items-center justify-center text-white font-display font-bold text-lg">K</span>
+        <span class="leading-tight">
+          <span id="brand-name" class="block font-display font-semibold text-xl text-sage">Kaur Care</span>
+          <span id="brand-sub" class="block text-[11px] text-slate-muted -mt-0.5"></span>
+        </span>
+      </a>
+      <span class="text-sm text-slate-muted hidden sm:block">Everyday care, made simple</span>
+    </div>
+  </nav>
+
+  <!-- Hero + triage -->
+  <header class="max-w-3xl mx-auto px-5 pt-12 pb-6 text-center">
+    <h1 class="font-display text-3xl md:text-5xl font-bold text-sage leading-tight mb-4">Skip the 8 AM GP phone queue &amp; long waiting lists.</h1>
+    <p class="text-slate-soft text-lg mb-8 max-w-2xl mx-auto">Check same-day NHS pharmacy care, clinic &amp; screening options, and build a clear 1-page GP brief in seconds, made simple for parents, women, men, and adults.</p>
+
+    <div class="mb-6">
+      <p class="text-xs font-semibold text-slate-muted uppercase tracking-wide mb-3">Popular right now</p>
+      <div id="quick" class="flex flex-wrap gap-2 justify-center">
+        <button class="quick-pill" data-who="Child Under 16" data-c="Earache">Kid's Earache</button>
+        <button class="quick-pill" data-who="Adult 16+" data-c="Sore throat">Sore Throat</button>
+        <button class="quick-pill" data-who="Adult 16+" data-c="ADHD / Autism assessment">ADHD &amp; Autism</button>
+        <button class="quick-pill" data-who="Women's Health" data-c="Endometriosis">Endo &amp; PCOS</button>
+        <button class="quick-pill" data-who="Adult 16+" data-c="Dermatology">Skin &amp; Rash</button>
+        <button class="quick-pill" data-who="Adult 16+" data-c="MRI / ultrasound">Scan &amp; Specialist</button>
+      </div>
+    </div>
+
+    <div class="card p-6 text-left shadow-sm">
+      <label class="block text-sm font-semibold mb-2">1. Who is this for?</label>
+      <div id="who" class="flex flex-wrap gap-2 mb-4">
+        <button class="pill" data-who="Child Under 16">A child</button>
+        <button class="pill" data-who="Women's Health">Women's health</button>
+        <button class="pill" data-who="Adult 16+">An adult</button>
+      </div>
+      <label class="block text-sm font-semibold mb-2">2. What is the concern?</label>
+      <div id="pills" class="flex flex-wrap gap-2 mb-3"></div>
+      <input id="condition" type="text" placeholder="Or type anything (e.g. earache, endometriosis, ADHD, MRI scan)" class="w-full px-4 py-3 border border-sand text-sm mb-4 focus:outline-none focus:border-sage" />
+      <label class="block text-sm font-semibold mb-2">3. Your UK postcode <span class="font-normal text-slate-muted">(optional)</span></label>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input id="postcode" type="text" placeholder="e.g. SW1A 1AA" maxlength="10" class="flex-1 px-4 py-3 border border-sand text-sm focus:outline-none focus:border-sage" />
+        <button id="search-btn" class="px-6 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Find my care options</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Results -->
+  <main id="results" class="max-w-4xl mx-auto px-5 pb-16 hidden">
+    <div class="flex gap-1 border-b border-[#ece7df] mb-6 overflow-x-auto">
+      <div class="tab-btn active" data-tab="t1">Pharmacy First &amp; same-day NHS</div>
+      <div class="tab-btn" data-tab="t2">Right to Choose &amp; waiting lists</div>
+      <div class="tab-btn" data-tab="t3">Self-care &amp; local support</div>
+    </div>
+
+    <section id="t1" class="tab-panel"></section>
+    <section id="t2" class="tab-panel hidden"></section>
+    <section id="t3" class="tab-panel hidden"></section>
+
+    <!-- Gated prep tools -->
+    <section class="mt-10">
+      <h2 class="font-display text-2xl font-bold text-sage mb-1">Appointment prep tools</h2>
+      <p class="text-slate-soft text-sm mb-4">Optional time-savers. The NHS information above is always free; these generators are a convenience. Your details stay in your browser and are never sent to us.</p>
+      <div id="tools-locked" class="card p-6 text-center">
+        <div class="text-3xl mb-2">🔒</div>
+        <p class="font-semibold mb-1">Unlock the document generators</p>
+        <p class="text-sm text-slate-soft mb-4">The Right to Choose referral letter and the 1-page GP symptom brief generators.</p>
+        <input id="unlock-email" type="email" placeholder="Your email (for your receipt)" class="w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Fast-Track Pass, £4.99 one-off</button>
+          <button data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass, £7.99/mo</button>
+        </div>
+        <p id="unlock-msg" class="text-xs text-slate-muted mt-3"></p>
+        <div class="mt-4 pt-4 border-t border-[#ece7df]">
+          <p class="text-xs text-slate-muted mb-2">Have an employer or partner access code?</p>
+          <div class="flex flex-col sm:flex-row gap-2 justify-center max-w-sm mx-auto">
+            <input id="access-code" type="text" placeholder="Enter your code" class="flex-1 px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm focus:outline-none focus:border-sage" />
+            <button onclick="redeemAccessCode()" class="px-4 py-2.5 rounded-xl border border-sage text-sage font-semibold text-sm">Apply code</button>
+          </div>
+          <p id="code-msg" class="text-xs text-slate-muted mt-2"></p>
+        </div>
+      </div>
+
+      <div id="tools-partner" class="hidden card p-6 text-center bg-[#f4f8f5] border-[#d9e6de]">
+        <div class="text-2xl mb-1">✓</div>
+        <p id="partner-unlock-msg" class="font-semibold text-sage"></p>
+        <p class="text-sm text-slate-soft mt-1">The prep tools below are ready to use.</p>
+      </div>
+
+      <div id="tools-unlocked" class="hidden space-y-6">
+        <div class="card p-6">
+          <h3 class="font-display text-xl font-semibold mb-3">Tool A: Right to Choose referral letter</h3>
+          <div class="grid sm:grid-cols-2 gap-3 mb-3">
+            <input id="l-name" placeholder="Full name" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+            <input id="l-dob" placeholder="Date of birth (e.g. 12/03/1990)" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+            <input id="l-gp" placeholder="GP surgery name" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+            <input id="l-clinic" placeholder="Chosen clinic / provider" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+          </div>
+          <input id="l-condition" placeholder="Condition / service (e.g. ADHD assessment)" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3" />
+          <button onclick="genLetter()" class="px-5 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm">Generate letter</button>
+          <div id="l-out" class="hidden mt-4"></div>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="font-display text-xl font-semibold mb-1">Tool B: 1-page GP / appointment brief</h3>
+          <p class="text-sm text-slate-soft mb-3">Works for anyone: a child, a woman, a man or any adult, including ADHD and autism screening notes.</p>
+          <div class="grid sm:grid-cols-2 gap-3 mb-3">
+            <input id="b-condition" placeholder="Main concern (e.g. ADHD traits, pelvic pain, earache)" class="px-4 py-2.5 border border-sand text-sm" />
+            <input id="b-duration" placeholder="How long (e.g. 6 months)" class="px-4 py-2.5 border border-sand text-sm" />
+          </div>
+          <input id="b-triggers" placeholder="Pattern, triggers or examples (e.g. pain pattern, cycle, ADHD/autism traits)" class="w-full px-4 py-2.5 border border-sand text-sm mb-3" />
+          <textarea id="b-impact" placeholder="Impact on daily life: work, school, sleep, relationships" rows="2" class="w-full px-4 py-2.5 border border-sand text-sm mb-3"></textarea>
+          <textarea id="b-questions" placeholder="Questions you want to ask the GP (one per line)" rows="3" class="w-full px-4 py-2.5 border border-sand text-sm mb-3"></textarea>
+          <button onclick="genBrief()" class="px-5 py-2.5 rounded-2xl bg-sage text-white font-semibold text-sm">Generate brief</button>
+          <div id="b-out" class="hidden mt-4"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="print-area" class="hidden"></div>
+
+  <script src="/fast-track-config.js"></script>
+
+  <footer class="bg-sage text-white/90 py-8">
+    <div class="max-w-4xl mx-auto px-5 text-sm">
+      <p class="mb-2"><strong>This is a navigation and directory tool, not medical advice.</strong> It does not diagnose, prescribe or replace a consultation. Always confirm eligibility with your pharmacy, GP or NHS 111, and seek urgent help for serious symptoms.</p>
+      <p class="text-white/70 text-xs">Kaur Care, operated by HealthProcure Intel. Built on NHS commissioning &amp; procurement data.</p>
+    </div>
+  </footer>
+
+  <script>
+    var PILLS = {
+      "Child Under 16": ["Earache", "Sore throat", "Impetigo", "Insect bites", "Hay fever", "Skin infection", "ADHD / Autism assessment"],
+      "Women's Health": ["Endometriosis", "PCOS", "Heavy bleeding / fibroids", "Perimenopause / menopause", "Recurrent UTI", "Gynaecology / fertility"],
+      "Adult 16+": ["UTI", "Sore throat", "Sinusitis", "Shingles", "Acne", "Migraine", "Dermatology", "ENT", "Physio / MSK", "MRI / ultrasound", "ADHD / Autism assessment"]
+    };
+    var state = { who: '', condition: '', postcode: '', data: null, unlocked: false, demo: false, partner: null, partnerSlug: '', embed: false };
+    function $(id){ return document.getElementById(id); }
+    function esc(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
+
+    // Who pills
+    document.querySelectorAll('#who .pill').forEach(function(b){
+      b.addEventListener('click', function(){
+        document.querySelectorAll('#who .pill').forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active'); state.who = b.getAttribute('data-who');
+        renderPills();
+      });
+    });
+    function renderPills(){
+      var list = PILLS[state.who] || [];
+      $('pills').innerHTML = list.map(function(c){ return '<button class="pill" data-c="'+esc(c)+'">'+esc(c)+'</button>'; }).join('');
+      document.querySelectorAll('#pills .pill').forEach(function(b){
+        b.addEventListener('click', function(){
+          document.querySelectorAll('#pills .pill').forEach(function(x){ x.classList.remove('active'); });
+          b.classList.add('active'); $('condition').value = b.getAttribute('data-c');
+        });
+      });
+    }
+
+    // Universal quick-tap pills (hero): set who + condition and search right away.
+    document.querySelectorAll('#quick .quick-pill').forEach(function(b){
+      b.addEventListener('click', function(){
+        state.who = b.getAttribute('data-who');
+        document.querySelectorAll('#who .pill').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-who') === state.who); });
+        renderPills();
+        $('condition').value = b.getAttribute('data-c');
+        doSearch();
+      });
+    });
+
+    $('search-btn').addEventListener('click', doSearch);
+    async function doSearch(){
+      state.condition = $('condition').value.trim();
+      state.postcode = $('postcode').value.trim();
+      if (!state.condition){ alert('Please pick or type a concern.'); return; }
+      $('search-btn').textContent = 'Finding...';
+      try {
+        var res = await fetch('/api/fast-track/search', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ patientType: state.who, condition: state.condition, postcode: state.postcode }) });
+        var j = await res.json();
+        state.data = j.data;
+        renderResults();
+        $('results').classList.remove('hidden');
+        $('results').scrollIntoView({ behavior:'smooth' });
+      } catch(e){ alert('Something went wrong. Please try again.'); }
+      $('search-btn').textContent = 'Find my care options';
+    }
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(function(t){
+      t.addEventListener('click', function(){
+        document.querySelectorAll('.tab-btn').forEach(function(x){ x.classList.remove('active'); });
+        document.querySelectorAll('.tab-panel').forEach(function(x){ x.classList.add('hidden'); });
+        t.classList.add('active'); $(t.getAttribute('data-tab')).classList.remove('hidden');
+      });
+    });
+
+    function badge(status){
+      return status === 'verified'
+        ? '<span class="text-xs px-2 py-0.5 rounded-full badge-verified">Verified NHS pathway</span>'
+        : '<span class="text-xs px-2 py-0.5 rounded-full badge-check">Confirm with your pharmacy / current NHS guidance</span>';
+    }
+    function pathwayCard(p){
+      return '<div class="card p-4 mb-3">'
+        + '<div class="flex items-start justify-between gap-3 mb-1"><div class="font-semibold">'+esc(p.name)+'</div>'+badge(p.status)+'</div>'
+        + '<div class="text-sm text-slate-soft mb-2">Eligibility: '+esc(p.ageRule)+'</div>'
+        + '<details class="text-sm"><summary class="cursor-pointer text-sage font-medium">When this is not suitable</summary><ul class="list-disc pl-5 mt-2 text-slate-soft">'
+        + (p.exclusions||[]).map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')
+        + '</ul>'+(p.note?'<p class="mt-2 text-slate-soft">'+esc(p.note)+'</p>':'')+'</details></div>';
+    }
+    function providerBlock(d){
+      var out = '';
+      if (d.cqc && d.cqc.length){
+        out += '<h4 class="font-semibold mt-4 mb-2">CQC-registered locations</h4>'
+          + d.cqc.map(function(c){ return '<div class="text-sm py-1 border-b border-[#f0ebe3]">'+esc(c.name)+(c.postalCode?' <span class="text-slate-muted">'+esc(c.postalCode)+'</span>':'')+(c.cqcUrl?' &middot; <a class="text-sage underline" target="_blank" rel="noopener" href="'+esc(c.cqcUrl)+'">CQC record &amp; rating</a>':'')+'</div>'; }).join('');
+      }
+      if (d.commissioned && d.commissioned.length){
+        out += '<h4 class="font-semibold mt-4 mb-2">Services commissioned in the NHS for this category</h4><p class="text-xs text-slate-muted mb-2">From public procurement records, for context. Not a bookable clinic directory.</p>'
+          + d.commissioned.slice(0,6).map(function(s){ return '<div class="text-sm py-1 border-b border-[#f0ebe3]">'+esc(s.supplier)+(s.title?' <span class="text-slate-muted">'+esc(s.title).slice(0,70)+'</span>':'')+'</div>'; }).join('');
+      }
+      out += '<div class="mt-4 flex flex-wrap gap-2">'
+        + '<a class="pill" target="_blank" rel="noopener" href="'+esc(d.links.findPharmacy)+'">Find a pharmacy</a>'
+        + '<a class="pill" target="_blank" rel="noopener" href="'+esc(d.links.cqcSearch)+'">Search CQC services</a>'
+        + '<a class="pill" target="_blank" rel="noopener" href="'+esc(d.links.nhsServices)+'">NHS service search</a>'
+        + '<a class="pill" target="_blank" rel="noopener" href="'+esc(d.links.rightToChoose)+'">Your right to choose</a></div>';
+      return out;
+    }
+
+    function renderResults(){
+      var d = state.data;
+      // Tab 1
+      $('t1').innerHTML = '<div class="card p-5 mb-5 bg-[#f4f8f5] border-[#d9e6de]"><p class="text-sm text-sage">NHS Pharmacy First lets a pharmacist assess and, where appropriate, supply treatment for these conditions, free, often same-day, no GP appointment needed.</p></div>'
+        + '<h3 class="font-display text-xl font-semibold mb-3">Core pathways (nationwide)</h3>'
+        + d.pharmacyFirst.core.map(pathwayCard).join('')
+        + '<h3 class="font-display text-xl font-semibold mt-6 mb-3">Newer pathways (availability varies)</h3>'
+        + d.pharmacyFirst.expansion.map(pathwayCard).join('')
+        + '<div class="card p-5 mt-5">'+providerBlock(d)+'</div>';
+
+      // Tab 2
+      var rtc = d.rightToChoose.map(function(r){ return '<span class="pill">'+esc(r.name)+'</span>'; }).join('');
+      var wh = d.womensHealth.map(function(w){ return '<details class="card p-4 mb-2"><summary class="cursor-pointer font-semibold">'+esc(w.name)+'</summary><p class="text-xs text-slate-muted mt-2 mb-1">Bring to your appointment:</p><ul class="list-disc pl-5 text-sm text-slate-soft">'+w.prepPrompts.map(function(p){return '<li>'+esc(p)+'</li>';}).join('')+'</ul></details>'; }).join('');
+      $('t2').innerHTML = '<div class="card p-5 mb-5"><h3 class="font-display text-xl font-semibold mb-2">Your legal right to choose</h3><p class="text-sm text-slate-soft">In England you have a statutory right under the NHS Choice Framework to ask your GP to refer you to a clinically appropriate NHS-funded provider, including many independent clinics, which can mean a shorter wait. Local ICB policies can vary, so confirm current acceptance with your GP and chosen clinic.</p></div>'
+        + '<h4 class="font-semibold mb-2">Common Right to Choose routes</h4><div class="flex flex-wrap gap-2 mb-5">'+rtc+'</div>'
+        + '<h4 class="font-semibold mb-2">Women\'s health appointment prep</h4>'+wh
+        + '<div class="card p-5 mt-5">'+providerBlock(d)+'</div>'
+        + '<div class="card p-5 mt-5 bg-[#f4f8f5] border-[#d9e6de]"><h4 class="font-semibold mb-1">Long or capped NHS wait?</h4><p class="text-sm text-slate-soft mb-3">Use the appointment prep tools below to generate your Right to Choose referral letter, then take it to your GP. The provider links above are the authoritative NHS and CQC directories.</p></div>';
+
+      // Tab 3
+      var sc = d.selfCare.map(function(s){ return '<details class="card p-4 mb-2"><summary class="cursor-pointer font-semibold">'+esc(s.name)+'</summary><ul class="list-disc pl-5 text-sm text-slate-soft mt-2">'+s.tips.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul></details>'; }).join('');
+      var cfg = window.FAST_TRACK_CONFIG || {};
+      var essentials = (cfg.AFFILIATE_ESSENTIALS || []).filter(function(e){ return e && e.url && String(e.url).trim() && String(e.url).indexOf('REPLACE') < 0; }).map(function(e){
+        return '<div class="card p-4"><div class="font-semibold mb-1">'+esc(e.name)+'</div><p class="text-sm text-slate-soft mb-3">'+esc(e.blurb)+'</p><a href="'+esc(e.url)+'" target="_blank" rel="noopener sponsored nofollow" class="pill inline-block">'+esc(e.cta || 'View product')+'</a></div>';
+      }).join('');
+      var listUrl = cfg.LIST_PRACTICE_STRIPE_URL || '#';
+      $('t3').innerHTML = '<div class="card p-5 mb-5 bg-[#fdf9f2] border-[#efe6d4]"><p class="text-sm text-slate-soft"><strong>Comfort and wellbeing only.</strong> Nothing here treats or cures a condition. For symptoms, speak to your pharmacist or GP.</p></div>'
+        + '<h3 class="font-display text-xl font-semibold mb-3">General comfort &amp; self-care</h3>'+sc
+        + (essentials ? ('<h3 class="font-display text-xl font-semibold mt-6 mb-1">Recommended comfort essentials</h3><p class="text-xs text-slate-muted mb-3">'+esc(cfg.AFFILIATE_DISCLOSURE || '')+'</p><div class="grid sm:grid-cols-2 gap-3">'+essentials+'</div>') : '')
+        + '<div class="card p-5 mt-6"><h4 class="font-semibold mb-1">Are you a wellbeing practitioner?</h4><p class="text-sm text-slate-soft mb-3">List your practice in the local directory for £39/mo. Self-serve sign-up, you are listed as soon as your subscription starts.</p><a href="'+esc(listUrl)+'" target="_blank" rel="noopener" class="inline-block px-5 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm">List your practice, £39/mo</a></div>';
+    }
+
+    // Unlock / checkout
+    document.querySelectorAll('.unlock-btn').forEach(function(b){
+      b.addEventListener('click', async function(){
+        var plan = b.getAttribute('data-plan');
+        var email = $('unlock-email').value;
+        $('unlock-msg').textContent = 'Opening secure checkout...';
+        try {
+          var res = await fetch('/api/fast-track/checkout', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan: plan, email: email, postcode: state.postcode, condition: state.condition, partner_slug: state.partnerSlug }) });
+          var j = await res.json();
+          if (j.url){ window.location = j.url; }
+          else { $('unlock-msg').textContent = j.error || 'Checkout is not available yet.'; }
+        } catch(e){ $('unlock-msg').textContent = 'Checkout is not available yet.'; }
+      });
+    });
+    function setUnlocked(on, viaPartner){
+      state.unlocked = on;
+      $('tools-unlocked').classList.toggle('hidden', !on);
+      $('tools-locked').classList.toggle('hidden', on);
+      $('tools-partner').classList.toggle('hidden', !(on && viaPartner));
+    }
+    async function checkUnlock(){
+      var params = new URLSearchParams(location.search);
+      var sid = params.get('session_id') || '';
+      try {
+        var res = await fetch('/api/fast-track/verify' + (sid ? ('?session_id=' + encodeURIComponent(sid)) : ''));
+        var j = await res.json();
+        state.demo = !!j.demo;
+        if (j.unlocked) setUnlocked(true, false);
+        if (j.unlocked && sid){ $('unlock-msg').textContent = 'Unlocked. Thank you.'; }
+      } catch(e){ /* stay locked */ }
+    }
+
+    // White-label branding helpers
+    function hexToRgb(h){ h=String(h||'').replace('#',''); if(h.length===3){ h=h.split('').map(function(c){return c+c;}).join(''); } var n=parseInt(h.slice(0,6),16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+    function rgbToHex(r,g,b){ return '#'+[r,g,b].map(function(x){ return ('0'+Math.max(0,Math.min(255,Math.round(x))).toString(16)).slice(-2); }).join(''); }
+    function applyBrand(opts){
+      // opts: { slug, brandName, primaryColor, logoUrl, accessMode }
+      state.partner = opts; state.partnerSlug = opts.slug || '';
+      if (opts.primaryColor && /^#[0-9a-fA-F]{3,8}$/.test(opts.primaryColor)){
+        var c = hexToRgb(opts.primaryColor);
+        var root = document.documentElement;
+        root.style.setProperty('--brand-primary', opts.primaryColor);
+        root.style.setProperty('--brand-dark', rgbToHex(c[0]*0.8, c[1]*0.8, c[2]*0.8));
+        root.style.setProperty('--brand-light', rgbToHex(c[0]+(255-c[0])*0.4, c[1]+(255-c[1])*0.4, c[2]+(255-c[2])*0.4));
+      }
+      if (opts.brandName){
+        $('brand-name').textContent = opts.brandName;
+        $('brand-sub').textContent = 'by HealthProcure Intel';
+        $('brand-mark').textContent = (opts.brandName.trim()[0] || 'K').toUpperCase();
+        document.title = opts.brandName + ' | Care Navigator by HealthProcure Intel';
+      }
+      if (opts.logoUrl){ var img=$('brand-logo'); img.src=opts.logoUrl; img.alt=opts.brandName||''; img.classList.remove('hidden'); $('brand-mark').classList.add('hidden'); }
+      if (opts.accessMode === 'sponsored_free'){
+        setUnlocked(true, true);
+        $('partner-unlock-msg').textContent = 'Unlocked via ' + (opts.brandName || 'your partner');
+      }
+    }
+    async function redeemAccessCode(){
+      var code = ($('access-code').value || '').trim().toLowerCase();
+      if (!code){ $('code-msg').textContent = 'Please enter your code.'; return; }
+      $('code-msg').textContent = 'Checking...';
+      try {
+        var res = await fetch('/api/fast-track/partner?slug=' + encodeURIComponent(code));
+        var j = await res.json();
+        if (j.partner && j.partner.accessMode === 'sponsored_free'){ applyBrand(j.partner); $('code-msg').textContent = ''; }
+        else if (j.partner){ applyBrand(j.partner); $('code-msg').textContent = 'Partner applied. This code still needs the pass above to unlock the tools.'; }
+        else { $('code-msg').textContent = 'Code not recognised. Please check with your employer or partner.'; }
+      } catch(e){ $('code-msg').textContent = 'Could not check the code. Please try again.'; }
+    }
+    async function initPartner(){
+      var params = new URLSearchParams(location.search);
+      if (params.get('embed') === 'true'){ state.embed = true; document.body.classList.add('embed'); }
+      var slug = (params.get('partner') || '').trim().toLowerCase();
+      if (!slug) return;
+      // Lightweight param-based white-label (no DB row needed):
+      // ?partner=<slug>&name=<BrandName>&color=<HexColor>&unlock=sponsored
+      var nameParam = params.get('name');
+      var colorParam = params.get('color');
+      var unlockParam = params.get('unlock');
+      try {
+        var res = await fetch('/api/fast-track/partner?slug=' + encodeURIComponent(slug));
+        var j = await res.json();
+        if (j.partner){ applyBrand(j.partner); return; }
+      } catch(e){ /* fall through to params */ }
+      if (nameParam || colorParam || unlockParam){
+        var color = colorParam ? ('#' + String(colorParam).replace(/^#/, '')) : '';
+        applyBrand({ slug: slug, brandName: nameParam || '', primaryColor: color, logoUrl: null, accessMode: unlockParam === 'sponsored' ? 'sponsored_free' : 'revenue_share' });
+      }
+    }
+
+    // Generators (client-side, nothing sent to the server)
+    function outBox(id, title, text){
+      var el = $(id);
+      el.innerHTML = '<pre style="white-space:pre-wrap;font-family:inherit" class="text-sm bg-[#faf8f5] border border-[#ece7df] rounded-xl p-4">'+esc(text)+'</pre>'
+        + '<div class="flex gap-2 mt-2"><button class="pill" onclick="copyText(\''+id+'\')">Copy</button><button class="pill" onclick="printText(\''+id+'\')">Print / save as PDF</button><button class="pill" onclick="downloadText(\''+title+'\',\''+id+'\')">Download</button></div>';
+      el.classList.remove('hidden');
+      el.dataset.text = text;
+    }
+    function genLetter(){
+      var today = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+      var t = today + '\n\nDear ' + ($('l-gp').value || '[GP Surgery]') + ',\n\n'
+        + 'Re: Patient ' + ($('l-name').value || '[Full name]') + ', DOB ' + ($('l-dob').value || '[Date of birth]') + '\n\n'
+        + 'I am writing to exercise my legal right under the NHS Choice Framework to be referred to a clinically appropriate NHS-funded provider of my choice.\n\n'
+        + 'I would like to request a referral for ' + ($('l-condition').value || '[condition / service]') + ' to the following provider:\n'
+        + ($('l-clinic').value || '[Chosen clinic / provider]') + '\n\n'
+        + 'I understand this provider holds an NHS standard contract for this service. I would be grateful if you could process this referral, and please let me know if any further information is needed.\n\n'
+        + 'Yours sincerely,\n' + ($('l-name').value || '[Full name]')
+        + '\n\n---\nPrepared with Kaur Care. Appointment navigation, not medical advice.';
+      outBox('l-out', 'kaur-care-right-to-choose-letter', t);
+    }
+    function genBrief(){
+      var qs = ($('b-questions').value || '').split('\n').filter(Boolean).map(function(q){ return '  - ' + q; }).join('\n');
+      var t = '1-PAGE GP / APPOINTMENT BRIEF\nKaur Care\n\n'
+        + 'Main concern: ' + ($('b-condition').value || state.condition || '[condition]') + '\n'
+        + 'Duration: ' + ($('b-duration').value || '[how long]') + '\n'
+        + 'Pattern / triggers: ' + ($('b-triggers').value || '[cycle / pain triggers]') + '\n\n'
+        + 'Impact on daily life:\n' + ($('b-impact').value || '[impact on work, sleep, daily activities]') + '\n\n'
+        + 'My questions for the GP:\n' + (qs || '  - [your questions]') + '\n\n'
+        + 'Note: this is my own summary to help the appointment. It is not a diagnosis.';
+      outBox('b-out', 'kaur-care-symptom-brief', t);
+    }
+    function copyText(id){ navigator.clipboard.writeText($(id).dataset.text || '').catch(function(){}); }
+    function printText(id){ var pa=$('print-area'); pa.innerHTML='<pre style="white-space:pre-wrap;font-family:serif;padding:24px">'+esc($(id).dataset.text||'')+'</pre>'; pa.classList.remove('hidden'); window.print(); setTimeout(function(){ pa.classList.add('hidden'); }, 500); }
+    function downloadText(name, id){ var blob=new Blob([$(id).dataset.text||''],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click(); }
+
+    // Paid/demo unlock first (never relocks), then partner branding/unlock on top.
+    checkUnlock().then(initPartner);
+  </script>
+
+</body>
+</html>
