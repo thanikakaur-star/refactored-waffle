@@ -116,8 +116,8 @@
       <div class="hidden md:flex items-center gap-7">
         <a href="#how" class="nav-link">How it works</a>
         <a href="#covered" class="nav-link">What's covered</a>
+        <a href="#maternal-health" class="nav-link">Babies &amp; menopause</a>
         <a href="#prep-playbook" class="nav-link">Prep playbook</a>
-        <a href="#holistic" class="nav-link">Wellness</a>
         <a href="/journal" class="nav-link">Journal</a>
         <a href="#white-label" class="nav-link">Partners</a>
       </div>
@@ -130,6 +130,7 @@
       <div class="max-w-6xl mx-auto px-5 py-2 flex flex-col">
         <a href="#how" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">How it works</a>
         <a href="#covered" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
+        <a href="#maternal-health" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Babies, pregnancy &amp; menopause</a>
         <a href="#prep-playbook" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Prep playbook</a>
         <a href="#holistic" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Wellness</a>
         <a href="#pricing" onclick="closeMenu()" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
@@ -230,7 +231,9 @@
   <main id="results" class="max-w-4xl mx-auto px-5 pb-16 hidden">
     <div id="icb-banner" class="hidden card p-4 mb-5 bg-[#EDF3EF] border-[#d9e6de]">
       <p class="text-sm"><span class="font-semibold text-sage">Your NHS area:</span> <span id="icb-line" class="text-slate-soft">Finding your local NHS area...</span></p>
+      <div id="icb-links" class="hidden flex flex-wrap gap-2 mt-3"></div>
     </div>
+    <div id="toolkit" class="mb-6"></div>
     <div class="flex gap-1 border-b border-sand mb-6 overflow-x-auto">
       <div class="tab-btn active" data-tab="t1">Pharmacy First &amp; same-day NHS</div>
       <div class="tab-btn" data-tab="t2">Right to Choose &amp; waiting lists</div>
@@ -367,6 +370,89 @@
           <p class="text-xs text-slate-muted">Advocacy, coordination, second opinions, appointment prep. <a href="/journal" class="text-sage underline">See the guides</a>.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Babies, pregnancy & maternal equity, menopause education -->
+  <section id="maternal-health" class="site-section border-t border-sand">
+    <div class="max-w-5xl mx-auto px-5 py-14">
+      <p class="eyebrow mb-2 text-center">Babies, pregnancy &amp; menopause</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Care and knowledge for every stage</h2>
+      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-9">Clear, calm guidance for new babies, pregnancy and the menopause years — with honest information about where care can fall short, so you can advocate early.</p>
+
+      <!-- Babies & newborns -->
+      <div class="card p-6 md:p-8 mb-6">
+        <div class="flex items-center gap-3 mb-3"><span class="text-2xl">👶</span><h3 class="font-display text-2xl font-semibold text-sage">Babies &amp; newborns</h3></div>
+        <p class="text-slate-soft text-sm mb-4">Your health visitor and your baby's red book (personal child health record) are there for you between GP visits. Trust your instincts — you know your baby best.</p>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><p class="font-semibold text-sm mb-1">Good to know</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1">
+            <li>Keep feeding, nappies and temperature noted — patterns help clinicians</li>
+            <li>Follow safer-sleep guidance to reduce the risk of SIDS</li>
+            <li>Keep up with the NHS vaccination schedule and development reviews</li>
+            <li>It's always okay to ask your health visitor or ring 111 for reassurance</li>
+          </ul></div>
+          <div class="rounded-2xl border border-[#efd9cc] bg-[#FBF3EE] p-4"><p class="font-semibold text-sm mb-1 text-[#8a4b32]">When to get urgent help</p><p class="text-sm text-slate-soft">Call <strong>999</strong> for a baby who is hard to wake, has trouble breathing, a rash that doesn't fade under a glass, a fit/seizure, or a high-pitched or weak cry. Trust your gut — you will not be wasting anyone's time.</p></div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/start-for-life/baby/">NHS Start for Life — baby</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/conditions/baby/">NHS baby health A–Z</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.lullabytrust.org.uk/safer-sleep-advice/">Safer sleep (Lullaby Trust)</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/vaccinations/nhs-vaccinations-and-when-to-have-them/">Vaccination schedule</a>
+        </div>
+      </div>
+
+      <!-- Pregnancy & maternal health equity -->
+      <div class="card p-6 md:p-8 mb-6">
+        <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🤰</span><h3 class="font-display text-2xl font-semibold text-sage">Pregnancy &amp; maternal health equity</h3></div>
+        <p class="text-slate-soft text-sm mb-4">You can usually <strong>self-refer to maternity services</strong> as soon as you know you're pregnant — you don't have to wait for a GP. Booking by 10 weeks means earlier checks and support.</p>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><p class="font-semibold text-sm mb-1">Know the red flags — speak up straight away</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1">
+            <li>A change in your baby's usual movements (don't wait — ring your maternity unit any time, day or night)</li>
+            <li>A bad headache, vision changes or sudden swelling (possible pre-eclampsia)</li>
+            <li>Bleeding, severe pain, or feeling feverish and unwell</li>
+            <li>A strong sense that something is wrong — say so clearly and ask to be checked</li>
+          </ul></div>
+          <div class="rounded-2xl border border-[#efd9cc] bg-[#FBF3EE] p-4"><p class="font-semibold text-sm mb-1 text-[#8a4b32]">Honest words on inequality</p><p class="text-sm text-slate-soft">Maternity care should be safe for everyone, of every background. But UK data (MBRRACE-UK) shows Black women have been around two to three times more likely to die in pregnancy or soon after than white women, with raised risks for some Asian and ethnic-minority women and in more deprived areas. The gap is narrowing but real. Knowing this isn't to frighten you — it's so you feel entitled to be listened to, to ask questions, and to escalate if you're not being heard.</p></div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-3">
+          <a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/pregnancy/">NHS pregnancy guide</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.fivexmore.org/">Five X More (Black maternal health)</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.birthrights.org.uk/">Birthrights (your rights in birth)</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.tommys.org/">Tommy's (pregnancy support)</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.npeu.ox.ac.uk/mbrrace-uk">MBRRACE-UK (the evidence)</a>
+        </div>
+        <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="Pregnancy concern" data-brief-triggers="How many weeks, symptoms and any red flags (movements, headache, swelling, bleeding)" onclick="prefillFromEl(this)">Build a GP / midwife brief for this</button>
+      </div>
+
+      <!-- Perimenopause & menopause education -->
+      <div class="card p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-3"><span class="text-2xl">🌸</span><h3 class="font-display text-2xl font-semibold text-sage">Perimenopause &amp; menopause education</h3></div>
+        <p class="text-slate-soft text-sm mb-4">Perimenopause can start in your 40s (sometimes late 30s) and symptoms can begin years before periods stop. You deserve a proper conversation about your options — including HRT — not to be dismissed or told to just cope.</p>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><p class="font-semibold text-sm mb-1">Symptoms often missed</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1">
+            <li>Changes to periods, hot flushes and night sweats</li>
+            <li>Low mood, anxiety, brain fog and poor sleep</li>
+            <li>Joint aches, palpitations, and changes to libido</li>
+            <li>Vaginal dryness or recurrent UTIs (very treatable)</li>
+          </ul></div>
+          <div><p class="font-semibold text-sm mb-1">What to know going in</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1">
+            <li>Diagnosis is usually on symptoms — a blood test isn't needed over 45</li>
+            <li>HRT is the first-line option for most; ask about benefits and risks for you</li>
+            <li>There are non-hormonal options too if HRT isn't right for you</li>
+            <li>You can ask for a dedicated double appointment to cover it properly</li>
+          </ul></div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-3">
+          <a class="pill" target="_blank" rel="noopener" href="https://www.nhs.uk/conditions/menopause/">NHS menopause</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.nice.org.uk/guidance/ng23">NICE guidance (NG23)</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.womens-health-concern.org/">Women's Health Concern</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://thebms.org.uk/">British Menopause Society</a>
+          <a class="pill" target="_blank" rel="noopener" href="https://www.daisynetwork.org/">Daisy Network (early menopause)</a>
+        </div>
+        <button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-brief-condition="Perimenopause / menopause symptoms" data-brief-triggers="Main symptoms, how long, impact on sleep/mood/work, and questions about HRT" onclick="prefillFromEl(this)">Build a GP brief for menopause</button>
+      </div>
+
+      <p class="text-xs text-slate-muted text-center mt-6 max-w-2xl mx-auto">This is education and navigation, not medical advice or diagnosis. Always confirm with your GP, midwife, health visitor or NHS 111, and for an emergency call 999.</p>
     </div>
   </section>
 
@@ -738,13 +824,62 @@
       return bits.join(' · ');
     }
     function renderIcbBanner(status){
-      var banner = document.getElementById('icb-banner'), line = document.getElementById('icb-line');
+      var banner = document.getElementById('icb-banner'), line = document.getElementById('icb-line'), links = document.getElementById('icb-links');
       if (!banner || !line) return;
-      if (status === 'none'){ banner.classList.add('hidden'); return; }
+      if (status === 'none'){ banner.classList.add('hidden'); if (links){ links.classList.add('hidden'); links.innerHTML=''; } return; }
       banner.classList.remove('hidden');
-      if (status === 'loading'){ line.textContent = 'Finding your local NHS area...'; }
-      else if (status === 'fail'){ line.textContent = 'We could not match that postcode. Your options below still apply; double-check the postcode for local provider links.'; }
-      else { line.textContent = icbSummary() || 'Area found.'; }
+      if (status === 'loading'){ line.textContent = 'Finding your local NHS area...'; if (links){ links.classList.add('hidden'); } }
+      else if (status === 'fail'){ line.textContent = 'We could not match that postcode. Your options below still apply; double-check the postcode for local provider links.'; if (links){ links.classList.add('hidden'); } }
+      else { line.textContent = icbSummary() || 'Area found.'; renderLocalLinks(); }
+    }
+    // Turn the bare area name into useful local actions for that postcode.
+    function renderLocalLinks(){
+      var links = document.getElementById('icb-links'); if (!links) return;
+      var pc = (state.postcode || '').trim();
+      var loc = pc ? ('?location=' + encodeURIComponent(pc)) : '';
+      var hw = pc ? ('https://www.healthwatch.co.uk/your-local-healthwatch/list?search=' + encodeURIComponent(pc)) : 'https://www.healthwatch.co.uk/your-local-healthwatch/list';
+      var items = [
+        ['Find a GP near you', 'https://www.nhs.uk/service-search/find-a-gp' + loc],
+        ['Find a pharmacy', 'https://www.nhs.uk/service-search/pharmacy/find-a-pharmacy' + loc],
+        ['Urgent treatment / walk-in', 'https://www.nhs.uk/service-search/other-services/Urgent-care/LocationSearch/1824' + loc],
+        ['Find an NHS dentist', 'https://www.nhs.uk/service-search/find-a-dentist' + loc],
+        ['Your local Healthwatch (free advocacy)', hw]
+      ];
+      links.innerHTML = items.map(function(it){ return '<a class="pill" target="_blank" rel="noopener" href="' + it[1] + '">' + esc(it[0]) + '</a>'; }).join('');
+      links.classList.remove('hidden');
+    }
+    // A patient-power toolkit of genuinely useful national links, shown with every result.
+    function renderToolkit(){
+      var el = document.getElementById('toolkit'); if (!el) return;
+      var groups = [
+        { h: 'Manage your care', items: [
+          ['NHS App — GP, prescriptions & records', 'https://www.nhs.uk/nhs-app/'],
+          ['Get your test results & medical records', 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/health-records-in-the-nhs-app/view-your-health-record/'],
+          ['Check symptoms — NHS 111 online', 'https://111.nhs.uk/']
+        ]},
+        { h: 'Skip the GP — self-refer', items: [
+          ['NHS Talking Therapies (anxiety, low mood)', 'https://www.nhs.uk/service-search/mental-health/find-an-nhs-talking-therapies-service'],
+          ['Physiotherapy (many areas self-refer)', 'https://www.nhs.uk/nhs-services/physiotherapy/'],
+          ['Sexual health / contraception', 'https://www.nhs.uk/service-search/sexual-health/find-a-sexual-health-clinic'],
+          ['Maternity (book your pregnancy care)', 'https://www.nhs.uk/pregnancy/finding-out/pregnancy-care/']
+        ]},
+        { h: 'Know your rights & get help', items: [
+          ['Your legal Right to Choose', 'https://www.nhs.uk/nhs-services/hospitals/choosing-a-hospital/your-legal-right-to-choose/'],
+          ['PALS — help when care goes wrong', 'https://www.nhs.uk/nhs-services/hospitals/what-is-pals-patient-advice-and-liaison-service/'],
+          ['How to complain to the NHS', 'https://www.nhs.uk/nhs-services/how-to-complain-to-the-nhs/'],
+          ['Healthwatch — independent advocacy', 'https://www.healthwatch.co.uk/']
+        ]}
+      ];
+      el.innerHTML = '<details class="card p-5 bg-[#f6faf7] border-[#d9e6de]" open>'
+        + '<summary class="cursor-pointer font-semibold text-sage">Your patient-power toolkit — genuinely useful NHS links</summary>'
+        + '<p class="text-xs text-slate-muted mt-1 mb-3">Official NHS and advocacy resources that save time and help you be heard. These are national links; add your postcode on each page for local results.</p>'
+        + '<div class="grid sm:grid-cols-3 gap-4">'
+        + groups.map(function(g){
+            return '<div><p class="text-xs font-semibold uppercase tracking-wide text-terracotta mb-1.5">' + esc(g.h) + '</p><ul class="space-y-1.5">'
+              + g.items.map(function(it){ return '<li><a class="text-sm text-sage underline decoration-sage/30 hover:decoration-sage" target="_blank" rel="noopener" href="' + it[1] + '">' + esc(it[0]) + '</a></li>'; }).join('')
+              + '</ul></div>';
+          }).join('')
+        + '</div></details>';
     }
 
     // Tabs
@@ -988,6 +1123,7 @@
 
     function renderResults(){
       var d = state.data;
+      renderToolkit();
       // Tab 1
       $('t1').innerHTML = '<div class="card p-5 mb-5 bg-[#f4f8f5] border-[#d9e6de]"><p class="text-sm text-sage">NHS Pharmacy First lets a pharmacist assess and, where appropriate, supply treatment for these conditions, free, often same-day, no GP appointment needed.</p></div>'
         + '<h3 class="font-display text-xl font-semibold mb-3">Core pathways (nationwide)</h3>'
