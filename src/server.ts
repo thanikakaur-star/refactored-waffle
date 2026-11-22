@@ -1468,13 +1468,21 @@ const dashboardDir = [
 
 logger.info("Static dirs", { publicDir, dashboardDir });
 
-// Redirect the Railway URL to the canonical custom domain (SEO: avoid duplicate
-// indexing of the same site under two hostnames). Localhost and the custom
-// domain are left untouched.
-const CANONICAL_HOST = process.env.CANONICAL_HOST || "healthprocureintel.com";
+// Canonical host is kaurcare.com. Everything else that reaches this app, the
+// Railway URL, the old healthprocureintel.com domain and any www variant, is
+// 301-redirected to the matching kaurcare.com URL so the brand consolidates on
+// one domain and SEO equity flows to it. Localhost and kaurcare.com pass through.
+const CANONICAL_HOST = process.env.CANONICAL_HOST || "kaurcare.com";
 app.use((req, res, next) => {
   const host = (req.headers.host || "").toLowerCase();
-  if (host.endsWith(".up.railway.app")) {
+  const hostname = host.split(":")[0];
+  const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+  if (!isLocal && hostname !== CANONICAL_HOST && (
+    hostname.endsWith(".up.railway.app") ||
+    hostname === "healthprocureintel.com" ||
+    hostname === "www.healthprocureintel.com" ||
+    hostname === "www.kaurcare.com"
+  )) {
     res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`);
     return;
   }

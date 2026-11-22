@@ -10,4 +10,4 @@ Disallow: /webhooks/
 Disallow: /health
 Disallow: /admin
 
-Sitemap: https://healthprocureintel.com/sitemap.xml
+Sitemap: https://kaurcare.com/sitemap.xml

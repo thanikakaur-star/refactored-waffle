@@ -16,7 +16,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = join(root, "public", "tenders");
 mkdirSync(outDir, { recursive: true });
 
-const SITE = "https://healthprocureintel.com";
+const SITE = "https://kaurcare.com";
 const YEAR = 2026;
 
 // ---------------------------------------------------------------------------
