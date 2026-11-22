@@ -11,6 +11,15 @@ import { startScraperSchedule } from "./scraper/schedule.js";
 import { buildLeads } from "./leads/leads.js";
 import { sendLeadsDigest, startLeadsDigestSchedule } from "./leads/digest.js";
 import { enrichCompanyEmails } from "./leads/enrich.js";
+import {
+  PHARMACY_FIRST_CORE,
+  PHARMACY_FIRST_EXPANSION,
+  WOMENS_HEALTH,
+  RIGHT_TO_CHOOSE,
+  SELF_CARE,
+  conditionToCategory,
+} from "./data/fastTrackPathways.js";
+import { findCommissionedServices, cqcSearch, officialDirectoryLinks } from "./fast-track/providers.js";
 import { getSeoOverviewSafe, isSearchConsoleConfigured } from "./admin/searchConsole.js";
 import type { ApiTier } from "./types/index.js";
 import type { Request, Response, NextFunction } from "express";
@@ -89,6 +98,21 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
+        // Fast-Track (CarePath) consumer unlock: record the unlock, not a B2B API key.
+        if (session.metadata?.fast_track === "true") {
+          if (USE_SUPABASE && supabase) {
+            await supabase.from("fast_track_unlocks").insert({
+              stripe_session_id: session.id,
+              email: session.customer_email ?? session.customer_details?.email ?? session.metadata?.email ?? null,
+              postcode: session.metadata?.postcode ?? null,
+              condition: session.metadata?.condition ?? null,
+              plan_type: session.metadata?.plan_type ?? null,
+              unlocked: true,
+            });
+          }
+          logger.info("Fast-track unlock recorded", { session: session.id, plan: session.metadata?.plan_type });
+          break;
+        }
         const email = session.customer_email ?? session.customer_details?.email ?? "";
         const customerId = session.customer as string;
         const subscriptionId = session.subscription as string;
@@ -843,6 +867,105 @@ app.post("/api/v1/fast-track/practitioner-application", async (req, res) => {
   }
 });
 
+// Fast-Track search: structured pathway guidance + real commissioned services
+// (procurement DB) + CQC-registered locations (when CQC_API_KEY set) + official
+// NHS/CQC deep links. No fabricated clinics, ratings or wait times.
+app.post("/api/fast-track/search", async (req, res) => {
+  const condition = ftStr(req.body?.condition, 120) || "";
+  const postcode = ftStr(req.body?.postcode, 12) || "";
+  const patientType = ftStr(req.body?.patientType, 40) || "";
+  const category = conditionToCategory(condition);
+  const [commissioned, cqc] = await Promise.all([findCommissionedServices(category), cqcSearch()]);
+  res.json({
+    data: {
+      patientType,
+      condition,
+      postcode,
+      category,
+      pharmacyFirst: { core: PHARMACY_FIRST_CORE, expansion: PHARMACY_FIRST_EXPANSION },
+      womensHealth: WOMENS_HEALTH,
+      rightToChoose: RIGHT_TO_CHOOSE,
+      selfCare: SELF_CARE,
+      commissioned,
+      cqc,
+      links: officialDirectoryLinks(postcode),
+      disclaimer: "Appointment navigation only, not medical advice or diagnosis. For emergencies call 999 or NHS 111.",
+    },
+  });
+});
+
+// Fast-Track consumer checkout: £4.99 one-off document unlock or £7.99/mo family
+// pass. Core NHS info stays free; this only unlocks the convenience generators.
+app.post("/api/fast-track/checkout", async (req, res) => {
+  if (!STRIPE_SECRET) {
+    res.status(503).json({ error: "Payments are not configured yet." });
+    return;
+  }
+  const plan = ftStr(req.body?.plan, 20);
+  const email = ftStr(req.body?.email, 254);
+  const postcode = ftStr(req.body?.postcode, 12);
+  const condition = ftStr(req.body?.condition, 120);
+  let priceId: string | undefined;
+  let mode: "payment" | "subscription";
+  let planType: string;
+  if (plan === "family") {
+    priceId = process.env.STRIPE_FAMILY_PASS_PRICE_ID;
+    mode = "subscription";
+    planType = "family_monthly_799";
+  } else {
+    priceId = process.env.STRIPE_FAST_TRACK_PRICE_ID;
+    mode = "payment";
+    planType = "one_off_499";
+  }
+  if (!priceId) {
+    res.status(503).json({ error: "This plan is not configured yet (missing Stripe price id)." });
+    return;
+  }
+  try {
+    const stripe = new Stripe(STRIPE_SECRET);
+    const origin = req.headers.origin || `${req.protocol}://${req.get("host")}`;
+    const session = await stripe.checkout.sessions.create({
+      mode,
+      payment_method_types: ["card"],
+      customer_email: email || undefined,
+      line_items: [{ price: priceId, quantity: 1 }],
+      metadata: { fast_track: "true", plan_type: planType, email: email || "", postcode: postcode || "", condition: condition || "" },
+      success_url: `${origin}/fast-track?session_id={CHECKOUT_SESSION_ID}&unlocked=true`,
+      cancel_url: `${origin}/fast-track`,
+    });
+    res.json({ url: session.url });
+  } catch (err) {
+    logger.error("Fast-track checkout failed", { error: String(err) });
+    res.status(500).json({ error: "Could not start checkout. Please try again." });
+  }
+});
+
+// Verify an unlock (after Stripe redirect) and expose the local dev bypass.
+app.get("/api/fast-track/verify", async (req, res) => {
+  const demo = process.env.FAST_TRACK_DEMO_UNLOCK === "true";
+  const sessionId = typeof req.query.session_id === "string" ? req.query.session_id : "";
+  if (demo && !sessionId) {
+    res.json({ unlocked: true, demo: true });
+    return;
+  }
+  if (!sessionId) {
+    res.json({ unlocked: false, demo });
+    return;
+  }
+  try {
+    if (USE_SUPABASE && supabase) {
+      const { data } = await supabase.from("fast_track_unlocks").select("unlocked").eq("stripe_session_id", sessionId).limit(1);
+      const unlocked = Array.isArray(data) && data[0] && (data[0] as any).unlocked;
+      res.json({ unlocked: !!unlocked || demo, demo });
+      return;
+    }
+    res.json({ unlocked: demo, demo });
+  } catch (err) {
+    logger.warn("Fast-track verify failed", { error: String(err) });
+    res.json({ unlocked: demo, demo });
+  }
+});
+
 app.post("/api/v1/signup/free", async (req, res) => {
   const { email } = req.body;
   if (!email || typeof email !== "string" || !email.includes("@")) {
@@ -1367,6 +1490,11 @@ for (const page of staticPages) {
 // Programmatic SEO landing pages: /tenders (hub) and /tenders/<slug>
 app.get("/tenders", (_req, res) => {
   res.sendFile(path.join(publicDir, "tenders", "index.html"));
+});
+
+// Consumer vertical: CarePath Fast-Track navigator
+app.get("/fast-track", (_req, res) => {
+  res.sendFile(path.join(publicDir, "fast-track.html"));
 });
 app.get("/tenders/:slug", (req, res) => {
   const slug = path.basename(req.params.slug, ".html");
