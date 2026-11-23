@@ -99,6 +99,8 @@
     .kc-page { display: none; }
     html[data-kc="home"] .kc-page[data-page="home"]:not(#results) { display: block; }
     html[data-kc="home"] #results.kc-shown { display: block; }
+    /* After buying (or opening your tools) without a search: show only the prep tools, not empty result panels. */
+    #results.kc-tools-only > :not(.kc-prep) { display: none; }
     html[data-kc="how-it-works"] .kc-page[data-page="how-it-works"],
     html[data-kc="whats-covered"] .kc-page[data-page="whats-covered"],
     html[data-kc="health-topics"] .kc-page[data-page="health-topics"],
@@ -327,7 +329,7 @@
     <section id="t3" class="tab-panel hidden"></section>
 
     <!-- Gated prep tools -->
-    <section class="mt-10">
+    <section class="mt-10 kc-prep" id="prep-tools-block">
       <h2 class="font-display text-2xl font-bold text-sage mb-1">Appointment prep tools</h2>
       <p class="text-slate-soft text-sm mb-4">Optional time-savers. The NHS information above is always free; these generators are a convenience. Your details stay in your browser and are never sent to us.</p>
       <div id="tools-locked" class="card p-6 text-center" data-unlock-scope>
@@ -1116,6 +1118,10 @@
   <!-- Prep tools / pricing -->
   <section id="pricing" data-page="prep-tools" class="kc-page site-section border-t border-sand bg-white/50">
     <div class="max-w-4xl mx-auto px-5 py-14 text-center">
+      <div id="owned-bar" class="hidden card p-5 mb-8 text-left flex flex-wrap items-center justify-between gap-3" style="background:#EDF3EF;border-color:#d9e6de">
+        <div><p class="font-semibold text-sage">You have full access</p><p class="text-sm text-slate-soft">Your brief and letter builders are unlocked on this device.</p></div>
+        <button type="button" onclick="openTools()" class="px-5 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Open my prep tools</button>
+      </div>
       <p class="eyebrow mb-2">Prep tools</p>
       <h2 class="font-display text-3xl font-semibold text-sage mb-3">Turn up to your appointment ready</h2>
       <p class="text-slate-soft mb-8 max-w-2xl mx-auto">All the NHS guidance above is free. The optional document generators save you the writing. Everything you type stays in your browser and is never sent to us.</p>
@@ -1389,6 +1395,7 @@
         state.data = j.data;
         renderResults();
         if (typeof showPage === 'function') showPage('home', false);
+        $('results').classList.remove('kc-tools-only');
         $('results').classList.add('kc-shown');
         $('results').scrollIntoView({ behavior:'smooth' });
       } catch(e){ alert('Something went wrong. Please try again.'); }
@@ -1865,7 +1872,15 @@
       $('tools-unlocked').classList.toggle('hidden', !on);
       $('tools-locked').classList.toggle('hidden', on);
       $('tools-partner').classList.toggle('hidden', !(on && viaPartner));
+      var ob = $('owned-bar'); if (ob) ob.classList.toggle('hidden', !on);
       if (on) applyPending();
+    }
+    // Show the prep tools on the home page even when no search has been run.
+    function openTools(){
+      var r = $('results');
+      if (!r.classList.contains('kc-shown')){ r.classList.add('kc-shown', 'kc-tools-only'); }
+      showPage('home', true);
+      setTimeout(function(){ var t = $('prep-tools-block'); if (t) t.scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
     }
     async function checkUnlock(){
       var params = new URLSearchParams(location.search);
@@ -1874,21 +1889,36 @@
       var SID_KEY = 'kaurcare_pass_session';
       var stored = ''; try { stored = localStorage.getItem(SID_KEY) || ''; } catch(e){}
       var sid = urlSid || stored;
-      try {
-        var res = await fetch('/api/fast-track/verify' + (sid ? ('?session_id=' + encodeURIComponent(sid)) : ''));
-        var j = await res.json();
-        state.demo = !!j.demo;
-        if (j.unlocked) setUnlocked(true, false);
-        if (j.unlocked && sid){
-          try { localStorage.setItem(SID_KEY, sid); } catch(e){}
-          if (urlSid) $('unlock-msg').textContent = 'Unlocked. Thank you.';
-        }
-        if (j.ended && !j.unlocked){
-          // The monthly plan was cancelled or stopped being paid: forget it and say so.
-          try { localStorage.removeItem(SID_KEY); } catch(e){}
-          var um = $('unlock-msg'); if (um) um.textContent = 'Your monthly plan has ended. You can restart it any time below.';
-        }
-      } catch(e){ /* stay locked */ }
+      // Just back from Stripe: the payment confirmation can arrive a few seconds after the redirect, so keep checking.
+      var justPaid = !!urlSid && /unlocked=1/.test(location.search);
+      var attempts = justPaid ? 12 : 1;
+      if (justPaid){ flash('Confirming your payment...'); }
+      for (var i = 0; i < attempts; i++){
+        try {
+          var res = await fetch('/api/fast-track/verify' + (sid ? ('?session_id=' + encodeURIComponent(sid)) : ''));
+          var j = await res.json();
+          state.demo = !!j.demo;
+          if (j.unlocked){
+            setUnlocked(true, false);
+            if (sid){ try { localStorage.setItem(SID_KEY, sid); } catch(e){} }
+            if (justPaid){
+              var um0 = $('unlock-msg'); if (um0) um0.textContent = 'Unlocked. Thank you.';
+              openTools();
+              flash('Payment confirmed. Your prep tools are unlocked.');
+              try { history.replaceState({ kc:'home' }, '', '/'); } catch(e){}
+            }
+            return;
+          }
+          if (j.ended){
+            // The monthly plan was cancelled or stopped being paid: forget it and say so.
+            try { localStorage.removeItem(SID_KEY); } catch(e){}
+            var um = $('unlock-msg'); if (um) um.textContent = 'Your monthly plan has ended. You can restart it any time on the prep tools page.';
+            return;
+          }
+        } catch(e){ /* try again if we are waiting on a payment */ }
+        if (i < attempts - 1) await new Promise(function(r){ setTimeout(r, 2500); });
+      }
+      if (justPaid){ flash('We are still confirming your payment. Refresh in a minute, or contact us if it does not unlock.'); }
     }
 
     // White-label branding helpers
