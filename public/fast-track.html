@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/icons/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>(function(){var p=(location.pathname||'/').replace(/\/+$/,'')||'/';var m={'/':'home','/how-it-works':'how-it-works','/whats-covered':'whats-covered','/health-topics':'health-topics','/babies-pregnancy-menopause':'health-topics','/eczema-skin':'health-topics','/prep-playbook':'prep-playbook','/wellness':'wellness','/prep-tools':'prep-tools','/partners':'partners','/faqs':'faqs'};document.documentElement.setAttribute('data-kc',m[p]||'home');})();</script>
+  <script>(function(){var p=(location.pathname||'/').replace(/\/+$/,'')||'/';var m={'/':'home','/how-it-works':'how-it-works','/whats-covered':'whats-covered','/health-topics':'health-topics','/babies-pregnancy-menopause':'health-topics','/eczema-skin':'health-topics','/private-care':'private-care','/prep-playbook':'prep-playbook','/wellness':'wellness','/prep-tools':'prep-tools','/partners':'partners','/faqs':'faqs'};document.documentElement.setAttribute('data-kc',m[p]||'home');})();</script>
   <!-- PWA / Save to Home Screen -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#2D5A47" />
@@ -100,6 +100,7 @@
     html[data-kc="how-it-works"] .kc-page[data-page="how-it-works"],
     html[data-kc="whats-covered"] .kc-page[data-page="whats-covered"],
     html[data-kc="health-topics"] .kc-page[data-page="health-topics"],
+    html[data-kc="private-care"] .kc-page[data-page="private-care"],
     html[data-kc="prep-playbook"] .kc-page[data-page="prep-playbook"],
     html[data-kc="wellness"] .kc-page[data-page="wellness"],
     html[data-kc="prep-tools"] .kc-page[data-page="prep-tools"],
@@ -130,6 +131,7 @@
         <a href="/how-it-works" data-nav="how-it-works" class="nav-link">How it works</a>
         <a href="/whats-covered" data-nav="whats-covered" class="nav-link">What's covered</a>
         <a href="/health-topics" data-nav="health-topics" class="nav-link">Health topics</a>
+        <a href="/private-care" data-nav="private-care" class="nav-link">Private care</a>
         <a href="/prep-playbook" data-nav="prep-playbook" class="nav-link">Prep playbook</a>
         <a href="/wellness" data-nav="wellness" class="nav-link">Wellness</a>
         <a href="/journal" class="nav-link">Journal</a>
@@ -144,6 +146,7 @@
         <a href="/how-it-works" data-nav="how-it-works" class="py-3 border-b border-sand/60 nav-link">How it works</a>
         <a href="/whats-covered" data-nav="whats-covered" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
         <a href="/health-topics" data-nav="health-topics" class="py-3 border-b border-sand/60 nav-link">Health topics</a>
+        <a href="/private-care" data-nav="private-care" class="py-3 border-b border-sand/60 nav-link">Private care</a>
         <a href="/prep-playbook" data-nav="prep-playbook" class="py-3 border-b border-sand/60 nav-link">Prep playbook</a>
         <a href="/wellness" data-nav="wellness" class="py-3 border-b border-sand/60 nav-link">Wellness</a>
         <a href="/prep-tools" data-nav="prep-tools" class="py-3 border-b border-sand/60 nav-link">Prep tools</a>
@@ -725,6 +728,97 @@
   </section>
 
   <!-- (removed) old standalone Eczema & skin -->
+
+  <!-- Private care: costs, second and third opinions -->
+  <section id="private-care" data-page="private-care" class="kc-page site-section border-t border-sand">
+    <div class="max-w-5xl mx-auto px-5 py-14">
+      <p class="eyebrow mb-2 text-center">Private care</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Thinking about going private? Know the costs first</h2>
+      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-7">Private care can mean a faster appointment or a second opinion, but prices vary a lot and hidden extras are common. This page explains what to expect, what to ask, and how to protect yourself. It is general information, not financial or medical advice.</p>
+      <div class="flex flex-wrap justify-center gap-2 mb-10">
+        <a href="#pc-costs" class="quick-pill">Typical costs</a>
+        <a href="#pc-opinions" class="quick-pill">Second &amp; third opinions</a>
+        <a href="#pc-referral" class="quick-pill">Getting a referral</a>
+        <a href="#pc-ask" class="quick-pill">Questions to ask</a>
+        <a href="#pc-save" class="quick-pill">Keeping costs down</a>
+      </div>
+
+      <div class="card p-6 md:p-8 mb-6 bg-[#f6faf7] border-[#d9e6de]">
+        <h3 class="font-display text-xl font-semibold text-sage mb-2">First, check your free NHS options</h3>
+        <p class="text-sm text-slate-soft mb-3">Before paying, see whether the NHS can get you seen sooner. In England, <strong>Right to Choose</strong> can let you be referred to a different NHS-funded provider, sometimes with a much shorter wait, at no cost to you. <strong>Pharmacy First</strong> covers some everyday conditions the same day. Private care does not replace urgent care: for an emergency call 999, and for urgent advice call NHS 111.</p>
+        <div class="flex flex-wrap gap-2"><a class="pill" href="/journal/nhs-right-to-choose-adhd-autism-guide">How Right to Choose works</a><a class="pill" href="/journal/pharmacy-first-12-conditions-uk">What a pharmacist can treat</a><a class="pill" href="#find">Find my NHS options</a></div>
+      </div>
+
+      <div id="pc-costs" class="card p-6 md:p-8 mb-6 scroll-mt-24">
+        <h3 class="font-display text-2xl font-semibold text-sage mb-2">What things typically cost (indicative)</h3>
+        <p class="text-sm text-slate-soft mb-4">These are rough self-pay ranges drawn from several commercial UK price guides in late 2026. The guides disagree with each other, and prices depend on region (London is usually higher), hospital and consultant. <strong>Treat them as a guide for sense-checking a quote, not as a price list.</strong></p>
+        <div class="overflow-x-auto"><table class="w-full text-sm text-left">
+          <thead><tr class="border-b border-sand text-xs uppercase tracking-wider text-slate-muted"><th class="py-2 pr-3">Service</th><th class="py-2 pr-3">Rough range</th><th class="py-2">Notes</th></tr></thead>
+          <tbody class="text-slate-soft">
+            <tr class="border-b border-[#f0ebe3]"><td class="py-2.5 pr-3 font-semibold text-slate">Private GP, video or phone</td><td class="py-2.5 pr-3">about £30 to £105</td><td class="py-2.5">Often cheaper than face to face</td></tr>
+            <tr class="border-b border-[#f0ebe3]"><td class="py-2.5 pr-3 font-semibold text-slate">Private GP, face to face</td><td class="py-2.5 pr-3">about £60 to £250</td><td class="py-2.5">Higher in central London</td></tr>
+            <tr class="border-b border-[#f0ebe3]"><td class="py-2.5 pr-3 font-semibold text-slate">Specialist (consultant) appointment</td><td class="py-2.5 pr-3">about £150 to £400</td><td class="py-2.5">Often billed separately from tests and treatment</td></tr>
+            <tr class="border-b border-[#f0ebe3]"><td class="py-2.5 pr-3 font-semibold text-slate">MRI scan (one body area)</td><td class="py-2.5 pr-3">about £250 to £700</td><td class="py-2.5">Wide range; ask whether the radiologist&rsquo;s report is included</td></tr>
+            <tr class="border-b border-[#f0ebe3]"><td class="py-2.5 pr-3 font-semibold text-slate">Consultation + scan + follow-up</td><td class="py-2.5 pr-3">about £600 to £1,000</td><td class="py-2.5">Before any treatment is agreed</td></tr>
+            <tr><td class="py-2.5 pr-3 font-semibold text-slate">Hip or knee replacement</td><td class="py-2.5 pr-3">about £11,000 to £18,000</td><td class="py-2.5">Check what the package includes and excludes</td></tr>
+          </tbody></table></div>
+        <p class="text-xs text-slate-muted mt-3">Always get a written, itemised quote before you book. Prices change, so check with the provider.</p>
+      </div>
+
+      <div id="pc-opinions" class="card p-6 md:p-8 mb-6 scroll-mt-24">
+        <h3 class="font-display text-2xl font-semibold text-sage mb-2">Second and third opinions</h3>
+        <p class="text-sm text-slate-soft mb-4">A second opinion is another clinician looking at your situation. It can reassure you, confirm a plan, or offer options you had not heard about. You can ask for one on the NHS, and you can also pay privately. There is no automatic right to a second NHS opinion, but a GP or specialist will often arrange one if you ask clearly and politely.</p>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><p class="font-semibold text-sm mb-1">When a second opinion helps</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1"><li>Before major surgery or a major treatment</li><li>When a diagnosis feels uncertain or has changed</li><li>When you have a rare or complex condition</li><li>When you have been dismissed and symptoms continue</li></ul></div>
+          <div><p class="font-semibold text-sm mb-1">What about a third?</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1"><li>Consider one only if two opinions disagree in a way that matters</li><li>Ask both clinicians to look at each other&rsquo;s reports first, it is cheaper and clearer</li><li>Choose a specialist in that exact condition, ideally at a specialist centre</li><li>Ask first whether it is likely to change the plan</li></ul></div>
+        </div>
+        <div class="rounded-2xl border border-[#efd9cc] bg-[#FBF3EE] p-4"><p class="font-semibold text-sm mb-1 text-[#8a4b32]">Make the most of an opinion</p><p class="text-sm text-slate-soft">Bring your records, scans and reports, ask for the opinion in writing, and prepare your questions in advance. A paid opinion is only worth it if the clinician has the full picture.</p></div>
+        <div class="flex flex-wrap gap-2 mt-4"><button type="button" class="px-4 py-2.5 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark" data-letter="Second opinion" onclick="prefillFromEl(this)">Start a second-opinion request letter</button></div>
+      </div>
+
+      <div id="pc-referral" class="card p-6 md:p-8 mb-6 scroll-mt-24">
+        <h3 class="font-display text-2xl font-semibold text-sage mb-2">How to get a private referral</h3>
+        <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1.5 mb-3">
+          <li><strong>Self-pay:</strong> some consultants see you without a referral, but most prefer a GP referral letter so they have your history.</li>
+          <li><strong>With private medical insurance:</strong> your insurer usually needs a GP referral and must approve the appointment <em>before</em> you go. Ask them what is covered, and check for exclusions on existing conditions and ongoing care.</li>
+          <li><strong>Asking your NHS GP:</strong> GPs can usually write a referral letter to a private specialist. Some surgeries charge for non-NHS paperwork, so ask beforehand.</li>
+          <li><strong>Mixing private and NHS:</strong> you can use private care for a consultation or a scan and still use the NHS for treatment, but your GP is not required to prescribe medicines or repeat tests a private clinician recommends. Ask early how follow-up will work.</li>
+        </ul>
+      </div>
+
+      <div id="pc-ask" class="card p-6 md:p-8 mb-6 scroll-mt-24">
+        <h3 class="font-display text-2xl font-semibold text-sage mb-2">Questions to ask before you book</h3>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><p class="font-semibold text-sm mb-1">The money</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1"><li>Can I have a written, itemised quote?</li><li>What is included: consultation, tests, scans, reports, follow-ups?</li><li>Are the hospital, consultant, anaesthetist and radiologist billed separately?</li><li>What happens, and what does it cost, if there are complications?</li><li>Is there a fixed-price package?</li></ul></div>
+          <div><p class="font-semibold text-sm mb-1">The quality and safety</p><ul class="list-disc pl-5 text-sm text-slate-soft space-y-1"><li>Is the clinic or hospital registered with the CQC (in England)?</li><li>Is the doctor on the GMC specialist register for this condition?</li><li>How many of these procedures do they do each year?</li><li>Who looks after me if something goes wrong, and where?</li><li>Will my records be sent to my GP?</li></ul></div>
+        </div>
+        <div class="flex flex-wrap gap-2"><a class="pill" target="_blank" rel="noopener" href="https://www.cqc.org.uk/search/services">Check a service on the CQC site</a><a class="pill" target="_blank" rel="noopener" href="https://www.phin.org.uk">PHIN: private hospital and consultant information</a><a class="pill" target="_blank" rel="noopener" href="https://www.gmc-uk.org">GMC: check a doctor is registered</a></div>
+      </div>
+
+      <div id="pc-save" class="card p-6 md:p-8 mb-6 scroll-mt-24">
+        <h3 class="font-display text-2xl font-semibold text-sage mb-2">Keeping the cost down</h3>
+        <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1.5">
+          <li><strong>Shop around:</strong> get two or three quotes. Prices for the same scan can differ a lot.</li>
+          <li><strong>Pay for the opinion, not everything:</strong> a single private consultation, then continuing on the NHS, can cost far less than a full private pathway.</li>
+          <li><strong>Try video appointments</strong> where an examination is not needed.</li>
+          <li><strong>Ask for a package price</strong> for tests, scans and follow-up together.</li>
+          <li><strong>Bring your existing results</strong> so scans and blood tests are not repeated.</li>
+          <li><strong>Watch for upselling:</strong> ask what each test is for and whether it will change the plan.</li>
+          <li><strong>Check before using insurance</strong> or financing, and read the terms on interest and exclusions.</li>
+        </ul>
+      </div>
+
+      <div class="card p-6 md:p-8 bg-[#FBF3EE] border-[#efd9cc]">
+        <h3 class="font-display text-xl font-semibold text-[#8a4b32] mb-2">Be careful</h3>
+        <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1">
+          <li>Private does not automatically mean better. Check the clinician&rsquo;s registration and experience, not just the price or the waiting time.</li>
+          <li>Be cautious of clinics that push expensive packages, quick decisions, or treatments you do not understand.</li>
+          <li>Never delay urgent care to arrange something private. Call 999 for emergencies and NHS 111 for urgent advice.</li>
+        </ul>
+      </div>
+      <p class="text-xs text-slate-muted text-center mt-8 max-w-2xl mx-auto">Indicative prices come from commercial UK price guides and vary by provider and region. This is general information, not financial, legal or medical advice.</p>
+    </div>
+  </section>
 
   <!-- Appointment Prep Playbook + SBAR -->
   <section id="prep-playbook" data-page="prep-playbook" class="kc-page site-section border-t border-sand">
@@ -1357,7 +1451,8 @@
       if (p.triggers && $('b-triggers')) $('b-triggers').value = p.triggers;
       if (p.impact && $('b-impact')) $('b-impact').value = p.impact;
       if (p.questions && $('b-questions')) $('b-questions').value = p.questions;
-      if (p.letterCondition && $('l-condition')) $('l-condition').value = p.letterCondition;
+      if (p.letterCondition === 'Second opinion'){ if (typeof setLetterMode === 'function') setLetterMode('ref'); if ($('l-reftype')) $('l-reftype').value = 'second'; }
+      else if (p.letterCondition && $('l-condition')) $('l-condition').value = p.letterCondition;
       if (p.letterCondition && /adhd|autis/i.test(p.letterCondition) && $('l-adhd')) $('l-adhd').checked = true;
       savePending(null);
     }
@@ -1855,9 +1950,9 @@
     function downloadText(name, id){ var blob=new Blob([$(id).dataset.text||''],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click(); }
 
     // ---- Multi-page router: each nav item is its own page with a real URL ----
-    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/health-topics':'health-topics', '/babies-pregnancy-menopause':'health-topics', '/eczema-skin':'health-topics', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
-    var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'health-topics':'Health topics | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
-    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'health-topics':'health-topics', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
+    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/health-topics':'health-topics', '/babies-pregnancy-menopause':'health-topics', '/eczema-skin':'health-topics', '/private-care':'private-care', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
+    var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'health-topics':'Health topics | Kaur Care', 'private-care':'Private care costs and second opinions | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
+    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'health-topics':'health-topics', 'private-care':'private-care', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
     function kcPathFor(slug){ for (var k in KC_PATHS){ if (KC_PATHS[k] === slug) return k; } return '/'; }
     function kcCurrent(){ var p = (location.pathname || '/').replace(/\/+$/,'') || '/'; return KC_PATHS[p] || 'home'; }
     function showPage(slug, push){

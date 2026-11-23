@@ -218,6 +218,13 @@ describe("Static serving", () => {
     expect(html).toContain('id="h-periods"');
   });
 
+  it("serves the Private care page at /private-care", async () => {
+    const res = await fetch(`${BASE}/private-care`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('id="private-care"');
+  });
+
   it("keeps /health as the JSON health check", async () => {
     const res = await fetch(`${BASE}/health`);
     expect(res.status).toBe(200);
