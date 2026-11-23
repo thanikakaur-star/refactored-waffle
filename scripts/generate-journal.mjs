@@ -104,7 +104,7 @@ const cta = `<div class="cta">
 <h3>Walk in prepared</h3>
 <p>Build a clear 1-page GP brief or a Right to Choose referral letter in a couple of minutes, then take it to your appointment. Free, and your details stay on your device.</p>
 <a class="btn" href="/#find">Find my care options</a>
-<a class="btn alt" href="/#pricing">Build a GP brief</a>
+<a class="btn alt" href="/prep-tools">Build a GP brief</a>
 </div>`;
 
 const CATS = ["All", "NHS Shortcuts", "ADHD & Autism", "Women's Health", "Chronic Illness", "Parents & Kids", "Adult Health"];
