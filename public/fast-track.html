@@ -112,6 +112,7 @@
     html[data-kc="partners"] .kc-page[data-page="partners"],
     html[data-kc="faqs"] .kc-page[data-page="faqs"] { display: block; }
     .nav-active { color: var(--brand-primary) !important; font-weight: 700; }
+    #results, #plans, #prep-tools-block { scroll-margin-top: 84px; }
     /* Keep the footer at the bottom of the screen on short pages (no blank space beneath it). */
     body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
     body > * { width: 100%; flex-shrink: 0; }
@@ -317,6 +318,8 @@
       <p class="text-sm"><span class="font-semibold text-sage">Your NHS area:</span> <span id="icb-line" class="text-slate-soft">Finding your local NHS area...</span></p>
       <div id="icb-links" class="hidden flex flex-wrap gap-2 mt-3"></div>
     </div>
+    <div id="near-you" class="hidden mb-5"></div>
+    <div id="match-note" class="hidden mb-5"></div>
     <div id="toolkit" class="mb-6"></div>
     <div class="flex gap-1 border-b border-sand mb-6 overflow-x-auto">
       <div class="tab-btn active" data-tab="t1">Pharmacy First &amp; same-day NHS</div>
@@ -1392,7 +1395,9 @@
         b.addEventListener('click', function(){
           document.querySelectorAll('#pills .pill').forEach(function(x){ x.classList.remove('active'); });
           b.classList.add('active'); $('condition').value = b.getAttribute('data-c');
-          doSearch();
+          // With a postcode already entered, search now. Otherwise let them add it first, so local options come with the results.
+          if (($('postcode').value || '').replace(/\s/g, '').length >= 5){ doSearch(); }
+          else { flash('Now add your postcode (optional), then tap "Find my care options".'); var pc = $('postcode'); if (pc){ pc.scrollIntoView({ behavior:'smooth', block:'center' }); } }
         });
       });
     }
@@ -1448,6 +1453,7 @@
           postcode: r.postcode || clean
         };
         renderIcbBanner('done');
+        if (state.data) renderNearYou();
         var c = (r.country || '').toLowerCase().replace(/\s+/g, '-');
         if (NATIONS[c] && c !== currentNation()){ setNation(c); flash('We switched to ' + NATIONS[c].name + ' based on your postcode.'); }
       } catch(e){ state.postcodeInfo = null; renderIcbBanner('fail'); }
@@ -1787,6 +1793,7 @@
     // card and lift it to the top, or open the matching RTC / women's-health panel.
     function focusCondition(){
       var c = norm(state.condition); if (!c) return;
+      state.matchTarget = null;
       var cards = Array.prototype.slice.call(document.querySelectorAll('.pathway-card'));
       var pwMatch = null;
       cards.forEach(function(card){ if (!pwMatch){ if (textMatch(norm(card.getAttribute('data-pwname')), c)) pwMatch = card; } });
@@ -1796,21 +1803,43 @@
         var chip = pwMatch.querySelector('.pw-match'); if (chip) chip.classList.remove('hidden');
         var t1 = document.getElementById('t1');
         if (t1 && t1.children.length > 1){ try { t1.insertBefore(pwMatch, t1.children[1]); } catch(e){} }
-        setTimeout(function(){ pwMatch.scrollIntoView({ behavior:'smooth', block:'center' }); }, 150);
-        return;
+        state.matchTarget = { el: pwMatch, label: 'Same-day NHS pharmacy help for this' };
+        renderMatchNote(); return;
       }
       var rtcBtns = Array.prototype.slice.call(document.querySelectorAll('.rtc-pill'));
       var rtcMatch = null;
       rtcBtns.forEach(function(b){ if (!rtcMatch){ if (textMatch(norm(b.getAttribute('data-name')), c) || rtcKeyword(c, b.getAttribute('data-rtc'))) rtcMatch = b; } });
-      if (rtcMatch){ activateTab('t2'); pickRtc(rtcMatch); return; }
+      if (rtcMatch){ activateTab('t2'); pickRtc(rtcMatch); state.matchTarget = { el: rtcMatch, label: 'Right to Choose and waiting-list guidance for this' }; renderMatchNote(); return; }
       var whBtns = Array.prototype.slice.call(document.querySelectorAll('.wh-row'));
       var whMatch = null;
       whBtns.forEach(function(b){ if (!whMatch){ var n = norm(b.getAttribute('data-wh')) + ' ' + norm(b.textContent); if (textMatch(n, c)) whMatch = b; } });
-      if (whMatch){ activateTab('t2'); if (whMatch.getAttribute('aria-expanded') !== 'true') toggleWh(whMatch); setTimeout(function(){ whMatch.scrollIntoView({ behavior:'smooth', block:'center' }); }, 150); }
+      if (whMatch){ activateTab('t2'); if (whMatch.getAttribute('aria-expanded') !== 'true') toggleWh(whMatch); state.matchTarget = { el: whMatch, label: 'What to track and bring for this' }; renderMatchNote(); return; }
+      renderMatchNote();
+    }
+    // Tell the person what we matched, with a button, instead of scrolling past their local options.
+    function renderMatchNote(){
+      var el = $('match-note'); if (!el) return;
+      var m = state.matchTarget;
+      if (!m){ el.classList.add('hidden'); el.innerHTML = ''; return; }
+      el.innerHTML = '<div class="card p-4 flex flex-wrap items-center justify-between gap-3 bg-[#FBF3EE] border-[#efd9cc]"><p class="text-sm text-[#8a4b32]"><strong>Matched to ' + esc(state.condition) + ':</strong> ' + esc(m.label) + ' is below.</p><button type="button" class="pill" onclick="jumpToMatch()">Take me to it</button></div>';
+      el.classList.remove('hidden');
+    }
+    function jumpToMatch(){ var m = state.matchTarget; if (m && m.el) m.el.scrollIntoView({ behavior:'smooth', block:'center' }); }
+    // Services near the postcode, right at the top of the results.
+    function renderNearYou(){
+      var el = $('near-you'), d = state.data; if (!el) return;
+      if (!d){ el.classList.add('hidden'); el.innerHTML = ''; return; }
+      var hasPc = !!state.postcodeInfo;
+      el.innerHTML = '<div class="card p-5"><p class="font-display text-xl font-semibold text-sage mb-1">Near you</p>'
+        + (hasPc ? '<p class="text-sm text-slate-soft mb-1">Showing options for ' + esc(icbSummary()) + '.</p>'
+                 : '<p class="text-sm text-slate-soft mb-1">Add your postcode in the search above, then tap "Find my care options", to see services near you.</p>')
+        + providerBlock(d) + '</div>';
+      el.classList.remove('hidden');
     }
 
     function renderResults(){
       var d = state.data;
+      renderNearYou();
       renderToolkit();
       // Tab 1
       $('t1').innerHTML = '<div class="card p-5 mb-5 bg-[#f4f8f5] border-[#d9e6de]"><p class="text-sm text-sage">NHS Pharmacy First lets a pharmacist assess and, where appropriate, supply treatment for these conditions, free, often same-day, no GP appointment needed.</p></div>'
