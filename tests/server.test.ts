@@ -243,6 +243,20 @@ describe("Static serving", () => {
     }
   });
 
+  it("restore access: rejects a bad email, and answers the same for any valid one", async () => {
+    const post = (email: string) =>
+      fetch(`${BASE}/api/fast-track/restore`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
+    expect((await post("thani")).status).toBe(400);
+    const a = await post("nobody-here@example.com");
+    expect(a.status).toBe(200);
+    expect((await a.json()).ok).toBe(true);
+  });
+
+  it("restore access: refuses an invalid or forged link", async () => {
+    const res = await fetch(`${BASE}/api/fast-track/restore/redeem?token=not-a-real-token`);
+    expect(res.status).toBe(400);
+  });
+
   it("serves How it works and What's covered from the home page", async () => {
     for (const p of ["/how-it-works", "/whats-covered"]) {
       const res = await fetch(`${BASE}${p}`);

@@ -22,6 +22,8 @@ import {
 import { findCommissionedServices, cqcSearch, officialDirectoryLinks, getActivePartner } from "./fast-track/providers.js";
 import { getSeoOverviewSafe, isSearchConsoleConfigured } from "./admin/searchConsole.js";
 import { unlockStateForSubscriptionStatus } from "./fast-track/subscription.js";
+import { signRestoreToken, verifyRestoreToken, escapeLike, looksLikeEmail, restoreEmailHtml } from "./fast-track/restore.js";
+import { sendEmail } from "./utils/email.js";
 import type { ApiTier } from "./types/index.js";
 import type { Request, Response, NextFunction } from "express";
 import { z } from "zod";
@@ -56,6 +58,9 @@ if (USE_SUPABASE) {
 const mode = supabase ? "supabase" : "local";
 
 const app = express();
+// Railway puts one proxy in front of the app. Trust it so rate limits count each visitor's own IP
+// (otherwise everyone shares the proxy's address and one person can lock out the whole site).
+app.set("trust proxy", 1);
 
 app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 app.use(cors());
@@ -1014,6 +1019,77 @@ app.get("/api/fast-track/verify", async (req, res) => {
   } catch (err) {
     logger.warn("Fast-track verify failed", { error: String(err) });
     res.json({ unlocked: demo, demo });
+  }
+});
+
+// ---- Restore access by email (lost device or cleared browser) ----
+// Asking for a link always gets the same reply, so this cannot be used to find out
+// which emails have bought. The link carries a signed 30 minute token.
+const restoreRequestLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, limit: 6, standardHeaders: true, legacyHeaders: false,
+  message: { error: "Too many requests. Please try again in an hour." },
+});
+const restoreRedeemLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, limit: 40, standardHeaders: true, legacyHeaders: false,
+  message: { error: "Too many attempts. Please try again later." },
+});
+const RESTORE_SECRET = () => process.env.RESTORE_TOKEN_SECRET || STRIPE_SECRET || "";
+const SITE_BASE = () => (process.env.PUBLIC_BASE_URL || "https://kaurcare.com").replace(/\/+$/, "");
+
+app.post("/api/fast-track/restore", restoreRequestLimiter, async (req, res) => {
+  const email = (ftStr(req.body?.email, 254) || "").trim().toLowerCase();
+  if (!looksLikeEmail(email)) {
+    res.status(400).json({ error: "Please enter the email address you paid with." });
+    return;
+  }
+  // Same answer whether or not we find a purchase; do the work after replying.
+  res.json({ ok: true, message: "If that email has a purchase, a link is on its way. It works for 30 minutes. Check your spam folder too." });
+  try {
+    const secret = RESTORE_SECRET();
+    if (!USE_SUPABASE || !supabase || !secret) return;
+    const { data, error } = await supabase
+      .from("fast_track_unlocks")
+      .select("stripe_session_id")
+      .ilike("email", escapeLike(email))
+      .eq("unlocked", true)
+      .order("created_at", { ascending: false })
+      .limit(1);
+    if (error || !Array.isArray(data) || !data[0]) return;
+    const token = signRestoreToken((data[0] as { stripe_session_id: string }).stripe_session_id, secret);
+    const link = `${SITE_BASE()}/?restore=${encodeURIComponent(token)}`;
+    const sent = await sendEmail({
+      to: email,
+      subject: "Your Kaur Care access link",
+      html: restoreEmailHtml(link),
+      from: process.env.FAST_TRACK_FROM_EMAIL || "Kaur Care <onboarding@resend.dev>",
+    });
+    logger.info("Restore link requested", { sent });
+  } catch (err) {
+    logger.warn("Restore link failed", { error: String(err) });
+  }
+});
+
+app.get("/api/fast-track/restore/redeem", restoreRedeemLimiter, async (req, res) => {
+  const token = typeof req.query.token === "string" ? req.query.token : "";
+  const secret = RESTORE_SECRET();
+  const verified = secret ? verifyRestoreToken(token, secret) : null;
+  if (!verified) {
+    res.status(400).json({ error: "This link is invalid or has expired. Please ask for a new one." });
+    return;
+  }
+  try {
+    if (USE_SUPABASE && supabase) {
+      const { data } = await supabase.from("fast_track_unlocks").select("unlocked").eq("stripe_session_id", verified.sessionId).limit(1);
+      const row = Array.isArray(data) ? (data[0] as { unlocked?: boolean } | undefined) : undefined;
+      if (row && row.unlocked) {
+        res.json({ unlocked: true, session_id: verified.sessionId });
+        return;
+      }
+    }
+    res.status(400).json({ error: "This plan is no longer active. You can start it again on the prep tools page." });
+  } catch (err) {
+    logger.warn("Restore redeem failed", { error: String(err) });
+    res.status(500).json({ error: "Something went wrong. Please try again." });
   }
 });
 

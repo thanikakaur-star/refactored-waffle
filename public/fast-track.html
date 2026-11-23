@@ -374,6 +374,7 @@
           <button type="button" data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass — £7.99/mo</button>
         </div>
         <p class="u-msg text-xs text-slate-muted mt-3" id="unlock-msg"></p>
+        <div class="restore-slot mt-3"></div>
         <p class="u-detail hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto" id="unlock-detail"></p>
         <div class="mt-4 pt-4 border-t border-[#ece7df]">
           <p class="text-xs text-slate-muted mb-2">Have an employer or partner access code?</p>
@@ -392,6 +393,17 @@
       </div>
 
       <div id="tools-unlocked" class="hidden space-y-6">
+        <div id="profile-bar" class="card p-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <label class="flex items-start gap-2 text-sm max-w-md"><input type="checkbox" id="remember-profile" class="mt-1"> <span><strong>Remember my details on this device</strong><br><span class="text-xs text-slate-muted">Saved in this browser only and never sent to us, so you do not retype them next time. Please do not tick this on a shared computer.</span></span></label>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" class="pill" onclick="exportProfile()">Save details to a file</button>
+              <button type="button" class="pill" onclick="document.getElementById('profile-file').click()">Load details from a file</button>
+              <button type="button" class="pill" onclick="clearProfile()">Clear saved details</button>
+            </div>
+          </div>
+          <input type="file" id="profile-file" accept="application/json,.json" class="hidden">
+        </div>
         <div class="card p-6">
           <h3 class="font-display text-xl font-semibold mb-1">Tool A: Referral letters</h3>
           <p class="text-sm text-slate-soft mb-3">Choose a letter type. Each one is written to be clear, polite and hard to brush off, with a deadline and a request to record any refusal in your notes.</p>
@@ -1122,6 +1134,7 @@
         <div><p class="font-semibold text-sage">You have full access</p><p class="text-sm text-slate-soft">Your brief and letter builders are unlocked on this device.</p></div>
         <button type="button" onclick="openTools()" class="px-5 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Open my prep tools</button>
       </div>
+      <div class="restore-slot mb-8"></div>
       <p class="eyebrow mb-2">Prep tools</p>
       <h2 class="font-display text-3xl font-semibold text-sage mb-3">Turn up to your appointment ready</h2>
       <p class="text-slate-soft mb-8 max-w-2xl mx-auto">All the NHS guidance above is free. The optional document generators save you the writing. Everything you type stays in your browser and is never sent to us.</p>
@@ -1873,6 +1886,8 @@
       $('tools-locked').classList.toggle('hidden', on);
       $('tools-partner').classList.toggle('hidden', !(on && viaPartner));
       var ob = $('owned-bar'); if (ob) ob.classList.toggle('hidden', !on);
+      document.querySelectorAll('.restore-slot').forEach(function(s){ s.classList.toggle('hidden', on); });
+      if (on) initProfile();
       if (on) applyPending();
     }
     // Show the prep tools on the home page even when no search has been run.
@@ -1888,6 +1903,23 @@
       // Remember a purchase on this device so returning visitors stay unlocked; the server re-checks every visit.
       var SID_KEY = 'kaurcare_pass_session';
       var stored = ''; try { stored = localStorage.getItem(SID_KEY) || ''; } catch(e){}
+      // Back from an "email me a link" message: swap the signed token for this device's unlock.
+      var restoreTok = params.get('restore');
+      if (restoreTok){
+        try { history.replaceState({ kc:'home' }, '', '/'); } catch(e){}
+        try {
+          var rr = await fetch('/api/fast-track/restore/redeem?token=' + encodeURIComponent(restoreTok));
+          var rj = await rr.json();
+          if (rj.unlocked && rj.session_id){
+            try { localStorage.setItem(SID_KEY, rj.session_id); } catch(e){}
+            setUnlocked(true, false);
+            openTools();
+            flash('Access restored. Your prep tools are unlocked on this device.');
+            return;
+          }
+          flash(rj.error || 'This link has expired. Please ask for a new one.');
+        } catch(e){ flash('Could not check that link. Please try again.'); }
+      }
       var sid = urlSid || stored;
       // Just back from Stripe: the payment confirmation can arrive a few seconds after the redirect, so keep checking.
       var justPaid = !!urlSid && /unlocked=1/.test(location.search);
@@ -1919,6 +1951,108 @@
         if (i < attempts - 1) await new Promise(function(r){ setTimeout(r, 2500); });
       }
       if (justPaid){ flash('We are still confirming your payment. Refresh in a minute, or contact us if it does not unlock.'); }
+    }
+
+    // ---- Restore access by email ----
+    function initRestore(){
+      document.querySelectorAll('.restore-slot').forEach(function(slot){
+        slot.innerHTML = '<button type="button" class="restore-toggle text-sm font-semibold text-sage underline">Already paid? Restore my access</button>'
+          + '<div class="restore-form hidden mt-3 text-left max-w-md mx-auto"><p class="text-xs text-slate-muted mb-2">Enter the email you paid with. We will send a link that unlocks your prep tools on this device.</p>'
+          + '<div class="flex flex-col sm:flex-row gap-2"><input type="email" class="restore-email flex-1 px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" placeholder="Email you paid with" autocomplete="email" aria-label="Email you paid with">'
+          + '<button type="button" class="restore-send px-4 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm whitespace-nowrap">Email me a link</button></div>'
+          + '<p class="restore-msg text-xs text-slate-muted mt-2" role="status"></p></div>';
+        var form = slot.querySelector('.restore-form'), msg = slot.querySelector('.restore-msg'), input = slot.querySelector('.restore-email'), send = slot.querySelector('.restore-send');
+        slot.querySelector('.restore-toggle').addEventListener('click', function(){ form.classList.toggle('hidden'); if (!form.classList.contains('hidden')) input.focus(); });
+        function go(){
+          var email = (input.value || '').trim();
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ msg.textContent = 'Please enter the email address you paid with.'; return; }
+          send.disabled = true; msg.textContent = 'Sending...';
+          fetch('/api/fast-track/restore', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: email }) })
+            .then(function(r){ return r.json().catch(function(){ return {}; }); })
+            .then(function(j){ msg.textContent = j.message || j.error || 'Something went wrong. Please try again.'; })
+            .catch(function(){ msg.textContent = 'Could not send. Please check your connection and try again.'; })
+            .then(function(){ send.disabled = false; });
+        }
+        send.addEventListener('click', go);
+        input.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); go(); } });
+      });
+    }
+    initRestore();
+
+    // ---- Remember my details: on this device, or as a file you keep ----
+    var PROFILE_KEY = 'kaurcare_profile', REMEMBER_KEY = 'kaurcare_remember';
+    var PROFILE_TEXT = ['l-name','l-dob','l-nhs','l-contact','l-gp','l-gpname','l-condition','l-clinic','l-clinic-loc','l-wait','l-reftype','l-reason','l-summary','l-tried','l-impact','l-days','b-for','b-name','b-age','b-condition','b-duration','b-triggers','b-tried','b-meds','b-impact','b-worry','b-ask','b-questions'];
+    var PROFILE_CHECKS = ['l-confirmed','l-adhd'];
+    var profileReady = false, profileTimer = null;
+    function collectProfile(){
+      var f = {}; PROFILE_TEXT.forEach(function(id){ var e = $(id); if (e && e.value !== '') f[id] = e.value; });
+      var c = {}; PROFILE_CHECKS.forEach(function(id){ var e = $(id); if (e) c[id] = !!e.checked; });
+      var chips = [].slice.call(document.querySelectorAll('#b-impact-chips input:checked')).map(function(x){ return x.value; });
+      return { app:'kaur-care', v:1, saved:new Date().toISOString().slice(0,10), mode:letterMode, sev:Number($('b-sev').value) || 0, fields:f, checks:c, chips:chips, log:loadLog() };
+    }
+    function applyProfile(p){
+      if (!p || typeof p !== 'object' || p.app !== 'kaur-care') return false;
+      if (p.mode === 'rtc' || p.mode === 'ref') setLetterMode(p.mode);
+      var f = (p.fields && typeof p.fields === 'object') ? p.fields : {};
+      PROFILE_TEXT.forEach(function(id){
+        var e = $(id), v = f[id]; if (!e || typeof v !== 'string') return;
+        v = v.slice(0, 1500);
+        if (e.tagName === 'SELECT'){ var ok = [].some.call(e.options, function(o){ return o.value === v; }); if (ok) e.value = v; }
+        else e.value = v;
+      });
+      var c = (p.checks && typeof p.checks === 'object') ? p.checks : {};
+      PROFILE_CHECKS.forEach(function(id){ var e = $(id); if (e && typeof c[id] === 'boolean') e.checked = c[id]; });
+      if (Array.isArray(p.chips)) document.querySelectorAll('#b-impact-chips input').forEach(function(x){ x.checked = p.chips.indexOf(x.value) !== -1; });
+      if (typeof p.sev === 'number' && p.sev >= 0 && p.sev <= 10){ $('b-sev').value = String(Math.round(p.sev)); $('b-sev-val').textContent = String(Math.round(p.sev)); }
+      if (Array.isArray(p.log)){
+        var clean = p.log.filter(function(e){ return e && typeof e.date === 'string' && typeof e.note === 'string'; }).slice(-5).map(function(e){ return { date: e.date.slice(0, 20), note: e.note.slice(0, 160) }; });
+        if (clean.length){ saveLog(clean); renderLog(); }
+      }
+      return true;
+    }
+    function saveProfileNow(){
+      var box = $('remember-profile'); if (!box || !box.checked) return;
+      try { localStorage.setItem(PROFILE_KEY, JSON.stringify(collectProfile())); } catch(e){}
+    }
+    function saveProfileSoon(){ clearTimeout(profileTimer); profileTimer = setTimeout(saveProfileNow, 400); }
+    function initProfile(){
+      if (profileReady) return; profileReady = true;
+      var box = $('remember-profile'), root = $('tools-unlocked'); if (!box || !root) return;
+      var on = false; try { on = localStorage.getItem(REMEMBER_KEY) === '1'; } catch(e){}
+      box.checked = on;
+      if (on){ try { var raw = localStorage.getItem(PROFILE_KEY); if (raw) applyProfile(JSON.parse(raw)); } catch(e){} }
+      box.addEventListener('change', function(){
+        try {
+          if (box.checked){ localStorage.setItem(REMEMBER_KEY, '1'); saveProfileNow(); flash('Your details will be remembered on this device.'); }
+          else { localStorage.removeItem(REMEMBER_KEY); localStorage.removeItem(PROFILE_KEY); flash('Saved details removed from this device.'); }
+        } catch(e){ flash('Your browser would not let us save details here.'); }
+      });
+      ['input', 'change', 'click'].forEach(function(ev){ root.addEventListener(ev, function(e){ if (e.target !== box) saveProfileSoon(); }); });
+      var file = $('profile-file');
+      if (file) file.addEventListener('change', function(){
+        var fl = file.files && file.files[0]; if (!fl) return;
+        if (fl.size > 100000){ flash('That file is too big to be a Kaur Care details file.'); file.value = ''; return; }
+        var rd = new FileReader();
+        rd.onload = function(){
+          var ok = false; try { ok = applyProfile(JSON.parse(String(rd.result))); } catch(e){}
+          flash(ok ? 'Details loaded from your file.' : 'That file does not look like a Kaur Care details file.');
+          if (ok) saveProfileNow();
+          file.value = '';
+        };
+        rd.onerror = function(){ flash('Could not read that file.'); file.value = ''; };
+        rd.readAsText(fl);
+      });
+    }
+    function exportProfile(){
+      var blob = new Blob([JSON.stringify(collectProfile(), null, 2)], { type:'application/json' });
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'kaur-care-my-details.json'; a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+      flash('Saved. This file holds health details, so keep it somewhere private.');
+    }
+    function clearProfile(){
+      try { localStorage.removeItem(PROFILE_KEY); localStorage.removeItem(REMEMBER_KEY); } catch(e){}
+      var box = $('remember-profile'); if (box) box.checked = false;
+      flash('Saved details cleared from this device. The forms on screen are unchanged.');
     }
 
     // White-label branding helpers

@@ -11,14 +11,14 @@ export function isEmailConfigured(): boolean {
  * RESEND_API_KEY isn't set, so alert creation/matching still works in
  * environments that haven't wired up email yet.
  */
-export async function sendEmail(params: { to: string; subject: string; html: string }): Promise<boolean> {
+export async function sendEmail(params: { to: string; subject: string; html: string; from?: string }): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     logger.warn("RESEND_API_KEY not set — skipping email send", { to: params.to, subject: params.subject });
     return false;
   }
 
-  const from = process.env.ALERT_FROM_EMAIL || "HealthProcure Intel <alerts@resend.dev>";
+  const from = params.from || process.env.ALERT_FROM_EMAIL || "HealthProcure Intel <alerts@resend.dev>";
 
   try {
     const res = await fetch(RESEND_API_URL, {
