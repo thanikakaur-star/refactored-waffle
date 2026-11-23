@@ -1008,11 +1008,12 @@ app.get("/api/fast-track/verify", async (req, res) => {
   }
   try {
     if (USE_SUPABASE && supabase) {
-      const { data } = await supabase.from("fast_track_unlocks").select("unlocked").eq("stripe_session_id", sessionId).limit(1);
-      const row = Array.isArray(data) ? (data[0] as { unlocked?: boolean } | undefined) : undefined;
+      const { data } = await supabase.from("fast_track_unlocks").select("unlocked, plan_type").eq("stripe_session_id", sessionId).limit(1);
+      const row = Array.isArray(data) ? (data[0] as { unlocked?: boolean; plan_type?: string | null } | undefined) : undefined;
       const unlocked = !!(row && row.unlocked);
       // ended: a purchase exists but access was removed (monthly plan cancelled or unpaid).
-      res.json({ unlocked: unlocked || demo, demo, ended: !!row && !unlocked });
+      // plan: lets the page show family features only to Family & Women's Health Pass holders.
+      res.json({ unlocked: unlocked || demo, demo, ended: !!row && !unlocked, plan: unlocked && row ? row.plan_type ?? null : null });
       return;
     }
     res.json({ unlocked: demo, demo });
@@ -1079,10 +1080,10 @@ app.get("/api/fast-track/restore/redeem", restoreRedeemLimiter, async (req, res)
   }
   try {
     if (USE_SUPABASE && supabase) {
-      const { data } = await supabase.from("fast_track_unlocks").select("unlocked").eq("stripe_session_id", verified.sessionId).limit(1);
-      const row = Array.isArray(data) ? (data[0] as { unlocked?: boolean } | undefined) : undefined;
+      const { data } = await supabase.from("fast_track_unlocks").select("unlocked, plan_type").eq("stripe_session_id", verified.sessionId).limit(1);
+      const row = Array.isArray(data) ? (data[0] as { unlocked?: boolean; plan_type?: string | null } | undefined) : undefined;
       if (row && row.unlocked) {
-        res.json({ unlocked: true, session_id: verified.sessionId });
+        res.json({ unlocked: true, session_id: verified.sessionId, plan: row.plan_type ?? null });
         return;
       }
     }

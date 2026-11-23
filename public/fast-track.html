@@ -407,6 +407,17 @@
               <button type="button" class="pill" onclick="clearProfile()">Clear saved details</button>
             </div>
           </div>
+          <div id="family-people" class="hidden mt-4 pt-4 border-t border-[#ece7df]">
+            <div class="flex flex-wrap items-center gap-2">
+              <label for="person-select" class="text-sm font-semibold text-sage">Saved profile for</label>
+              <select id="person-select" onchange="switchPerson(this.value)" class="px-3 py-2 rounded-xl border border-[#d8d0c4] text-sm bg-white"></select>
+              <button type="button" id="person-add" class="pill" onclick="addPerson()">Add a person</button>
+              <button type="button" class="pill" onclick="renamePerson()">Rename</button>
+              <button type="button" id="person-remove" class="pill hidden" onclick="removePerson()">Remove</button>
+            </div>
+            <p class="text-xs text-slate-muted mt-2">Family &amp; Women&rsquo;s Health Pass: a separate saved profile for each person, up to 6, so every new brief or letter starts filled in. Saved on this device only.</p>
+          </div>
+          <p id="family-teaser" class="hidden text-xs text-slate-muted mt-3">Looking after more than one person? The Family &amp; Women&rsquo;s Health Pass keeps a separate saved profile for each family member. <a href="/prep-tools" class="underline text-sage">See the plans</a></p>
           <input type="file" id="profile-file" accept="application/json,.json" class="hidden">
         </div>
         <div class="card p-6">
@@ -1209,7 +1220,7 @@
             <span class="absolute -top-3 left-5 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-terracotta text-white">For ongoing care</span>
             <p class="font-semibold">Family &amp; Women&rsquo;s Health Pass</p>
             <p class="my-2"><span class="font-display text-5xl font-semibold text-sage">£7.99</span> <span class="text-sm text-slate-muted">per month</span></p>
-            <ul class="text-sm text-slate-soft space-y-1.5 mb-5 flex-1"><li>&#10003; The same tools, for repeat appointments</li><li>&#10003; Suits families and long-term concerns</li><li>&#10003; Cancel any time: email admin@kaurcare.com</li></ul>
+            <ul class="text-sm text-slate-soft space-y-1.5 mb-5 flex-1"><li>&#10003; Everything in the Fast-Track Pass</li><li>&#10003; A saved profile for each family member, up to 6</li><li>&#10003; Cancel any time: email admin@kaurcare.com</li></ul>
             <button type="button" data-plan="family" class="unlock-btn px-5 py-3.5 rounded-xl border border-sage text-sage font-semibold hover:bg-sage/5">Start for £7.99/month</button>
           </div>
         </div>
@@ -1231,7 +1242,7 @@
           <div class="card p-5"><p class="font-semibold mb-1">Ready for eConsult and the NHS App</p><p class="text-sm text-slate-soft">A short version to paste straight into your surgery&rsquo;s online form, plus a printable page.</p></div>
           <div class="card p-5"><p class="font-semibold mb-1">A &ldquo;before you leave&rdquo; checklist</p><p class="text-sm text-slate-soft">Plan, follow-up date and when to come back, so you walk out knowing what happens next.</p></div>
           <div class="card p-5"><p class="font-semibold mb-1">A polished PDF in one tap</p><p class="text-sm text-slate-soft">A clean one-page brief and properly laid out letters you can print, email or hand over.</p></div>
-          <div class="card p-5"><p class="font-semibold mb-1">Your details, if you want them kept</p><p class="text-sm text-slate-soft">Save your answers on your own device or in a file, so a repeat appointment takes a minute. Lost access? We email you a link.</p></div>
+          <div class="card p-5"><p class="font-semibold mb-1">Your details, if you want them kept</p><p class="text-sm text-slate-soft">Save your answers on your own device or in a file, so a repeat appointment takes a minute. The monthly plan keeps a separate profile for each family member. Lost access? We email you a link.</p></div>
         </div>
 
         <div class="card p-5 mb-8">
@@ -1957,6 +1968,7 @@
           var rj = await rr.json();
           if (rj.unlocked && rj.session_id){
             try { localStorage.setItem(SID_KEY, rj.session_id); } catch(e){}
+            state.plan = rj.plan || '';
             setUnlocked(true, false);
             openTools();
             flash('Access restored. Your prep tools are unlocked on this device.');
@@ -1975,6 +1987,7 @@
           var res = await fetch('/api/fast-track/verify' + (sid ? ('?session_id=' + encodeURIComponent(sid)) : ''));
           var j = await res.json();
           state.demo = !!j.demo;
+          state.plan = j.plan || '';
           if (j.unlocked){
             setUnlocked(true, false);
             if (sid){ try { localStorage.setItem(SID_KEY, sid); } catch(e){} }
@@ -2026,10 +2039,12 @@
     initRestore();
 
     // ---- Remember my details: on this device, or as a file you keep ----
-    var PROFILE_KEY = 'kaurcare_profile', REMEMBER_KEY = 'kaurcare_remember';
+    // Family & Women's Health Pass holders can keep a separate saved profile for each person.
+    var PROFILE_KEY = 'kaurcare_profile', PEOPLE_KEY = 'kaurcare_people', REMEMBER_KEY = 'kaurcare_remember', MAX_PEOPLE = 6;
     var PROFILE_TEXT = ['l-name','l-dob','l-nhs','l-contact','l-gp','l-gpname','l-condition','l-clinic','l-clinic-loc','l-wait','l-reftype','l-reason','l-summary','l-tried','l-impact','l-days','b-for','b-name','b-age','b-condition','b-duration','b-triggers','b-tried','b-meds','b-impact','b-worry','b-ask','b-questions'];
     var PROFILE_CHECKS = ['l-confirmed','l-adhd'];
-    var profileReady = false, profileTimer = null;
+    var profileReady = false, profileTimer = null, PEOPLE = null;
+    function isFamily(){ return state.plan === 'family_monthly_799'; }
     function collectProfile(){
       var f = {}; PROFILE_TEXT.forEach(function(id){ var e = $(id); if (e && e.value !== '') f[id] = e.value; });
       var c = {}; PROFILE_CHECKS.forEach(function(id){ var e = $(id); if (e) c[id] = !!e.checked; });
@@ -2052,25 +2067,101 @@
       if (typeof p.sev === 'number' && p.sev >= 0 && p.sev <= 10){ $('b-sev').value = String(Math.round(p.sev)); $('b-sev-val').textContent = String(Math.round(p.sev)); }
       if (Array.isArray(p.log)){
         var clean = p.log.filter(function(e){ return e && typeof e.date === 'string' && typeof e.note === 'string'; }).slice(-5).map(function(e){ return { date: e.date.slice(0, 20), note: e.note.slice(0, 160) }; });
-        if (clean.length){ saveLog(clean); renderLog(); }
+        saveLog(clean); renderLog();
       }
       return true;
     }
+    // Put every form back to blank, ready for a different person.
+    function resetForms(){
+      PROFILE_TEXT.forEach(function(id){
+        var e = $(id); if (!e) return;
+        if (e.tagName === 'SELECT'){ var d = [].findIndex.call(e.options, function(o){ return o.defaultSelected; }); e.selectedIndex = d < 0 ? 0 : d; }
+        else e.value = '';
+      });
+      PROFILE_CHECKS.forEach(function(id){ var e = $(id); if (e) e.checked = false; });
+      document.querySelectorAll('#b-impact-chips input').forEach(function(x){ x.checked = false; });
+      $('b-sev').value = '5'; $('b-sev-val').textContent = '5';
+      setLetterMode('rtc');
+      saveLog([]); renderLog();
+      ['l-out', 'b-out'].forEach(function(id){ var o = $(id); if (o){ o.classList.add('hidden'); o.innerHTML = ''; } });
+    }
+    function loadPeople(){
+      try { var raw = JSON.parse(localStorage.getItem(PEOPLE_KEY) || 'null'); if (raw && Array.isArray(raw.people) && raw.people.length) return raw; } catch(e){}
+      var first = { id:'p1', label:'Me', data:null };
+      try { var old = localStorage.getItem(PROFILE_KEY); if (old) first.data = JSON.parse(old); } catch(e){}
+      return { v:1, active:'p1', people:[first] };
+    }
+    function savePeople(){ try { localStorage.setItem(PEOPLE_KEY, JSON.stringify(PEOPLE)); localStorage.removeItem(PROFILE_KEY); } catch(e){} }
+    function activePerson(){
+      var a = PEOPLE.people.filter(function(x){ return x.id === PEOPLE.active; })[0];
+      if (!a){ a = PEOPLE.people[0]; PEOPLE.active = a.id; }
+      return a;
+    }
     function saveProfileNow(){
-      var box = $('remember-profile'); if (!box || !box.checked) return;
-      try { localStorage.setItem(PROFILE_KEY, JSON.stringify(collectProfile())); } catch(e){}
+      var box = $('remember-profile'); if (!box || !box.checked || !PEOPLE) return;
+      activePerson().data = collectProfile(); savePeople();
     }
     function saveProfileSoon(){ clearTimeout(profileTimer); profileTimer = setTimeout(saveProfileNow, 400); }
+    function renderPeople(){
+      var fam = $('family-people'), teaser = $('family-teaser'); if (!fam) return;
+      fam.classList.toggle('hidden', !isFamily());
+      if (teaser) teaser.classList.toggle('hidden', state.plan !== 'one_off_499');
+      if (!isFamily() || !PEOPLE) return;
+      $('person-select').innerHTML = PEOPLE.people.map(function(x){ return '<option value="' + esc(x.id) + '"' + (x.id === PEOPLE.active ? ' selected' : '') + '>' + esc(x.label) + '</option>'; }).join('');
+      $('person-add').disabled = PEOPLE.people.length >= MAX_PEOPLE;
+      $('person-remove').classList.toggle('hidden', PEOPLE.people.length < 2);
+    }
+    function switchPerson(id){
+      if (!PEOPLE || id === PEOPLE.active) return;
+      saveProfileNow();
+      PEOPLE.active = id; savePeople();
+      resetForms();
+      var p = activePerson(); if (p.data) applyProfile(p.data);
+      renderPeople();
+      flash('Now using the profile for ' + p.label + '.');
+    }
+    function cleanLabel(v){ return String(v || '').replace(/[<>]/g, '').trim().slice(0, 30); }
+    function addPerson(){
+      if (!isFamily() || !PEOPLE) return;
+      if (PEOPLE.people.length >= MAX_PEOPLE){ flash('You can keep up to ' + MAX_PEOPLE + ' profiles.'); return; }
+      var label = cleanLabel(window.prompt('Whose details are these? For example Amira, or Dad.'));
+      if (!label) return;
+      var box = $('remember-profile');
+      if (box && !box.checked){ box.checked = true; try { localStorage.setItem(REMEMBER_KEY, '1'); } catch(e){} }
+      var id = 'p' + Date.now().toString(36);
+      PEOPLE.people.push({ id:id, label:label, data:null });
+      switchPerson(id);
+    }
+    function renamePerson(){
+      if (!isFamily() || !PEOPLE) return;
+      var p = activePerson();
+      var label = cleanLabel(window.prompt('New name for this profile', p.label));
+      if (!label) return;
+      p.label = label; savePeople(); renderPeople();
+    }
+    function removePerson(){
+      if (!isFamily() || !PEOPLE || PEOPLE.people.length < 2) return;
+      var p = activePerson();
+      if (!window.confirm('Remove ' + p.label + ' and their saved details from this device?')) return;
+      PEOPLE.people = PEOPLE.people.filter(function(x){ return x.id !== p.id; });
+      PEOPLE.active = PEOPLE.people[0].id; savePeople();
+      resetForms();
+      var n = activePerson(); if (n.data) applyProfile(n.data);
+      renderPeople();
+      flash(p.label + ' removed from this device.');
+    }
     function initProfile(){
       if (profileReady) return; profileReady = true;
       var box = $('remember-profile'), root = $('tools-unlocked'); if (!box || !root) return;
+      PEOPLE = loadPeople();
       var on = false; try { on = localStorage.getItem(REMEMBER_KEY) === '1'; } catch(e){}
       box.checked = on;
-      if (on){ try { var raw = localStorage.getItem(PROFILE_KEY); if (raw) applyProfile(JSON.parse(raw)); } catch(e){} }
+      if (on){ var ap = activePerson(); if (ap.data) applyProfile(ap.data); }
+      renderPeople();
       box.addEventListener('change', function(){
         try {
           if (box.checked){ localStorage.setItem(REMEMBER_KEY, '1'); saveProfileNow(); flash('Your details will be remembered on this device.'); }
-          else { localStorage.removeItem(REMEMBER_KEY); localStorage.removeItem(PROFILE_KEY); flash('Saved details removed from this device.'); }
+          else { localStorage.removeItem(REMEMBER_KEY); localStorage.removeItem(PROFILE_KEY); localStorage.removeItem(PEOPLE_KEY); PEOPLE = loadPeople(); renderPeople(); flash('Saved details removed from this device.'); }
         } catch(e){ flash('Your browser would not let us save details here.'); }
       });
       ['input', 'change', 'click'].forEach(function(ev){ root.addEventListener(ev, function(e){ if (e.target !== box) saveProfileSoon(); }); });
@@ -2090,14 +2181,17 @@
       });
     }
     function exportProfile(){
-      var blob = new Blob([JSON.stringify(collectProfile(), null, 2)], { type:'application/json' });
+      var data = collectProfile(); if (PEOPLE && isFamily()) data.person = activePerson().label;
+      var blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
       var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'kaur-care-my-details.json'; a.click();
       setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
       flash('Saved. This file holds health details, so keep it somewhere private.');
     }
     function clearProfile(){
-      try { localStorage.removeItem(PROFILE_KEY); localStorage.removeItem(REMEMBER_KEY); } catch(e){}
+      try { localStorage.removeItem(PROFILE_KEY); localStorage.removeItem(PEOPLE_KEY); localStorage.removeItem(REMEMBER_KEY); } catch(e){}
+      PEOPLE = loadPeople();
       var box = $('remember-profile'); if (box) box.checked = false;
+      renderPeople();
       flash('Saved details cleared from this device. The forms on screen are unchanged.');
     }
 
