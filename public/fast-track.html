@@ -231,6 +231,7 @@
 
         <label class="block text-sm font-semibold mb-2">What is the concern?</label>
         <div id="pills" class="flex flex-wrap gap-2 mb-3"></div>
+        <p id="pill-hint" class="hidden text-xs font-semibold text-terracotta mb-3" role="status">Got it. Now add your postcode below (optional), then tap Find care.</p>
         <input id="condition" type="text" placeholder="Type anything (e.g. earache, endometriosis, ADHD, MRI scan)" class="w-full px-4 py-3 border border-sand text-sm mb-5 focus:outline-none focus:border-sage" />
 
         <label class="block text-sm font-semibold mb-2">Your UK postcode <span class="font-normal text-slate-muted">(optional)</span></label>
@@ -1397,7 +1398,7 @@
           b.classList.add('active'); $('condition').value = b.getAttribute('data-c');
           // With a postcode already entered, search now. Otherwise let them add it first, so local options come with the results.
           if (($('postcode').value || '').replace(/\s/g, '').length >= 5){ doSearch(); }
-          else { flash('Now add your postcode (optional), then tap "Find my care options".'); var pc = $('postcode'); if (pc){ pc.scrollIntoView({ behavior:'smooth', block:'center' }); } }
+          else { var hint = $('pill-hint'); if (hint) hint.classList.remove('hidden'); }
         });
       });
     }
@@ -1418,6 +1419,7 @@
       state.condition = $('condition').value.trim();
       state.postcode = $('postcode').value.trim();
       if (!state.condition){ alert('Please pick or type a concern.'); return; }
+      var ph = $('pill-hint'); if (ph) ph.classList.add('hidden');
       if (typeof openInstallGate === 'function') openInstallGate();
       $('search-btn').textContent = 'Finding...';
       lookupPostcode(state.postcode); // resolves region + NHS ICB in the background
