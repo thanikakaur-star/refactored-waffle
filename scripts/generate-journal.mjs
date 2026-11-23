@@ -489,6 +489,159 @@ ${MIDCTA}
 <h2>Be kind to yourself, and know the red lines</h2>
 <p>Persisting is tiring, and it is not your fault that it is hard. Keep going, bring someone with you if it helps, and do not downplay how it affects you. If symptoms are severe or rapidly worsening, chest pain, trouble breathing, sudden weakness, heavy bleeding, do not wait to be believed, call NHS 111 or 999. And if things feel hopeless, the Samaritans (116 123) are there any time.</p>` + cta,
   },
+  {
+    slug: "sbar-for-patients-explain-symptoms-gp",
+    category: "NHS Shortcuts",
+    title: "SBAR for Patients: How to Explain Your Symptoms Clearly in a 10-Minute GP Appointment",
+    desc: "Clinicians use a four-step structure called SBAR to hand over information quickly. Here is a plain-English version patients can use to say what matters, with an example.",
+    read: 5,
+    body: `<p class="lead">If you have ever left a GP appointment realising you forgot the one thing that mattered, you are not alone. Clinicians use a simple structure to communicate quickly and clearly, and you can borrow it. It is called SBAR.</p>
+<h2>What is SBAR?</h2>
+<p>SBAR stands for Situation, Background, Assessment and Recommendation. It is widely used in healthcare to hand over information safely and quickly, for example when a nurse updates a doctor. Patients are rarely taught it, but the same shape works well when you are the one explaining. In this patient version we swap the last step for a Request, because you are saying what you are hoping for.</p>
+<h2>The four steps in plain English</h2>
+<h3>S: Situation (why I am here today)</h3>
+<p>One or two sentences, stated first. For example: "I have had headaches most days for two months and I would like to understand why."</p>
+<h3>B: Background (what led up to it)</h3>
+<p>When it started, what changed around then, anything that makes it better or worse, and what you have already tried, including medicines and supplements.</p>
+<h3>A: Assessment (how it affects me)</h3>
+<p>How it affects your sleep, work, energy and daily life, any pattern you have noticed, and anything that worries you. Specific details such as "I have missed three days of work this month" are easier to act on than "it is really bad".</p>
+${MIDCTA}
+<h3>R: Request (what I am hoping for)</h3>
+<p>Be specific about what would help: an examination, a test, a treatment discussion, a referral, a plan with a follow-up date, or a question about using your <a href="/journal/nhs-right-to-choose-adhd-autism-guide">Right to Choose</a>.</p>
+<h2>A worked example</h2>
+<p><strong>S:</strong> "I have had headaches most days for two months." <strong>B:</strong> "They started after a very stressful period at work. Paracetamol barely helps and they are worst in the afternoon." <strong>A:</strong> "I am missing work and cannot concentrate after lunch, and it is affecting my sleep." <strong>R:</strong> "I would like to understand what is causing them and whether I need any tests or a referral."</p>
+<h2>Make it even easier</h2>
+<p>Write your four answers down before you go, and bring them as a single page. Handing over a brief means nothing gets lost if the appointment is short. Our guide to <a href="/journal/how-to-prepare-10-minute-gp-appointment">preparing for a 10-minute GP appointment</a> goes further, and Kaur Care can turn your SBAR notes into a clean one-page brief for free.</p>
+<h2>A note on safety</h2>
+<p>SBAR is about being heard in routine appointments. If symptoms are severe or sudden, such as chest pain, difficulty breathing, signs of a stroke or heavy bleeding, call 999. For urgent advice that is not an emergency, use NHS 111.</p>` + cta,
+  },
+  {
+    slug: "eczema-on-darker-skin-what-it-looks-like",
+    category: "Adult Health",
+    title: "What Eczema Looks Like on Brown and Black Skin (and Why It Gets Missed)",
+    desc: "Eczema is often described as red, but on darker skin it can look purple, grey, brown or ashen. Here is what to look for, why it can be overlooked, and how to be heard.",
+    read: 5,
+    body: `<p class="lead">Pictures of eczema usually show red, inflamed skin. On brown and black skin it often looks different, which can make it easier to miss or to judge as milder than it feels. Knowing what to look for helps you describe it and ask for the right care.</p>
+<h2>How eczema can look on darker skin</h2>
+<p>The National Eczema Society notes that on pigmented skin eczema may look pink, red and purple, or like a subtle darkening of your usual skin colour. The NHS also notes that eczema can appear lighter or darker than the surrounding skin. Alongside colour, look for dryness, rough or thickened patches, scaling, and above all itching.</p>
+<h2>Where it appears</h2>
+<p>In many people the classic pattern is the creases of the elbows and knees. The National Eczema Society notes that in people with darker skin the pattern can be reversed, affecting the fronts of the knees and the outsides of the elbows. Eczema can also affect the face, neck, hands and eyelids.</p>
+<h2>Colour changes afterwards</h2>
+<p>After a flare, skin can stay lighter or darker than before, which is called post-inflammatory pigmentation change. It is more noticeable on darker skin, can take months to fade, and tends to improve once the eczema is well controlled. It is not caused by moisturiser, and it is worth mentioning to your clinician.</p>
+${MIDCTA}
+<h2>Why it can be missed or underestimated</h2>
+<p>Redness is one of the main ways clinicians judge how inflamed skin is, and it is harder to see on darker skin. Some research suggests the severity of eczema in skin of colour can be underestimated for this reason, and clinical trial guidance encourages assessing inflammation with the underlying skin tone in mind. This does not mean your clinician is not trying. It means it is worth giving them more than colour to go on.</p>
+<h2>How to describe it so you are heard</h2>
+<ul>
+<li><strong>Itch:</strong> how bad it is and whether it wakes you at night.</li>
+<li><strong>Feel:</strong> dry, rough, thickened, warm or weeping skin.</li>
+<li><strong>Impact:</strong> sleep, work, school, mood and daily life.</li>
+<li><strong>Pattern:</strong> where it appears and how often it flares.</li>
+<li><strong>What you have tried:</strong> creams, ointments and anything that triggers it.</li>
+</ul>
+<p>Photos on your phone taken in good natural light over several days can also help. Our guide on <a href="/journal/how-to-prepare-10-minute-gp-appointment">preparing for a 10-minute GP appointment</a> covers how to bring it all together.</p>
+<h2>What helps</h2>
+<p>Daily moisturising is the foundation for everyone with eczema. Read more in our guide to <a href="/journal/eczema-emollients-affordable-fragrance-free-uk">affordable fragrance-free emollients</a>. If your skin looks infected (weeping, crusting, hot and painful) or you feel unwell, seek medical advice promptly.</p>
+<p>This article is general information, not a diagnosis. If you are unsure what a skin change is, see your GP or pharmacist.</p>` + cta,
+  },
+  {
+    slug: "eczema-emollients-affordable-fragrance-free-uk",
+    category: "Adult Health",
+    title: "Eczema Moisturisers on a Budget: Fragrance-Free Emollients and the Steroid Cream Loop",
+    desc: "Moisturising is the foundation of eczema care, and it does not have to be expensive. How to choose fragrance-free emollients, save money in the UK, and get a proper plan for steroid creams.",
+    read: 6,
+    body: `<p class="lead">If you live with eczema, you have probably been through lots of creams. The good news is that the most important treatment, moisturising, does not need to be expensive or fancy. Here is how to do it well and affordably, and how to avoid getting stuck on repeat steroid prescriptions with no plan.</p>
+<h2>Emollients are the foundation</h2>
+<p>Emollients are moisturisers designed for dry, eczema-prone skin. NHS guidance recommends using them regularly, at least twice a day, even when your skin looks clear. Apply generously, and within a few minutes of bathing to lock in moisture. Smooth them on in the direction of hair growth rather than rubbing in hard.</p>
+<h2>Choosing a fragrance-free one</h2>
+<ul>
+<li>Choose <strong>fragrance-free</strong> products, as perfume can irritate sensitive skin.</li>
+<li>Thicker <strong>ointments</strong> are very moisturising, good for very dry skin and overnight, but greasy.</li>
+<li>Lighter <strong>creams</strong> and lotions can be easier for daytime and warmer weather.</li>
+<li>Avoid perfumed soaps, bubble baths and hot water. Use lukewarm water and pat dry.</li>
+<li>Patch-test a new product on a small area first.</li>
+</ul>
+<p>Your pharmacist can help you choose, and it is normal to try more than one to find what suits you.</p>
+${MIDCTA}
+<h2>How to keep the cost down</h2>
+<ul>
+<li><strong>Buy in bulk.</strong> A large pump tub is usually far cheaper per gram than small tubes.</li>
+<li><strong>Try supermarket and pharmacy own-brand fragrance-free options.</strong> Plain emollients work on the same principle regardless of branding.</li>
+<li><strong>Ask for a prescription if you use a lot.</strong> Prescriptions are free for children under 16 and for people in other exempt groups in England. Otherwise, check whether a Prescription Prepayment Certificate would save you money, and look up current prices and eligibility on the NHS Business Services Authority website.</li>
+<li><strong>Avoid expensive products with big claims.</strong> A higher price does not mean better results for eczema.</li>
+</ul>
+<h2>The steroid cream loop</h2>
+<p>Topical steroids are a normal, effective part of treating eczema flares, usually at the lowest strength that works, for the shortest time, and the mildest ones on the face and delicate skin. The problem some people face is being left on repeat prescriptions for months or years with no review. Ask your GP for a clear plan:</p>
+<ul>
+<li>Which strength, on which areas, and for how many days.</li>
+<li>What to use between flares.</li>
+<li>When you will be reviewed, rather than an open-ended repeat.</li>
+<li>What the next step is if creams are not holding it, such as other treatments or a referral.</li>
+</ul>
+<p>If you have used strong steroids for a long time and notice burning, redness or worsening skin after stopping, do not just carry on or stop alone, speak to your GP or a dermatologist. If the wait to see one is long, you may be able to use your <a href="/journal/nhs-right-to-choose-adhd-autism-guide">Right to Choose</a> for an NHS dermatology referral.</p>
+<h2>Light therapy: what the evidence says</h2>
+<p>For moderate to severe eczema that is not controlled by creams, the NHS can offer phototherapy under dermatology supervision, so ask your GP whether you are a candidate. Home red or LED light devices are heavily marketed, but the evidence for treating eczema is limited. If you are considering one, talk to your GP or dermatologist first and keep up your emollients rather than relying on a device.</p>
+<p>See also our guide on <a href="/journal/eczema-on-darker-skin-what-it-looks-like">what eczema looks like on brown and black skin</a>. This is general information, not medical advice.</p>` + cta,
+  },
+  {
+    slug: "pregnant-how-to-self-refer-maternity-uk",
+    category: "Women's Health",
+    title: "Just Found Out You're Pregnant? How to Self-Refer for NHS Maternity Care",
+    desc: "In most areas you can refer yourself to NHS maternity services without seeing a GP. When to book, what to expect, red flags to act on, and why speaking up matters.",
+    read: 5,
+    body: `<p class="lead">You have taken the test and it is positive. What now? In most parts of England you do not need to see your GP first. You can usually refer yourself directly to your local NHS maternity service, which is often the quickest way to get started.</p>
+<h2>How to self-refer</h2>
+<p>Most NHS trusts have a self-referral form on their website, usually under "maternity" or "pregnancy". Search for your local trust's maternity self-referral, or ask your GP surgery for the route in your area. You will be asked for details such as your name, date of birth, address, GP and your estimated due date, and you will usually be contacted to arrange your first midwife appointment.</p>
+<h2>When to book</h2>
+<p>NHS guidance is to contact your midwife or GP as soon as you know you are pregnant, ideally so that your booking appointment happens by about 10 weeks. This is when you will be asked about your health history and offered tests and information on screening and care. If you have an existing health condition, take medicines regularly, or have had complications in a previous pregnancy, tell the service straight away, as you may need extra support. Do not stop prescribed medicines without advice.</p>
+${MIDCTA}
+<h2>Red flags: do not wait</h2>
+<p>Contact your maternity unit or call NHS 111, and call 999 in an emergency, if you notice:</p>
+<ul>
+<li><strong>A change in your baby's usual movements.</strong> Contact your maternity unit straight away, day or night. Do not wait until the next day.</li>
+<li><strong>A severe headache, vision problems, pain just below the ribs, or sudden swelling of the face, hands or feet,</strong> which can be signs of pre-eclampsia.</li>
+<li><strong>Vaginal bleeding, severe tummy pain or fluid leaking.</strong></li>
+<li><strong>Feeling very unwell, or a strong sense that something is wrong.</strong> Say so clearly and ask to be checked.</li>
+</ul>
+<h2>Speaking up and feeling heard</h2>
+<p>Maternity care should be safe and respectful for everyone. UK data from MBRRACE-UK shows that outcomes are not equal: in recent reports Black women have been around two to three times more likely to die during or soon after pregnancy than white women, and risks are also higher in more deprived areas, although the gap has narrowed in the latest figures. Knowing this is not meant to frighten you. It is a reminder that you are entitled to be listened to, to ask questions and to escalate if you do not feel heard.</p>
+<p>Practical steps: write down your questions, bring someone with you if you can, ask for things to be explained again, and ask for your concerns to be recorded in your notes. Organisations such as Five X More, Birthrights and Tommy's offer information and support.</p>
+<p>Our <a href="/journal/how-to-prepare-10-minute-gp-appointment">appointment preparation guide</a> and Kaur Care's free brief builder can help you walk in prepared. This is general information, not medical advice. Always follow the advice of your midwife or doctor.</p>` + cta,
+  },
+  {
+    slug: "baby-red-flags-when-to-call-999-111-uk",
+    category: "Parents & Kids",
+    title: "Baby Red Flags: When to Call 999, NHS 111 or Your GP (UK Parents' Guide)",
+    desc: "A calm guide for new parents on the signs that mean you should get urgent help for a baby, and when to ring 111 or the GP instead. Trust your instincts.",
+    read: 5,
+    body: `<p class="lead">Newborns and babies can change quickly, and it is hard to know what is normal. This calm guide covers the main signs that mean getting help, and which service to use. The most important rule: you know your baby best, and you will never be wasting anyone's time by asking.</p>
+<h2>Call 999 if your baby</h2>
+<ul>
+<li>Is struggling to breathe, breathing very fast, or has long pauses in breathing.</li>
+<li>Is very floppy, limp, hard to wake, or not responding to you.</li>
+<li>Has a fit (seizure) that does not stop, or a first-time fit.</li>
+<li>Has blue, grey or very pale skin or lips.</li>
+<li>Has a rash that does not fade when you press a glass against it.</li>
+</ul>
+<p>In any emergency, call 999 straight away. Do not wait to see whether things settle.</p>
+${MIDCTA}
+<h2>Get same-day help (NHS 111 or your GP) if</h2>
+<ul>
+<li><strong>Your baby is under 3 months and has a temperature of 38°C or higher,</strong> or is 3 to 6 months with a temperature of 39°C or higher. Check the NHS guidance on fever in young children and act promptly.</li>
+<li>Your baby is feeding much less than usual, or refusing feeds.</li>
+<li>There are signs of dehydration, such as noticeably fewer wet nappies, a dry mouth, or a sunken soft spot on the top of the head.</li>
+<li>Your baby is unusually sleepy, irritable, or has a high-pitched or weak cry.</li>
+<li>There is persistent vomiting, especially if green, or blood in the stools.</li>
+<li>Your baby has jaundice (yellowing of skin or eyes) in the first weeks of life.</li>
+</ul>
+<h2>Not sure which to use?</h2>
+<p>Use NHS 111 online or by phone. They can assess your baby's symptoms and direct you to the right place, and they will tell you if it needs an ambulance. Your health visitor can also help with feeding, sleep, development and general worries between appointments, and your baby's red book (personal child health record) is a useful thing to keep to hand.</p>
+<h2>Things that are common and usually settle</h2>
+<p>Many babies have blocked noses, sneezing, hiccups, milk spots, occasional spit-up, and irregular sleep patterns. These are common, and a pharmacist can often help with minor problems. See our guide on <a href="/journal/kids-earache-sore-throat-calm-parent-guide">kids' earache, sore throat and rashes</a> and what a <a href="/journal/pharmacy-first-12-conditions-uk">pharmacist can help with</a>.</p>
+<h2>Prepare for the call or appointment</h2>
+<p>Note down when symptoms started, your baby's temperature, how much they are feeding, wet and dirty nappies, and any rash. Photos can help. Having this ready means you can explain clearly even when you are tired and worried.</p>
+<p>This is general information, not medical advice. If you are worried about your baby, seek help.</p>` + cta,
+  },
 ];
 
 for (const a of articles) {
