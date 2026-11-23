@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/icons/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>(function(){var p=(location.pathname||'/').replace(/\/+$/,'')||'/';var m={'/':'home','/how-it-works':'how-it-works','/whats-covered':'whats-covered','/health-topics':'health-topics','/babies-pregnancy-menopause':'health-topics','/eczema-skin':'health-topics','/private-care':'private-care','/prep-playbook':'prep-playbook','/wellness':'wellness','/prep-tools':'prep-tools','/partners':'partners','/faqs':'faqs'};document.documentElement.setAttribute('data-kc',m[p]||'home');})();</script>
+  <script>(function(){var p=(location.pathname||'/').replace(/\/+$/,'')||'/';var m={'/':'home','/how-it-works':'how-it-works','/whats-covered':'whats-covered','/health-topics':'health-topics','/babies-pregnancy-menopause':'health-topics','/eczema-skin':'health-topics','/uk-nations':'uk-nations','/private-care':'private-care','/prep-playbook':'prep-playbook','/wellness':'wellness','/prep-tools':'prep-tools','/partners':'partners','/faqs':'faqs'};document.documentElement.setAttribute('data-kc',m[p]||'home');})();</script>
   <!-- PWA / Save to Home Screen -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#2D5A47" />
@@ -100,6 +100,7 @@
     html[data-kc="how-it-works"] .kc-page[data-page="how-it-works"],
     html[data-kc="whats-covered"] .kc-page[data-page="whats-covered"],
     html[data-kc="health-topics"] .kc-page[data-page="health-topics"],
+    html[data-kc="uk-nations"] .kc-page[data-page="uk-nations"],
     html[data-kc="private-care"] .kc-page[data-page="private-care"],
     html[data-kc="prep-playbook"] .kc-page[data-page="prep-playbook"],
     html[data-kc="wellness"] .kc-page[data-page="wellness"],
@@ -146,6 +147,7 @@
         <a href="/how-it-works" data-nav="how-it-works" class="py-3 border-b border-sand/60 nav-link">How it works</a>
         <a href="/whats-covered" data-nav="whats-covered" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
         <a href="/health-topics" data-nav="health-topics" class="py-3 border-b border-sand/60 nav-link">Health topics</a>
+        <a href="/uk-nations" data-nav="uk-nations" class="py-3 border-b border-sand/60 nav-link">Scotland, Wales &amp; NI</a>
         <a href="/private-care" data-nav="private-care" class="py-3 border-b border-sand/60 nav-link">Private care</a>
         <a href="/prep-playbook" data-nav="prep-playbook" class="py-3 border-b border-sand/60 nav-link">Prep playbook</a>
         <a href="/wellness" data-nav="wellness" class="py-3 border-b border-sand/60 nav-link">Wellness</a>
@@ -194,6 +196,14 @@
       <div class="card p-6 md:p-7 shadow-sm">
         <h2 class="font-display text-xl font-semibold mb-1">Find your care options</h2>
         <p class="text-sm text-slate-soft mb-5">Three quick steps. It takes about ten seconds.</p>
+
+        <label for="nation" class="block text-sm font-semibold mb-2">Where do you live?</label>
+        <select id="nation" class="w-full px-4 py-2.5 border border-sand text-sm bg-white mb-5 focus:outline-none focus:border-sage" onchange="setNation(this.value)">
+          <option value="england">England</option>
+          <option value="scotland">Scotland</option>
+          <option value="wales">Wales</option>
+          <option value="northern-ireland">Northern Ireland</option>
+        </select>
 
         <label class="block text-sm font-semibold mb-2">Who is this for?</label>
         <div id="who" class="seg mb-5">
@@ -808,6 +818,73 @@
 
   <!-- (removed) old standalone Eczema & skin -->
 
+  <!-- UK nations: how care differs -->
+  <section id="uk-nations" data-page="uk-nations" class="kc-page site-section border-t border-sand">
+    <div class="max-w-5xl mx-auto px-5 py-14">
+      <p class="eyebrow mb-2 text-center">Across the UK</p>
+      <h2 class="font-display text-3xl font-semibold text-sage text-center mb-3">Care in Scotland, Wales and Northern Ireland</h2>
+      <p class="text-slate-soft text-center max-w-2xl mx-auto mb-9">Health care is run separately in each UK nation. Some of Kaur Care&rsquo;s tools, such as the 1-page brief, the SBAR guide and the symptom log, work anywhere. Others describe NHS England. Here is what differs, and where to start.</p>
+
+      <div class="card p-6 md:p-8 mb-6 bg-[#f6faf7] border-[#d9e6de]">
+        <h3 class="font-display text-xl font-semibold text-sage mb-2">What is England-only</h3>
+        <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1.5">
+          <li><strong>Right to Choose:</strong> the right to choose a different provider for a first outpatient appointment is an English NHS right. It may not apply elsewhere in the UK.</li>
+          <li><strong>NHS Pharmacy First (England):</strong> the seven or twelve conditions we list. Scotland, Wales and Northern Ireland have their own pharmacy schemes, with different names and conditions.</li>
+          <li><strong>NHS App, NHS 111 online and eConsult:</strong> the exact services and names differ across the UK.</li>
+          <li><strong>Waiting time targets and screening details:</strong> set separately in each nation.</li>
+        </ul>
+        <p class="text-sm text-slate-soft mt-3">What works everywhere: the brief and SBAR, symptom tracking, second-opinion and referral request letters, and the general advocacy guides. Prescriptions are free in Scotland, Wales and Northern Ireland.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5 mb-6">
+        <div class="card p-6" id="nation-scotland">
+          <h3 class="font-display text-xl font-semibold text-sage mb-2">Scotland</h3>
+          <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1.5 mb-4">
+            <li>Urgent advice: <strong>NHS 24</strong>, call 111</li>
+            <li>Health information: <strong>NHS inform</strong></li>
+            <li>Pharmacies offer <strong>Pharmacy First Scotland</strong> for common conditions</li>
+            <li>Free prescriptions</li>
+            <li>Free, independent advice if you have a concern: the Patient Advice and Support Service</li>
+          </ul>
+          <div class="flex flex-wrap gap-2"><a class="pill" target="_blank" rel="noopener" href="https://www.nhsinform.scot">NHS inform</a><a class="pill" target="_blank" rel="noopener" href="https://www.nhs24.scot">NHS 24</a></div>
+        </div>
+        <div class="card p-6" id="nation-wales">
+          <h3 class="font-display text-xl font-semibold text-sage mb-2">Wales</h3>
+          <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1.5 mb-4">
+            <li>Urgent advice: <strong>NHS 111 Wales</strong></li>
+            <li>Many pharmacies run a <strong>common ailments service</strong></li>
+            <li>Free prescriptions</li>
+            <li>Concerns: the <strong>Putting Things Right</strong> process, and <strong>Llais</strong>, the independent voice for health and social care</li>
+          </ul>
+          <div class="flex flex-wrap gap-2"><a class="pill" target="_blank" rel="noopener" href="https://nhs.wales">NHS Wales</a><a class="pill" target="_blank" rel="noopener" href="https://111.wales.nhs.uk">NHS 111 Wales</a></div>
+        </div>
+        <div class="card p-6" id="nation-northern-ireland">
+          <h3 class="font-display text-xl font-semibold text-sage mb-2">Northern Ireland</h3>
+          <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1.5 mb-4">
+            <li>Care is provided through <strong>Health and Social Care (HSC)</strong> trusts</li>
+            <li>For urgent help outside surgery hours, use your <strong>GP out-of-hours</strong> service</li>
+            <li>Ask your pharmacy which minor ailment services they offer</li>
+            <li>Free prescriptions</li>
+            <li>Complaints can go to the trust, and then the Northern Ireland Public Services Ombudsman</li>
+          </ul>
+          <div class="flex flex-wrap gap-2"><a class="pill" target="_blank" rel="noopener" href="https://www.nidirect.gov.uk">nidirect</a><a class="pill" target="_blank" rel="noopener" href="https://hscni.net">HSC</a></div>
+        </div>
+      </div>
+
+      <div class="card p-6 md:p-8">
+        <h3 class="font-display text-xl font-semibold text-sage mb-2">Using Kaur Care from anywhere in the UK</h3>
+        <ul class="list-disc pl-5 text-sm text-slate-soft space-y-1.5 mb-4">
+          <li>Choose where you live on the home page, and we will show a clear notice about what is England-specific.</li>
+          <li>Build your <strong>1-page brief</strong> and use the <strong>SBAR guide</strong> for any appointment, in any nation.</li>
+          <li>Use the <strong>second-opinion or referral request letter</strong> to ask your GP politely and in writing.</li>
+          <li>For an emergency call <strong>999</strong>. Check your nation&rsquo;s service for urgent advice.</li>
+        </ul>
+        <a href="#find" class="inline-block px-5 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Find my options</a>
+      </div>
+      <p class="text-xs text-slate-muted text-center mt-8 max-w-2xl mx-auto">Services and names change. Always confirm with your pharmacy, GP or your nation&rsquo;s health service. This is general information, not medical advice.</p>
+    </div>
+  </section>
+
   <!-- Private care: costs, second and third opinions -->
   <section id="private-care" data-page="private-care" class="kc-page site-section border-t border-sand">
     <div class="max-w-5xl mx-auto px-5 py-14">
@@ -1207,7 +1284,7 @@
     <div class="max-w-4xl mx-auto px-5 text-sm">
       <p class="mb-2"><strong>This is a navigation and directory tool, not medical advice.</strong> It does not diagnose, prescribe or replace a consultation. Always confirm eligibility with your pharmacy, GP or NHS 111, and seek urgent help for serious symptoms.</p>
       <p class="text-white/80 text-xs mb-1">Kaur Care is an independent NHS care-navigation tool, built on real NHS data to help people in England get seen faster and advocate for themselves.</p>
-      <p class="text-white/70 text-xs"><a href="/journal" class="underline">Journal</a> &middot; <a href="/privacy" class="underline">Privacy</a></p>
+      <p class="text-white/70 text-xs"><a href="/uk-nations" class="underline">Across the UK</a> &middot; <a href="/journal" class="underline">Journal</a> &middot; <a href="/privacy" class="underline">Privacy</a></p>
     </div>
   </footer>
 
@@ -1217,7 +1294,7 @@
       "Women's Health": ["Endometriosis", "PCOS", "Heavy bleeding / fibroids", "Perimenopause / menopause", "Recurrent UTI", "Gynaecology / fertility"],
       "Adult 16+": ["UTI", "Sore throat", "Sinusitis", "Shingles", "Acne", "Migraine", "Dermatology", "ENT", "Physio / MSK", "MRI / ultrasound", "ADHD / Autism assessment"]
     };
-    var state = { who: '', condition: '', postcode: '', data: null, unlocked: false, demo: false, partner: null, partnerSlug: '', embed: false, postcodeInfo: null };
+    var state = { nation: 'england', who: '', condition: '', postcode: '', data: null, unlocked: false, demo: false, partner: null, partnerSlug: '', embed: false, postcodeInfo: null };
     function $(id){ return document.getElementById(id); }
     function esc(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
 
@@ -1291,6 +1368,8 @@
           postcode: r.postcode || clean
         };
         renderIcbBanner('done');
+        var c = (r.country || '').toLowerCase().replace(/\s+/g, '-');
+        if (NATIONS[c] && c !== currentNation()){ setNation(c); flash('We switched to ' + NATIONS[c].name + ' based on your postcode.'); }
       } catch(e){ state.postcodeInfo = null; renderIcbBanner('fail'); }
     }
     function icbSummary(){
@@ -1327,8 +1406,55 @@
       links.classList.remove('hidden');
     }
     // A patient-power toolkit of genuinely useful national links, shown with every result.
+    // ---- UK nations: England is the default; other nations run their own NHS ----
+    var NATIONS = {
+      'england': { name:'England' },
+      'scotland': { name:'Scotland', health:'NHS Scotland',
+        links:[['NHS inform: health information','https://www.nhsinform.scot'],['NHS 24: call 111 for urgent advice','https://www.nhs24.scot']],
+        note:'Scotland runs its own NHS. Pharmacy First Scotland, NHS 24 and NHS inform are the places to start. Prescriptions are free.' },
+      'wales': { name:'Wales', health:'NHS Wales',
+        links:[['NHS Wales: services and information','https://nhs.wales'],['NHS 111 Wales: urgent advice','https://111.wales.nhs.uk']],
+        note:'Wales runs its own NHS. Many pharmacies offer a common ailments service, and prescriptions are free. Concerns can go through the health board’s Putting Things Right process.' },
+      'northern-ireland': { name:'Northern Ireland', health:'Health and Social Care (HSC) in Northern Ireland',
+        links:[['nidirect: health and wellbeing','https://www.nidirect.gov.uk'],['HSC: local health services','https://hscni.net']],
+        note:'Northern Ireland has its own Health and Social Care system. Ask your pharmacy which services they offer, and prescriptions are free. For urgent help outside surgery hours, use your GP out-of-hours service.' }
+    };
+    var NATION_KEY = 'kaurcare_nation';
+    function currentNation(){ return (state && state.nation) || 'england'; }
+    function loadNation(){ try { var n = localStorage.getItem(NATION_KEY); if (n && NATIONS[n]) return n; } catch(e){} return 'england'; }
+    function setNation(n){
+      if (!NATIONS[n]) n = 'england';
+      state.nation = n;
+      try { localStorage.setItem(NATION_KEY, n); } catch(e){}
+      var sel = $('nation'); if (sel && sel.value !== n) sel.value = n;
+      if (state.data){ renderResults(); }
+      refreshLetterNationWarning();
+    }
+    function nationNotice(){
+      var n = currentNation(); if (n === 'england') return '';
+      var N = NATIONS[n];
+      return '<div class="card p-5 mb-5 bg-[#FBF3EE] border-[#efd9cc]"><p class="font-semibold text-sm mb-1 text-[#8a4b32]">You chose ' + esc(N.name) + '</p>'
+        + '<p class="text-sm text-slate-soft mb-3">The Pharmacy First list, Right to Choose and eConsult guidance below describe <strong>NHS England</strong>. ' + esc(N.note) + ' Always confirm local details with your pharmacy, GP or health service.</p>'
+        + '<div class="flex flex-wrap gap-2">' + N.links.map(function(l){ return '<a class="pill" target="_blank" rel="noopener" href="' + l[1] + '">' + esc(l[0]) + '</a>'; }).join('')
+        + '<a class="pill" href="/uk-nations">How care differs across the UK</a></div></div>';
+    }
+    function refreshLetterNationWarning(){
+      var h = $('l-mode-help'); if (!h) return;
+      var n = currentNation();
+      var base = (typeof letterMode !== 'undefined' && letterMode === 'ref')
+        ? 'Ask for a referral, a second opinion or a review of a decision, politely and with a request for the reasons in writing if it is declined.'
+        : 'Ask your GP to refer you to a different NHS-funded provider for a first outpatient appointment, in England, where it is clinically appropriate.';
+      h.textContent = base + ((n !== 'england' && (typeof letterMode === 'undefined' || letterMode === 'rtc')) ? ' Note: Right to Choose applies in England only, so it may not apply in ' + NATIONS[n].name + '. The referral or second-opinion letter works anywhere in the UK.' : '');
+    }
     function renderToolkit(){
       var el = document.getElementById('toolkit'); if (!el) return;
+      if (currentNation() !== 'england'){
+        var N = NATIONS[currentNation()];
+        el.innerHTML = '<div class="card p-5 bg-[#f6faf7] border-[#d9e6de]"><p class="font-semibold text-sage mb-1">Where to start in ' + esc(N.name) + '</p><p class="text-xs text-slate-muted mb-3">Official services for ' + esc(N.health) + '. England-only tools such as the NHS App links, Right to Choose and Pharmacy First England do not apply here.</p><div class="flex flex-wrap gap-2">'
+          + N.links.map(function(l){ return '<a class="pill" target="_blank" rel="noopener" href="' + l[1] + '">' + esc(l[0]) + '</a>'; }).join('')
+          + '<a class="pill" href="/uk-nations">How care differs across the UK</a></div></div>';
+        return;
+      }
       var groups = [
         { h: 'Manage your care', items: [
           ['NHS App — GP, prescriptions & records', 'https://www.nhs.uk/nhs-app/'],
@@ -1646,6 +1772,7 @@
         + (essentials ? ('<h3 class="font-display text-xl font-semibold mt-6 mb-1">Recommended comfort essentials</h3><p class="text-xs text-slate-muted mb-3">'+esc(cfg.AFFILIATE_DISCLOSURE || '')+'</p><div class="grid sm:grid-cols-2 gap-3">'+essentials+'</div>') : '')
         + '<div class="card p-5 mt-6"><h4 class="font-semibold mb-1">Are you a wellbeing practitioner?</h4><p class="text-sm text-slate-soft mb-3">List your practice in the local directory for £39/mo. Self-serve sign-up, you are listed as soon as your subscription starts.</p><a href="'+esc(listUrl)+'" target="_blank" rel="noopener" class="inline-block px-5 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm">List your practice, £39/mo</a></div>';
       if (isAdhdAutism()) updateAdhdLinks();
+      var nn = nationNotice(); if (nn){ $('t1').insertAdjacentHTML('afterbegin', nn); $('t2').insertAdjacentHTML('afterbegin', nn); }
       applyPending();
       focusCondition();
     }
@@ -2029,9 +2156,9 @@
     function downloadText(name, id){ var blob=new Blob([$(id).dataset.text||''],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click(); }
 
     // ---- Multi-page router: each nav item is its own page with a real URL ----
-    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/health-topics':'health-topics', '/babies-pregnancy-menopause':'health-topics', '/eczema-skin':'health-topics', '/private-care':'private-care', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
-    var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'health-topics':'Health topics | Kaur Care', 'private-care':'Private care costs and second opinions | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
-    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'health-topics':'health-topics', 'private-care':'private-care', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
+    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/health-topics':'health-topics', '/babies-pregnancy-menopause':'health-topics', '/eczema-skin':'health-topics', '/uk-nations':'uk-nations', '/private-care':'private-care', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
+    var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'health-topics':'Health topics | Kaur Care', 'uk-nations':'Care across the UK | Kaur Care', 'private-care':'Private care costs and second opinions | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
+    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'health-topics':'health-topics', 'uk-nations':'uk-nations', 'private-care':'private-care', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
     function kcPathFor(slug){ for (var k in KC_PATHS){ if (KC_PATHS[k] === slug) return k; } return '/'; }
     function kcCurrent(){ var p = (location.pathname || '/').replace(/\/+$/,'') || '/'; return KC_PATHS[p] || 'home'; }
     function showPage(slug, push){
@@ -2065,6 +2192,7 @@
     // Paid/demo unlock first (never relocks), then partner branding/unlock on top.
     checkUnlock().then(initPartner);
     renderLog();
+    state.nation = loadNation(); (function(){ var sel = $('nation'); if (sel) sel.value = state.nation; })();
     initInstallBanner();
 
     // PWA "Save to Home Screen" banner.

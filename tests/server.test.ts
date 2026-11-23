@@ -225,6 +225,13 @@ describe("Static serving", () => {
     expect(html).toContain('id="private-care"');
   });
 
+  it("serves the UK nations page at /uk-nations", async () => {
+    const res = await fetch(`${BASE}/uk-nations`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('id="uk-nations"');
+  });
+
   it("keeps /health as the JSON health check", async () => {
     const res = await fetch(`${BASE}/health`);
     expect(res.status).toBe(200);
