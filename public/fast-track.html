@@ -334,7 +334,7 @@
       <p class="text-slate-soft text-sm mb-4">Optional time-savers. The NHS information above is always free; these generators are a convenience. Your details stay in your browser and are never sent to us.</p>
       <div id="tools-locked" class="card p-6 text-center" data-unlock-scope>
         <div class="text-3xl mb-2">🔒</div>
-        <p class="font-semibold mb-1">Unlock the document generators</p>
+        <p class="font-semibold mb-1">Turn your results into a one-page brief and letters, from £4.99</p>
         <p class="text-sm text-slate-soft mb-4">Build a 1-page brief with a 30-second opening script, SBAR layout, questions suggested for your concern, a "before you leave" checklist, an eConsult-ready version and a printable page. Plus two letter builders: Right to Choose, and referral or second-opinion requests.</p>
         <div class="grid md:grid-cols-2 gap-4 text-left mb-6" data-preview>
           <div class="relative rounded-2xl border border-sand bg-white overflow-hidden" style="height:250px">
@@ -370,9 +370,10 @@
         </div>
         <input id="unlock-email" type="email" placeholder="Your email (for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
-          <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock both generators — £4.99 one-off</button>
-          <button type="button" data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass — £7.99/mo</button>
+          <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock both tools for £4.99, once</button>
+          <button type="button" data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass, £7.99/month</button>
         </div>
+        <p class="text-xs text-slate-muted mt-3">No account needed. Secure checkout by Stripe. Questions? <a href="mailto:admin@kaurcare.com" class="underline text-sage">admin@kaurcare.com</a></p>
         <p class="u-msg text-xs text-slate-muted mt-3" id="unlock-msg"></p>
         <div class="restore-slot mt-3"></div>
         <p class="u-detail hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto" id="unlock-detail"></p>
@@ -1136,8 +1137,14 @@
       </div>
       <div class="restore-slot mb-8"></div>
       <p class="eyebrow mb-2">Prep tools</p>
-      <h2 class="font-display text-3xl font-semibold text-sage mb-3">Turn up to your appointment ready</h2>
-      <p class="text-slate-soft mb-8 max-w-2xl mx-auto">All the NHS guidance above is free. The optional document generators save you the writing. Everything you type stays in your browser and is never sent to us.</p>
+      <h2 class="font-display text-3xl md:text-4xl font-semibold text-sage mb-3">Be heard in a 10-minute appointment</h2>
+      <p class="text-slate-soft mb-6 max-w-2xl mx-auto">Answer a few questions and get a one-page brief your GP can read in 30 seconds, plus referral letters that are clear, polite and hard to brush off. From <strong>£4.99, once</strong>.</p>
+      <p class="mb-8"><a href="#plans" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'});return false;" class="inline-block px-6 py-3.5 rounded-2xl bg-sage text-white font-semibold hover:bg-sage-dark">See the plans</a></p>
+      <div class="grid sm:grid-cols-3 gap-4 text-left mb-10">
+        <div class="card p-5"><p class="text-[11px] font-bold uppercase tracking-wider text-terracotta mb-1">Step 1</p><p class="font-semibold mb-1">Tell us what is happening</p><p class="text-sm text-slate-soft">A few plain questions about your symptoms, what you have tried and what you hope for.</p></div>
+        <div class="card p-5"><p class="text-[11px] font-bold uppercase tracking-wider text-terracotta mb-1">Step 2</p><p class="font-semibold mb-1">Get your brief and letters</p><p class="text-sm text-slate-soft">Built in the order clinicians use, with questions picked for your concern.</p></div>
+        <div class="card p-5"><p class="text-[11px] font-bold uppercase tracking-wider text-terracotta mb-1">Step 3</p><p class="font-semibold mb-1">Hand it over or send it</p><p class="text-sm text-slate-soft">Download a PDF, print it, or paste the short version into eConsult or the NHS App.</p></div>
+      </div>
       <div class="grid sm:grid-cols-2 gap-5 text-left">
         <div class="card p-6">
           <p class="font-semibold mb-1">Referral letters</p>
@@ -1182,6 +1189,34 @@
           </div>
         </div>
         </div>
+      <div id="plans" class="max-w-3xl mx-auto text-left mt-12" data-unlock-scope>
+        <h3 class="font-display text-2xl md:text-3xl font-semibold text-sage text-center mb-2">Get your brief in about three minutes</h3>
+        <p class="text-center text-slate-soft text-sm mb-6">About the price of a coffee, and it saves you the writing every time you need a letter or a summary.</p>
+        <input type="email" placeholder="Your email (optional, for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-6 focus:outline-none focus:border-sage" />
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div class="card p-6 flex flex-col border-sage relative" style="box-shadow:0 10px 30px rgba(45,90,71,.12)">
+            <span class="absolute -top-3 left-5 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-sage text-white">Best for one appointment</span>
+            <p class="font-semibold">Fast-Track Pass</p>
+            <p class="my-2"><span class="font-display text-5xl font-semibold text-sage">£4.99</span> <span class="text-sm text-slate-muted">pay once</span></p>
+            <ul class="text-sm text-slate-soft space-y-1.5 mb-5 flex-1"><li>&#10003; The 1-page brief and both letter builders</li><li>&#10003; Download a polished PDF, or paste into eConsult</li><li>&#10003; Yours to keep. No renewal, no account</li></ul>
+            <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3.5 rounded-xl bg-sage text-white font-semibold hover:bg-sage-dark">Unlock for £4.99</button>
+          </div>
+          <div class="card p-6 flex flex-col relative">
+            <span class="absolute -top-3 left-5 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-terracotta text-white">For ongoing care</span>
+            <p class="font-semibold">Family &amp; Women&rsquo;s Health Pass</p>
+            <p class="my-2"><span class="font-display text-5xl font-semibold text-sage">£7.99</span> <span class="text-sm text-slate-muted">per month</span></p>
+            <ul class="text-sm text-slate-soft space-y-1.5 mb-5 flex-1"><li>&#10003; The same tools, for repeat appointments</li><li>&#10003; Suits families and long-term concerns</li><li>&#10003; Cancel any time: email admin@kaurcare.com</li></ul>
+            <button type="button" data-plan="family" class="unlock-btn px-5 py-3.5 rounded-xl border border-sage text-sage font-semibold hover:bg-sage/5">Start for £7.99/month</button>
+          </div>
+        </div>
+        <p class="u-msg text-sm text-slate-muted mt-4 text-center"></p>
+        <p class="u-detail hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto text-center"></p>
+        <ul class="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-slate-soft mt-5">
+          <li>&#10003; No account needed</li><li>&#10003; Secure checkout by Stripe</li><li>&#10003; Your answers stay on your device</li><li>&#10003; Works on your phone</li>
+        </ul>
+        <p class="text-xs text-slate-muted mt-3 text-center">Built by someone who has seen both sides of the appointment. Questions or trouble paying? Email <a href="mailto:admin@kaurcare.com" class="underline text-sage">admin@kaurcare.com</a> and a real person will reply.</p>
+      </div>
+
       <div class="mt-10 text-left">
         <h3 class="font-display text-2xl font-semibold text-sage text-center mb-6">What you get</h3>
         <div class="grid sm:grid-cols-2 gap-4 mb-8">
@@ -1191,38 +1226,17 @@
           <div class="card p-5"><p class="font-semibold mb-1">Letters that are clear and polite</p><p class="text-sm text-slate-soft">Right to Choose, referral and second-opinion letters with a reply deadline and a request to record any refusal in writing.</p></div>
           <div class="card p-5"><p class="font-semibold mb-1">Ready for eConsult and the NHS App</p><p class="text-sm text-slate-soft">A short version to paste straight into your surgery&rsquo;s online form, plus a printable page.</p></div>
           <div class="card p-5"><p class="font-semibold mb-1">A &ldquo;before you leave&rdquo; checklist</p><p class="text-sm text-slate-soft">Plan, follow-up date and when to come back, so you walk out knowing what happens next.</p></div>
+          <div class="card p-5"><p class="font-semibold mb-1">A polished PDF in one tap</p><p class="text-sm text-slate-soft">A clean one-page brief and properly laid out letters you can print, email or hand over.</p></div>
+          <div class="card p-5"><p class="font-semibold mb-1">Your details, if you want them kept</p><p class="text-sm text-slate-soft">Save your answers on your own device or in a file, so a repeat appointment takes a minute. Lost access? We email you a link.</p></div>
         </div>
 
         <div class="card p-5 mb-8">
           <h4 class="font-semibold text-center mb-3">Free vs the prep tools</h4>
           <div class="grid sm:grid-cols-2 gap-4 text-sm">
             <div><p class="font-semibold text-sage mb-1">Always free</p><ul class="list-disc pl-5 text-slate-soft space-y-1"><li>Find your NHS options by postcode</li><li>Health topics, guides and the Journal</li><li>The Prep playbook and SBAR guide</li><li>Private care costs and second-opinion guide</li></ul></div>
-            <div><p class="font-semibold text-terracotta mb-1">With a pass</p><ul class="list-disc pl-5 text-slate-soft space-y-1"><li>The 1-page brief builder, with opener and suggested questions</li><li>Referral and Right to Choose letter builders</li><li>eConsult and NHS App versions, and a printable page</li><li>The 5-day symptom and flare log</li></ul></div>
+            <div><p class="font-semibold text-terracotta mb-1">With a pass</p><ul class="list-disc pl-5 text-slate-soft space-y-1"><li>The 1-page brief builder, with opener and suggested questions</li><li>Referral and Right to Choose letter builders</li><li>eConsult and NHS App versions, and a printable page</li><li>Download as a polished PDF</li><li>The 5-day symptom and flare log</li></ul></div>
           </div>
         </div>
-      </div>
-
-      <div class="max-w-3xl mx-auto text-left" data-unlock-scope>
-        <h3 class="font-display text-2xl font-semibold text-sage text-center mb-4">Choose how to unlock</h3>
-        <input type="email" placeholder="Your email (optional, for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-5 focus:outline-none focus:border-sage" />
-        <div class="grid sm:grid-cols-2 gap-5">
-          <div class="card p-6 flex flex-col">
-            <p class="font-semibold">Fast-Track Pass</p>
-            <p class="my-2"><span class="font-display text-4xl font-semibold text-sage">£4.99</span> <span class="text-sm text-slate-muted">one-off</span></p>
-            <ul class="text-sm text-slate-soft space-y-1.5 mb-5 flex-1"><li>&#10003; Brief builder and letter builders</li><li>&#10003; eConsult and printable versions</li><li>&#10003; Pay once, no renewal</li></ul>
-            <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock for £4.99</button>
-          </div>
-          <div class="card p-6 flex flex-col border-sage relative">
-            <span class="absolute -top-3 left-5 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-terracotta text-white">For ongoing care</span>
-            <p class="font-semibold">Family &amp; Women&rsquo;s Health Pass</p>
-            <p class="my-2"><span class="font-display text-4xl font-semibold text-sage">£7.99</span> <span class="text-sm text-slate-muted">per month</span></p>
-            <ul class="text-sm text-slate-soft space-y-1.5 mb-5 flex-1"><li>&#10003; The same tools, for repeat appointments</li><li>&#10003; Suits families and long-term concerns</li><li>&#10003; Renews monthly</li></ul>
-            <button type="button" data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Start for £7.99/month</button>
-          </div>
-        </div>
-        <p class="u-msg text-sm text-slate-muted mt-4 text-center"></p>
-        <p class="u-detail hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto text-center"></p>
-        <p class="text-xs text-slate-muted mt-3 text-center">Secure checkout by Stripe. What you type into the tools stays in your browser and is never sent to us.</p>
       </div>
     </div>
   </section>
@@ -1960,7 +1974,8 @@
           + '<div class="restore-form hidden mt-3 text-left max-w-md mx-auto"><p class="text-xs text-slate-muted mb-2">Enter the email you paid with. We will send a link that unlocks your prep tools on this device.</p>'
           + '<div class="flex flex-col sm:flex-row gap-2"><input type="email" class="restore-email flex-1 px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" placeholder="Email you paid with" autocomplete="email" aria-label="Email you paid with">'
           + '<button type="button" class="restore-send px-4 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm whitespace-nowrap">Email me a link</button></div>'
-          + '<p class="restore-msg text-xs text-slate-muted mt-2" role="status"></p></div>';
+          + '<p class="restore-msg text-xs text-slate-muted mt-2" role="status"></p>'
+          + '<p class="text-xs text-slate-muted mt-2">No email? Check you used the same address you paid with, or email <a href="mailto:admin@kaurcare.com" class="underline text-sage">admin@kaurcare.com</a> and we will sort it out.</p></div>';
         var form = slot.querySelector('.restore-form'), msg = slot.querySelector('.restore-msg'), input = slot.querySelector('.restore-email'), send = slot.querySelector('.restore-send');
         slot.querySelector('.restore-toggle').addEventListener('click', function(){ form.classList.toggle('hidden'); if (!form.classList.contains('hidden')) input.focus(); });
         function go(){
