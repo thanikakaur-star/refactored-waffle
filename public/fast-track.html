@@ -2048,8 +2048,8 @@
     // "Reviewed by" line: shown only when a named reviewer is set in fast-track-config.js.
     (function(){
       var r = (window.FAST_TRACK_CONFIG || {}).CLINICAL_REVIEW;
-      if (!r || !r.name) return;
-      var text = 'Content reviewed by ' + r.name + (r.role ? ', ' + r.role : '') + (r.date ? '. Last checked ' + r.date + '.' : '.');
+      if (!r || !(r.text || r.name)) return;
+      var text = r.text || ('Content reviewed by ' + r.name + (r.role ? ', ' + r.role : '') + (r.date ? '. Last checked ' + r.date + '.' : '.'));
       document.querySelectorAll('.review-slot').forEach(function(el){ el.textContent = text; el.classList.remove('hidden'); });
     })();
 

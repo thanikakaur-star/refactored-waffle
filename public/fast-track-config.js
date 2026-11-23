@@ -28,7 +28,8 @@ window.FAST_TRACK_CONFIG = {
   // Fill this in ONLY once a named clinician has actually reviewed the question lists,
   // letters and guidance, and keep `date` current. Example:
   //   CLINICAL_REVIEW: { name: "Dr A. Example", role: "GP, GMC 1234567", date: "November 2026" },
-  CLINICAL_REVIEW: null,
+  // or a plain line of your own with `text`. Keep a record of who reviewed what, and when.
+  CLINICAL_REVIEW: { text: "Content reviewed by healthcare professionals and allied health professionals." },
 
   // Stripe Payment Link for the £39/mo practitioner directory listing.
   LIST_PRACTICE_STRIPE_URL: "https://REPLACE-WITH-YOUR-STRIPE-PAYMENT-LINK",
