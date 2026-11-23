@@ -306,6 +306,38 @@
         <div class="text-3xl mb-2">🔒</div>
         <p class="font-semibold mb-1">Unlock the document generators</p>
         <p class="text-sm text-slate-soft mb-4">Build a 1-page brief with a 30-second opening script, SBAR layout, questions suggested for your concern, a "before you leave" checklist, an eConsult-ready version and a printable page. Plus two letter builders: Right to Choose, and referral or second-opinion requests.</p>
+        <div class="grid md:grid-cols-2 gap-4 text-left mb-6" data-preview>
+          <div class="relative rounded-2xl border border-sand bg-white overflow-hidden" style="height:250px">
+            <span class="absolute top-3 right-3 z-10 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-terracotta text-white">Example</span>
+            <div class="p-4">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-sage mb-1">1-page brief</p>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-terracotta">My 30-second opener</p>
+              <p class="text-xs text-slate italic mb-2">&ldquo;I&rsquo;m here about heavy periods. It&rsquo;s been going on for 8 months. It&rsquo;s affecting my sleep and work.&rdquo;</p>
+            </div>
+            <div class="px-4" style="filter:blur(5px);user-select:none;pointer-events:none" aria-hidden="true">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-terracotta">S: Situation</p><p class="text-xs text-slate mb-1.5">Heavy, painful periods for about 8 months, getting worse.</p>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-terracotta">A: Assessment</p><p class="text-xs text-slate mb-1.5">Severity 7/10. Missing work 3 to 4 days a month.</p>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-terracotta">My questions</p><p class="text-xs text-slate">1. What could be causing this? 2. Can I have an iron check? 3. Is a referral appropriate?</p>
+            </div>
+            <div class="absolute inset-x-0 bottom-0 h-24" style="background:linear-gradient(to top,#fff 25%,rgba(255,255,255,0))"></div>
+            <div class="absolute bottom-3 inset-x-0 text-center text-xs font-semibold text-sage">&#128274; Unlocks with a pass</div>
+          </div>
+          <div class="relative rounded-2xl border border-sand bg-white overflow-hidden" style="height:250px">
+            <span class="absolute top-3 right-3 z-10 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-terracotta text-white">Example</span>
+            <div class="p-4">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-sage mb-1">Right to Choose letter</p>
+              <p class="text-xs text-slate font-semibold">Subject: Request for referral under NHS Right to Choose: dermatology</p>
+              <p class="text-xs text-slate mb-2">Dear Dr Patel, I am writing to ask you to refer me, and to exercise my right to choose the provider&hellip;</p>
+            </div>
+            <div class="px-4" style="filter:blur(5px);user-select:none;pointer-events:none" aria-hidden="true">
+              <p class="text-xs text-slate mb-1.5">Could you please make the referral through the NHS e-Referral Service, and let me know within 14 days that it has been sent.</p>
+              <p class="text-xs text-slate mb-1.5">If you feel a referral is not clinically appropriate, please tell me the reason in writing and record my request in my notes.</p>
+              <p class="text-xs text-slate">Yours sincerely, Sam Kaur</p>
+            </div>
+            <div class="absolute inset-x-0 bottom-0 h-24" style="background:linear-gradient(to top,#fff 25%,rgba(255,255,255,0))"></div>
+            <div class="absolute bottom-3 inset-x-0 text-center text-xs font-semibold text-sage">&#128274; Unlocks with a pass</div>
+          </div>
+        </div>
         <input id="unlock-email" type="email" placeholder="Your email (for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock both generators — £4.99 one-off</button>
@@ -832,7 +864,41 @@
           <p class="text-sm text-slate-soft">A 30-second opener, SBAR summary, questions suggested for your concern, a "before you leave" checklist, and a copy for eConsult or the NHS App.</p>
         </div>
       </div>
-      <div class="card p-6 mt-8 max-w-xl mx-auto" data-unlock-scope>
+      <div class="mt-8 max-w-3xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-4 text-left mb-2" data-preview>
+          <div class="relative rounded-2xl border border-sand bg-white overflow-hidden" style="height:250px">
+            <span class="absolute top-3 right-3 z-10 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-terracotta text-white">Example</span>
+            <div class="p-4">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-sage mb-1">1-page brief</p>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-terracotta">My 30-second opener</p>
+              <p class="text-xs text-slate italic mb-2">&ldquo;I&rsquo;m here about heavy periods. It&rsquo;s been going on for 8 months. It&rsquo;s affecting my sleep and work.&rdquo;</p>
+            </div>
+            <div class="px-4" style="filter:blur(5px);user-select:none;pointer-events:none" aria-hidden="true">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-terracotta">S: Situation</p><p class="text-xs text-slate mb-1.5">Heavy, painful periods for about 8 months, getting worse.</p>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-terracotta">A: Assessment</p><p class="text-xs text-slate mb-1.5">Severity 7/10. Missing work 3 to 4 days a month.</p>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-terracotta">My questions</p><p class="text-xs text-slate">1. What could be causing this? 2. Can I have an iron check? 3. Is a referral appropriate?</p>
+            </div>
+            <div class="absolute inset-x-0 bottom-0 h-24" style="background:linear-gradient(to top,#fff 25%,rgba(255,255,255,0))"></div>
+            <div class="absolute bottom-3 inset-x-0 text-center text-xs font-semibold text-sage">&#128274; Unlocks with a pass</div>
+          </div>
+          <div class="relative rounded-2xl border border-sand bg-white overflow-hidden" style="height:250px">
+            <span class="absolute top-3 right-3 z-10 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-terracotta text-white">Example</span>
+            <div class="p-4">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-sage mb-1">Right to Choose letter</p>
+              <p class="text-xs text-slate font-semibold">Subject: Request for referral under NHS Right to Choose: dermatology</p>
+              <p class="text-xs text-slate mb-2">Dear Dr Patel, I am writing to ask you to refer me, and to exercise my right to choose the provider&hellip;</p>
+            </div>
+            <div class="px-4" style="filter:blur(5px);user-select:none;pointer-events:none" aria-hidden="true">
+              <p class="text-xs text-slate mb-1.5">Could you please make the referral through the NHS e-Referral Service, and let me know within 14 days that it has been sent.</p>
+              <p class="text-xs text-slate mb-1.5">If you feel a referral is not clinically appropriate, please tell me the reason in writing and record my request in my notes.</p>
+              <p class="text-xs text-slate">Yours sincerely, Sam Kaur</p>
+            </div>
+            <div class="absolute inset-x-0 bottom-0 h-24" style="background:linear-gradient(to top,#fff 25%,rgba(255,255,255,0))"></div>
+            <div class="absolute bottom-3 inset-x-0 text-center text-xs font-semibold text-sage">&#128274; Unlocks with a pass</div>
+          </div>
+        </div>
+        </div>
+      <div class="card p-6 mt-4 max-w-xl mx-auto" data-unlock-scope>
         <p class="font-semibold mb-1">Unlock the document generators</p>
         <p class="text-sm text-slate-soft mb-4">One payment or subscription unlocks both the Right to Choose letter and the 1-page GP brief. Your details stay in your browser.</p>
         <input type="email" placeholder="Your email (for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
