@@ -129,8 +129,7 @@
         </span>
       </a>
       <div class="hidden lg:flex items-center gap-6">
-        <a href="/how-it-works" data-nav="how-it-works" class="nav-link">How it works</a>
-        <a href="/whats-covered" data-nav="whats-covered" class="nav-link">What's covered</a>
+        <a href="/how-it-works" class="nav-link">How it works</a>
         <a href="/health-topics" data-nav="health-topics" class="nav-link">Health topics</a>
         <a href="/private-care" data-nav="private-care" class="nav-link">Private care</a>
         <a href="/prep-playbook" data-nav="prep-playbook" class="nav-link">Prep playbook</a>
@@ -153,8 +152,7 @@
     </div>
     <div id="mobile-menu" class="lg:hidden hidden border-t border-sand bg-cream">
       <div class="max-w-6xl mx-auto px-5 py-2 flex flex-col">
-        <a href="/how-it-works" data-nav="how-it-works" class="py-3 border-b border-sand/60 nav-link">How it works</a>
-        <a href="/whats-covered" data-nav="whats-covered" class="py-3 border-b border-sand/60 nav-link">What's covered</a>
+        <a href="/how-it-works" class="py-3 border-b border-sand/60 nav-link">How it works &amp; what's covered</a>
         <a href="/health-topics" data-nav="health-topics" class="py-3 border-b border-sand/60 nav-link">Health topics</a>
         <a href="/uk-nations" data-nav="uk-nations" class="py-3 border-b border-sand/60 nav-link">Scotland, Wales &amp; NI</a>
         <a href="/private-care" data-nav="private-care" class="py-3 border-b border-sand/60 nav-link">Private care</a>
@@ -492,7 +490,7 @@
   </main>
 
   <!-- How it works -->
-  <section id="how" data-page="how-it-works" class="kc-page site-section border-t border-sand bg-white/50">
+  <section id="how" data-page="home" class="kc-page site-section border-t border-sand bg-white/50">
     <div class="max-w-6xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">How it works</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-10">Advocate for yourself, in three steps</h2>
@@ -517,7 +515,7 @@
   </section>
 
   <!-- What's covered -->
-  <section id="covered" data-page="whats-covered" class="kc-page site-section">
+  <section id="covered" data-page="home" class="kc-page site-section">
     <div class="max-w-6xl mx-auto px-5 py-14">
       <p class="eyebrow mb-2 text-center">What's covered</p>
       <h2 class="font-display text-3xl font-semibold text-sage text-center mb-10">Everyday care for the whole family</h2>
@@ -2197,9 +2195,9 @@
     function downloadText(name, id){ var blob=new Blob([$(id).dataset.text||''],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click(); }
 
     // ---- Multi-page router: each nav item is its own page with a real URL ----
-    var KC_PATHS = { '/':'home', '/how-it-works':'how-it-works', '/whats-covered':'whats-covered', '/health-topics':'health-topics', '/babies-pregnancy-menopause':'health-topics', '/eczema-skin':'health-topics', '/uk-nations':'uk-nations', '/private-care':'private-care', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
+    var KC_PATHS = { '/':'home', '/how-it-works':'home', '/whats-covered':'home', '/health-topics':'health-topics', '/babies-pregnancy-menopause':'health-topics', '/eczema-skin':'health-topics', '/uk-nations':'uk-nations', '/private-care':'private-care', '/prep-playbook':'prep-playbook', '/wellness':'wellness', '/prep-tools':'prep-tools', '/partners':'partners', '/faqs':'faqs' };
     var KC_TITLES = { 'home':'Kaur Care | Skip the Queue for NHS & Private Care', 'how-it-works':'How it works | Kaur Care', 'whats-covered':"What's covered | Kaur Care", 'health-topics':'Health topics | Kaur Care', 'uk-nations':'Care across the UK | Kaur Care', 'private-care':'Private care costs and second opinions | Kaur Care', 'prep-playbook':'Appointment prep playbook | Kaur Care', 'wellness':'Holistic wellness | Kaur Care', 'prep-tools':'Appointment prep tools | Kaur Care', 'partners':'For partners | Kaur Care', 'faqs':'FAQs | Kaur Care' };
-    var KC_ANCHOR = { 'find':'home', 'how':'how-it-works', 'covered':'whats-covered', 'health-topics':'health-topics', 'uk-nations':'uk-nations', 'private-care':'private-care', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
+    var KC_ANCHOR = { 'find':'home', 'how':'home', 'covered':'home', 'health-topics':'health-topics', 'uk-nations':'uk-nations', 'private-care':'private-care', 'prep-playbook':'prep-playbook', 'holistic':'wellness', 'pricing':'prep-tools', 'free':'prep-tools', 'faq':'faqs', 'white-label':'partners' };
     function kcPathFor(slug){ for (var k in KC_PATHS){ if (KC_PATHS[k] === slug) return k; } return '/'; }
     function kcCurrent(){ var p = (location.pathname || '/').replace(/\/+$/,'') || '/'; return KC_PATHS[p] || 'home'; }
     function showPage(slug, push){
@@ -2220,7 +2218,14 @@
       if (href.charAt(0) === '#' || href.slice(0,2) === '/#'){
         var id = href.replace(/^\/?#/, '');
         var slugA = KC_ANCHOR[id];
-        if (slugA){ e.preventDefault(); showPage(slugA, true); if (id === 'find'){ var f = document.getElementById('find'); if (f) setTimeout(function(){ f.scrollIntoView({ behavior:'smooth' }); }, 60); } }
+        if (slugA){ e.preventDefault(); showPage(slugA, true); if (id === 'find' || id === 'how' || id === 'covered'){ var f = document.getElementById(id); if (f) setTimeout(function(){ f.scrollIntoView({ behavior:'smooth' }); }, 60); } }
+        return;
+      }
+      if (href === '/how-it-works' || href === '/whats-covered'){
+        e.preventDefault(); showPage('home', false);
+        try { history.pushState({ kc:'home' }, '', href); } catch(x){}
+        var t = document.getElementById(href === '/how-it-works' ? 'how' : 'covered');
+        if (t) setTimeout(function(){ t.scrollIntoView({ behavior:'smooth' }); }, 60);
         return;
       }
       // Internal page links (leave /journal, /privacy and external links alone).
@@ -2229,6 +2234,7 @@
     }, false);
     window.addEventListener('popstate', function(){ showPage(kcCurrent(), false); });
     showPage(kcCurrent(), false);
+    (function(){ var p = (location.pathname || '/').replace(/\/+$/,''); var id = p === '/how-it-works' ? 'how' : p === '/whats-covered' ? 'covered' : ''; if (id) setTimeout(function(){ var t = document.getElementById(id); if (t) t.scrollIntoView(); }, 200); })();
 
     // Add a gentle "prep tools" prompt at the bottom of each content page.
     function addPassCtas(){
