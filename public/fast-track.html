@@ -1869,13 +1869,25 @@
     }
     async function checkUnlock(){
       var params = new URLSearchParams(location.search);
-      var sid = params.get('session_id') || '';
+      var urlSid = params.get('session_id') || '';
+      // Remember a purchase on this device so returning visitors stay unlocked; the server re-checks every visit.
+      var SID_KEY = 'kaurcare_pass_session';
+      var stored = ''; try { stored = localStorage.getItem(SID_KEY) || ''; } catch(e){}
+      var sid = urlSid || stored;
       try {
         var res = await fetch('/api/fast-track/verify' + (sid ? ('?session_id=' + encodeURIComponent(sid)) : ''));
         var j = await res.json();
         state.demo = !!j.demo;
         if (j.unlocked) setUnlocked(true, false);
-        if (j.unlocked && sid){ $('unlock-msg').textContent = 'Unlocked. Thank you.'; }
+        if (j.unlocked && sid){
+          try { localStorage.setItem(SID_KEY, sid); } catch(e){}
+          if (urlSid) $('unlock-msg').textContent = 'Unlocked. Thank you.';
+        }
+        if (j.ended && !j.unlocked){
+          // The monthly plan was cancelled or stopped being paid: forget it and say so.
+          try { localStorage.removeItem(SID_KEY); } catch(e){}
+          var um = $('unlock-msg'); if (um) um.textContent = 'Your monthly plan has ended. You can restart it any time below.';
+        }
       } catch(e){ /* stay locked */ }
     }
 

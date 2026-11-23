@@ -21,6 +21,7 @@ import {
 } from "./data/fastTrackPathways.js";
 import { findCommissionedServices, cqcSearch, officialDirectoryLinks, getActivePartner } from "./fast-track/providers.js";
 import { getSeoOverviewSafe, isSearchConsoleConfigured } from "./admin/searchConsole.js";
+import { unlockStateForSubscriptionStatus } from "./fast-track/subscription.js";
 import type { ApiTier } from "./types/index.js";
 import type { Request, Response, NextFunction } from "express";
 import { z } from "zod";
@@ -101,7 +102,8 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
         // Fast-Track (CarePath) consumer unlock: record the unlock, not a B2B API key.
         if (session.metadata?.fast_track === "true") {
           if (USE_SUPABASE && supabase) {
-            await supabase.from("fast_track_unlocks").insert({
+            const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id ?? null;
+            const row = {
               stripe_session_id: session.id,
               email: session.customer_email ?? session.customer_details?.email ?? session.metadata?.email ?? null,
               postcode: session.metadata?.postcode ?? null,
@@ -109,7 +111,15 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
               plan_type: session.metadata?.plan_type ?? null,
               partner_slug: session.metadata?.partner_slug || null,
               unlocked: true,
-            });
+            };
+            // Monthly plans remember their subscription so access can be removed if it ends.
+            let { error } = await supabase.from("fast_track_unlocks").insert(subscriptionId ? { ...row, stripe_subscription_id: subscriptionId } : row);
+            if (error && /stripe_subscription_id/.test(error.message || "")) {
+              // Column not migrated yet: still grant access rather than lose a paid unlock.
+              logger.warn("fast_track_unlocks.stripe_subscription_id missing; run migration 015", { session: session.id });
+              ({ error } = await supabase.from("fast_track_unlocks").insert(row));
+            }
+            if (error) logger.error("Fast-track unlock insert failed", { session: session.id, error: error.message });
           }
           logger.info("Fast-track unlock recorded", { session: session.id, plan: session.metadata?.plan_type });
           break;
@@ -141,8 +151,11 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
         const sub = event.data.object as Stripe.Subscription;
         if (USE_SUPABASE && supabase) {
           await supabase.from("api_keys").update({ is_active: false }).eq("stripe_subscription_id", sub.id);
+          // Family & Women's Health Pass: cancelled subscription removes the unlock.
+          const { error } = await supabase.from("fast_track_unlocks").update({ unlocked: false }).eq("stripe_subscription_id", sub.id);
+          if (error) logger.error("Fast-track relock failed", { subscriptionId: sub.id, error: error.message });
         }
-        logger.info("API key deactivated", { subscriptionId: sub.id });
+        logger.info("Subscription ended: API key deactivated and fast-track unlock removed", { subscriptionId: sub.id });
         break;
       }
       case "customer.subscription.updated": {
@@ -151,6 +164,12 @@ app.post("/webhooks/stripe", express.raw({ type: "application/json" }), async (r
         const newTier = resolveTier(item?.price.id ?? "", (item?.price.unit_amount ?? undefined) as number | undefined);
         if (USE_SUPABASE && supabase) {
           await supabase.from("api_keys").update({ tier: newTier }).eq("stripe_subscription_id", sub.id);
+          // Keep the Family pass in step with payment status (unpaid or cancelled relocks; active unlocks).
+          const unlockState = unlockStateForSubscriptionStatus(sub.status);
+          if (unlockState !== null) {
+            const { error } = await supabase.from("fast_track_unlocks").update({ unlocked: unlockState }).eq("stripe_subscription_id", sub.id);
+            if (error) logger.error("Fast-track unlock sync failed", { subscriptionId: sub.id, error: error.message });
+          }
         }
         logger.info("Subscription tier updated", { subscriptionId: sub.id, tier: newTier });
         break;
@@ -985,8 +1004,10 @@ app.get("/api/fast-track/verify", async (req, res) => {
   try {
     if (USE_SUPABASE && supabase) {
       const { data } = await supabase.from("fast_track_unlocks").select("unlocked").eq("stripe_session_id", sessionId).limit(1);
-      const unlocked = Array.isArray(data) && data[0] && (data[0] as any).unlocked;
-      res.json({ unlocked: !!unlocked || demo, demo });
+      const row = Array.isArray(data) ? (data[0] as { unlocked?: boolean } | undefined) : undefined;
+      const unlocked = !!(row && row.unlocked);
+      // ended: a purchase exists but access was removed (monthly plan cancelled or unpaid).
+      res.json({ unlocked: unlocked || demo, demo, ended: !!row && !unlocked });
       return;
     }
     res.json({ unlocked: demo, demo });
