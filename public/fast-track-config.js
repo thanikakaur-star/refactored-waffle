@@ -24,6 +24,12 @@ window.FAST_TRACK_CONFIG = {
   // Keep to general comfort/wellbeing items only (no medical/treatment claims).
   AFFILIATE_ESSENTIALS: [],
 
+  // "Reviewed by" line shown on the prep tools pages. Leave as null to show nothing.
+  // Fill this in ONLY once a named clinician has actually reviewed the question lists,
+  // letters and guidance, and keep `date` current. Example:
+  //   CLINICAL_REVIEW: { name: "Dr A. Example", role: "GP, GMC 1234567", date: "November 2026" },
+  CLINICAL_REVIEW: null,
+
   // Stripe Payment Link for the £39/mo practitioner directory listing.
   LIST_PRACTICE_STRIPE_URL: "https://REPLACE-WITH-YOUR-STRIPE-PAYMENT-LINK",
 };

@@ -398,6 +398,7 @@
       </div>
 
       <div id="tools-unlocked" class="hidden space-y-6">
+        <p class="review-slot hidden text-xs font-semibold text-sage" role="note"></p>
         <div id="profile-bar" class="card p-4">
           <div class="flex flex-wrap items-center justify-between gap-3">
             <label class="flex items-start gap-2 text-sm max-w-md"><input type="checkbox" id="remember-profile" class="mt-1"> <span><strong>Remember my details on this device</strong><br><span class="text-xs text-slate-muted">Saved in this browser only and never sent to us, so you do not retype them next time. Please do not tick this on a shared computer.</span></span></label>
@@ -1154,6 +1155,7 @@
       <p class="eyebrow mb-2">Prep tools</p>
       <h2 class="font-display text-3xl md:text-4xl font-semibold text-sage mb-3">Be heard in a 10-minute appointment</h2>
       <p class="text-slate-soft mb-6 max-w-2xl mx-auto">Answer a few questions and get a one-page brief your GP can read in 30 seconds, plus referral letters that are clear, polite and hard to brush off. From <strong>£4.99, once</strong>.</p>
+      <p class="review-slot hidden text-xs font-semibold text-sage mb-4" role="note"></p>
       <p class="mb-8"><a href="#plans" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'});return false;" class="inline-block px-6 py-3.5 rounded-2xl bg-sage text-white font-semibold hover:bg-sage-dark">See the plans</a></p>
       <div class="grid sm:grid-cols-3 gap-4 text-left mb-10">
         <div class="card p-5"><p class="text-[11px] font-bold uppercase tracking-wider text-terracotta mb-1">Step 1</p><p class="font-semibold mb-1">Tell us what is happening</p><p class="text-sm text-slate-soft">A few plain questions about your symptoms, what you have tried and what you hope for.</p></div>
@@ -1226,6 +1228,11 @@
         </div>
         <p class="u-msg text-sm text-slate-muted mt-4 text-center"></p>
         <p class="u-detail hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto text-center"></p>
+        <div class="card p-5 mt-6" style="background:#EDF3EF;border-color:#d9e6de">
+          <p class="font-display text-xl font-semibold text-sage mb-1">Your health details stay on your device</p>
+          <p class="text-sm text-slate-soft">Many online tools send what you type to their servers. Kaur Care&rsquo;s brief and letter builders run in your browser, so your symptoms, date of birth and NHS number are never sent to us. Keep them on your own device, or in a file only you hold.</p>
+          <p class="text-xs text-slate-muted mt-2">At checkout we keep your email, plan and search terms so you can get back in. Read the <a href="/privacy" class="underline text-sage">privacy page</a>.</p>
+        </div>
         <ul class="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-slate-soft mt-5">
           <li>&#10003; No account needed</li><li>&#10003; Secure checkout by Stripe</li><li>&#10003; Your answers stay on your device</li><li>&#10003; Works on your phone</li>
         </ul>
@@ -2037,6 +2044,14 @@
       });
     }
     initRestore();
+
+    // "Reviewed by" line: shown only when a named reviewer is set in fast-track-config.js.
+    (function(){
+      var r = (window.FAST_TRACK_CONFIG || {}).CLINICAL_REVIEW;
+      if (!r || !r.name) return;
+      var text = 'Content reviewed by ' + r.name + (r.role ? ', ' + r.role : '') + (r.date ? '. Last checked ' + r.date + '.' : '.');
+      document.querySelectorAll('.review-slot').forEach(function(el){ el.textContent = text; el.classList.remove('hidden'); });
+    })();
 
     // ---- Remember my details: on this device, or as a file you keep ----
     // Family & Women's Health Pass holders can keep a separate saved profile for each person.
