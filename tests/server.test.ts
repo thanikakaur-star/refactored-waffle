@@ -207,7 +207,22 @@ describe("Static serving", () => {
     const res = await fetch(`${BASE}/`);
     expect(res.status).toBe(200);
     const html = await res.text();
-    expect(html).toContain("HealthProcure Intel");
+    expect(html).toContain("Kaur Care");
+    expect(html).not.toContain("HealthProcure");
+  });
+
+  it("serves the Kaur Care health topics page at /health-topics", async () => {
+    const res = await fetch(`${BASE}/health-topics`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('id="h-periods"');
+  });
+
+  it("keeps /health as the JSON health check", async () => {
+    const res = await fetch(`${BASE}/health`);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.status).toBe("ok");
   });
 
   it("serves the dashboard at /dashboard", async () => {
