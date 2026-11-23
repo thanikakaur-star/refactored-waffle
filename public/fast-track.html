@@ -305,7 +305,7 @@
       <div id="tools-locked" class="card p-6 text-center" data-unlock-scope>
         <div class="text-3xl mb-2">🔒</div>
         <p class="font-semibold mb-1">Unlock the document generators</p>
-        <p class="text-sm text-slate-soft mb-4">Build a 1-page brief with a 30-second opening script, SBAR layout, questions suggested for your concern, a "before you leave" checklist, an eConsult-ready version and a printable page. Plus the Right to Choose referral letter.</p>
+        <p class="text-sm text-slate-soft mb-4">Build a 1-page brief with a 30-second opening script, SBAR layout, questions suggested for your concern, a "before you leave" checklist, an eConsult-ready version and a printable page. Plus two letter builders: Right to Choose, and referral or second-opinion requests.</p>
         <input id="unlock-email" type="email" placeholder="Your email (for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock both generators — £4.99 one-off</button>
@@ -331,15 +331,49 @@
 
       <div id="tools-unlocked" class="hidden space-y-6">
         <div class="card p-6">
-          <h3 class="font-display text-xl font-semibold mb-3">Tool A: Right to Choose referral letter</h3>
+          <h3 class="font-display text-xl font-semibold mb-1">Tool A: Referral letters</h3>
+          <p class="text-sm text-slate-soft mb-3">Choose a letter type. Each one is written to be clear, polite and hard to brush off, with a deadline and a request to record any refusal in your notes.</p>
+          <div id="l-mode" class="seg mb-4" style="grid-template-columns:repeat(2,1fr)">
+            <button type="button" class="seg-btn active" data-mode="rtc" onclick="setLetterMode('rtc')">Right to Choose</button>
+            <button type="button" class="seg-btn" data-mode="ref" onclick="setLetterMode('ref')">Referral or second opinion</button>
+          </div>
+          <p id="l-mode-help" class="text-xs text-slate-muted mb-3">Ask your GP to refer you to a different NHS-funded provider for a first outpatient appointment, in England, where it is clinically appropriate.</p>
+          <p class="text-xs font-semibold text-sage uppercase tracking-wider mb-2">About you</p>
           <div class="grid sm:grid-cols-2 gap-3 mb-3">
             <input id="l-name" placeholder="Full name" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
             <input id="l-dob" placeholder="Date of birth (e.g. 12/03/1990)" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+            <input id="l-nhs" placeholder="NHS number (optional)" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+            <input id="l-contact" placeholder="Best phone or email (optional)" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
             <input id="l-gp" placeholder="GP surgery name" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
-            <input id="l-clinic" placeholder="Chosen clinic / provider" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+            <input id="l-gpname" placeholder="GP's name (optional)" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
           </div>
-          <input id="l-condition" placeholder="Condition / service (e.g. ADHD assessment)" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3" />
-          <button onclick="genLetter()" class="px-5 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm">Generate letter</button>
+          <p class="text-xs font-semibold text-sage uppercase tracking-wider mb-2">What you are asking for</p>
+          <input id="l-condition" placeholder="Condition / service (e.g. dermatology, ADHD assessment, MRI)" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3" />
+          <div id="l-rtc-fields">
+            <div class="grid sm:grid-cols-2 gap-3 mb-3">
+              <input id="l-clinic" placeholder="Chosen clinic / provider" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+              <input id="l-clinic-loc" placeholder="Provider location or website" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+            </div>
+            <input id="l-wait" placeholder="Local NHS wait you were told (optional, e.g. 18 months)" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3" />
+            <label class="flex items-start gap-2 text-sm mb-2"><input id="l-confirmed" type="checkbox" class="mt-1"> <span>I have checked that this provider accepts NHS Right to Choose referrals for my area</span></label>
+            <label class="flex items-start gap-2 text-sm mb-3"><input id="l-adhd" type="checkbox" class="mt-1"> <span>This is an ADHD or autism assessment (adds a line about follow-up and prescribing arrangements)</span></label>
+          </div>
+          <div id="l-ref-fields" class="hidden">
+            <select id="l-reftype" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 bg-white">
+              <option value="referral">I am asking to be referred to a specialist or service</option>
+              <option value="second">I am asking for a second opinion</option>
+              <option value="review">I am asking for a decision to be reviewed</option>
+            </select>
+            <textarea id="l-reason" placeholder="Why you are asking (e.g. symptoms have continued despite treatment)" rows="2" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3"></textarea>
+          </div>
+          <p class="text-xs font-semibold text-sage uppercase tracking-wider mb-2">Your situation, briefly</p>
+          <textarea id="l-summary" placeholder="Your symptoms and how long (e.g. skin condition for 2 years, flares monthly)" rows="2" class="w-full px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3"></textarea>
+          <div class="grid sm:grid-cols-2 gap-3 mb-3">
+            <input id="l-tried" placeholder="What has been tried so far" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+            <input id="l-impact" placeholder="Impact on daily life" class="px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm" />
+          </div>
+          <div class="flex items-center gap-2 mb-4"><label class="text-sm">Please reply within</label><select id="l-days" class="px-3 py-2 rounded-xl border border-[#d8d0c4] text-sm bg-white"><option value="7">7 days</option><option value="14" selected>14 days</option><option value="21">21 days</option></select></div>
+          <button onclick="genLetter()" class="px-5 py-2.5 rounded-xl bg-sage text-white font-semibold text-sm">Build my letter</button>
           <div id="l-out" class="hidden mt-4"></div>
         </div>
 
@@ -790,8 +824,8 @@
       <p class="text-slate-soft mb-8 max-w-2xl mx-auto">All the NHS guidance above is free. The optional document generators save you the writing. Everything you type stays in your browser and is never sent to us.</p>
       <div class="grid sm:grid-cols-2 gap-5 text-left">
         <div class="card p-6">
-          <p class="font-semibold mb-1">Right to Choose referral letter</p>
-          <p class="text-sm text-slate-soft">A formal letter citing the NHS Choice Framework, ready to hand your GP.</p>
+          <p class="font-semibold mb-1">Referral letters</p>
+          <p class="text-sm text-slate-soft">Right to Choose and referral or second-opinion letters with a reply deadline, a request to record any refusal, a before-you-send checklist and a short eConsult version.</p>
         </div>
         <div class="card p-6">
           <p class="font-semibold mb-1">1-page GP / appointment brief</p>
@@ -1258,6 +1292,7 @@
       if (p.impact && $('b-impact')) $('b-impact').value = p.impact;
       if (p.questions && $('b-questions')) $('b-questions').value = p.questions;
       if (p.letterCondition && $('l-condition')) $('l-condition').value = p.letterCondition;
+      if (p.letterCondition && /adhd|autis/i.test(p.letterCondition) && $('l-adhd')) $('l-adhd').checked = true;
       savePending(null);
     }
     function flash(text){
@@ -1501,20 +1536,93 @@
       el.classList.remove('hidden');
       el.dataset.text = text;
     }
-    function genLetter(){
+    var letterMode = 'rtc';
+    function setLetterMode(mode){
+      letterMode = mode;
+      document.querySelectorAll('#l-mode .seg-btn').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-mode') === mode); });
+      $('l-rtc-fields').classList.toggle('hidden', mode !== 'rtc');
+      $('l-ref-fields').classList.toggle('hidden', mode !== 'ref');
+      $('l-mode-help').textContent = mode === 'rtc'
+        ? 'Ask your GP to refer you to a different NHS-funded provider for a first outpatient appointment, in England, where it is clinically appropriate.'
+        : 'Ask for a referral, a second opinion or a review of a decision, politely and with a request for the reasons in writing if it is declined.';
+    }
+    function letterVals(){
+      function v(id){ return (($(id) && $(id).value) || '').trim(); }
+      return { name:v('l-name'), dob:v('l-dob'), nhs:v('l-nhs'), contact:v('l-contact'), gp:v('l-gp'), gpname:v('l-gpname'),
+        service:v('l-condition'), clinic:v('l-clinic'), loc:v('l-clinic-loc'), wait:v('l-wait'),
+        confirmed: !!($('l-confirmed') && $('l-confirmed').checked), adhd: !!($('l-adhd') && $('l-adhd').checked),
+        reftype:v('l-reftype') || 'referral', reason:v('l-reason'), summary:v('l-summary'), tried:v('l-tried'), impact:v('l-impact'),
+        days: v('l-days') || '14' };
+    }
+    function tidy(x){ return (x || '').replace(/\s+$/,'').replace(/[.]+$/,''); }
+    function letterText(L){
       var today = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
       var p = state.postcodeInfo;
-      var areaLine = (p && (p.town || p.icb)) ? ('NHS area: ' + [p.town, p.icb].filter(Boolean).join(', ') + '\n') : '';
-      var t = today + '\n' + areaLine + '\nDear ' + ($('l-gp').value || '[GP Surgery]') + ',\n\n'
-        + 'Re: Patient ' + ($('l-name').value || '[Full name]') + ', DOB ' + ($('l-dob').value || '[Date of birth]') + '\n\n'
-        + 'I am writing to exercise my legal right under the NHS Choice Framework to be referred to a clinically appropriate NHS-funded provider of my choice.\n\n'
-        + 'I would like to request a referral for ' + ($('l-condition').value || '[condition / service]') + ' to the following provider:\n'
-        + ($('l-clinic').value || '[Chosen clinic / provider]') + '\n\n'
-        + 'I understand this provider holds an NHS standard contract for this service. I would be grateful if you could process this referral, and please let me know if any further information is needed.\n\n'
-        + 'Yours sincerely,\n' + ($('l-name').value || '[Full name]')
-        + '\n\n---\nPrepared with Kaur Care. Appointment navigation, not medical advice.';
-      outBox('l-out', 'kaur-care-right-to-choose-letter', t);
+      var area = (p && (p.town || p.icb)) ? [p.town, p.icb].filter(Boolean).join(', ') : '';
+      var name = L.name || '[Full name]';
+      var svc = L.service || '[service or specialty]';
+      var ids = 'DOB: ' + (L.dob || '[date of birth]') + (L.nhs ? '    NHS number: ' + L.nhs : '') + (L.contact ? '\nContact: ' + L.contact : '');
+      var t = today + '\n\nTo: ' + (L.gpname ? L.gpname + ', ' : '') + (L.gp || '[GP surgery]') + '\n\n';
+      var summaryBlock = '';
+      if (L.summary || L.tried || L.impact){
+        summaryBlock = 'A brief summary:\n';
+        if (L.summary) summaryBlock += '  - What is happening: ' + tidy(L.summary) + '\n';
+        if (L.tried) summaryBlock += '  - What has been tried: ' + tidy(L.tried) + '\n';
+        if (L.impact) summaryBlock += '  - Impact on my daily life: ' + tidy(L.impact) + '\n';
+        summaryBlock += '\n';
+      }
+      if (letterMode === 'rtc'){
+        t += 'Subject: Request for referral under NHS Right to Choose: ' + svc + '\nPatient: ' + name + '\n' + ids + (area ? '\nNHS area: ' + area : '') + '\n\n';
+        t += 'Dear ' + (L.gpname || 'Doctor') + ',\n\n';
+        t += 'I am writing to ask you to refer me for ' + svc + ', and to exercise my right to choose the provider of my first outpatient appointment. Under the NHS Constitution and the NHS Choice Framework, patients in England have the right to choose the organisation that provides their care when they are referred for a first outpatient appointment, where it is clinically appropriate to refer.\n\n';
+        t += summaryBlock;
+        if (L.clinic){
+          t += 'The provider I would like to be referred to is:\n  ' + L.clinic + (L.loc ? ' (' + L.loc + ')' : '') + '\n';
+          t += (L.confirmed ? 'I have checked with the provider that they accept NHS Right to Choose referrals for patients in my area.' : 'I understand this provider is commissioned to provide NHS-funded care for this service, and I will confirm with them that they accept referrals for my area.') + '\n\n';
+        } else {
+          t += 'I would like to be referred to an NHS-funded provider that can offer this service. I am happy to discuss the options with you.\n\n';
+        }
+        if (L.wait) t += 'I have been told the local NHS wait is ' + tidy(L.wait) + ', which is why I am asking about my choices.\n\n';
+        if (L.adhd) t += 'As this is an assessment for ADHD or autism, I understand that arrangements for any follow-up or prescribing after assessment can depend on local policy. Please let me know if there is anything I should be aware of or arrange in advance.\n\n';
+        t += 'Could you please:\n  1. Make the referral to my chosen provider, through the NHS e-Referral Service or the route the provider uses.\n  2. Let me know within ' + L.days + ' days that the referral has been sent, and if you need any further information from me.\n  3. If you feel a referral is not clinically appropriate, tell me the reason in writing and record my request in my notes, so we can discuss the next steps.\n\n';
+        t += 'I have enclosed a one-page summary to help save time. Thank you for your help.\n\n';
+      } else {
+        var typeLine = L.reftype === 'second' ? 'Request for a second opinion' : (L.reftype === 'review' ? 'Request to review a previous decision' : 'Request for a referral');
+        t += 'Subject: ' + typeLine + ': ' + svc + '\nPatient: ' + name + '\n' + ids + (area ? '\nNHS area: ' + area : '') + '\n\n';
+        t += 'Dear ' + (L.gpname || 'Doctor') + ',\n\n';
+        if (L.reftype === 'second') t += 'I am writing to ask for a second opinion about ' + svc + '. I would value another clinician looking at my situation, and I would be grateful for your help arranging this.\n\n';
+        else if (L.reftype === 'review') t += 'I am writing to ask whether a previous decision about ' + svc + ' could be reviewed. My circumstances have not improved and I would like us to look at the options again.\n\n';
+        else t += 'I am writing to ask whether I can be referred for ' + svc + '.\n\n';
+        t += summaryBlock;
+        if (L.reason) t += 'Why I am asking: ' + tidy(L.reason) + '.\n\n';
+        t += 'Could you please:\n  1. Consider my request and let me know your decision within ' + L.days + ' days.\n  2. If you agree, arrange the referral and tell me what happens next and roughly when.\n  3. If you feel this is not appropriate at this stage, explain the reasons in writing, record my request in my notes, and tell me what you would suggest instead and when we should review it.\n\n';
+        t += 'I have enclosed a one-page summary to help. Thank you for your time.\n\n';
+      }
+      t += 'Yours sincerely,\n' + name + '\n\n---\nPrepared with Kaur Care. Appointment navigation, not medical advice or legal advice.';
+      return t;
     }
+    function letterShort(L){
+      var svc = L.service || '[service]';
+      var m = 'Hello. I would like to ask for ' + (letterMode === 'rtc' ? 'a referral for ' + svc + ' under NHS Right to Choose' + (L.clinic ? ', to ' + L.clinic : '') : (L.reftype === 'second' ? 'a second opinion about ' + svc : (L.reftype === 'review' ? 'a review of a previous decision about ' + svc : 'a referral for ' + svc))) + '. ';
+      if (L.summary) m += tidy(L.summary) + '. ';
+      if (L.tried) m += 'Tried so far: ' + tidy(L.tried) + '. ';
+      if (L.impact) m += 'Impact: ' + tidy(L.impact) + '. ';
+      m += 'Please let me know within ' + L.days + ' days, and if it cannot be done, the reason in writing. Thank you.';
+      return m;
+    }
+    function genLetter(){
+      var L = letterVals();
+      var t = letterText(L);
+      outBox('l-out', letterMode === 'rtc' ? 'kaur-care-right-to-choose-letter' : 'kaur-care-referral-request-letter', t);
+      var el = $('l-out'); el.dataset.short = letterShort(L);
+      var checks = letterMode === 'rtc'
+        ? ['Check the provider on the official NHS and CQC directories','Ask the provider: do you accept Right to Choose referrals for my area (ICB)?','Ask how they receive referrals (NHS e-Referral Service, direct, email) and what the GP must include','Ask the current wait for a first appointment, and whether it is face to face or remote','Ask what happens after the first appointment (follow-up, any medication arrangements)','Confirm there is no charge for NHS-funded care','Send or hand in your letter with your 1-page brief and any relevant results']
+        : ['Attach your 1-page brief and any relevant results or letters','Hand it in at the start, or send it by the NHS App, eConsult or the surgery’s online form','Note the date you sent it and the reply date you asked for','If you get no reply, follow up politely once, then ask the practice manager','If you still have concerns, the practice complaints process or PALS can help']
+      el.insertAdjacentHTML('beforeend',
+        '<div class="rounded-2xl border border-[#d9e6de] bg-[#f6faf7] p-4 mt-4"><p class="text-[11px] font-bold uppercase tracking-wider text-sage mb-1">Before you send</p><ul class="text-sm text-slate-soft space-y-1">' + checks.map(function(c){ return '<li>☐ ' + esc(c) + '</li>'; }).join('') + '</ul></div>'
+        + '<div class="flex flex-wrap gap-2 mt-3"><button class="pill" onclick="copyShort()">Copy short version for eConsult / NHS App</button></div>');
+    }
+    function copyShort(){ navigator.clipboard.writeText($('l-out').dataset.short || '').then(function(){ flash('Short version copied.'); }).catch(function(){ flash('Could not copy. Select the text and copy it manually.'); }); }
     var SUGG = [
       [/period|menstru|bleed|pelvic|endo|pcos|fibroid|cycle/, ['What could be causing this, and what should we check?','Can I have a blood test for iron or anaemia?','Is an ultrasound or a gynaecology referral appropriate?','What treatment options are there, and what are the pros and cons of each?','What should make me come back sooner?']],
       [/menopaus|hot flush|perimenopaus/, ['Could this be perimenopause or menopause?','What are my options, including HRT, and what are the benefits and risks for me?','Are there non-hormonal options?','Can I book a longer appointment to go through this properly?','When should we review how I am doing?']],
