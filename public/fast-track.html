@@ -76,6 +76,8 @@
     .card { background: #FFFFFF; border: 1px solid #E8E0D5; border-radius: 24px; }
     .pill { border: 1px solid #E8E0D5; background: #fff; border-radius: 9999px; padding: 9px 16px; font-size: 14px; cursor: pointer; transition: all .15s; }
     .pill:hover { border-color: var(--brand-primary); }
+    .pill-primary { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); font-weight: 600; }
+    .pill-primary:hover { background: #244a3a; }
     .pill.active { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
     .tab-btn { padding: 12px 16px; font-weight: 600; font-size: 14px; color: #6b6256; border-bottom: 2px solid transparent; cursor: pointer; }
     .tab-btn.active { color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
@@ -108,6 +110,10 @@
     html[data-kc="partners"] .kc-page[data-page="partners"],
     html[data-kc="faqs"] .kc-page[data-page="faqs"] { display: block; }
     .nav-active { color: var(--brand-primary) !important; font-weight: 700; }
+    /* Keep the footer at the bottom of the screen on short pages (no blank space beneath it). */
+    body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+    body > * { width: 100%; flex-shrink: 0; }
+    body > footer { margin-top: auto; }
     @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } }
   </style>
 </head>
@@ -1318,6 +1324,7 @@
   <div id="print-area" class="hidden"></div>
 
   <script src="/fast-track-config.js"></script>
+  <script src="/kc-pdf.js" defer></script>
 
   <footer class="bg-sage text-white/90 py-8">
     <div class="max-w-4xl mx-auto px-5 text-sm">
@@ -1937,7 +1944,7 @@
     function outBox(id, title, text){
       var el = $(id);
       el.innerHTML = '<pre style="white-space:pre-wrap;font-family:inherit" class="text-sm bg-[#faf8f5] border border-[#ece7df] rounded-xl p-4">'+esc(text)+'</pre>'
-        + '<div class="flex flex-wrap gap-2 mt-2"><button class="pill" onclick="copyText(\''+id+'\')">Copy</button><button class="pill" onclick="printText(\''+id+'\')">Print / save as PDF</button><button class="pill" onclick="downloadText(\''+title+'\',\''+id+'\')">Download</button><button class="pill" onclick="shareWhatsApp(\''+id+'\')">Send via WhatsApp</button></div>'
+        + '<div class="flex flex-wrap gap-2 mt-2"><button class="pill pill-primary" onclick="downloadLetterPdf(\''+id+'\',\''+title+'\')">Download PDF</button><button class="pill" onclick="copyText(\''+id+'\')">Copy</button><button class="pill" onclick="printText(\''+id+'\')">Print</button><button class="pill" onclick="downloadText(\''+title+'\',\''+id+'\')">Text file</button><button class="pill" onclick="shareWhatsApp(\''+id+'\')">Send via WhatsApp</button></div>'
         + '<p class="text-xs text-slate-muted mt-2">Tip: paste the copied text straight into your NHS App, eConsult or Patchs online form.</p>';
       el.classList.remove('hidden');
       el.dataset.text = text;
@@ -2154,11 +2161,23 @@
       var text = briefText(m);
       var el = $('b-out');
       el.innerHTML = briefCardHtml(m)
-        + '<div class="flex flex-wrap gap-2 mt-3"><button class="pill" onclick="copyText(\'b-out\')">Copy brief</button><button class="pill" onclick="printBrief()">Print / save as PDF</button><button class="pill" onclick="downloadText(\'kaur-care-appointment-brief\',\'b-out\')">Download</button><button class="pill" onclick="copyEconsult()">Copy as an eConsult / NHS App message</button><button class="pill" onclick="shareWhatsApp(\'b-out\')">Send via WhatsApp</button></div>'
+        + '<div class="flex flex-wrap gap-2 mt-3"><button class="pill pill-primary" onclick="downloadBriefPdf()">Download PDF</button><button class="pill" onclick="copyText(\'b-out\')">Copy brief</button><button class="pill" onclick="printBrief()">Print</button><button class="pill" onclick="downloadText(\'kaur-care-appointment-brief\',\'b-out\')">Text file</button><button class="pill" onclick="copyEconsult()">Copy as an eConsult / NHS App message</button><button class="pill" onclick="shareWhatsApp(\'b-out\')">Send via WhatsApp</button></div>'
         + '<p class="text-xs text-slate-muted mt-2">Tip: hand over the printed page at the start, or paste the eConsult version into your surgery’s online form.</p>';
       el.dataset.text = text; el.dataset.econsult = econsultText(m); el._model = m;
       el.classList.remove('hidden');
       el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+    function pdfFail(){ flash('Could not make the PDF. Check your connection, or use Print and choose Save as PDF.'); }
+    function downloadBriefPdf(){
+      if (!window.kcPdf){ pdfFail(); return; }
+      var m = $('b-out')._model || briefModel();
+      flash('Making your PDF...');
+      window.kcPdf.brief(m, openerText(m)).catch(pdfFail);
+    }
+    function downloadLetterPdf(id, title){
+      if (!window.kcPdf){ pdfFail(); return; }
+      flash('Making your PDF...');
+      window.kcPdf.letter($(id).dataset.text || '', title).catch(pdfFail);
     }
     function copyEconsult(){ var t = ($('b-out').dataset.econsult || ''); navigator.clipboard.writeText(t).then(function(){ flash('eConsult message copied.'); }).catch(function(){ flash('Could not copy. Select the text and copy it manually.'); }); }
     function printBrief(){ var m = $('b-out')._model || briefModel(); var pa = $('print-area'); pa.innerHTML = '<div style="padding:24px;max-width:760px;margin:0 auto">' + briefCardHtml(m) + '</div>'; pa.classList.remove('hidden'); window.print(); setTimeout(function(){ pa.classList.add('hidden'); }, 500); }

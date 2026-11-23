@@ -232,6 +232,25 @@ describe("Static serving", () => {
     expect(html).toContain('id="uk-nations"');
   });
 
+  it("serves the PDF export script and its brand fonts", async () => {
+    const js = await fetch(`${BASE}/kc-pdf.js`);
+    expect(js.status).toBe(200);
+    expect(await js.text()).toContain("kcPdf");
+    for (const f of ["Fraunces-SemiBold", "PlusJakartaSans-Regular", "PlusJakartaSans-Bold"]) {
+      const res = await fetch(`${BASE}/fonts/${f}.ttf`);
+      expect(res.status).toBe(200);
+      expect((await res.arrayBuffer()).byteLength).toBeGreaterThan(5000);
+    }
+  });
+
+  it("serves How it works and What's covered from the home page", async () => {
+    for (const p of ["/how-it-works", "/whats-covered"]) {
+      const res = await fetch(`${BASE}${p}`);
+      expect(res.status).toBe(200);
+      expect(await res.text()).toContain('id="how"');
+    }
+  });
+
   it("keeps /health as the JSON health check", async () => {
     const res = await fetch(`${BASE}/health`);
     expect(res.status).toBe(200);

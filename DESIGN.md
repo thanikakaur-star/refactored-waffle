@@ -375,3 +375,25 @@ The approved Instagram intro carousel (8 slides, 1080×1350, 4:5). Posted and we
 
 ### Default template
 This carousel is the **default template for every Kaur Care carousel post**. New carousels reuse the same palette, fonts, layout, footer, alternating backgrounds and sage CTA closer; only the slide copy changes. Render script: `scripts/social/carousel-template.cjs`.
+
+---
+
+## Kaur Care: PDF export (brief and letters)
+
+Source: `public/kc-pdf.js`, loaded on the prep tools. Built in the browser with jsPDF (cdnjs, pinned 2.5.1), so nothing a person types leaves their device.
+
+### Brief (one A4 page)
+- Header: emblem, "Kaur Care" in Fraunces 600 (sage), terracotta eyebrow and date on the right, sage rule below
+- Opener in a mint panel (`#EDF3EF`); rows use a terracotta uppercase label column and an ink value column, hairline `#F0EBE3` between rows
+- "Before I leave, I will ask" in a blush panel (`#FBF3EE`) with drawn checkboxes
+- Type scales down automatically so the brief always fits one page; only falls back to a second page at the smallest size
+
+### Letters
+- Thin sage band with a short terracotta accent at the top of each page
+- Subject line in Fraunces (sage); body in Plus Jakarta Sans 10.4pt, 1.55 line height; terracotta list markers
+- Closing line "Prepared with Kaur Care" in muted small type under a sand hairline
+
+### Rules
+- Fonts are static, Latin-1 subsets of the same Fraunces and Plus Jakarta Sans used on the site (`public/fonts/`)
+- No em dashes or en dashes in any copy the PDF adds
+- Keep the layout calm and printable: white page, no gradients, no decorative shadows
