@@ -642,6 +642,204 @@ ${MIDCTA}
 <p>Note down when symptoms started, your baby's temperature, how much they are feeding, wet and dirty nappies, and any rash. Photos can help. Having this ready means you can explain clearly even when you are tired and worried.</p>
 <p>This is general information, not medical advice. If you are worried about your baby, seek help.</p>` + cta,
   },
+  {
+    slug: "how-to-ask-your-gp-for-a-referral-uk",
+    category: "NHS Shortcuts",
+    title: "How to Ask Your GP for a Referral (and What to Say If They Say No)",
+    desc: "A practical UK guide to asking your GP for a specialist referral: what to say, what to bring, how to ask for a refusal in writing, and the routes that skip the GP altogether.",
+    read: 5,
+    body: `<p class="lead">For most specialist care on the NHS, the GP is the front door. That makes the referral conversation one of the most important ten minutes you will have, and also one of the easiest to lose to nerves. Here is how to ask clearly, what to do if the answer is no, and the routes where you do not need a GP at all.</p>
+<h2>Before you ask: get your facts straight</h2>
+<p>GPs decide on referrals quickly, so the clearer your picture, the easier the decision. Write down, on one page: what is happening, when it started, how often, what makes it better or worse, what you have already tried, and how it affects your work, sleep and daily life. Our guide to <a href="/journal/how-to-prepare-10-minute-gp-appointment">preparing for a 10-minute GP appointment</a> shows how, and the <a href="/prep-tools">Kaur Care brief</a> builds this page for you.</p>
+<h2>Say what you are asking for in one sentence</h2>
+<p>Do not leave the request to the end, or hope the GP will suggest it. Say it near the start: <em>"I would like to ask whether I can be referred to a specialist for this, because it has not improved with the treatment we have tried."</em> If you know the service you want, name it, for example dermatology, gynaecology, ENT, or an assessment for ADHD or autism.</p>
+${MIDCTA}
+<h2>What a good reason sounds like</h2>
+<ul>
+<li>It has lasted a long time or keeps coming back.</li>
+<li>Treatments or self-care you have tried have not worked.</li>
+<li>It is getting worse, or it is now affecting your work, sleep, relationships or mental health.</li>
+<li>You are worried about a specific possibility and would like it ruled out.</li>
+</ul>
+<p>Concrete examples carry more weight than general statements. "I have missed three days of work this month" lands better than "it is really bad".</p>
+<h2>If the GP says no</h2>
+<p>Sometimes there is a good clinical reason: another treatment should be tried first, a test is needed before a specialist can help, or a referral would not change what is done. You are still entitled to understand why. Calmly ask:</p>
+<ul>
+<li>"What would need to change for you to refer me?"</li>
+<li>"Can we agree a follow-up date to review this?"</li>
+<li>"Could you note in my record that I asked for a referral and what was decided?"</li>
+</ul>
+<p>It is reasonable to follow up in writing through your surgery's online form, thanking the GP and restating your request and the reasons. If you remain concerned, you can ask for a <a href="/journal/how-to-get-a-second-opinion-nhs-uk">second opinion</a> or speak to the practice manager. A written request is also much easier for a practice to action than a verbal one. The <a href="/prep-tools">referral letter builder</a> gives you a polite, clear version with a reply deadline.</p>
+<h2>Routes that skip the GP</h2>
+<p>In many areas you can refer yourself, without a GP, for NHS Talking Therapies, physiotherapy and some musculoskeletal services, sexual health clinics, and pregnancy and maternity care. Availability varies by area, so check your local NHS website or ask your surgery. For everyday ailments, a pharmacist can often help the same day, see <a href="/journal/pharmacy-first-12-conditions-uk">what Pharmacy First covers</a>.</p>
+<h2>In England, you may also be able to choose where you go</h2>
+<p>When you are referred for a routine first outpatient appointment, you can usually choose between providers, which sometimes means a shorter wait. We explain how in our <a href="/journal/nhs-right-to-choose-letter-template-gp">Right to Choose letter guide</a>.</p>
+<h2>When it is not a referral job</h2>
+<p>Chest pain, difficulty breathing, signs of a stroke, heavy bleeding, sudden severe pain or sudden confusion need 999 or NHS 111, not a referral conversation. If you have symptoms that could be cancer, tell your GP clearly and say you are worried, as urgent referral routes exist for exactly that.</p>
+<p>This is general information, not medical advice. Care differs across the UK, see <a href="/uk-nations">how it varies by nation</a>.</p>` + cta,
+  },
+  {
+    slug: "nhs-right-to-choose-letter-template-gp",
+    category: "NHS Shortcuts",
+    title: "NHS Right to Choose Letter Template: Free Example to Send to Your GP",
+    desc: "A free, copy-and-paste Right to Choose letter for England, with a plain-English explanation of what it means, when it applies and how to follow it up.",
+    read: 5,
+    body: `<p class="lead">If you are in England and waiting for a routine specialist appointment, you may be able to choose which NHS-funded provider sees you, sometimes with a much shorter wait. Putting your request in writing makes it easier for your GP to action and leaves a record. Here is a free template you can copy, and how to use it.</p>
+<h2>What Right to Choose means</h2>
+<p>Under the NHS Constitution and the NHS Choice Framework, patients in England who are being referred for a first outpatient appointment have the right to choose the organisation that provides their care, where it is clinically appropriate to refer. The provider must hold an NHS contract for the service, so it stays free. It does not apply in emergencies, and the details differ for some services, so always confirm with your GP and the provider. It is an England-only right: Scotland, Wales and Northern Ireland run their own systems, see <a href="/uk-nations">care across the UK</a>.</p>
+<h2>Before you write</h2>
+<ol>
+<li>Find a provider that explicitly accepts NHS Right to Choose referrals for the service you need and for your area, and confirm with them.</li>
+<li>Note their full name and location or website.</li>
+<li>Have your NHS number and GP surgery details to hand.</li>
+</ol>
+${MIDCTA}
+<h2>The template</h2>
+<p>Copy this, replace the square brackets, and send it through your surgery's online form, the NHS App, or by post.</p>
+<div class="tip"><p><strong>Subject: Request for referral under NHS Right to Choose: [service]</strong></p>
+<p>Dear [GP's name],</p>
+<p>I am writing to ask you to refer me for [service], and to exercise my right to choose the provider of my first outpatient appointment. Under the NHS Constitution and the NHS Choice Framework, patients in England have the right to choose the organisation that provides their care when they are referred for a first outpatient appointment, where it is clinically appropriate to refer.</p>
+<p>A brief summary: [what is happening and for how long]. So far I have tried [treatments or self-care]. It is affecting [work, sleep, daily life].</p>
+<p>The provider I would like to be referred to is [provider name, location]. I understand they accept NHS Right to Choose referrals for patients in my area, and I will confirm this with them.</p>
+<p>Could you please make the referral to my chosen provider, let me know within 14 days that it has been sent, and tell me if you need any further information from me? If you feel a referral is not clinically appropriate, I would be grateful if you could tell me the reason in writing and record my request in my notes, so we can discuss the next steps.</p>
+<p>Yours sincerely,<br>[Name], [date of birth], [NHS number]</p></div>
+<h2>After you send it</h2>
+<ul>
+<li>Keep a copy and note the date.</li>
+<li>If you have not heard back by your deadline, follow up politely through the same route.</li>
+<li>Once the referral is made, ask the provider to confirm they have received it.</li>
+<li>If your GP declines, ask for the reason in writing, and see our guide on <a href="/journal/how-to-ask-your-gp-for-a-referral-uk">what to do if the answer is no</a>.</li>
+</ul>
+<h2>Save the writing</h2>
+<p>Kaur Care's <a href="/prep-tools">letter builder</a> fills in a Right to Choose letter like this from your answers, with a reply deadline and a before-you-send checklist, and gives you a PDF to send or print. For ADHD and autism assessments specifically, see our <a href="/journal/nhs-right-to-choose-adhd-autism-guide">Right to Choose guide</a>.</p>
+<p>This is general information, not legal or medical advice. Local policies can vary, so confirm current acceptance with your GP and chosen provider.</p>` + cta,
+  },
+  {
+    slug: "how-to-get-a-second-opinion-nhs-uk",
+    category: "NHS Shortcuts",
+    title: "How to Get a Second Opinion on the NHS (and When to Consider Going Private)",
+    desc: "Unsure about a diagnosis or treatment plan? A practical UK guide to asking for a second opinion, what to say, and the private route if you decide to pay.",
+    read: 5,
+    body: `<p class="lead">If you are unsure about a diagnosis, a treatment plan, or being told nothing more can be done, asking for a second opinion is a normal, reasonable thing to do. Most clinicians understand why patients want one. Here is how to ask, what to expect, and when paying privately is an option.</p>
+<h2>Is there a right to a second opinion?</h2>
+<p>There is no absolute legal right to a second opinion on the NHS, but a request is commonly agreed when there is a reasonable case for it, particularly for serious or complex conditions. Having a clear reason makes it much more likely. Rules differ across the UK, so check your nation's guidance, see <a href="/uk-nations">care across the UK</a>.</p>
+<h2>Good reasons to ask</h2>
+<ul>
+<li>You have a serious or life-changing diagnosis, or a major treatment is being proposed.</li>
+<li>Your symptoms continue and you have not been given a clear explanation.</li>
+<li>You were told nothing more can be done and you would like another view on the options.</li>
+<li>You have lost confidence in the plan, or in the communication around it.</li>
+</ul>
+<h2>How to ask</h2>
+<ol>
+<li><strong>Ask the clinician you are seeing,</strong> your GP or hospital consultant. Say it without blame: "I would like to ask for a second opinion, to be sure I understand all my options."</li>
+<li><strong>Explain your reason briefly,</strong> and what you hope a second opinion would help with.</li>
+<li><strong>Ask them to make the referral,</strong> and to say who they would suggest, or whether you can name a specialist or centre.</li>
+<li><strong>Get it in writing</strong> if you can, and ask for your records and results to be shared with the second doctor.</li>
+</ol>
+${MIDCTA}
+<p>If you prefer to ask in writing, the <a href="/prep-tools">Kaur Care letter builder</a> has a second-opinion option with a polite reply deadline and a request to record any refusal and the reasons.</p>
+<h2>If the answer is no</h2>
+<p>You can ask what the reasons are and for them to be recorded in your notes. You can also raise it with the practice manager or the hospital's Patient Advice and Liaison Service (PALS), and our guide to <a href="/journal/how-to-complain-nhs-gp-practice-uk">making a complaint</a> covers the formal route if you need it.</p>
+<h2>Going private for a second opinion</h2>
+<p>You can pay for a second opinion from a private consultant without your GP's agreement, though many specialists will want a GP or consultant letter and your records, so ask for those. A single private consultation often costs in the low hundreds of pounds, and scans or tests are extra, so ask for a full price before you book. Our <a href="/private-care">private care guide</a> explains costs and what to ask. You can often return to the NHS afterwards with the report in hand.</p>
+<h2>Make the most of it</h2>
+<p>Bring a one-page summary, your questions, copies of results and a list of medicines. Ask the second doctor to explain what is the same as, and different from, the first view. Having a clear page in front of you, like the <a href="/prep-tools">appointment brief</a>, keeps the visit focused.</p>
+<p>This is general information, not medical advice. If you are worried about your safety or your symptoms are getting worse quickly, call NHS 111 or 999.</p>` + cta,
+  },
+  {
+    slug: "how-to-complain-nhs-gp-practice-uk",
+    category: "NHS Shortcuts",
+    title: "How to Complain About Your GP Practice or the NHS (Step by Step, UK)",
+    desc: "A calm, practical guide to making an NHS complaint in England: who to contact, what to write, the 12-month time limit, and what to do if you are not satisfied.",
+    read: 6,
+    body: `<p class="lead">Complaining is not about causing trouble. It is how problems get noticed, fixed, and stopped from happening to someone else. If something has gone wrong, such as a missed diagnosis, being dismissed, a long unexplained delay, or poor communication, you have a clear route. This guide covers England. Scotland, Wales and Northern Ireland have their own processes, so check yours.</p>
+<h2>Step 1: Decide what you want</h2>
+<p>Do you want an explanation, an apology, a change to your care, or a change to how the service works? Knowing this helps you write clearly and helps the practice respond properly.</p>
+<h2>Step 2: Raise it early and informally, if you feel able</h2>
+<p>A conversation with the practice manager, or the service's Patient Advice and Liaison Service (PALS) for hospitals, often solves things quickly. It is fine to skip this step if it feels unsafe or you have already tried it.</p>
+<h2>Step 3: Make a formal complaint</h2>
+<ul>
+<li><strong>Who to send it to:</strong> the organisation involved (the practice, hospital or provider), or the organisation that commissions the service, which for GP care is generally your Integrated Care Board (ICB). Some primary care services are handled through NHS England's customer contact centre.</li>
+<li><strong>Time limit:</strong> usually within 12 months of the incident, or of when you first became aware of the problem. Time limits can sometimes be extended with good reason.</li>
+<li><strong>Format:</strong> you can complain in writing or verbally, and in most cases the organisation must acknowledge it within three working days. They should investigate and send you a written response.</li>
+</ul>
+${MIDCTA}
+<h2>What to write</h2>
+<ol>
+<li><strong>Facts and dates.</strong> What happened, when, and who was involved, kept plain and in order.</li>
+<li><strong>Impact.</strong> What it meant for your health, work or family.</li>
+<li><strong>What you want.</strong> An explanation, an apology, a change, a referral.</li>
+<li><strong>A reply deadline,</strong> and your contact details.</li>
+</ol>
+<p>Keep a copy and a note of every call and email. Our <a href="/prep-tools">referral and request letter builder</a> uses the same clear, calm structure, and the <a href="/journal/sbar-for-patients-explain-symptoms-gp">SBAR approach</a> helps you set out events in order.</p>
+<h2>Free support</h2>
+<p>Independent NHS complaints advocacy is available free in England, and your local <a href="https://www.healthwatch.co.uk" target="_blank" rel="noopener">Healthwatch</a> can point you to it. Citizens Advice can also help you plan what to write.</p>
+<h2>If you are not satisfied with the response</h2>
+<p>You can take it to the Parliamentary and Health Service Ombudsman (PHSO), which is free and independent, once you have had a final response from the organisation or if the complaint is taking too long. In Scotland, Wales and Northern Ireland the equivalent ombudsman is a different body.</p>
+<h2>If you are worried about your care now</h2>
+<p>A complaint is about the past. If you are unwell right now, seek care first: NHS 111 for urgent advice, 999 in an emergency. You can also ask for your <a href="/journal/how-to-get-gp-records-test-results-uk">records and results</a> to support your complaint.</p>
+<p>This is general information, not legal advice. Details can change, so check current NHS guidance.</p>` + cta,
+  },
+  {
+    slug: "how-to-get-gp-records-test-results-uk",
+    category: "NHS Shortcuts",
+    title: "How to Get Your GP Records and Test Results (NHS App and Subject Access Request)",
+    desc: "You can see your own health record and results. Here is how to use the NHS App, how a free subject access request works, and what to do if something looks wrong.",
+    read: 5,
+    body: `<p class="lead">Your health record belongs to the story of your care, and you are entitled to see it. Having your own results means fewer wasted appointments, better questions, and a clearer paper trail if you ever need to challenge a decision. Here are the main ways to get them in England.</p>
+<h2>1. The NHS App (the quickest)</h2>
+<p>If you register for the NHS App, you can usually see test results, medicines, appointments, and, where your practice has switched on online record access, entries in your GP record. Some practices release results as soon as they are filed, and others after a clinician reviews them. If something you expect is missing, ask your practice what is switched on.</p>
+<h2>2. Ask your practice for specific information</h2>
+<p>You can ask reception, or send an online message, for a particular result, a letter, or a summary of your record. Being specific makes it faster, for example "the blood test results from March" or "the hospital letter about my scan".</p>
+${MIDCTA}
+<h2>3. A subject access request (SAR)</h2>
+<p>You have a legal right to a copy of the personal data an organisation holds about you, including your health record. It is free, and the organisation must usually respond within one month, which can be extended for complex requests. You can ask your practice for your full record, or hospital records through the hospital's records or information governance team. Say what you need, whether a time period or a particular condition, to keep it focused.</p>
+<h2>What to do once you have it</h2>
+<ul>
+<li>Read it with a pen. Note anything unclear, and any facts that look wrong.</li>
+<li>Bring a short list of questions to your next appointment.</li>
+<li>If something factual is wrong, such as a date, medicine or allergy, ask for it to be corrected, and ask that your view be noted if you and the clinician disagree.</li>
+</ul>
+<h2>Use it to prepare</h2>
+<p>Your results can make the next appointment shorter and sharper. Put the key points on a single page, what the tests showed, your timeline, what you have tried, and what you want to ask, with the <a href="/prep-tools">Kaur Care brief</a>, and see our guide to <a href="/journal/how-to-prepare-10-minute-gp-appointment">preparing for a 10-minute GP appointment</a>. If you are making a <a href="/journal/how-to-complain-nhs-gp-practice-uk">complaint</a> or asking for a <a href="/journal/how-to-get-a-second-opinion-nhs-uk">second opinion</a>, your records are the evidence.</p>
+<h2>Privacy matters</h2>
+<p>Your record is sensitive. Only use secure routes, such as the NHS App or your practice's official request form, and be careful sharing screenshots. Kaur Care does not see or store anything you type into its tools, and you can read how that works in our <a href="/privacy">privacy page</a>.</p>
+<p>This is general information, not legal or medical advice. Rules and processes can differ across the UK.</p>` + cta,
+  },
+  {
+    slug: "nhs-waiting-list-what-to-do-while-you-wait-uk",
+    category: "NHS Shortcuts",
+    title: "On an NHS Waiting List? What to Do While You Wait (and Your 18-Week Rights)",
+    desc: "Long NHS waits are stressful. Here is what you can do while you wait in England: check your referral, track symptoms, know your 18-week right, and when to speak up.",
+    read: 6,
+    body: `<p class="lead">Being told the wait is months, or longer, is hard, especially when you are in pain or worried. You cannot make the list shorter on your own, but there is a lot you can do to stay safe, stay on track and, in some cases, move faster. This guide is for England.</p>
+<h2>Check that your referral is where it should be</h2>
+<ul>
+<li>Use the NHS App, or ask your GP surgery, to confirm your referral was sent and to which service.</li>
+<li>Contact the hospital's booking team to check they have received it and ask for an estimate of the wait.</li>
+<li>Look at the "My Planned Care" website for typical waiting times at different hospitals, which can help you decide whether to ask about other providers.</li>
+</ul>
+<h2>Know your 18-week right</h2>
+<p>Under the NHS Constitution, you have the right to start consultant-led treatment within 18 weeks of a referral for a non-urgent condition. When that cannot be met, the NHS should take reasonable steps to offer you alternatives. In practice, many people wait longer, but you are entitled to ask the hospital or your Integrated Care Board what options exist, including a different provider.</p>
+${MIDCTA}
+<h2>Ask about choosing a different provider</h2>
+<p>For routine first outpatient appointments you often have a choice of provider, which can mean a shorter wait. See our <a href="/journal/nhs-right-to-choose-letter-template-gp">Right to Choose letter template</a> and our guide to <a href="/journal/nhs-referral-loop-how-to-get-seen-faster">getting seen faster</a>.</p>
+<h2>Track how you are doing</h2>
+<p>Keep a simple log of symptoms, flare-ups, and how they affect your work and sleep. It helps you spot a change, and it gives clinicians something concrete if you need an earlier slot. The Kaur Care brief includes a 5-day symptom log that goes straight into your one-page summary.</p>
+<h2>Speak up if things get worse</h2>
+<p>If your symptoms change, get worse, or new ones appear, tell your GP and ask whether your referral should be updated or made more urgent, and ask them to note it in your record. For anything severe or sudden, use NHS 111 or 999, you should not wait out an emergency.</p>
+<h2>Look after yourself in the gap</h2>
+<ul>
+<li>Ask your pharmacist about symptom relief and self-care, see <a href="/journal/pharmacy-first-12-conditions-uk">what Pharmacy First covers</a>.</li>
+<li>Look into free support such as NHS Talking Therapies, which you can often self-refer to.</li>
+<li>Charities for your condition often run helplines, forums and advice.</li>
+<li>If you are considering paying for private care, our <a href="/private-care">private care guide</a> explains costs and how to return to the NHS afterwards.</li>
+</ul>
+<h2>Ask to be told if a slot opens up</h2>
+<p>Ask the booking team whether they keep a cancellation list and whether you can be added, and make sure they have an up-to-date phone number and your preferred times.</p>
+<p>This is general information, not medical advice. Rules differ in Scotland, Wales and Northern Ireland, see <a href="/uk-nations">care across the UK</a>.</p>` + cta,
+  },
 ];
 
 for (const a of articles) {

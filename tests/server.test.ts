@@ -265,6 +265,26 @@ describe("Static serving", () => {
     }
   });
 
+  it("serves the journal hub and the new guides", async () => {
+    const slugs = [
+      "how-to-ask-your-gp-for-a-referral-uk",
+      "nhs-right-to-choose-letter-template-gp",
+      "how-to-get-a-second-opinion-nhs-uk",
+      "how-to-complain-nhs-gp-practice-uk",
+      "how-to-get-gp-records-test-results-uk",
+      "nhs-waiting-list-what-to-do-while-you-wait-uk",
+    ];
+    const hub = await (await fetch(`${BASE}/journal`)).text();
+    for (const slug of slugs) {
+      expect(hub).toContain(`/journal/${slug}`);
+      const res = await fetch(`${BASE}/journal/${slug}`);
+      expect(res.status).toBe(200);
+      const html = await res.text();
+      expect(html).toContain("<title>");
+      expect(html).toContain("/prep-tools");
+    }
+  });
+
   it("keeps /health as the JSON health check", async () => {
     const res = await fetch(`${BASE}/health`);
     expect(res.status).toBe(200);
