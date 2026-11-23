@@ -305,7 +305,7 @@
       <div id="tools-locked" class="card p-6 text-center" data-unlock-scope>
         <div class="text-3xl mb-2">🔒</div>
         <p class="font-semibold mb-1">Unlock the document generators</p>
-        <p class="text-sm text-slate-soft mb-4">The Right to Choose referral letter and the 1-page GP symptom brief generators.</p>
+        <p class="text-sm text-slate-soft mb-4">Build a 1-page brief with a 30-second opening script, SBAR layout, questions suggested for your concern, a "before you leave" checklist, an eConsult-ready version and a printable page. Plus the Right to Choose referral letter.</p>
         <input id="unlock-email" type="email" placeholder="Your email (for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock both generators — £4.99 one-off</button>
@@ -345,14 +345,43 @@
 
         <div class="card p-6">
           <h3 class="font-display text-xl font-semibold mb-1">Tool B: 1-page GP / appointment brief</h3>
-          <p class="text-sm text-slate-soft mb-3">Works for anyone: a child, a woman, a man or any adult, including ADHD and autism screening notes.</p>
+          <p class="text-sm text-slate-soft mb-4">Answer what you can. The brief builds a 30-second opening script, a clear one-page summary in SBAR order, questions to ask and a "before you leave" checklist. Works for you, a child or someone you care for.</p>
+          <div class="grid sm:grid-cols-3 gap-3 mb-3">
+            <select id="b-for" class="px-4 py-2.5 border border-sand text-sm bg-white"><option value="me">This is for me</option><option value="child">This is for my child</option><option value="other">Someone I care for</option></select>
+            <input id="b-name" placeholder="Name (optional)" class="px-4 py-2.5 border border-sand text-sm" />
+            <input id="b-age" placeholder="Age (optional)" class="px-4 py-2.5 border border-sand text-sm" />
+          </div>
+          <p class="text-xs font-semibold text-sage uppercase tracking-wider mb-2">S: Situation</p>
           <div class="grid sm:grid-cols-2 gap-3 mb-3">
-            <input id="b-condition" placeholder="Main concern (e.g. ADHD traits, pelvic pain, earache)" class="px-4 py-2.5 border border-sand text-sm" />
+            <input id="b-condition" placeholder="Main concern (e.g. heavy periods, eczema, earache)" class="px-4 py-2.5 border border-sand text-sm" />
             <input id="b-duration" placeholder="How long (e.g. 6 months)" class="px-4 py-2.5 border border-sand text-sm" />
           </div>
-          <input id="b-triggers" placeholder="Pattern, triggers or examples (e.g. pain pattern, cycle, ADHD/autism traits)" class="w-full px-4 py-2.5 border border-sand text-sm mb-3" />
-          <textarea id="b-impact" placeholder="Impact on daily life: work, school, sleep, relationships" rows="2" class="w-full px-4 py-2.5 border border-sand text-sm mb-3"></textarea>
-          <textarea id="b-questions" placeholder="Questions you want to ask the GP (one per line)" rows="3" class="w-full px-4 py-2.5 border border-sand text-sm mb-4"></textarea>
+          <p class="text-xs font-semibold text-sage uppercase tracking-wider mb-2">B: Background</p>
+          <input id="b-triggers" placeholder="Pattern, triggers or examples (when it happens, what makes it better or worse)" class="w-full px-4 py-2.5 border border-sand text-sm mb-3" />
+          <div class="grid sm:grid-cols-2 gap-3 mb-3">
+            <input id="b-tried" placeholder="What you've already tried (and whether it helped)" class="px-4 py-2.5 border border-sand text-sm" />
+            <input id="b-meds" placeholder="Current medicines, supplements &amp; allergies" class="px-4 py-2.5 border border-sand text-sm" />
+          </div>
+          <p class="text-xs font-semibold text-sage uppercase tracking-wider mb-2">A: Assessment</p>
+          <div class="mb-3">
+            <label class="text-sm font-semibold block mb-1">How bad at its worst? <span id="b-sev-val" class="text-terracotta">5</span>/10</label>
+            <input id="b-sev" type="range" min="0" max="10" value="5" class="w-full accent-[#2D5A47]" oninput="document.getElementById('b-sev-val').textContent=this.value" />
+          </div>
+          <p class="text-sm font-semibold mb-1">What does it affect?</p>
+          <div id="b-impact-chips" class="flex flex-wrap gap-2 mb-3">
+            <label class="pill"><input type="checkbox" value="sleep" class="mr-1.5">Sleep</label>
+            <label class="pill"><input type="checkbox" value="work or school" class="mr-1.5">Work / school</label>
+            <label class="pill"><input type="checkbox" value="energy" class="mr-1.5">Energy</label>
+            <label class="pill"><input type="checkbox" value="mood" class="mr-1.5">Mood</label>
+            <label class="pill"><input type="checkbox" value="relationships" class="mr-1.5">Relationships</label>
+            <label class="pill"><input type="checkbox" value="exercise and daily tasks" class="mr-1.5">Daily tasks</label>
+          </div>
+          <textarea id="b-impact" placeholder="Anything more on the impact (e.g. missed 3 days of work this month)" rows="2" class="w-full px-4 py-2.5 border border-sand text-sm mb-3"></textarea>
+          <input id="b-worry" placeholder="What worries you most (optional)" class="w-full px-4 py-2.5 border border-sand text-sm mb-3" />
+          <p class="text-xs font-semibold text-sage uppercase tracking-wider mb-2">R: Request</p>
+          <input id="b-ask" placeholder="What are you hoping for today? (a test, a plan, a referral, treatment options)" class="w-full px-4 py-2.5 border border-sand text-sm mb-3" />
+          <div class="flex items-center justify-between mb-1"><label class="text-sm font-semibold">Questions for the GP (one per line)</label><button type="button" onclick="suggestQuestions()" class="text-xs font-semibold text-sage underline">Suggest questions for my concern</button></div>
+          <textarea id="b-questions" placeholder="Your questions" rows="4" class="w-full px-4 py-2.5 border border-sand text-sm mb-4"></textarea>
 
           <div class="rounded-2xl border border-sand bg-[#faf8f5] p-4 mb-4">
             <p class="font-semibold text-sm mb-1">5-day symptom &amp; flare log <span class="font-normal text-slate-muted">(saved on this device only)</span></p>
@@ -365,7 +394,7 @@
             <div id="log-list" class="space-y-1"></div>
           </div>
 
-          <button onclick="genBrief()" class="px-5 py-2.5 rounded-2xl bg-sage text-white font-semibold text-sm">Generate brief</button>
+          <button onclick="genBrief()" class="px-5 py-2.5 rounded-2xl bg-sage text-white font-semibold text-sm">Build my brief</button>
           <div id="b-out" class="hidden mt-4"></div>
         </div>
       </div>
@@ -766,7 +795,7 @@
         </div>
         <div class="card p-6">
           <p class="font-semibold mb-1">1-page GP / appointment brief</p>
-          <p class="text-sm text-slate-soft">Your symptoms, pattern, daily impact and questions on a single clear page.</p>
+          <p class="text-sm text-slate-soft">A 30-second opener, SBAR summary, questions suggested for your concern, a "before you leave" checklist, and a copy for eConsult or the NHS App.</p>
         </div>
       </div>
       <div class="card p-6 mt-8 max-w-xl mx-auto" data-unlock-scope>
@@ -1486,19 +1515,139 @@
         + '\n\n---\nPrepared with Kaur Care. Appointment navigation, not medical advice.';
       outBox('l-out', 'kaur-care-right-to-choose-letter', t);
     }
-    function genBrief(){
-      var qs = ($('b-questions').value || '').split('\n').filter(Boolean).map(function(q){ return '  - ' + q; }).join('\n');
-      var log = logText();
-      var t = '1-PAGE GP / APPOINTMENT BRIEF\nKaur Care\n\n'
-        + 'Main concern: ' + ($('b-condition').value || state.condition || '[condition]') + '\n'
-        + 'Duration: ' + ($('b-duration').value || '[how long]') + '\n'
-        + 'Pattern / triggers: ' + ($('b-triggers').value || '[cycle / pain triggers]') + '\n\n'
-        + 'Impact on daily life:\n' + ($('b-impact').value || '[impact on work, sleep, daily activities]') + '\n\n'
-        + (log ? ('Recent symptom log:\n' + log + '\n\n') : '')
-        + 'My questions for the GP:\n' + (qs || '  - [your questions]') + '\n\n'
-        + 'Note: this is my own summary to help the appointment. It is not a diagnosis.';
-      outBox('b-out', 'kaur-care-symptom-brief', t);
+    var SUGG = [
+      [/period|menstru|bleed|pelvic|endo|pcos|fibroid|cycle/, ['What could be causing this, and what should we check?','Can I have a blood test for iron or anaemia?','Is an ultrasound or a gynaecology referral appropriate?','What treatment options are there, and what are the pros and cons of each?','What should make me come back sooner?']],
+      [/menopaus|hot flush|perimenopaus/, ['Could this be perimenopause or menopause?','What are my options, including HRT, and what are the benefits and risks for me?','Are there non-hormonal options?','Can I book a longer appointment to go through this properly?','When should we review how I am doing?']],
+      [/eczema|skin|rash|derma|acne|itch/, ['What is the plan for flares and for in between flares?','Which cream or ointment, how much, where, and for how many days?','When will you review this, rather than repeating the prescription?','Would a referral to dermatology help?','Can you take my skin tone into account when judging how severe this is?']],
+      [/pregnan|midwife|maternity|antenatal/, ['Which checks and scans should I expect, and when?','Which symptoms mean I should call straight away?','Who do I contact out of hours?','Can my concerns and preferences be noted in my maternity record?','Is there extra support I should be offered?']],
+      [/baby|newborn|infant|toddler|child/, ['What signs mean we should get help urgently?','How long should we expect this to last?','Is there anything we should be doing at home?','When should we come back or call 111?','Does this need any tests or a follow-up?']],
+      [/adhd|autis|neurodiv/, ['What are the next steps for an assessment?','Can I use my Right to Choose to be referred to another provider?','What are the typical waiting times in my area?','Can I be given any support while I wait?','Which information would help the assessment, and can I bring it?']],
+      [/headache|migraine/, ['What might be causing these headaches?','Are there any signs I should watch for that need urgent attention?','Do I need any tests or a referral?','Could my medicines or daily routine be affecting this?','What is the plan if it does not improve?']],
+      [/uti|bladder|urin|cystitis/, ['Can you check whether this is an infection?','What can I do to reduce the chance of it coming back?','Do I need any tests if it keeps happening?','When should I seek urgent help?','Would a referral help if this is recurrent?']],
+      [/anxi|mood|depress|stress|sleep|panic|mental/, ['What support options are available, including talking therapies?','Can I refer myself to NHS Talking Therapies?','What can I do while I wait for support?','Is there anything physical we should check?','When should we review this?']],
+      [/pain|back|knee|joint|muscul|physio|shoulder/, ['What do you think is causing the pain?','Do I need a scan, and if so which?','Can I be referred to physiotherapy, or refer myself?','What should I avoid or keep doing in the meantime?','What would make you want to see me again sooner?']]
+    ];
+    var SUGG_DEFAULT = ['What do you think is going on?','Which tests or checks would help, if any?','What are my options, and what are the pros and cons of each?','What is the plan, and when should we review it?','What should make me come back, or call 111, sooner?'];
+    function suggestQuestions(){
+      var c = (($('b-condition').value || state.condition || '') + '').toLowerCase();
+      var list = SUGG_DEFAULT;
+      for (var i = 0; i < SUGG.length; i++){ if (SUGG[i][0].test(c)){ list = SUGG[i][1]; break; } }
+      var ta = $('b-questions'); var existing = (ta.value || '').trim();
+      ta.value = (existing ? existing + '\n' : '') + list.join('\n');
+      flash('Questions added. Edit or delete any that don’t fit.');
     }
+    function briefModel(){
+      var who = $('b-for').value, name = ($('b-name').value || '').trim(), age = ($('b-age').value || '').trim();
+      var chips = Array.prototype.slice.call(document.querySelectorAll('#b-impact-chips input:checked')).map(function(x){ return x.value; });
+      var qs = ($('b-questions').value || '').split('\n').map(function(q){ return q.trim(); }).filter(Boolean);
+      return {
+        who: who, name: name, age: age,
+        concern: ($('b-condition').value || state.condition || '').trim(),
+        duration: ($('b-duration').value || '').trim(),
+        pattern: ($('b-triggers').value || '').trim(),
+        tried: ($('b-tried').value || '').trim(),
+        meds: ($('b-meds').value || '').trim(),
+        sev: $('b-sev').value,
+        chips: chips,
+        impact: ($('b-impact').value || '').trim(),
+        worry: ($('b-worry').value || '').trim(),
+        ask: ($('b-ask').value || '').trim(),
+        questions: qs,
+        log: loadLog()
+      };
+    }
+    function lc(x){ x = x || ''; return (x && !/^[A-Z]{2,}/.test(x)) ? x.charAt(0).toLowerCase() + x.slice(1) : x; }
+    function subj(m){ return m.who === 'me' ? 'I' : (m.who === 'child' ? 'my child' : 'the person I care for'); }
+    function openerText(m){
+      var s = m.who === 'me' ? 'I’m here about ' : 'I’m here about my ' + (m.who === 'child' ? 'child’s ' : 'family member’s ');
+      s += (lc(m.concern) || '[main concern]') + '.';
+      if (m.duration) s += ' It’s been going on for ' + m.duration + '.';
+      var imp = m.chips.length ? m.chips.join(', ') : '';
+      if (imp) s += ' It’s affecting ' + (m.who === 'me' ? 'my ' : 'their ') + imp + '.';
+      if (m.ask) s += ' What I’m hoping for today: ' + m.ask.replace(/\.?$/, '') + '.';
+      return s;
+    }
+    function briefText(m){
+      var L = [];
+      L.push('1-PAGE APPOINTMENT BRIEF  |  Prepared with Kaur Care');
+      var hdr = []; if (m.name) hdr.push(m.name); if (m.age) hdr.push('age ' + m.age);
+      L.push((m.who === 'me' ? 'For: myself' : (m.who === 'child' ? 'For: my child' : 'For: someone I care for')) + (hdr.length ? ' (' + hdr.join(', ') + ')' : ''));
+      L.push('');
+      L.push('MY 30-SECOND OPENER');
+      L.push('"' + openerText(m) + '"');
+      L.push('');
+      L.push('S - SITUATION');
+      L.push('Main concern: ' + (m.concern || '[main concern]'));
+      L.push('How long: ' + (m.duration || '[how long]'));
+      L.push('');
+      L.push('B - BACKGROUND');
+      L.push('Pattern / triggers: ' + (m.pattern || '[when it happens, what helps or worsens it]'));
+      L.push('Already tried: ' + (m.tried || '[what I have tried]'));
+      L.push('Medicines, supplements & allergies: ' + (m.meds || '[list]'));
+      L.push('');
+      L.push('A - ASSESSMENT');
+      L.push('Worst severity: ' + m.sev + '/10');
+      L.push('Affects: ' + (m.chips.length ? m.chips.join(', ') : '[not selected]'));
+      if (m.impact) L.push('Impact in my words: ' + m.impact);
+      if (m.worry) L.push('What worries me most: ' + m.worry);
+      if (m.log.length){ L.push(''); L.push('RECENT SYMPTOM LOG'); m.log.forEach(function(e){ L.push('  ' + e.date + ': ' + e.note); }); }
+      L.push('');
+      L.push('R - REQUEST');
+      L.push('Hoping for: ' + (m.ask || '[a clear plan and next steps]'));
+      L.push('');
+      L.push('MY QUESTIONS');
+      (m.questions.length ? m.questions : ['[your questions]']).forEach(function(q, i){ L.push('  ' + (i + 1) + '. ' + q); });
+      L.push('');
+      L.push('BEFORE I LEAVE, I WILL ASK');
+      L.push('  [ ] What is the plan, and who is doing what?');
+      L.push('  [ ] When is my follow-up?');
+      L.push('  [ ] What would mean I should come back, call 111 or call 999 sooner?');
+      L.push('  [ ] Can my concerns and the plan be written in my notes?');
+      L.push('');
+      L.push('My own summary to help the appointment. It is not a diagnosis. For an emergency call 999; for urgent advice call NHS 111.');
+      return L.join('\n');
+    }
+    function econsultText(m){
+      var t = 'Hello. ' + (m.who === 'me' ? 'I am writing about ' : 'I am writing about my ' + (m.who === 'child' ? 'child' : 'family member') + ' and ') + (lc(m.concern) || '[main concern]') + (m.duration ? ', which has been going on for ' + m.duration : '') + '. ';
+      if (m.pattern) t += m.pattern.replace(/\.?$/, '') + '. ';
+      if (m.tried) t += 'So far we have tried: ' + m.tried.replace(/\.?$/, '') + '. ';
+      t += 'At its worst it is ' + m.sev + ' out of 10. ';
+      if (m.chips.length) t += 'It is affecting ' + (m.who === 'me' ? 'my ' : 'their ') + m.chips.join(', ') + '. ';
+      if (m.impact) t += 'Impact: ' + m.impact.replace(/\.?$/, '') + '. ';
+      if (m.meds) t += 'Medicines and allergies: ' + m.meds.replace(/\.?$/, '') + '. ';
+      if (m.worry) t += 'My main worry: ' + m.worry.replace(/\.?$/, '') + '. ';
+      t += 'What I am hoping for: ' + (m.ask ? m.ask.replace(/\.?$/, '') : 'advice on the next steps') + '. Thank you.';
+      return t;
+    }
+    function briefCardHtml(m){
+      function row(k, v){ return v ? '<div class="py-1.5 border-b border-[#f0ebe3]"><dt class="text-[11px] font-bold uppercase tracking-wider text-terracotta">' + esc(k) + '</dt><dd class="text-sm text-slate">' + esc(v) + '</dd></div>' : ''; }
+      var logHtml = m.log.length ? '<div class="py-1.5 border-b border-[#f0ebe3]"><dt class="text-[11px] font-bold uppercase tracking-wider text-terracotta">Recent symptom log</dt><dd class="text-sm text-slate">' + m.log.map(function(e){ return esc(e.date) + ': ' + esc(e.note); }).join('<br>') + '</dd></div>' : '';
+      return '<div class="rounded-2xl border border-sand bg-white p-5">'
+        + '<div class="rounded-xl bg-[#EDF3EF] p-4 mb-4"><p class="text-[11px] font-bold uppercase tracking-wider text-sage mb-1">My 30-second opener</p><p class="text-sm text-slate italic">“' + esc(openerText(m)) + '”</p></div>'
+        + '<dl>'
+        + row('S: Situation', (m.concern || '') + (m.duration ? ' (for ' + m.duration + ')' : ''))
+        + row('B: Pattern / triggers', m.pattern) + row('B: Already tried', m.tried) + row('B: Medicines & allergies', m.meds)
+        + row('A: Severity at worst', m.sev + '/10') + row('A: Affects', m.chips.join(', ')) + row('A: In my words', m.impact) + row('A: Biggest worry', m.worry)
+        + logHtml
+        + row('R: Hoping for', m.ask)
+        + '</dl>'
+        + (m.questions.length ? '<p class="text-[11px] font-bold uppercase tracking-wider text-terracotta mt-3 mb-1">My questions</p><ol class="list-decimal pl-5 text-sm text-slate space-y-0.5">' + m.questions.map(function(q){ return '<li>' + esc(q) + '</li>'; }).join('') + '</ol>' : '')
+        + '<div class="rounded-xl bg-[#FBF3EE] p-4 mt-4"><p class="text-[11px] font-bold uppercase tracking-wider text-[#8a4b32] mb-1">Before I leave, I will ask</p><ul class="text-sm text-slate space-y-0.5"><li>☐ What is the plan, and who is doing what?</li><li>☐ When is my follow-up?</li><li>☐ What would mean I should come back or call 111 / 999 sooner?</li><li>☐ Can my concerns and the plan be written in my notes?</li></ul></div>'
+        + '<p class="text-[11px] text-slate-muted mt-3">My own summary to help the appointment. Not a diagnosis. For an emergency call 999; for urgent advice call NHS 111. Prepared with Kaur Care.</p></div>';
+    }
+    function genBrief(){
+      var m = briefModel();
+      var text = briefText(m);
+      var el = $('b-out');
+      el.innerHTML = briefCardHtml(m)
+        + '<div class="flex flex-wrap gap-2 mt-3"><button class="pill" onclick="copyText(\'b-out\')">Copy brief</button><button class="pill" onclick="printBrief()">Print / save as PDF</button><button class="pill" onclick="downloadText(\'kaur-care-appointment-brief\',\'b-out\')">Download</button><button class="pill" onclick="copyEconsult()">Copy as an eConsult / NHS App message</button><button class="pill" onclick="shareWhatsApp(\'b-out\')">Send via WhatsApp</button></div>'
+        + '<p class="text-xs text-slate-muted mt-2">Tip: hand over the printed page at the start, or paste the eConsult version into your surgery’s online form.</p>';
+      el.dataset.text = text; el.dataset.econsult = econsultText(m); el._model = m;
+      el.classList.remove('hidden');
+      el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+    function copyEconsult(){ var t = ($('b-out').dataset.econsult || ''); navigator.clipboard.writeText(t).then(function(){ flash('eConsult message copied.'); }).catch(function(){ flash('Could not copy. Select the text and copy it manually.'); }); }
+    function printBrief(){ var m = $('b-out')._model || briefModel(); var pa = $('print-area'); pa.innerHTML = '<div style="padding:24px;max-width:760px;margin:0 auto">' + briefCardHtml(m) + '</div>'; pa.classList.remove('hidden'); window.print(); setTimeout(function(){ pa.classList.add('hidden'); }, 500); }
     function copyText(id){ navigator.clipboard.writeText($(id).dataset.text || '').catch(function(){}); }
     function shareWhatsApp(id){ var t = ($(id).dataset.text || ''); window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank', 'noopener'); }
 
