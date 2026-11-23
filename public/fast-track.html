@@ -136,6 +136,15 @@
         <a href="/prep-playbook" data-nav="prep-playbook" class="nav-link">Prep playbook</a>
         <a href="/wellness" data-nav="wellness" class="nav-link">Wellness</a>
         <a href="/journal" class="nav-link">Journal</a>
+        <a href="/prep-tools" data-nav="prep-tools" class="nav-link" style="color:#C87A5A;font-weight:700">Prep tools</a>
+        <details class="relative" id="more-menu">
+          <summary class="nav-link cursor-pointer" style="list-style:none">More &#9662;</summary>
+          <div class="absolute right-0 mt-2 w-52 bg-white border border-sand rounded-xl shadow-lg p-2 flex flex-col z-50">
+            <a href="/uk-nations" data-nav="uk-nations" class="nav-link px-3 py-2 rounded-lg hover:bg-[#f6faf7]" onclick="document.getElementById('more-menu').removeAttribute('open')">Scotland, Wales &amp; NI</a>
+            <a href="/partners" data-nav="partners" class="nav-link px-3 py-2 rounded-lg hover:bg-[#f6faf7]" onclick="document.getElementById('more-menu').removeAttribute('open')">For partners</a>
+            <a href="/faqs" data-nav="faqs" class="nav-link px-3 py-2 rounded-lg hover:bg-[#f6faf7]" onclick="document.getElementById('more-menu').removeAttribute('open')">FAQs</a>
+          </div>
+        </details>
       </div>
       <div class="flex items-center gap-2">
         <a href="#find" class="shrink-0 px-4 py-2 rounded-xl bg-sage text-white text-sm font-semibold hover:bg-sage-dark">Find care</a>
@@ -179,6 +188,7 @@
           <span class="flex items-center gap-1.5"><span class="text-sage">✓</span> No sign-up to search</span>
           <span class="flex items-center gap-1.5"><span class="text-sage">✓</span> Built on NHS data</span>
         </div>
+        <p class="text-sm text-slate-muted mb-6">The search is free. <a href="/prep-tools" class="text-sage font-semibold underline">Prep tools from £4.99</a> help you walk in prepared.</p>
         <div>
           <p class="text-xs font-semibold text-slate-muted uppercase tracking-wider mb-2.5">Popular searches</p>
           <div id="quick" class="flex flex-wrap gap-2">
@@ -260,6 +270,7 @@
             <li class="flex gap-2"><span class="text-sage shrink-0">✓</span><span>What you type never leaves your browser</span></li>
           </ul>
           <a href="#find" class="inline-block px-5 py-3 rounded-2xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Start your own</a>
+          <a href="/prep-tools" class="inline-block ml-2 px-5 py-3 rounded-2xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">See pricing from £4.99</a>
         </div>
         <div class="card p-6 md:p-7 relative" style="background:#fff;box-shadow:0 14px 40px rgba(45,90,71,.12)">
           <span class="absolute -top-3 right-5 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-terracotta text-white">Example only</span>
@@ -1148,17 +1159,47 @@
           </div>
         </div>
         </div>
-      <div class="card p-6 mt-4 max-w-xl mx-auto" data-unlock-scope>
-        <p class="font-semibold mb-1">Unlock the document generators</p>
-        <p class="text-sm text-slate-soft mb-4">One payment or subscription unlocks both the Right to Choose letter and the 1-page GP brief. Your details stay in your browser.</p>
-        <input type="email" placeholder="Your email (for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-3 focus:outline-none focus:border-sage" />
-        <div class="flex flex-col sm:flex-row gap-3 justify-center">
-          <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock both generators — £4.99 one-off</button>
-          <button type="button" data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Family &amp; Women's Health Pass — £7.99/mo</button>
+      <div class="mt-10 text-left">
+        <h3 class="font-display text-2xl font-semibold text-sage text-center mb-6">What you get</h3>
+        <div class="grid sm:grid-cols-2 gap-4 mb-8">
+          <div class="card p-5"><p class="font-semibold mb-1">A 30-second opener you can read out</p><p class="text-sm text-slate-soft">Built from your own answers, so you start the appointment clearly instead of rambling or forgetting the main thing.</p></div>
+          <div class="card p-5"><p class="font-semibold mb-1">Your story in SBAR order</p><p class="text-sm text-slate-soft">The structure clinicians use: situation, background, assessment, request. One tidy page to hand over.</p></div>
+          <div class="card p-5"><p class="font-semibold mb-1">Questions picked for your concern</p><p class="text-sm text-slate-soft">Suggested questions for periods, menopause, skin, pregnancy, children, ADHD and autism, headaches and more. Edit them freely.</p></div>
+          <div class="card p-5"><p class="font-semibold mb-1">Letters that are clear and polite</p><p class="text-sm text-slate-soft">Right to Choose, referral and second-opinion letters with a reply deadline and a request to record any refusal in writing.</p></div>
+          <div class="card p-5"><p class="font-semibold mb-1">Ready for eConsult and the NHS App</p><p class="text-sm text-slate-soft">A short version to paste straight into your surgery&rsquo;s online form, plus a printable page.</p></div>
+          <div class="card p-5"><p class="font-semibold mb-1">A &ldquo;before you leave&rdquo; checklist</p><p class="text-sm text-slate-soft">Plan, follow-up date and when to come back, so you walk out knowing what happens next.</p></div>
         </div>
-        <p class="u-msg text-xs text-slate-muted mt-3"></p>
-        <p class="u-detail hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto"></p>
-        <p class="text-xs text-slate-muted mt-3">Secure checkout by Stripe. Nothing you type into the generators is ever sent to us.</p>
+
+        <div class="card p-5 mb-8">
+          <h4 class="font-semibold text-center mb-3">Free vs the prep tools</h4>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm">
+            <div><p class="font-semibold text-sage mb-1">Always free</p><ul class="list-disc pl-5 text-slate-soft space-y-1"><li>Find your NHS options by postcode</li><li>Health topics, guides and the Journal</li><li>The Prep playbook and SBAR guide</li><li>Private care costs and second-opinion guide</li></ul></div>
+            <div><p class="font-semibold text-terracotta mb-1">With a pass</p><ul class="list-disc pl-5 text-slate-soft space-y-1"><li>The 1-page brief builder, with opener and suggested questions</li><li>Referral and Right to Choose letter builders</li><li>eConsult and NHS App versions, and a printable page</li><li>The 5-day symptom and flare log</li></ul></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-3xl mx-auto text-left" data-unlock-scope>
+        <h3 class="font-display text-2xl font-semibold text-sage text-center mb-4">Choose how to unlock</h3>
+        <input type="email" placeholder="Your email (optional, for your receipt)" class="u-email w-full max-w-xs mx-auto block px-4 py-2.5 rounded-xl border border-[#d8d0c4] text-sm mb-5 focus:outline-none focus:border-sage" />
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div class="card p-6 flex flex-col">
+            <p class="font-semibold">Fast-Track Pass</p>
+            <p class="my-2"><span class="font-display text-4xl font-semibold text-sage">£4.99</span> <span class="text-sm text-slate-muted">one-off</span></p>
+            <ul class="text-sm text-slate-soft space-y-1.5 mb-5 flex-1"><li>&#10003; Brief builder and letter builders</li><li>&#10003; eConsult and printable versions</li><li>&#10003; Pay once, no renewal</li></ul>
+            <button type="button" data-plan="one_off" class="unlock-btn px-5 py-3 rounded-xl bg-sage text-white font-semibold text-sm hover:bg-sage-dark">Unlock for £4.99</button>
+          </div>
+          <div class="card p-6 flex flex-col border-sage relative">
+            <span class="absolute -top-3 left-5 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-terracotta text-white">For ongoing care</span>
+            <p class="font-semibold">Family &amp; Women&rsquo;s Health Pass</p>
+            <p class="my-2"><span class="font-display text-4xl font-semibold text-sage">£7.99</span> <span class="text-sm text-slate-muted">per month</span></p>
+            <ul class="text-sm text-slate-soft space-y-1.5 mb-5 flex-1"><li>&#10003; The same tools, for repeat appointments</li><li>&#10003; Suits families and long-term concerns</li><li>&#10003; Renews monthly</li></ul>
+            <button type="button" data-plan="family" class="unlock-btn px-5 py-3 rounded-xl border border-sage text-sage font-semibold text-sm hover:bg-sage/5">Start for £7.99/month</button>
+          </div>
+        </div>
+        <p class="u-msg text-sm text-slate-muted mt-4 text-center"></p>
+        <p class="u-detail hidden text-[11px] text-slate-muted/80 mt-1 font-mono break-words max-w-md mx-auto text-center"></p>
+        <p class="text-xs text-slate-muted mt-3 text-center">Secure checkout by Stripe. What you type into the tools stays in your browser and is never sent to us.</p>
       </div>
     </div>
   </section>
@@ -2189,6 +2230,20 @@
     window.addEventListener('popstate', function(){ showPage(kcCurrent(), false); });
     showPage(kcCurrent(), false);
 
+    // Add a gentle "prep tools" prompt at the bottom of each content page.
+    function addPassCtas(){
+      document.querySelectorAll('.kc-page[data-page]').forEach(function(sec){
+        var pg = sec.getAttribute('data-page');
+        if (pg === 'home' || pg === 'prep-tools' || sec.getAttribute('data-cta')) return;
+        var host = sec.firstElementChild; if (!host) return;
+        sec.setAttribute('data-cta', '1');
+        var d = document.createElement('div');
+        d.className = 'max-w-5xl mx-auto px-5 pb-14';
+        d.innerHTML = '<div class="card p-6 md:p-8 text-center" style="background:#2D5A47;border-color:#2D5A47"><p class="font-display text-2xl font-semibold text-white mb-2">Walk in prepared</p><p class="text-white/85 text-sm max-w-xl mx-auto mb-5">Build a clear 1-page brief with a 30-second opener, questions for your concern, and referral letters, in a couple of minutes. From <strong>£4.99 one-off</strong> or <strong>£7.99 a month</strong>. What you type stays on your device.</p><div class="flex flex-wrap gap-3 justify-center"><a href="/prep-tools" class="px-5 py-3 rounded-2xl bg-white text-sage font-semibold text-sm">See the prep tools</a><a href="#find" class="px-5 py-3 rounded-2xl border border-white/60 text-white font-semibold text-sm">Try the free search</a></div></div>';
+        sec.appendChild(d);
+      });
+    }
+    addPassCtas();
     // Paid/demo unlock first (never relocks), then partner branding/unlock on top.
     checkUnlock().then(initPartner);
     renderLog();
